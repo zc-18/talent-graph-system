@@ -11,6 +11,8 @@ from docx.shared import Pt, RGBColor, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 DOCS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "docs"))
+# Markdown 源文件统一放在 docs/_source/，交付目录 docs/ 下只保留生成的 .docx
+SRC = os.path.join(DOCS, "_source")
 FILES = ["作品设计与实现方案.md", "测试方案与报告.md", "部署说明.md", "演示视频脚本.md", "技术答辩文档.md"]
 
 ACCENT = RGBColor(0x36, 0x52, 0xD9)
@@ -113,11 +115,11 @@ def convert(path):
             add_runs(p, line)
         i += 1
 
-    out = os.path.splitext(path)[0] + ".docx"
+    out = os.path.join(DOCS, os.path.splitext(os.path.basename(path))[0] + ".docx")
     doc.save(out)
     print("生成:", os.path.basename(out))
 
 
 if __name__ == "__main__":
     for fn in FILES:
-        convert(os.path.join(DOCS, fn))
+        convert(os.path.join(SRC, fn))

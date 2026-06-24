@@ -215,8 +215,8 @@ export default function JobDetail() {
       )}
 
       {editor && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/40 backdrop-blur-sm" onClick={() => setEditor(null)}>
-          <div className="glass p-6 w-[420px]" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 grid place-items-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={() => setEditor(null)}>
+          <div className="glass p-6 w-[420px] max-w-full max-h-[90vh] overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="text-lg font-bold text-slate-900 mb-4">{editor.action === 'add' ? '新增能力项' : '编辑能力项'}</div>
             <div className="space-y-3">
               <div>

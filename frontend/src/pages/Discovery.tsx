@@ -76,7 +76,7 @@ export default function Discovery() {
               <h3 className="text-lg font-bold text-slate-800">从一个关键词，发现一个新职业</h3>
             </div>
             <p className="text-sm text-slate-500 mb-5">系统不是凭空想象，而是先检索真实网络证据，再由大模型基于证据生成可溯源的岗位定义。</p>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
                 [Globe, '多源检索证据', 'Tavily + Serper 双独立来源并行检索，统计独立来源数', '#0EA5E9'],
                 [Zap, '大模型 RAG 接地', '基于证据生成岗位定义，约束"不臆造证据外内容"', '#6366F1'],
@@ -129,7 +129,7 @@ export default function Discovery() {
                 ))}
               </ul>
 
-              <div className="grid grid-cols-2 gap-5 mt-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
                 <div>
                   <div className="label mb-2">必备技能</div>
                   <div className="space-y-1.5">

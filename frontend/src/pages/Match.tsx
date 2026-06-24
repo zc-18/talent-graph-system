@@ -142,7 +142,7 @@ export default function Match() {
                 <h3 className="text-lg font-bold text-slate-800">上传简历或输入技能，开始诊断</h3>
                 <p className="text-sm text-slate-500 mt-1">系统将对比目标岗位能力图谱，输出多维匹配与提升路径</p>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   [Target, '综合匹配度', '加权必备/加分/级别/领域四维评分', '#6366F1'],
                   [Route, '能力差距分析', '清晰列出已具备与缺失的必备技能', '#0EA5E9'],
@@ -180,7 +180,7 @@ export default function Match() {
               </div>
 
               <Card className="p-5">
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <div className="flex items-center gap-2 label mb-2"><CheckCircle2 className="w-4 h-4 text-emerald-600" /> 已具备 ({res.matched_skills.filter((m: any) => m.importance === 'required').length})</div>
                     <div className="flex flex-wrap gap-1.5">

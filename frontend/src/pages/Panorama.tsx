@@ -159,8 +159,10 @@ export default function Panorama() {
           <div className="absolute inset-0 rounded-2xl bg-white/25 pointer-events-none" />
           <div className="relative z-10">
             {loading ? <Spinner label="构建图谱中…" /> : (
-              <ReactECharts ref={chartRef} option={option} style={{ height: 620 }} onEvents={onEvents}
-                notMerge lazyUpdate />
+              <div className="h-[440px] sm:h-[560px] xl:h-[620px]">
+                <ReactECharts ref={chartRef} option={option} style={{ height: '100%' }} onEvents={onEvents}
+                  notMerge lazyUpdate />
+              </div>
             )}
           </div>
           {data && (

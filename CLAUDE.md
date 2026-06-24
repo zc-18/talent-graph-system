@@ -25,7 +25,7 @@ uv run python data/seed_relations.py          # inject skill prerequisite/relate
 uv run python data/rediscover_new_jobs.py     # (re)create the is_new jobs via discovery (KEYWORDS list)
 uv run python data/evaluate.py all            # JD/resume/match accuracy (reads parsed_cache.json)
 uv run python data/export_deliverables.py     # export test-data samples + 综合测试报告.json
-uv run python data/md_to_docx.py              # convert docs/*.md → .docx
+uv run python data/md_to_docx.py              # convert docs/_source/*.md → docs/*.docx
 ```
 
 Frontend (from `frontend/`, npm):
@@ -61,4 +61,4 @@ Other services: `discovery` (new-job discovery, RAG-grounded via Tavily+Serper i
 
 ## Submission materials
 
-`docs/` holds the deliverables: 作品设计与实现方案 / 测试方案与报告 / 部署说明 / 演示视频脚本 / 技术答辩文档 (each as `.md` + generated `.docx`), `智岗图谱_作品介绍.pptx`, `测试数据/` (graph I/O examples + datasets + eval results), `截图/`. When dataset size changes, the headline numbers (job/JD/skill counts, accuracy) are scattered across these docs + `ppt_build/build.js` — re-run eval/export then update them together.
+`docs/` holds the deliverables: 作品设计与实现方案 / 测试方案与报告 / 部署说明 / 演示视频脚本 / 技术答辩文档 (交付为 Word `.docx`；Markdown 源在 `docs/_source/`，由 `md_to_docx.py` 生成 .docx), `智岗图谱_作品介绍.pptx`, `测试数据/` (graph I/O examples + datasets + eval results), `截图/`. When dataset size changes, the headline numbers (job/JD/skill counts, accuracy) are scattered across these docs + `ppt_build/build.js` — re-run eval/export then update them together.
