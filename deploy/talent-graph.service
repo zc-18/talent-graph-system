@@ -1,0 +1,18 @@
+[Unit]
+Description=TalentGraph 岗位能力图谱系统 (FastAPI + 静态前端)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/talent-graph/backend
+Environment=STATIC_DIR=/opt/talent-graph/backend/static
+ExecStart=/opt/talent-graph/backend/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8200 --workers 1
+Restart=on-failure
+RestartSec=5
+# 保护小内存服务器：上限 420MB，超出则重启
+MemoryMax=420M
+MemoryHigh=360M
+CPUQuota=120%
+
+[Install]
+WantedBy=multi-user.target

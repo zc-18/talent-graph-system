@@ -1,0 +1,136 @@
+{
+  "summary": {
+    "metric": "人岗匹配",
+    "n": 18,
+    "classification_acc": 1.0,
+    "match_f1": 1.0
+  },
+  "rows": [
+    {
+      "id": 1,
+      "target": "机器学习工程师",
+      "acc": 1.0,
+      "score": 84.0,
+      "wrong": []
+    },
+    {
+      "id": 2,
+      "target": "机器学习工程师",
+      "acc": 1.0,
+      "score": 62.04,
+      "wrong": []
+    },
+    {
+      "id": 3,
+      "target": "自然语言处理工程师",
+      "acc": 1.0,
+      "score": 67.88,
+      "wrong": []
+    },
+    {
+      "id": 4,
+      "target": "自然语言处理工程师",
+      "acc": 1.0,
+      "score": 62.31,
+      "wrong": []
+    },
+    {
+      "id": 5,
+      "target": "大数据开发工程师",
+      "acc": 1.0,
+      "score": 69.64,
+      "wrong": []
+    },
+    {
+      "id": 6,
+      "target": "大数据开发工程师",
+      "acc": 1.0,
+      "score": 47.4,
+      "wrong": []
+    },
+    {
+      "id": 7,
+      "target": "Java开发工程师",
+      "acc": 1.0,
+      "score": 75.5,
+      "wrong": []
+    },
+    {
+      "id": 8,
+      "target": "Java开发工程师",
+      "acc": 1.0,
+      "score": 52.81,
+      "wrong": []
+    },
+    {
+      "id": 9,
+      "target": "算法工程师",
+      "acc": 1.0,
+      "score": 64.35,
+      "wrong": []
+    },
+    {
+      "id": 10,
+      "target": "计算机视觉工程师",
+      "acc": 1.0,
+      "score": 70.6,
+      "wrong": []
+    },
+    {
+      "id": 11,
+      "target": "物联网开发工程师",
+      "acc": 1.0,
+      "score": 77.16,
+      "wrong": []
+    },
+    {
+      "id": 12,
+      "target": "物联网开发工程师",
+      "acc": 1.0,
+      "score": 53.19,
+      "wrong": []
+    },
+    {
+      "id": 13,
+      "target": "数据分析师",
+      "acc": 1.0,
+      "score": 75.07,
+      "wrong": []
+    },
+    {
+      "id": 14,
+      "target": "后端开发工程师",
+      "acc": 1.0,
+      "score": 75.49,
+      "wrong": []
+    },
+    {
+      "id": 15,
+      "target": "后端开发工程师",
+      "acc": 1.0,
+      "score": 48.75,
+      "wrong": []
+    },
+    {
+      "id": 16,
+      "target": "Python开发工程师",
+      "acc": 1.0,
+      "score": 66.49,
+      "wrong": []
+    },
+    {
+      "id": 17,
+      "target": "算法工程师",
+      "acc": 1.0,
+      "score": 58.14,
+      "wrong": []
+    },
+    {
+      "id": 18,
+      "target": "计算机视觉工程师",
+      "acc": 1.0,
+      "score": 55.96,
+      "wrong": []
+    }
+  ]
+}

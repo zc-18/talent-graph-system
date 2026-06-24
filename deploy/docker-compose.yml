@@ -1,0 +1,19 @@
+services:
+  talent-graph:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: talent-graph:1.0.0
+    container_name: talent-graph
+    restart: unless-stopped
+    ports:
+      - "8200:8200"
+    environment:
+      - STATIC_DIR=/app/static
+    # 控制资源，保护小内存服务器
+    deploy:
+      resources:
+        limits:
+          memory: 420M
+          cpus: "1.0"
+    mem_limit: 420m

@@ -1,0 +1,33 @@
+# ===== 密钥 / 环境 =====
+backend/.env
+*.env
+!*.env.example
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+backend/data/parsed_cache.json
+
+# ===== Node / 前端 =====
+node_modules/
+frontend/dist/
+docs/ppt_build/node_modules/
+*.log
+npm-debug.log*
+
+# ===== 构建产物 / 打包 =====
+*.tar.gz
+backend/static/
+
+# ===== 编辑器 / 系统 =====
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.playwright-mcp/

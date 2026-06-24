@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/api.ts","./src/main.tsx","./src/components/chatbot.tsx","./src/components/select.tsx","./src/components/ui.tsx","./src/pages/dashboard.tsx","./src/pages/discovery.tsx","./src/pages/evolution.tsx","./src/pages/jobdetail.tsx","./src/pages/jobs.tsx","./src/pages/match.tsx","./src/pages/panorama.tsx"],"version":"5.9.3"}

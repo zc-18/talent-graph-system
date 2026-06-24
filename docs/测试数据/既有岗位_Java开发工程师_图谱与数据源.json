@@ -1,0 +1,246 @@
+{
+  "岗位类型": "既有岗位",
+  "岗位名称": "Java开发工程师",
+  "输入_数据源示例": [
+    {
+      "company": "灵犀科技",
+      "source": "招聘平台A",
+      "publish_date": "2026-03-29 00:00:00",
+      "is_duplicate": false,
+      "inflation_flag": false,
+      "lag_days": 87,
+      "quality_score": 0.6939,
+      "raw_text": "【灵犀科技】招聘Java开发工程师（工作地点：上海）\n岗位职责：\n· 参与技术方案评审与数据库设计；\n· 对接前端及第三方系统完成接口联调；\n· 编写高质量、可维护的代码并完成单元测试。\n任职资格：\n1. 熟练掌握Java；\n2. 扎实的Spring功底；\n3. 深入理解MySQL；\n4. 熟悉分布式系统及其原理；\n5. 有丰富的Redis实战经验；\n优先条件：\n- 了解Kubernetes相关技术更佳\n- 了解Docker相关技术更佳\n- 了解微服务相关技术更佳\n- 具备Linux背景优先考虑\n其他：具备良好的团队协作与沟通能力。"
+    },
+    {
+      "company": "博观智能",
+      "source": "行业社区",
+      "publish_date": "2026-01-13 00:00:00",
+      "is_duplicate": false,
+      "inflation_flag": false,
+      "lag_days": 162,
+      "quality_score": 0.5654,
+      "raw_text": "【博观智能】招聘Java开发工程师（工作地点：西安）\n岗位职责：\n· 参与技术方案评审与数据库设计；\n· 编写高质量、可维护的代码并完成单元测试；\n· 参与高并发分布式系统架构设计与优化。\n任职资格：\n1. 扎实的Java功底；\n2. 有丰富的Spring实战经验；\n3. 能够独立使用MySQL解决实际问题；\n4. 有丰富的Redis实战经验；\n5. 扎实的高并发功底；\n优先条件：\n- 接触过Linux优先\n- 接触过Docker优先\n- 有Kubernetes经验者优先"
+    },
+    {
+      "company": "致远云",
+      "source": "猎头渠道",
+      "publish_date": "2026-04-28 00:00:00",
+      "is_duplicate": false,
+      "inflation_flag": false,
+      "lag_days": 57,
+      "quality_score": 0.759,
+      "raw_text": "招募Java开发工程师（致远云·广州）\n一、岗位职责\n1. 负责核心业务系统的后端服务设计与开发；\n2. 参与高并发分布式系统架构设计与优化；\n3. 编写高质量、可维护的代码并完成单元测试；\n4. 参与技术方案评审与数据库设计；\n5. 排查并解决线上性能与稳定性问题；\n二、任职要求\n1. 扎实的Java功底；\n2. 有丰富的Spring实战经验；\n3. 有丰富的MySQL实战经验；\n4. 熟悉高并发及其原理；\n5. 能够独立使用分布式系统解决实际问题；\n6. 能够独立使用消息队列解决实际问题；\n三、加分项\n- 有微服务经验者优先\n- 有Kubernetes经验者优先"
+    }
+  ],
+  "输出_能力图谱": {
+    "岗位名称": "Java开发工程师",
+    "技术栈": "云计算与工程",
+    "级别": "senior",
+    "岗位简介": "Java开发工程师（基于11条有效JD交叉验证构建）",
+    "核心职责": [
+      "负责核心业务系统的后端服务设计与开发",
+      "参与高并发分布式系统架构设计与优化",
+      "编写高质量、可维护的代码并完成单元测试",
+      "参与技术方案评审与数据库设计",
+      "排查并解决线上性能与稳定性问题"
+    ],
+    "典型应用场景": [
+      "高并发分布式系统",
+      "核心业务系统后端服务"
+    ],
+    "必备技能": [
+      {
+        "技能": "Java",
+        "权重": 1.0,
+        "掌握级别": "proficient",
+        "置信度": 0.9669,
+        "独立来源数": 11
+      },
+      {
+        "技能": "Spring",
+        "权重": 1.0,
+        "掌握级别": "proficient",
+        "置信度": 0.9669,
+        "独立来源数": 11
+      },
+      {
+        "技能": "MySQL",
+        "权重": 1.0,
+        "掌握级别": "proficient",
+        "置信度": 0.9669,
+        "独立来源数": 11
+      },
+      {
+        "技能": "消息队列",
+        "权重": 0.8273,
+        "掌握级别": "proficient",
+        "置信度": 0.9388,
+        "独立来源数": 8
+      },
+      {
+        "技能": "高并发",
+        "权重": 0.8273,
+        "掌握级别": "proficient",
+        "置信度": 0.9386,
+        "独立来源数": 8
+      },
+      {
+        "技能": "分布式系统",
+        "权重": 0.7364,
+        "掌握级别": "proficient",
+        "置信度": 0.9244,
+        "独立来源数": 7
+      },
+      {
+        "技能": "Redis",
+        "权重": 0.6455,
+        "掌握级别": "proficient",
+        "置信度": 0.9047,
+        "独立来源数": 6
+      }
+    ],
+    "加分技能": [
+      {
+        "技能": "Kubernetes",
+        "置信度": 0.9493
+      },
+      {
+        "技能": "Docker",
+        "置信度": 0.9381
+      },
+      {
+        "技能": "Linux",
+        "置信度": 0.9249
+      },
+      {
+        "技能": "微服务",
+        "置信度": 0.9238
+      }
+    ],
+    "岗位定义置信度": 0.9403,
+    "证据总数": 93
+  },
+  "反幻觉_能力项溯源示例": [
+    {
+      "skill": "Java",
+      "importance": "required",
+      "confidence": 0.9669,
+      "source_count": 11,
+      "evidences": [
+        {
+          "type": "jd",
+          "snippet": "Java"
+        },
+        {
+          "type": "jd",
+          "snippet": "Java"
+        },
+        {
+          "type": "jd",
+          "snippet": "Java"
+        }
+      ]
+    },
+    {
+      "skill": "Spring",
+      "importance": "required",
+      "confidence": 0.9669,
+      "source_count": 11,
+      "evidences": [
+        {
+          "type": "jd",
+          "snippet": "Spring"
+        },
+        {
+          "type": "jd",
+          "snippet": "Spring"
+        },
+        {
+          "type": "jd",
+          "snippet": "Spring"
+        }
+      ]
+    },
+    {
+      "skill": "MySQL",
+      "importance": "required",
+      "confidence": 0.9669,
+      "source_count": 11,
+      "evidences": [
+        {
+          "type": "jd",
+          "snippet": "MySQL"
+        },
+        {
+          "type": "jd",
+          "snippet": "MySQL"
+        },
+        {
+          "type": "jd",
+          "snippet": "MySQL"
+        }
+      ]
+    },
+    {
+      "skill": "Kubernetes",
+      "importance": "bonus",
+      "confidence": 0.9493,
+      "source_count": 9,
+      "evidences": [
+        {
+          "type": "jd",
+          "snippet": "Kubernetes"
+        },
+        {
+          "type": "jd",
+          "snippet": "Kubernetes"
+        },
+        {
+          "type": "jd",
+          "snippet": "Kubernetes"
+        }
+      ]
+    },
+    {
+      "skill": "消息队列",
+      "importance": "required",
+      "confidence": 0.9388,
+      "source_count": 8,
+      "evidences": [
+        {
+          "type": "jd",
+          "snippet": "消息队列"
+        },
+        {
+          "type": "jd",
+          "snippet": "消息队列"
+        },
+        {
+          "type": "jd",
+          "snippet": "消息队列"
+        }
+      ]
+    },
+    {
+      "skill": "高并发",
+      "importance": "required",
+      "confidence": 0.9386,
+      "source_count": 8,
+      "evidences": [
+        {
+          "type": "jd",
+          "snippet": "高并发"
+        },
+        {
+          "type": "jd",
+          "snippet": "高并发"
+        },
+        {
+          "type": "jd",
+          "snippet": "高并发"
+        }
+      ]
+    }
+  ]
+}

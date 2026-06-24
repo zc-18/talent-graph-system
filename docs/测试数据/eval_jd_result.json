@@ -1,0 +1,970 @@
+{
+  "summary": {
+    "metric": "JD解析",
+    "n": 119,
+    "precision": 0.998,
+    "recall": 0.9968,
+    "f1": 0.9974,
+    "importance_acc": 0.9961
+  },
+  "rows": [
+    {
+      "id": 1,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 2,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 3,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 4,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 5,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 6,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 7,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 8,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 9,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 10,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 11,
+      "role": "Java开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 12,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 13,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 14,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 15,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 16,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 17,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 18,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 19,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 20,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 21,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 22,
+      "role": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 23,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 24,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 25,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 26,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 27,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 28,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 29,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 30,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 31,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 32,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 33,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 34,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 35,
+      "role": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 36,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 37,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 38,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 39,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 40,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 41,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 42,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 43,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 44,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 45,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 46,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 47,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 48,
+      "role": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 49,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 50,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 51,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 52,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 53,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 54,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 55,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 56,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 57,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 58,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 59,
+      "role": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 60,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 61,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 62,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 63,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 64,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 65,
+      "role": "计算机视觉工程师",
+      "precision": 0.875,
+      "recall": 0.875,
+      "f1": 0.875,
+      "missed": [
+        "计算机视觉"
+      ]
+    },
+    {
+      "id": 66,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 67,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 68,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 69,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 70,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 71,
+      "role": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 72,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 73,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 0.857,
+      "f1": 0.923,
+      "missed": [
+        "物联网"
+      ]
+    },
+    {
+      "id": 74,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 75,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 76,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 77,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 78,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 79,
+      "role": "物联网开发工程师",
+      "precision": 0.889,
+      "recall": 0.889,
+      "f1": 0.889,
+      "missed": [
+        "物联网"
+      ]
+    },
+    {
+      "id": 80,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 81,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 82,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 83,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 84,
+      "role": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 85,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 86,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 87,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 88,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 89,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 90,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 91,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 92,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 93,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 94,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 95,
+      "role": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 96,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 97,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 98,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 99,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 100,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 101,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 102,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 103,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 104,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 105,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 106,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 107,
+      "role": "后端开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 108,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 109,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 110,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 111,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 112,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 113,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 114,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 115,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 116,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 117,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 118,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 119,
+      "role": "Python开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    }
+  ]
+}

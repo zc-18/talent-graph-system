@@ -1,0 +1,2472 @@
+[
+  {
+    "id": 1,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "分布式系统",
+        "Redis"
+      ],
+      "bonus": [
+        "Kubernetes",
+        "Docker",
+        "微服务",
+        "Linux"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 2,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "Redis",
+        "高并发"
+      ],
+      "bonus": [
+        "Linux",
+        "Docker",
+        "Kubernetes"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 3,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "高并发",
+        "分布式系统",
+        "消息队列"
+      ],
+      "bonus": [
+        "微服务",
+        "Kubernetes"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 4,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "消息队列",
+        "Redis",
+        "分布式系统"
+      ],
+      "bonus": [
+        "Kubernetes",
+        "微服务",
+        "Docker"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 5,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "分布式系统",
+        "消息队列",
+        "高并发"
+      ],
+      "bonus": [
+        "Docker",
+        "Linux"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 6,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "消息队列",
+        "高并发"
+      ],
+      "bonus": [
+        "Kubernetes",
+        "Docker",
+        "Linux"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 7,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "高并发",
+        "消息队列",
+        "Redis"
+      ],
+      "bonus": [
+        "Linux",
+        "Kubernetes",
+        "Docker",
+        "微服务"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 8,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "Redis",
+        "分布式系统"
+      ],
+      "bonus": [
+        "微服务",
+        "Kubernetes",
+        "Docker"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 9,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "消息队列",
+        "高并发"
+      ],
+      "bonus": [
+        "Docker",
+        "Kubernetes"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 10,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "高并发",
+        "分布式系统",
+        "消息队列"
+      ],
+      "bonus": [
+        "Linux",
+        "微服务"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 11,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "高并发",
+        "消息队列",
+        "分布式系统",
+        "Redis"
+      ],
+      "bonus": [
+        "Kubernetes",
+        "Linux",
+        "微服务"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 12,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "模型部署",
+        "Spark"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 13,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "Spark",
+        "模型部署",
+        "推荐系统",
+        "TensorFlow"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 14,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "PyTorch"
+      ],
+      "bonus": [
+        "推荐系统",
+        "TensorFlow",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 15,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "PyTorch",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "模型部署",
+        "推荐系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 16,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "PyTorch",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "推荐系统",
+        "TensorFlow",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 17,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "推荐系统",
+        "Spark"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 18,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "TensorFlow",
+        "推荐系统",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 19,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "PyTorch",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "推荐系统",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 20,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "TensorFlow",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 21,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘",
+        "PyTorch"
+      ],
+      "bonus": [
+        "模型部署",
+        "Spark",
+        "推荐系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 22,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "PyTorch",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "TensorFlow",
+        "Spark",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 23,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "ETL",
+        "Hive",
+        "数据仓库",
+        "Kafka"
+      ],
+      "bonus": [
+        "Flink",
+        "ClickHouse",
+        "实时计算",
+        "数据治理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 24,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "Hive",
+        "ETL",
+        "数据仓库",
+        "Kafka"
+      ],
+      "bonus": [
+        "ClickHouse",
+        "数据治理",
+        "Flink",
+        "实时计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 25,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "数据仓库",
+        "Hive",
+        "ETL"
+      ],
+      "bonus": [
+        "数据治理",
+        "实时计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 26,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "Kafka",
+        "数据仓库"
+      ],
+      "bonus": [
+        "Flink",
+        "实时计算",
+        "数据治理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 27,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "数据仓库",
+        "ETL",
+        "Kafka",
+        "Hive"
+      ],
+      "bonus": [
+        "Flink",
+        "ClickHouse",
+        "实时计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 28,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "ETL",
+        "Kafka"
+      ],
+      "bonus": [
+        "实时计算",
+        "ClickHouse"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 29,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "数据仓库",
+        "ETL",
+        "Kafka",
+        "Hive"
+      ],
+      "bonus": [
+        "实时计算",
+        "Flink",
+        "ClickHouse"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 30,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "Kafka",
+        "Hive",
+        "ETL",
+        "数据仓库"
+      ],
+      "bonus": [
+        "数据治理",
+        "实时计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 31,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "Kafka",
+        "ETL",
+        "数据仓库",
+        "Hive"
+      ],
+      "bonus": [
+        "ClickHouse",
+        "Flink",
+        "实时计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 32,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "数据仓库",
+        "ETL",
+        "Kafka",
+        "Hive"
+      ],
+      "bonus": [
+        "数据治理",
+        "Flink",
+        "ClickHouse",
+        "实时计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 33,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "Kafka",
+        "数据仓库"
+      ],
+      "bonus": [
+        "ClickHouse",
+        "Flink",
+        "数据治理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 34,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "Kafka",
+        "数据仓库",
+        "Hive",
+        "ETL"
+      ],
+      "bonus": [
+        "数据治理",
+        "Flink"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 35,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "required": [
+        "Spark",
+        "Hadoop",
+        "SQL",
+        "Kafka",
+        "ETL"
+      ],
+      "bonus": [
+        "Flink",
+        "数据治理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 36,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "模型部署",
+        "自然语言处理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 37,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "推荐系统",
+        "强化学习",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "计算机视觉",
+        "模型部署",
+        "推理加速",
+        "自然语言处理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 38,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘",
+        "强化学习"
+      ],
+      "bonus": [
+        "自然语言处理",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 39,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "推荐系统",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "自然语言处理",
+        "推理加速"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 40,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "强化学习"
+      ],
+      "bonus": [
+        "模型部署",
+        "计算机视觉",
+        "自然语言处理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 41,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘",
+        "强化学习"
+      ],
+      "bonus": [
+        "自然语言处理",
+        "模型部署",
+        "计算机视觉"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 42,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "计算机视觉",
+        "自然语言处理",
+        "推理加速"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 43,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "数据挖掘",
+        "推荐系统",
+        "强化学习"
+      ],
+      "bonus": [
+        "模型部署",
+        "计算机视觉",
+        "自然语言处理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 44,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "强化学习"
+      ],
+      "bonus": [
+        "自然语言处理",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 45,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "推荐系统",
+        "数据挖掘"
+      ],
+      "bonus": [
+        "计算机视觉",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 46,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "推荐系统"
+      ],
+      "bonus": [
+        "计算机视觉",
+        "自然语言处理",
+        "推理加速",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 47,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "强化学习",
+        "推荐系统"
+      ],
+      "bonus": [
+        "推理加速",
+        "自然语言处理",
+        "计算机视觉",
+        "模型部署"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 48,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "required": [
+        "机器学习",
+        "深度学习",
+        "Python",
+        "强化学习",
+        "数据挖掘",
+        "推荐系统"
+      ],
+      "bonus": [
+        "自然语言处理",
+        "计算机视觉",
+        "推理加速",
+        "模型部署"
+      ],
+      "inflation": true,
+      "inflated_extra": [
+        "Scala",
+        "ROS",
+        "PLC",
+        "Neo4j",
+        "区块链",
+        "Zigbee"
+      ]
+    }
+  },
+  {
+    "id": 49,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "PyTorch",
+        "Transformer",
+        "大语言模型"
+      ],
+      "bonus": [
+        "检索增强生成",
+        "模型微调",
+        "提示工程",
+        "HuggingFace"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 50,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "Transformer",
+        "PyTorch",
+        "大语言模型"
+      ],
+      "bonus": [
+        "提示工程",
+        "HuggingFace",
+        "模型微调",
+        "检索增强生成"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 51,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "PyTorch"
+      ],
+      "bonus": [
+        "检索增强生成",
+        "HuggingFace",
+        "模型微调"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 52,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "Transformer"
+      ],
+      "bonus": [
+        "检索增强生成",
+        "提示工程",
+        "HuggingFace"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 53,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "大语言模型",
+        "PyTorch",
+        "Transformer"
+      ],
+      "bonus": [
+        "提示工程",
+        "HuggingFace",
+        "检索增强生成",
+        "模型微调"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 54,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "Transformer",
+        "PyTorch",
+        "大语言模型"
+      ],
+      "bonus": [
+        "模型微调",
+        "提示工程"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 55,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "Transformer",
+        "大语言模型",
+        "PyTorch"
+      ],
+      "bonus": [
+        "提示工程",
+        "检索增强生成",
+        "模型微调"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 56,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "Transformer",
+        "PyTorch"
+      ],
+      "bonus": [
+        "HuggingFace",
+        "提示工程"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 57,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "大语言模型"
+      ],
+      "bonus": [
+        "模型微调",
+        "HuggingFace"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 58,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "PyTorch"
+      ],
+      "bonus": [
+        "提示工程",
+        "检索增强生成",
+        "模型微调"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 59,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "required": [
+        "自然语言处理",
+        "深度学习",
+        "Python",
+        "大语言模型",
+        "Transformer",
+        "PyTorch"
+      ],
+      "bonus": [
+        "HuggingFace",
+        "提示工程",
+        "检索增强生成",
+        "模型微调"
+      ],
+      "inflation": true,
+      "inflated_extra": [
+        "CoAP",
+        "PLC",
+        "量子计算",
+        "Zigbee",
+        "区块链",
+        "AIGC"
+      ]
+    }
+  },
+  {
+    "id": 60,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "PyTorch",
+        "模型部署"
+      ],
+      "bonus": [
+        "TensorFlow",
+        "边缘计算",
+        "多模态",
+        "推理加速"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 61,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "PyTorch",
+        "模型部署"
+      ],
+      "bonus": [
+        "边缘计算",
+        "推理加速"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 62,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "模型部署"
+      ],
+      "bonus": [
+        "推理加速",
+        "边缘计算",
+        "TensorFlow",
+        "多模态"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 63,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "模型部署",
+        "PyTorch"
+      ],
+      "bonus": [
+        "推理加速",
+        "多模态",
+        "边缘计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 64,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "模型部署"
+      ],
+      "bonus": [
+        "推理加速",
+        "边缘计算",
+        "TensorFlow",
+        "多模态"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 65,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "模型部署",
+        "PyTorch"
+      ],
+      "bonus": [
+        "TensorFlow",
+        "多模态",
+        "边缘计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 66,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "PyTorch",
+        "模型部署"
+      ],
+      "bonus": [
+        "边缘计算",
+        "TensorFlow",
+        "推理加速",
+        "多模态"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 67,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "模型部署"
+      ],
+      "bonus": [
+        "推理加速",
+        "多模态",
+        "TensorFlow"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 68,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "模型部署",
+        "PyTorch"
+      ],
+      "bonus": [
+        "边缘计算",
+        "多模态",
+        "TensorFlow",
+        "推理加速"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 69,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "PyTorch"
+      ],
+      "bonus": [
+        "边缘计算",
+        "推理加速",
+        "多模态",
+        "TensorFlow"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 70,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "模型部署"
+      ],
+      "bonus": [
+        "多模态",
+        "边缘计算",
+        "TensorFlow",
+        "推理加速"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 71,
+    "job_title": "计算机视觉工程师",
+    "ground_truth": {
+      "required": [
+        "计算机视觉",
+        "深度学习",
+        "Python",
+        "模型部署"
+      ],
+      "bonus": [
+        "边缘计算",
+        "多模态"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 72,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "传感器技术",
+        "Linux",
+        "MQTT"
+      ],
+      "bonus": [
+        "边缘计算",
+        "5G通信"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 73,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "MQTT"
+      ],
+      "bonus": [
+        "5G通信",
+        "实时操作系统",
+        "边缘计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 74,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "传感器技术"
+      ],
+      "bonus": [
+        "5G通信",
+        "实时操作系统",
+        "边缘计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 75,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "MQTT",
+        "Linux"
+      ],
+      "bonus": [
+        "实时操作系统",
+        "边缘计算",
+        "5G通信"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 76,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "MQTT"
+      ],
+      "bonus": [
+        "实时操作系统",
+        "5G通信"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 77,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "MQTT",
+        "传感器技术",
+        "Linux"
+      ],
+      "bonus": [
+        "5G通信",
+        "边缘计算",
+        "实时操作系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 78,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "MQTT"
+      ],
+      "bonus": [
+        "边缘计算",
+        "实时操作系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 79,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "Linux",
+        "MQTT",
+        "传感器技术"
+      ],
+      "bonus": [
+        "实时操作系统",
+        "5G通信",
+        "边缘计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 80,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "Linux",
+        "传感器技术"
+      ],
+      "bonus": [
+        "边缘计算",
+        "实时操作系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 81,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "MQTT",
+        "Linux",
+        "传感器技术"
+      ],
+      "bonus": [
+        "实时操作系统",
+        "5G通信",
+        "边缘计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 82,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "MQTT",
+        "传感器技术"
+      ],
+      "bonus": [
+        "实时操作系统",
+        "5G通信",
+        "边缘计算"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 83,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "传感器技术"
+      ],
+      "bonus": [
+        "边缘计算",
+        "实时操作系统",
+        "5G通信"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 84,
+    "job_title": "物联网开发工程师",
+    "ground_truth": {
+      "required": [
+        "物联网",
+        "嵌入式开发",
+        "C++",
+        "传感器技术"
+      ],
+      "bonus": [
+        "实时操作系统",
+        "边缘计算",
+        "5G通信"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 85,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "Spark",
+        "机器学习"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 86,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "Spark",
+        "数据治理",
+        "机器学习"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 87,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "Spark",
+        "机器学习",
+        "数据治理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 88,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "Spark",
+        "机器学习"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 89,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "数据治理",
+        "机器学习",
+        "Spark"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 90,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "数据治理",
+        "Spark",
+        "机器学习"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 91,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "机器学习",
+        "Spark",
+        "数据治理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 92,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "数据治理",
+        "机器学习",
+        "Spark"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 93,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "Spark",
+        "机器学习",
+        "数据治理"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 94,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "数据治理",
+        "机器学习",
+        "Spark"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 95,
+    "job_title": "数据分析师",
+    "ground_truth": {
+      "required": [
+        "SQL",
+        "数据挖掘",
+        "Python",
+        "数据建模"
+      ],
+      "bonus": [
+        "数据治理",
+        "机器学习",
+        "Spark"
+      ],
+      "inflation": true,
+      "inflated_extra": [
+        "区块链",
+        "Scala",
+        "扩散模型",
+        "数字孪生",
+        "Zigbee",
+        "CoAP"
+      ]
+    }
+  },
+  {
+    "id": 96,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "微服务",
+        "Python",
+        "Go",
+        "消息队列"
+      ],
+      "bonus": [
+        "Kubernetes",
+        "高并发",
+        "分布式系统",
+        "Docker"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 97,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "消息队列",
+        "Go",
+        "Python"
+      ],
+      "bonus": [
+        "Docker",
+        "Kubernetes"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 98,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "Go",
+        "消息队列",
+        "微服务"
+      ],
+      "bonus": [
+        "分布式系统",
+        "Docker",
+        "高并发",
+        "Kubernetes"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 99,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "微服务",
+        "Go",
+        "消息队列",
+        "Python"
+      ],
+      "bonus": [
+        "Kubernetes",
+        "Docker",
+        "分布式系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 100,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "Go",
+        "Python",
+        "微服务",
+        "消息队列"
+      ],
+      "bonus": [
+        "Docker",
+        "高并发",
+        "Kubernetes"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 101,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "Go",
+        "消息队列",
+        "Python"
+      ],
+      "bonus": [
+        "分布式系统",
+        "Kubernetes",
+        "Docker"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 102,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "Go",
+        "Python",
+        "微服务"
+      ],
+      "bonus": [
+        "Docker",
+        "分布式系统",
+        "高并发"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 103,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "微服务",
+        "Python",
+        "消息队列",
+        "Go"
+      ],
+      "bonus": [
+        "Kubernetes",
+        "分布式系统",
+        "高并发",
+        "Docker"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 104,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "微服务",
+        "消息队列",
+        "Go"
+      ],
+      "bonus": [
+        "分布式系统",
+        "Docker"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 105,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "微服务",
+        "Go",
+        "Python"
+      ],
+      "bonus": [
+        "Docker",
+        "Kubernetes"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 106,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "微服务",
+        "消息队列",
+        "Go",
+        "Python"
+      ],
+      "bonus": [
+        "高并发",
+        "分布式系统",
+        "Kubernetes"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 107,
+    "job_title": "后端开发工程师",
+    "ground_truth": {
+      "required": [
+        "Java",
+        "MySQL",
+        "Redis",
+        "Python",
+        "Go",
+        "消息队列",
+        "微服务"
+      ],
+      "bonus": [
+        "分布式系统",
+        "Kubernetes",
+        "Docker",
+        "高并发"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 108,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "MySQL"
+      ],
+      "bonus": [
+        "数据挖掘",
+        "机器学习",
+        "分布式系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 109,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "MySQL"
+      ],
+      "bonus": [
+        "机器学习",
+        "分布式系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 110,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "MySQL"
+      ],
+      "bonus": [
+        "数据挖掘",
+        "分布式系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 111,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "Redis"
+      ],
+      "bonus": [
+        "Docker",
+        "数据挖掘",
+        "机器学习"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 112,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "Redis"
+      ],
+      "bonus": [
+        "数据挖掘",
+        "机器学习",
+        "Docker"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 113,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "Redis"
+      ],
+      "bonus": [
+        "机器学习",
+        "数据挖掘",
+        "分布式系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 114,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "MySQL",
+        "Redis"
+      ],
+      "bonus": [
+        "分布式系统",
+        "Docker"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 115,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "MySQL"
+      ],
+      "bonus": [
+        "机器学习",
+        "数据挖掘"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 116,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "Redis",
+        "MySQL"
+      ],
+      "bonus": [
+        "Docker",
+        "数据挖掘"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 117,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "MySQL",
+        "Redis"
+      ],
+      "bonus": [
+        "Docker",
+        "数据挖掘",
+        "机器学习",
+        "分布式系统"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 118,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "Redis"
+      ],
+      "bonus": [
+        "Docker",
+        "分布式系统",
+        "数据挖掘",
+        "机器学习"
+      ],
+      "inflation": false,
+      "inflated_extra": []
+    }
+  },
+  {
+    "id": 119,
+    "job_title": "Python开发工程师",
+    "ground_truth": {
+      "required": [
+        "Python",
+        "SQL",
+        "Linux",
+        "Redis"
+      ],
+      "bonus": [
+        "Docker",
+        "分布式系统",
+        "机器学习",
+        "数据挖掘"
+      ],
+      "inflation": true,
+      "inflated_extra": [
+        "区块链",
+        "Neo4j",
+        "Scala",
+        "数字孪生",
+        "量子计算",
+        "扩散模型"
+      ]
+    }
+  },
+  {
+    "id": 120,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "duplicate": true,
+      "duplicate_of": 30
+    }
+  },
+  {
+    "id": 121,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "duplicate": true,
+      "duplicate_of": 1
+    }
+  },
+  {
+    "id": 122,
+    "job_title": "Java开发工程师",
+    "ground_truth": {
+      "duplicate": true,
+      "duplicate_of": 10
+    }
+  },
+  {
+    "id": 123,
+    "job_title": "自然语言处理工程师",
+    "ground_truth": {
+      "duplicate": true,
+      "duplicate_of": 59
+    }
+  },
+  {
+    "id": 124,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "duplicate": true,
+      "duplicate_of": 29
+    }
+  },
+  {
+    "id": 125,
+    "job_title": "机器学习工程师",
+    "ground_truth": {
+      "duplicate": true,
+      "duplicate_of": 16
+    }
+  },
+  {
+    "id": 126,
+    "job_title": "大数据开发工程师",
+    "ground_truth": {
+      "duplicate": true,
+      "duplicate_of": 28
+    }
+  },
+  {
+    "id": 127,
+    "job_title": "算法工程师",
+    "ground_truth": {
+      "duplicate": true,
+      "duplicate_of": 39
+    }
+  }
+]

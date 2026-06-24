@@ -1,0 +1,259 @@
+[
+  {
+    "id": 1,
+    "target_job": "机器学习工程师",
+    "candidate_name": "候选人01",
+    "years_experience": 3,
+    "ground_truth_skills": [
+      "Python",
+      "机器学习",
+      "深度学习",
+      "PyTorch",
+      "数据挖掘",
+      "推荐系统"
+    ],
+    "raw_text": "姓名：候选人01\n求职意向：机器学习工程师\n工作年限：3年\n学历：电子信息 硕士\n\n【专业技能】\n· 机器学习\n· 推荐系统\n· pytorch\n· DL\n· python\n· 数据挖掘\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  机器学习工程师  3年\n"
+  },
+  {
+    "id": 2,
+    "target_job": "机器学习工程师",
+    "candidate_name": "候选人02",
+    "years_experience": 2,
+    "ground_truth_skills": [
+      "Python",
+      "机器学习",
+      "深度学习"
+    ],
+    "raw_text": "姓名：候选人02\n求职意向：机器学习工程师\n工作年限：2年\n学历：计算机科学与技术 硕士\n\n【专业技能】\n· Python\n· 深度学习\n· 机器学习\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  机器学习工程师  2年\n"
+  },
+  {
+    "id": 3,
+    "target_job": "自然语言处理工程师",
+    "candidate_name": "候选人03",
+    "years_experience": 4,
+    "ground_truth_skills": [
+      "Python",
+      "自然语言处理",
+      "深度学习",
+      "PyTorch",
+      "大语言模型",
+      "检索增强生成",
+      "模型微调"
+    ],
+    "raw_text": "姓名：候选人03\n求职意向：自然语言处理工程师\n工作年限：4年\n学历：计算机科学与技术 硕士\n\n【专业技能】\n· torch\n· 自然语言处理\n· deep learning\n· Python\n· 大语言模型\n· 模型微调\n· 检索增强生成\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  自然语言处理工程师  4年\n"
+  },
+  {
+    "id": 4,
+    "target_job": "自然语言处理工程师",
+    "candidate_name": "候选人04",
+    "years_experience": 2,
+    "ground_truth_skills": [
+      "Python",
+      "深度学习",
+      "Transformer",
+      "大语言模型"
+    ],
+    "raw_text": "姓名：候选人04\n求职意向：自然语言处理工程师\n工作年限：2年\n学历：电子信息 硕士\n\n【专业技能】\n· 深度学习\n· Transformer\n· Python\n· LLM\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  自然语言处理工程师  2年\n"
+  },
+  {
+    "id": 5,
+    "target_job": "大数据开发工程师",
+    "candidate_name": "候选人05",
+    "years_experience": 5,
+    "ground_truth_skills": [
+      "Spark",
+      "Hadoop",
+      "Hive",
+      "SQL",
+      "数据仓库",
+      "Kafka",
+      "Flink"
+    ],
+    "raw_text": "姓名：候选人05\n求职意向：大数据开发工程师\n工作年限：5年\n学历：人工智能 硕士\n\n【专业技能】\n· Kafka\n· Hive\n· SQL\n· Hadoop\n· Flink\n· PySpark\n· 数仓\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  大数据开发工程师  5年\n"
+  },
+  {
+    "id": 6,
+    "target_job": "大数据开发工程师",
+    "candidate_name": "候选人06",
+    "years_experience": 1,
+    "ground_truth_skills": [
+      "SQL",
+      "Hive",
+      "数据仓库"
+    ],
+    "raw_text": "姓名：候选人06\n求职意向：大数据开发工程师\n工作年限：1年\n学历：软件工程 本科\n\n【专业技能】\n· 数仓\n· sql\n· Hive\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  大数据开发工程师  1年\n"
+  },
+  {
+    "id": 7,
+    "target_job": "Java开发工程师",
+    "candidate_name": "候选人07",
+    "years_experience": 4,
+    "ground_truth_skills": [
+      "Java",
+      "Spring",
+      "MySQL",
+      "Redis",
+      "分布式系统",
+      "消息队列",
+      "Kubernetes"
+    ],
+    "raw_text": "姓名：候选人07\n求职意向：Java开发工程师\n工作年限：4年\n学历：软件工程 本科\n\n【专业技能】\n· Redis\n· Spring\n· k8s\n· 消息中间件\n· JavaEE\n· 分布式\n· MySQL\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  Java开发工程师  4年\n"
+  },
+  {
+    "id": 8,
+    "target_job": "Java开发工程师",
+    "candidate_name": "候选人08",
+    "years_experience": 2,
+    "ground_truth_skills": [
+      "Java",
+      "MySQL",
+      "Spring"
+    ],
+    "raw_text": "姓名：候选人08\n求职意向：Java开发工程师\n工作年限：2年\n学历：计算机科学与技术 硕士\n\n【专业技能】\n· SpringBoot\n· java\n· MySQL\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  Java开发工程师  2年\n"
+  },
+  {
+    "id": 9,
+    "target_job": "算法工程师",
+    "candidate_name": "候选人09",
+    "years_experience": 5,
+    "ground_truth_skills": [
+      "Python",
+      "机器学习",
+      "深度学习",
+      "数据挖掘",
+      "强化学习",
+      "计算机视觉"
+    ],
+    "raw_text": "姓名：候选人09\n求职意向：算法工程师\n工作年限：5年\n学历：人工智能 硕士\n\n【专业技能】\n· machine learning\n· DL\n· Python3\n· 图像识别\n· RL\n· data mining\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  算法工程师  5年\n"
+  },
+  {
+    "id": 10,
+    "target_job": "计算机视觉工程师",
+    "candidate_name": "候选人10",
+    "years_experience": 3,
+    "ground_truth_skills": [
+      "Python",
+      "计算机视觉",
+      "深度学习",
+      "PyTorch",
+      "模型部署",
+      "推理加速"
+    ],
+    "raw_text": "姓名：候选人10\n求职意向：计算机视觉工程师\n工作年限：3年\n学历：人工智能 硕士\n\n【专业技能】\n· python\n· 模型部署\n· 图像识别\n· PyTorch\n· deep learning\n· 推理加速\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  计算机视觉工程师  3年\n"
+  },
+  {
+    "id": 11,
+    "target_job": "物联网开发工程师",
+    "candidate_name": "候选人11",
+    "years_experience": 3,
+    "ground_truth_skills": [
+      "物联网",
+      "嵌入式开发",
+      "C++",
+      "MQTT",
+      "传感器技术",
+      "边缘计算"
+    ],
+    "raw_text": "姓名：候选人11\n求职意向：物联网开发工程师\n工作年限：3年\n学历：数据科学 本科\n\n【专业技能】\n· 传感器\n· MQTT\n· edge computing\n· c++\n· 嵌入式\n· 物联网\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  物联网开发工程师  3年\n"
+  },
+  {
+    "id": 12,
+    "target_job": "物联网开发工程师",
+    "candidate_name": "候选人12",
+    "years_experience": 2,
+    "ground_truth_skills": [
+      "C++",
+      "Linux",
+      "嵌入式开发"
+    ],
+    "raw_text": "姓名：候选人12\n求职意向：物联网开发工程师\n工作年限：2年\n学历：数据科学 本科\n\n【专业技能】\n· 嵌入式开发\n· Linux\n· c++\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  物联网开发工程师  2年\n"
+  },
+  {
+    "id": 13,
+    "target_job": "数据分析师",
+    "candidate_name": "候选人13",
+    "years_experience": 2,
+    "ground_truth_skills": [
+      "SQL",
+      "Python",
+      "数据挖掘",
+      "数据建模",
+      "机器学习"
+    ],
+    "raw_text": "姓名：候选人13\n求职意向：数据分析师\n工作年限：2年\n学历：软件工程 本科\n\n【专业技能】\n· sql\n· Python\n· machine learning\n· data mining\n· 数据建模\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  数据分析师  2年\n"
+  },
+  {
+    "id": 14,
+    "target_job": "后端开发工程师",
+    "candidate_name": "候选人14",
+    "years_experience": 4,
+    "ground_truth_skills": [
+      "Java",
+      "MySQL",
+      "Redis",
+      "微服务",
+      "Go",
+      "消息队列",
+      "Docker"
+    ],
+    "raw_text": "姓名：候选人14\n求职意向：后端开发工程师\n工作年限：4年\n学历：软件工程 本科\n\n【专业技能】\n· Docker\n· Java\n· 消息队列\n· Redis\n· MySQL\n· Go\n· 微服务\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  后端开发工程师  4年\n"
+  },
+  {
+    "id": 15,
+    "target_job": "后端开发工程师",
+    "candidate_name": "候选人15",
+    "years_experience": 1,
+    "ground_truth_skills": [
+      "Python",
+      "MySQL",
+      "Redis"
+    ],
+    "raw_text": "姓名：候选人15\n求职意向：后端开发工程师\n工作年限：1年\n学历：数据科学 本科\n\n【专业技能】\n· mysql\n· Redis\n· python\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  后端开发工程师  1年\n"
+  },
+  {
+    "id": 16,
+    "target_job": "Python开发工程师",
+    "candidate_name": "候选人16",
+    "years_experience": 3,
+    "ground_truth_skills": [
+      "Python",
+      "SQL",
+      "MySQL",
+      "Linux",
+      "Docker",
+      "数据挖掘"
+    ],
+    "raw_text": "姓名：候选人16\n求职意向：Python开发工程师\n工作年限：3年\n学历：软件工程 本科\n\n【专业技能】\n· sql\n· mysql\n· docker\n· Python3\n· 数据挖掘\n· Linux\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  Python开发工程师  3年\n"
+  },
+  {
+    "id": 17,
+    "target_job": "算法工程师",
+    "candidate_name": "候选人17",
+    "years_experience": 6,
+    "ground_truth_skills": [
+      "Python",
+      "机器学习",
+      "深度学习",
+      "自然语言处理",
+      "大语言模型",
+      "模型部署",
+      "推理加速"
+    ],
+    "raw_text": "姓名：候选人17\n求职意向：算法工程师\n工作年限：6年\n学历：计算机科学与技术 硕士\n\n【专业技能】\n· 深度学习\n· NLP\n· 模型部署\n· TensorRT\n· 机器学习\n· 大模型\n· python\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  算法工程师  6年\n"
+  },
+  {
+    "id": 18,
+    "target_job": "计算机视觉工程师",
+    "candidate_name": "候选人18",
+    "years_experience": 4,
+    "ground_truth_skills": [
+      "计算机视觉",
+      "深度学习",
+      "Python",
+      "PyTorch",
+      "TensorFlow",
+      "多模态"
+    ],
+    "raw_text": "姓名：候选人18\n求职意向：计算机视觉工程师\n工作年限：4年\n学历：计算机科学与技术 硕士\n\n【专业技能】\n· PyTorch\n· 计算机视觉\n· deep learning\n· multimodal\n· TF\n· python\n\n【项目经历】\n1. 在实际项目中综合运用上述技术栈完成研发与上线，独立负责核心模块；\n2. 参与团队协作，具备良好的工程实践与问题解决能力。\n\n【工作经历】\n某科技公司  计算机视觉工程师  4年\n"
+  }
+]
