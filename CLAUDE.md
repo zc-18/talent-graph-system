@@ -40,7 +40,7 @@ PPT deck: `cd docs/ppt_build && npm install pptxgenjs && node build.js` (embeds 
 
 ## Deploy model (important)
 
-- **Code deploy is manual**: `npm run build` → tar `backend/app` + `backend/.env` + `frontend/dist` (as `static/`) → upload to server `/opt/talent-graph/backend/` → `systemctl restart talent-graph`. The server only ever receives the built tarball; **never edit code on the server** — local files are the single source of truth.
+- **Code deploy is manual**: `npm run build` → tar `backend/app` + `backend/.env` + `frontend/dist` (as `static/`) → upload to server `/opt/talent-graph/backend/` → `systemctl restart talent-graph`. The server only ever receives the built tarball; **never edit code on the server** — local files are the single source of truth. For a **frontend-only** change you can skip the restart: replace `/opt/talent-graph/backend/static/` (serve dir set by `STATIC_DIR` env in the systemd unit) — FastAPI `StaticFiles` + the SPA catch-all read from disk live.
 - **Data is NOT in code**: the knowledge graph lives in the cloud MySQL `talent_graph`. Local `data/*.py` scripts write into it; the production backend reads it live. So "publishing new jobs/data" = run the local pipeline scripts (no redeploy needed); redeploy only when `app/` or frontend code changes.
 - The server is tiny (~786MB free RAM). Backend runs as a **single uvicorn worker** via systemd `talent-graph.service` with `MemoryMax=420M`. Do not build Docker images on the server.
 
@@ -51,13 +51,15 @@ PPT deck: `cd docs/ppt_build && npm install pptxgenjs && node build.js` (embeds 
 
 Other services: `discovery` (new-job discovery, RAG-grounded via Tavily+Serper in `clients.multi_source_search`), `evolution` (diff old vs new capabilities → add/delete/modify changes), `resume` (PDF/Word parse), `matching` (multi-dimensional person-job match + learning path).
 
-**External clients** (`app/clients.py`): DeepSeek (LLM, OpenAI-compatible), BGE embeddings, Tavily, Serper. All keys in `backend/.env` (read via `app/config.py`).
+**External clients** (`app/clients.py`): DeepSeek (LLM, OpenAI-compatible), BGE embeddings, Tavily, Serper. All keys in `backend/.env` (read via `app/config.py`). `backend/.env` is **gitignored** (holds DB password + all API keys) — `backend/.env.example` carries placeholder keys; copy it to `.env` and fill in real values for local dev.
 
 **Two non-obvious gotchas baked into the code:**
 - `matching.py` semantic match is **guarded to CJK-only strings**: the BGE model (`bge-small-zh`) returns *degenerate/identical* vectors for pure-English tokens (Spark/Hive/Java all ≈ same vector), which would create false matches. English synonyms are handled by the dictionary in `taxonomy.normalize_skill` instead; semantic match only runs between Chinese strings, with a degeneracy guard.
 - `run_pipeline.py --use-cache` reuses `data/parsed_cache.json` (keyed by JD text hash) so only *new* JDs hit the LLM; it always writes the merged cache back, which `evaluate.py` then reuses for free.
 
 **Frontend** (`frontend/src/`): React + Vite + Tailwind + Framer Motion + ECharts. `App.tsx` = sidebar + routed pages (`pages/`) + `ChatBot.tsx` (streaming SSE assistant). `components/ui.tsx` = shared Card/Badge/etc; `components/Select.tsx` = custom dropdown (native selects look inconsistent). `api.ts` = typed axios client. The panorama force-graph (`pages/Panorama.tsx`) is the visual centerpiece: nodes are flat linear-gradient "coins" (jobs) + minimal flat dots (skills); edge hover-emphasis is **disabled** to avoid flicker; light theme uses `public/bg.png` + `public/graph-bg.png`.
+
+**Responsive layout** is breakpoint-driven (Tailwind `lg:` = 1024px), no JS width checks. In `App.tsx` the desktop sidebar is `hidden lg:flex` (its collapsible behavior is desktop-only); below `lg` a sticky top bar (hamburger + logo) plus a Framer-Motion left **drawer** (backdrop, closes on nav tap) replace it. Pages keep their desktop column count at the `lg:` breakpoint and stack via `grid-cols-1 sm:grid-cols-2/3`; the Panorama graph height is responsive (`h-[440px] sm:h-[560px] xl:h-[620px]`). When adding a page, follow this pattern — desktop classes gated behind `lg:`, mobile-first defaults below.
 
 ## Submission materials
 
