@@ -20,13 +20,17 @@ async def upload_resume(file: UploadFile = File(...), db: Session = Depends(get_
     if not text.strip():
         raise HTTPException(422, "无法从文件中提取文本，请检查文件格式")
     parsed = resume_svc.parse_resume(text)
-    row = models.Resume(filename=file.filename, candidate_name=parsed.get("candidate_name", ""),
-                        raw_text=text[:20000], extracted=parsed, skills=parsed.get("skills", []),
+    # 合规·隐私最小化：原始简历全文与姓名仅内存解析、即时返回本人，不落库；
+    # 服务端仅留存脱敏后的技能要素用于分析。
+    row = models.Resume(filename="(已脱敏)", candidate_name="", raw_text=None,
+                        extracted=resume_svc.redact_for_storage(parsed),
+                        skills=parsed.get("skills", []),
                         years_experience=parsed.get("years_experience", 0))
     db.add(row)
     db.commit()
     return {"resume_id": row.id, "filename": file.filename, "extracted": parsed,
-            "skill_count": len(parsed.get("skills", []))}
+            "skill_count": len(parsed.get("skills", [])),
+            "privacy_notice": "原始简历与姓名等个人信息仅用于本次解析，不在服务端留存"}
 
 
 @router.post("/resume/text")
@@ -36,12 +40,15 @@ def parse_resume_text(payload: dict, db: Session = Depends(get_db)):
     if not text.strip():
         raise HTTPException(400, "文本为空")
     parsed = resume_svc.parse_resume(text)
-    row = models.Resume(filename="text-input", candidate_name=parsed.get("candidate_name", ""),
-                        raw_text=text[:20000], extracted=parsed, skills=parsed.get("skills", []),
+    # 合规·隐私最小化：不持久化原始简历与姓名，仅留存脱敏技能要素
+    row = models.Resume(filename="text-input", candidate_name="", raw_text=None,
+                        extracted=resume_svc.redact_for_storage(parsed),
+                        skills=parsed.get("skills", []),
                         years_experience=parsed.get("years_experience", 0))
     db.add(row)
     db.commit()
-    return {"resume_id": row.id, "extracted": parsed, "skill_count": len(parsed.get("skills", []))}
+    return {"resume_id": row.id, "extracted": parsed, "skill_count": len(parsed.get("skills", [])),
+            "privacy_notice": "原始简历与姓名等个人信息仅用于本次解析，不在服务端留存"}
 
 
 def _job_caps(db: Session, job_id: int) -> list[dict]:

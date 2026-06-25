@@ -1,11 +1,11 @@
 {
   "summary": {
     "metric": "JD解析",
-    "n": 295,
-    "precision": 0.9883,
-    "recall": 0.984,
-    "f1": 0.9859,
-    "importance_acc": 0.9824
+    "n": 371,
+    "precision": 0.9859,
+    "recall": 0.9798,
+    "f1": 0.9825,
+    "importance_acc": 0.9775
   },
   "rows": [
     {
@@ -1570,9 +1570,9 @@
     {
       "id": 191,
       "role": "机器人开发工程师",
-      "precision": 0.933,
+      "precision": 1.0,
       "recall": 1.0,
-      "f1": 0.966,
+      "f1": 1.0,
       "missed": []
     },
     {
@@ -2430,6 +2430,653 @@
     {
       "id": 295,
       "role": "搜索算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 296,
+      "role": "自动驾驶系统工程师",
+      "precision": 0.625,
+      "recall": 0.833,
+      "f1": 0.714,
+      "missed": [
+        "自动驾驶"
+      ]
+    },
+    {
+      "id": 297,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 0.889,
+      "f1": 0.941,
+      "missed": [
+        "自动驾驶"
+      ]
+    },
+    {
+      "id": 298,
+      "role": "自动驾驶系统工程师",
+      "precision": 0.875,
+      "recall": 0.875,
+      "f1": 0.875,
+      "missed": [
+        "自动驾驶"
+      ]
+    },
+    {
+      "id": 299,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 300,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 301,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 302,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 0.875,
+      "f1": 0.933,
+      "missed": [
+        "自动驾驶"
+      ]
+    },
+    {
+      "id": 303,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 304,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 305,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 0.875,
+      "f1": 0.933,
+      "missed": [
+        "自动驾驶"
+      ]
+    },
+    {
+      "id": 306,
+      "role": "自动驾驶系统工程师",
+      "precision": 0.889,
+      "recall": 0.889,
+      "f1": 0.889,
+      "missed": [
+        "自动驾驶"
+      ]
+    },
+    {
+      "id": 307,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 0.875,
+      "f1": 0.933,
+      "missed": [
+        "自动驾驶"
+      ]
+    },
+    {
+      "id": 308,
+      "role": "自动驾驶系统工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 309,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 310,
+      "role": "服务机器人算法工程师",
+      "precision": 0.571,
+      "recall": 0.571,
+      "f1": 0.571,
+      "missed": [
+        "ROS",
+        "SLAM",
+        "机器人技术"
+      ]
+    },
+    {
+      "id": 311,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 0.889,
+      "f1": 0.941,
+      "missed": [
+        "机器人技术"
+      ]
+    },
+    {
+      "id": 312,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 0.875,
+      "f1": 0.933,
+      "missed": [
+        "机器人技术"
+      ]
+    },
+    {
+      "id": 313,
+      "role": "服务机器人算法工程师",
+      "precision": 0.857,
+      "recall": 0.857,
+      "f1": 0.857,
+      "missed": [
+        "机器人技术"
+      ]
+    },
+    {
+      "id": 314,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 315,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 0.875,
+      "f1": 0.933,
+      "missed": [
+        "机器人技术"
+      ]
+    },
+    {
+      "id": 316,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 317,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 0.833,
+      "f1": 0.909,
+      "missed": [
+        "机器人技术"
+      ]
+    },
+    {
+      "id": 318,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 319,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 320,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 321,
+      "role": "服务机器人算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 322,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 323,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 324,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 325,
+      "role": "数字孪生工程师",
+      "precision": 0.875,
+      "recall": 0.875,
+      "f1": 0.875,
+      "missed": [
+        "数字孪生"
+      ]
+    },
+    {
+      "id": 326,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 327,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 328,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 329,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 330,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 331,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 332,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 333,
+      "role": "数字孪生工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 334,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 335,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 336,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 337,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 338,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 339,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 340,
+      "role": "嵌入式软件工程师",
+      "precision": 0.857,
+      "recall": 0.857,
+      "f1": 0.857,
+      "missed": [
+        "物联网"
+      ]
+    },
+    {
+      "id": 341,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 342,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 343,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 344,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 345,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 346,
+      "role": "嵌入式软件工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 347,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 348,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 349,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 350,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 351,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 352,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 353,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 354,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 355,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 356,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 357,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 358,
+      "role": "边缘计算工程师",
+      "precision": 0.875,
+      "recall": 0.875,
+      "f1": 0.875,
+      "missed": [
+        "物联网"
+      ]
+    },
+    {
+      "id": 359,
+      "role": "边缘计算工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 360,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 0.875,
+      "f1": 0.933,
+      "missed": [
+        "物联网"
+      ]
+    },
+    {
+      "id": 361,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 362,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 363,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 364,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 365,
+      "role": "工业物联网工程师",
+      "precision": 0.75,
+      "recall": 0.75,
+      "f1": 0.75,
+      "missed": [
+        "PLC",
+        "物联网"
+      ]
+    },
+    {
+      "id": 366,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 367,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 368,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 369,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 370,
+      "role": "工业物联网工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "missed": []
+    },
+    {
+      "id": 371,
+      "role": "工业物联网工程师",
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,

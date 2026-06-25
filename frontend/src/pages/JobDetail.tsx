@@ -25,8 +25,9 @@ function SkillRow({ s, onEdit, onRemove }: any) {
       <div className="flex items-center gap-2 shrink-0">
         <span className="text-[11px] text-slate-400" title="独立来源数">×{s.source_count}</span>
         <ConfidencePill value={s.confidence} />
-        <button onClick={() => onEdit(s)} className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-accent transition"><Pencil className="w-3.5 h-3.5" /></button>
-        <button onClick={() => onRemove(s)} className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-rose-400 transition"><Trash2 className="w-3.5 h-3.5" /></button>
+        {/* 触屏设备（<lg）常驻显示，桌面端保留 hover 渐显；p-1 -m-1 放大点按热区不改变排版 */}
+        <button onClick={() => onEdit(s)} className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-accent transition p-1 -m-1"><Pencil className="w-3.5 h-3.5" /></button>
+        <button onClick={() => onRemove(s)} className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-rose-400 transition p-1 -m-1"><Trash2 className="w-3.5 h-3.5" /></button>
       </div>
     </div>
   )
@@ -65,39 +66,39 @@ export default function JobDetail() {
 
       <Card className="p-6 relative overflow-hidden">
         <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full blur-3xl opacity-25" style={{ background: color }} />
-        <div className="flex items-start justify-between gap-4 relative">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 relative">
+          <div className="min-w-0">
+            <div className="flex items-center flex-wrap gap-2 mb-2">
               <Badge tone="indigo">{job.category}</Badge>
               <Badge tone="slate">{LEVEL_LABEL[job.level] || job.level}</Badge>
               {job.is_new && <Badge tone="amber">新兴岗位 · 新兴度 {Math.round(job.emergence_score * 100)}%</Badge>}
               <Badge tone="cyan">v{job.version}</Badge>
             </div>
-            <h1 className="text-3xl font-extrabold text-slate-900">{job.name}</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{job.name}</h1>
             <p className="text-sm text-slate-500 mt-2 max-w-3xl leading-relaxed">{job.summary}</p>
           </div>
-          <div className="text-right shrink-0">
+          <div className="text-left sm:text-right sm:shrink-0">
             <div className="text-xs text-slate-500 mb-1">岗位定义置信度</div>
             <div className="text-3xl font-extrabold gradient-text">{Math.round(job.confidence * 100)}%</div>
             <div className="text-[11px] text-slate-400 mt-1">{job.evidence_count} 条证据支撑</div>
-            <button onClick={() => nav('/match', { state: { jobId } })} className="btn-primary mt-3">
+            <button onClick={() => nav('/match', { state: { jobId } })} className="btn-primary mt-3 w-full sm:w-auto justify-center">
               <Target className="w-4 h-4" /> 匹配此岗位
             </button>
           </div>
         </div>
       </Card>
 
-      <div className="flex gap-1.5">
+      <div className="flex flex-wrap gap-1.5">
         {[['profile', '能力画像', Layers], ['evidence', '溯源证据', ShieldCheck], ['history', '演化历史', History]].map(
           ([k, label, Icon]: any) => (
             <button key={k} onClick={() => setTab(k)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
                 tab === k ? 'bg-grad-accent text-white shadow-glow' : 'btn-ghost'}`}>
               <Icon className="w-4 h-4" /> {label}
             </button>
           ))}
         <button onClick={() => setEditor({ action: 'add', skill_name: '', importance: 'required', weight: 0.6, level_required: 'familiar' })}
-          className="btn-ghost ml-auto"><Plus className="w-4 h-4" /> 人工新增能力项</button>
+          className="btn-ghost w-full sm:w-auto sm:ml-auto justify-center whitespace-nowrap"><Plus className="w-4 h-4" /> 人工新增能力项</button>
       </div>
 
       {tab === 'profile' && (
@@ -157,7 +158,7 @@ export default function JobDetail() {
             <div className="space-y-2">
               {evidence.items.map((it: any, i: number) => (
                 <details key={i} className="rounded-xl bg-sky-50/70 px-4 py-3 group">
-                  <summary className="flex items-center justify-between cursor-pointer list-none">
+                  <summary className="flex items-center justify-between gap-2 flex-wrap cursor-pointer list-none">
                     <div className="flex items-center gap-2">
                       <FileText className="w-4 h-4 text-slate-500" />
                       <span className="text-sm font-medium text-slate-800">{it.skill}</span>

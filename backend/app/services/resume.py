@@ -116,3 +116,16 @@ def _postprocess_resume(data: dict, text: str) -> dict:
         "titles": data.get("titles", [])[:5],
         "raw_skill_count": len(raw_skills),
     }
+
+
+# 个人信息（PII）字段：依据数据合规与隐私最小化原则，不在服务端持久化
+_PII_FIELDS = {"candidate_name", "projects", "titles"}
+
+
+def redact_for_storage(parsed: dict) -> dict:
+    """数据最小化：剔除姓名/项目经历/任职单位等个人身份信息(PII)，
+    仅保留用于岗位匹配分析的非身份技能要素，供（可选的）服务端留存。
+
+    原始简历全文与姓名仅在内存中用于本次解析、即时返回给本人，绝不落库。
+    """
+    return {k: v for k, v in (parsed or {}).items() if k not in _PII_FIELDS}

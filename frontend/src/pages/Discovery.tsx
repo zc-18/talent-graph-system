@@ -40,14 +40,14 @@ export default function Discovery() {
       </div>
 
       <Card className="p-5">
-        <div className="flex gap-2">
-          <div className="glass flex items-center gap-2 px-3 py-2.5 flex-1">
-            <Search className="w-4 h-4 text-slate-500" />
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="glass flex items-center gap-2 px-3 py-2.5 flex-1 min-w-0">
+            <Search className="w-4 h-4 text-slate-500 shrink-0" />
             <input value={kw} onChange={e => setKw(e.target.value)} onKeyDown={e => e.key === 'Enter' && run(kw)}
               placeholder="输入新兴岗位关键词，如：提示词工程师 / AI智能体开发工程师"
-              className="bg-transparent text-sm outline-none flex-1 text-slate-800 placeholder:text-slate-400" />
+              className="bg-transparent text-sm outline-none flex-1 min-w-0 text-slate-800 placeholder:text-slate-400" />
           </div>
-          <button onClick={() => run(kw)} disabled={loading} className="btn-primary">
+          <button onClick={() => run(kw)} disabled={loading} className="btn-primary shrink-0 w-full sm:w-auto justify-center whitespace-nowrap">
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />} 发现并定义
           </button>
         </div>
@@ -107,16 +107,16 @@ export default function Discovery() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2 space-y-5">
             <Card className="p-6">
-              <div className="flex items-start justify-between">
-                <div>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div className="min-w-0">
                   <Badge tone="amber">新兴岗位</Badge>
                   <h2 className="text-2xl font-extrabold text-slate-900 mt-2">{def.job_title}</h2>
-                  <div className="flex gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2 mt-2">
                     <Badge tone="indigo">{def.category}</Badge>
                     <Badge tone="cyan">新兴度 {Math.round((def.emergence_score || 0) * 100)}%</Badge>
                   </div>
                 </div>
-                <button onClick={() => run(def.job_title, true)} disabled={saving} className="btn-primary">
+                <button onClick={() => run(def.job_title, true)} disabled={saving} className="btn-primary shrink-0 w-full sm:w-auto justify-center whitespace-nowrap">
                   {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} 保存到图谱
                 </button>
               </div>

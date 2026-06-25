@@ -90,7 +90,7 @@ export default function ChatBot() {
             initial={{ opacity: 0, y: 24, scale: 0.92 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.92 }} transition={{ type: 'spring', stiffness: 300, damping: 26 }}
             style={{ transformOrigin: 'bottom right' }}
-            className="fixed bottom-24 right-6 z-50 w-[384px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[calc(100vh-8rem)] flex flex-col rounded-3xl overflow-hidden bg-white shadow-2xl border border-white/80">
+            className="fixed bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-50 w-auto sm:w-[384px] h-[560px] max-h-[calc(100vh-8rem)] flex flex-col rounded-3xl overflow-hidden bg-white shadow-2xl border border-white/80">
             {/* 头部 */}
             <div className="px-4 py-3.5 flex items-center gap-3 text-white" style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}>
               <img src="/avatar.webp" alt="" className="w-11 h-11 rounded-full object-cover ring-2 ring-white/70 bg-white" />

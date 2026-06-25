@@ -22,6 +22,7 @@ uv run python data/generate_dataset.py        # generate seed_jds.json + ground_
 uv run python data/generate_resumes.py        # generate test_resumes.json
 uv run python data/run_pipeline.py --reset --use-cache   # clean→parse→cross-validate→persist graph
 uv run python data/seed_relations.py          # inject skill prerequisite/related/drives edges
+uv run python data/seed_evolution.py          # seed Java existing-job v1→v2 capability evolution (add/del/modify + sources), idempotent
 uv run python data/rediscover_new_jobs.py     # (re)create the is_new jobs via discovery (KEYWORDS list)
 uv run python data/evaluate.py all            # JD/resume/match accuracy (reads parsed_cache.json)
 uv run python data/export_deliverables.py     # export test-data samples + 综合测试报告.json

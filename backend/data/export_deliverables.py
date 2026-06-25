@@ -44,12 +44,34 @@ def export_existing_job(db, job_name="Java开发工程师"):
         evidence_sample.append({"skill": sk.name if sk else "", "importance": j.importance,
                                 "confidence": j.confidence, "source_count": j.source_count,
                                 "evidences": [{"type": e.source_type, "snippet": e.snippet} for e in evs]})
+    # 能力演化示例（核心功能②：明确标注新增/删除/修改 + 更新说明 + 数据源）
+    chgs = db.query(models.CapabilityChange).filter(
+        models.CapabilityChange.job_id == job.id).order_by(
+        models.CapabilityChange.created_at.desc()).all()
+    type_cn = {"add": "新增", "delete": "删除", "modify": "修改"}
+    evo_items = [{
+        "变更类型": type_cn.get(c.change_type, c.change_type), "能力项": c.skill_name,
+        "重要度": c.importance, "变更前": c.old_value, "变更后": c.new_value,
+        "更新说明": c.reason, "数据源": c.data_source, "置信度": c.confidence,
+    } for c in chgs]
+    evolution_example = {
+        "说明": "针对既有岗位，系统用最新招聘 JD 窗口 + 多源联网证据交叉验证，识别能力要求变化并标注增/删/改，附更新说明与数据源。",
+        "当前版本": job.version,
+        "变更统计": {
+            "新增": sum(1 for c in chgs if c.change_type == "add"),
+            "删除": sum(1 for c in chgs if c.change_type == "delete"),
+            "修改": sum(1 for c in chgs if c.change_type == "modify"),
+        },
+        "变更明细": evo_items,
+    } if evo_items else {"说明": "暂无演化记录；可在『岗位能力演化』页用最新 JD 驱动该岗位更新。"}
+
     out = {
         "岗位类型": "既有岗位",
         "岗位名称": job_name,
         "输入_数据源示例": inputs,
         "输出_能力图谱": {
             "岗位名称": detail["name"], "技术栈": detail["category"], "级别": detail["level"],
+            "版本": detail.get("version"),
             "岗位简介": detail["summary"], "核心职责": detail["core_responsibilities"],
             "典型应用场景": detail["typical_scenarios"],
             "必备技能": [{"技能": s["name"], "权重": s["weight"], "掌握级别": s["level_required"],
@@ -58,6 +80,7 @@ def export_existing_job(db, job_name="Java开发工程师"):
             "加分技能": [{"技能": s["name"], "置信度": s["confidence"]} for s in detail["bonus_skills"]],
             "岗位定义置信度": detail["confidence"], "证据总数": detail["evidence_count"],
         },
+        "能力演化示例_v1到v2": evolution_example,
         "反幻觉_能力项溯源示例": evidence_sample,
     }
     dump("既有岗位_Java开发工程师_图谱与数据源.json", out)

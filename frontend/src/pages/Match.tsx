@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ReactECharts from 'echarts-for-react'
 import {
-  Target, Upload, FileText, Loader2, CheckCircle2, XCircle, Route, Lightbulb, Sparkles, User,
+  Target, Upload, FileText, Loader2, CheckCircle2, XCircle, Route, Lightbulb, Sparkles, User, ShieldCheck,
 } from 'lucide-react'
 import { api, JobListItem } from '../api'
 import { Card, Badge, Spinner } from '../components/ui'
@@ -129,6 +129,11 @@ export default function Match() {
           <button onClick={analyze} disabled={loading || !jobId} className="btn-primary w-full">
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Target className="w-4 h-4" />} 开始匹配诊断
           </button>
+
+          <div className="flex items-start gap-1.5 text-[11px] text-slate-400 leading-relaxed">
+            <ShieldCheck className="w-3.5 h-3.5 shrink-0 mt-0.5 text-emerald-500" />
+            <span>隐私合规：简历仅在内存中解析用于本次匹配，原始简历与姓名等个人信息<b className="text-slate-500">不在服务器留存</b>，仅保留脱敏技能要素。</span>
+          </div>
         </Card>
 
         <div className="lg:col-span-2 space-y-5">

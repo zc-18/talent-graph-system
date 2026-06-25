@@ -21,7 +21,7 @@ export default function Evolution() {
   const [result, setResult] = useState<any>(null)
   const [history, setHistory] = useState<any>(null)
 
-  useEffect(() => { api.jobs({ size: 100, is_new: false }).then(d => { setJobs(d.items); if (d.items[0]) setJobId(d.items[0].id) }) }, [])
+  useEffect(() => { api.jobs({ size: 100, is_new: false }).then(d => { setJobs(d.items); const pref = d.items.find(j => j.name === 'Java开发工程师') || d.items[0]; if (pref) setJobId(pref.id) }) }, [])
   useEffect(() => { if (jobId) { api.changes(jobId).then(setHistory); setResult(null) } }, [jobId])
 
   const run = async () => {
