@@ -146,7 +146,8 @@ export default function JobDetail() {
               </Card>
             )}
           </div>
-          <div className="space-y-5">
+          {/* 右列高度通常小于左列：sticky 跟随滚动，避免滚到底部时右侧大片留白 */}
+          <div className="space-y-5 lg:sticky lg:top-6 self-start">
             <Card className="p-5">
               <div className="label mb-3 flex items-center gap-2"><Briefcase className="w-4 h-4 text-violet-600" /> 核心职责</div>
               <ul className="space-y-2">

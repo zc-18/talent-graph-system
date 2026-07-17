@@ -39,8 +39,11 @@ export default function Match() {
     finally { setLoading(false) }
   }
 
+  // 无任何简历输入（未上传解析成功、也没有粘贴文本）时禁止诊断
+  const hasInput = mode === 'text' ? !!resumeText.trim() : (!!extracted || !!resumeText.trim())
+
   const analyze = async () => {
-    if (!jobId) return
+    if (!jobId || !hasInput) return
     setLoading(true); setResult(null)
     try {
       const body: any = { job_id: jobId, generate_suggestions: true }
@@ -139,7 +142,8 @@ export default function Match() {
             </div>
           )}
 
-          <button onClick={analyze} disabled={loading || !jobId} className="btn-primary w-full">
+          <button onClick={analyze} disabled={loading || !jobId || !hasInput} className="btn-primary w-full"
+            title={hasInput ? undefined : '请先上传简历或粘贴文本'}>
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Target className="w-4 h-4" />} 开始匹配诊断
           </button>
 

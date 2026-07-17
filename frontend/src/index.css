@@ -59,12 +59,14 @@ body {
 .fade-in { animation: fadeIn .5s ease both; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-/* 键盘可达性：全局统一的 focus 可见环（鼠标点击不触发） */
-:focus-visible {
+/* 键盘可达性：全局统一的 focus 可见环（鼠标点击不触发）。
+   输入类控件自带 border/ring 焦点样式，排除以免出现双重描边 */
+:focus-visible:not(input):not(textarea):not(select) {
   outline: 2px solid rgba(59,130,246,0.55);
   outline-offset: 2px;
   border-radius: 8px;
 }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
 
 /* 尊重系统"减少动态效果"偏好 */
 @media (prefers-reduced-motion: reduce) {

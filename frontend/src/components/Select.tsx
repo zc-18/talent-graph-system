@@ -74,11 +74,13 @@ export default function Select({ value, onChange, options, placeholder = '请选
       </button>
       <AnimatePresence>
         {open && (
-          <motion.div ref={listRef} role="listbox" aria-label={label || placeholder}
+          <motion.div
             initial={{ opacity: 0, y: -6, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }} transition={{ duration: 0.16 }}
-            className={`absolute z-30 mt-2 min-w-full max-h-64 overflow-auto rounded-2xl bg-white border border-slate-200 shadow-xl p-1.5 ${align === 'right' ? 'right-0' : 'left-0'}`}
+            className={`absolute z-30 mt-2 min-w-full rounded-2xl bg-white border border-slate-200 shadow-xl overflow-hidden ${align === 'right' ? 'right-0' : 'left-0'}`}
             style={{ boxShadow: '0 16px 40px -12px rgba(37,99,235,0.25)' }}>
+            {/* 内层滚动：外层 overflow-hidden 裁掉圆角，滚动条不再穿出容器 */}
+            <div ref={listRef} role="listbox" aria-label={label || placeholder} className="max-h-64 overflow-y-auto p-1.5">
             {opts.map((o, i) => {
               const active = String(o.value) === String(value)
               return (
@@ -91,6 +93,7 @@ export default function Select({ value, onChange, options, placeholder = '请选
                 </button>
               )
             })}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
