@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, Search, Globe, Save, Zap, Loader2, ExternalLink } from 'lucide-react'
-import { api } from '../api'
+import { api, errMsg } from '../api'
 import { Card, Badge, ConfidencePill } from '../components/ui'
+import { useToast } from '../components/Toast'
 
 export default function Discovery() {
   const [seeds, setSeeds] = useState<string[]>([])
@@ -11,8 +12,9 @@ export default function Discovery() {
   const [saving, setSaving] = useState(false)
   const [res, setRes] = useState<any>(null)
   const nav = useNavigate()
+  const toast = useToast()
 
-  useEffect(() => { api.seeds().then(d => setSeeds(d.seeds)) }, [])
+  useEffect(() => { api.seeds().then(d => setSeeds(d.seeds)).catch(() => {}) }, [])
 
   const run = async (keyword: string, save = false) => {
     if (!keyword.trim()) return
@@ -20,7 +22,9 @@ export default function Discovery() {
     try {
       const r = await api.discover(keyword, save)
       setRes(r)
-      if (save && r.saved) nav(`/jobs/${r.saved.id}`)
+      if (save && r.saved) { toast('success', `「${r.saved.name ?? keyword}」已保存到图谱`); nav(`/jobs/${r.saved.id}`) }
+    } catch (e) {
+      toast('error', errMsg(e, save ? '保存失败，请重试' : '发现失败：联网检索或大模型服务暂不可用'))
     } finally { setLoading(false); setSaving(false) }
   }
 

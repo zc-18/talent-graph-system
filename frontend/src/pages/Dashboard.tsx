@@ -5,7 +5,7 @@ import {
   Briefcase, Sparkles, Layers, Database, ShieldCheck, Copy, TrendingUp, ArrowRight,
 } from 'lucide-react'
 import { api, Stats, JobListItem, CATEGORY_COLORS } from '../api'
-import { Card, Spinner, ConfidencePill, Badge } from '../components/ui'
+import { Card, ConfidencePill, Badge, PageSkeleton, ErrorState } from '../components/ui'
 
 function Kpi({ icon, label, value, sub, tone, delay }: any) {
   return (
@@ -23,21 +23,25 @@ function Kpi({ icon, label, value, sub, tone, delay }: any) {
 export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [jobs, setJobs] = useState<JobListItem[]>([])
+  const [error, setError] = useState(false)
   const nav = useNavigate()
 
-  useEffect(() => {
-    api.stats().then(setStats)
-    api.jobs({ size: 8 }).then(d => setJobs(d.items))
-  }, [])
+  const load = () => {
+    setError(false)
+    api.stats().then(setStats).catch(() => setError(true))
+    api.jobs({ size: 8 }).then(d => setJobs(d.items)).catch(() => {})
+  }
+  useEffect(load, [])
 
-  if (!stats) return <Spinner />
+  if (error) return <ErrorState text="驾驶舱数据加载失败" onRetry={load} />
+  if (!stats) return <PageSkeleton />
 
   const catData = Object.entries(stats.categories).map(([name, value]) => ({
     name, value, itemStyle: { color: CATEGORY_COLORS[name] || '#64748B' },
   }))
   const donut = {
     tooltip: { trigger: 'item' },
-    legend: { bottom: 0, textStyle: { color: '#64748B' }, itemWidth: 10, itemHeight: 10 },
+    legend: { bottom: 0, type: 'scroll', textStyle: { color: '#64748B', fontSize: 11 }, itemWidth: 10, itemHeight: 10, itemGap: 10, pageIconSize: 10 },
     series: [{
       type: 'pie', radius: ['52%', '78%'], center: ['50%', '44%'], avoidLabelOverlap: false,
       itemStyle: { borderColor: '#ffffff', borderWidth: 3 },

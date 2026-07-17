@@ -2,6 +2,15 @@ import axios from 'axios'
 
 const http = axios.create({ baseURL: '/api', timeout: 200000 })
 
+// 统一提取后端/网络错误为可读文案（供 toast / ErrorState 使用）
+export function errMsg(e: any, fallback = '操作失败，请稍后重试'): string {
+  const detail = e?.response?.data?.detail
+  if (typeof detail === 'string' && detail) return detail
+  if (e?.code === 'ECONNABORTED') return '请求超时，请检查网络后重试'
+  if (e?.message === 'Network Error') return '网络连接失败，请检查网络'
+  return fallback
+}
+
 // ---------- 类型 ----------
 export interface JobListItem {
   id: number; name: string; category: string; level: string; is_new: boolean

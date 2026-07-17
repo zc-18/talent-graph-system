@@ -69,28 +69,28 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* 悬浮按钮 */}
+      {/* 悬浮按钮：移动端更小更贴边，减少对内容的遮挡；主内容区已预留底部安全间距 */}
       <motion.button
         onClick={() => setOpen(o => !o)}
         initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.6, type: 'spring', stiffness: 260, damping: 18 }}
         whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-50 rounded-full shadow-glow grid place-items-center"
-        style={{ width: 60, height: 60, background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}
-        aria-label="AI助手">
+        className="fixed bottom-4 right-4 lg:bottom-6 lg:right-6 z-50 rounded-full shadow-glow grid place-items-center w-12 h-12 lg:w-[60px] lg:h-[60px]"
+        style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}
+        aria-label={open ? '关闭 AI 助手' : '打开 AI 助手'}>
         {open
           ? <X className="w-6 h-6 text-white" />
-          : <img src="/avatar.webp" alt="助手" className="w-12 h-12 rounded-full object-cover ring-2 ring-white/80" />}
+          : <img src="/avatar.webp" alt="" className="w-9 h-9 lg:w-12 lg:h-12 rounded-full object-cover ring-2 ring-white/80" />}
       </motion.button>
 
-      {/* 对话面板 */}
+      {/* 对话面板：<sm 近全屏，≥sm 右下浮窗 */}
       <AnimatePresence>
         {open && (
-          <motion.div
+          <motion.div role="dialog" aria-label="智岗小助手对话"
             initial={{ opacity: 0, y: 24, scale: 0.92 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.92 }} transition={{ type: 'spring', stiffness: 300, damping: 26 }}
             style={{ transformOrigin: 'bottom right' }}
-            className="fixed bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-50 w-auto sm:w-[384px] h-[560px] max-h-[calc(100vh-8rem)] flex flex-col rounded-3xl overflow-hidden bg-white shadow-2xl border border-white/80">
+            className="fixed inset-x-2 top-16 bottom-20 sm:inset-auto sm:bottom-24 sm:right-6 z-50 sm:w-[384px] sm:h-[560px] sm:max-h-[calc(100vh-8rem)] flex flex-col rounded-3xl overflow-hidden bg-white shadow-2xl border border-white/80">
             {/* 头部 */}
             <div className="px-4 py-3.5 flex items-center gap-3 text-white" style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}>
               <img src="/avatar.webp" alt="" className="w-11 h-11 rounded-full object-cover ring-2 ring-white/70 bg-white" />
@@ -100,7 +100,7 @@ export default function ChatBot() {
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 inline-block" /> 在线 · 随时为你解答
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} className="text-white/80 hover:text-white p-1"><X className="w-5 h-5" /></button>
+              <button onClick={() => setOpen(false)} aria-label="关闭对话" className="text-white/80 hover:text-white p-1"><X className="w-5 h-5" /></button>
             </div>
 
             {/* 消息区 */}
@@ -141,7 +141,7 @@ export default function ChatBot() {
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input) } }}
                   placeholder="输入你的问题…" disabled={loading}
                   className="flex-1 resize-none bg-transparent outline-none text-[13px] text-slate-700 placeholder:text-slate-400 max-h-24" />
-                <button onClick={() => send(input)} disabled={loading || !input.trim()}
+                <button onClick={() => send(input)} disabled={loading || !input.trim()} aria-label="发送"
                   className="shrink-0 w-8 h-8 rounded-xl grid place-items-center text-white disabled:opacity-40 transition"
                   style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}>
                   <Send className="w-4 h-4" />

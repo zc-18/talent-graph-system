@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Briefcase, Search, Sparkles, PlusCircle } from 'lucide-react'
 import { api, JobListItem, CATEGORY_COLORS } from '../api'
-import { Card, Spinner, ConfidencePill, Badge, EmptyState } from '../components/ui'
+import { Card, Spinner, ConfidencePill, Badge, EmptyState, ErrorState } from '../components/ui'
 import Select from '../components/Select'
 
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
@@ -14,16 +14,18 @@ export default function Jobs() {
   const [q, setQ] = useState('')
   const [onlyNew, setOnlyNew] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const nav = useNavigate()
 
-  useEffect(() => { api.categories().then(d => setCats(['全部', ...d.categories])) }, [])
+  useEffect(() => { api.categories().then(d => setCats(['全部', ...d.categories])).catch(() => {}) }, [])
   const load = () => {
-    setLoading(true)
+    setLoading(true); setError(false)
     const params: any = { size: 100 }
     if (cat !== '全部') params.category = cat
     if (q) params.q = q
     if (onlyNew) params.is_new = true
     api.jobs(params).then(d => { setItems(d.items); setLoading(false) })
+      .catch(() => { setError(true); setLoading(false) })
   }
   useEffect(load, [cat, onlyNew])
 
@@ -55,7 +57,7 @@ export default function Jobs() {
         </button>
       </div>
 
-      {loading ? <Spinner /> : items.length === 0 ? <EmptyState text="未找到匹配的岗位" /> : (
+      {loading ? <Spinner /> : error ? <ErrorState text="岗位列表加载失败" onRetry={load} /> : items.length === 0 ? <EmptyState text="未找到匹配的岗位" hint="试试更换分类或关键词" /> : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {items.map((j, i) => (
             <Card key={j.id} delay={i * 0.02} hover className="p-5 cursor-pointer group"

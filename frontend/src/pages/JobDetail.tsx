@@ -3,31 +3,38 @@ import { useParams, useNavigate } from 'react-router-dom'
 import {
   ArrowLeft, ShieldCheck, FileText, History, Plus, Trash2, Pencil, Target, Layers, Briefcase,
 } from 'lucide-react'
-import { api, JobDetail as TJob, CATEGORY_COLORS } from '../api'
-import { Card, Spinner, ConfidencePill, Badge } from '../components/ui'
+import { api, errMsg, JobDetail as TJob, CATEGORY_COLORS } from '../api'
+import { Card, Spinner, ConfidencePill, Badge, ErrorState } from '../components/ui'
+import { useToast } from '../components/Toast'
+import ConfirmDialog from '../components/ConfirmDialog'
 
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
 const SKILL_LEVEL: Record<string, string> = { familiar: '了解', proficient: '熟练', expert: '精通' }
 
 function SkillRow({ s, onEdit, onRemove }: any) {
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-sky-50/70 hover:bg-sky-100/80 px-3.5 py-2.5 transition group">
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-slate-800">{s.name}</span>
-          <Badge tone="slate">{s.category}</Badge>
-          <span className="text-[11px] text-slate-400">{SKILL_LEVEL[s.level_required] || ''}</span>
-        </div>
-        <div className="mt-1.5 h-1.5 rounded-full bg-sky-50/80 overflow-hidden">
+    <div className="rounded-xl bg-sky-50/70 hover:bg-sky-100/80 px-3.5 py-2.5 transition group">
+      {/* 首行：技能名 + 分类/级别；操作按钮固定右侧。徽章不换行，窄屏截断而非竖排 */}
+      <div className="flex items-center gap-2 min-w-0">
+        <span className="text-sm font-medium text-slate-800 shrink-0">{s.name}</span>
+        <span className="chip border bg-slate-100 text-slate-600 border-slate-200 whitespace-nowrap truncate min-w-0">{s.category}</span>
+        <span className="text-[11px] text-slate-400 shrink-0 hidden sm:inline">{SKILL_LEVEL[s.level_required] || ''}</span>
+        <span className="flex-1" />
+        <button onClick={() => onEdit(s)} aria-label={`编辑技能 ${s.name}`}
+          className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-accent transition p-2 -m-1 shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-accent/40 outline-none">
+          <Pencil className="w-3.5 h-3.5" /></button>
+        <button onClick={() => onRemove(s)} aria-label={`删除技能 ${s.name}`}
+          className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-rose-400 transition p-2 -m-1 shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-rose-300 outline-none">
+          <Trash2 className="w-3.5 h-3.5" /></button>
+      </div>
+      {/* 次行：权重条 + 来源数/置信度 */}
+      <div className="mt-1.5 flex items-center gap-2.5">
+        <div className="flex-1 h-1.5 rounded-full bg-sky-50/80 overflow-hidden">
           <div className="h-full rounded-full bg-grad-accent" style={{ width: `${Math.round(s.weight * 100)}%` }} />
         </div>
-      </div>
-      <div className="flex items-center gap-2 shrink-0">
-        <span className="text-[11px] text-slate-400" title="独立来源数">×{s.source_count}</span>
-        <ConfidencePill value={s.confidence} />
-        {/* 触屏设备（<lg）常驻显示，桌面端保留 hover 渐显；p-1 -m-1 放大点按热区不改变排版 */}
-        <button onClick={() => onEdit(s)} className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-accent transition p-1 -m-1"><Pencil className="w-3.5 h-3.5" /></button>
-        <button onClick={() => onRemove(s)} className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-rose-400 transition p-1 -m-1"><Trash2 className="w-3.5 h-3.5" /></button>
+        <span className="text-[11px] text-slate-400 shrink-0 sm:hidden">{SKILL_LEVEL[s.level_required] || ''}</span>
+        <span className="text-[11px] text-slate-400 shrink-0" title="独立来源数">×{s.source_count}</span>
+        <span className="shrink-0"><ConfidencePill value={s.confidence} /></span>
       </div>
     </div>
   )
@@ -42,20 +49,32 @@ export default function JobDetail() {
   const [evidence, setEvidence] = useState<any>(null)
   const [history, setHistory] = useState<any>(null)
   const [editor, setEditor] = useState<any>(null)
+  const [removing, setRemoving] = useState<any>(null)
+  const [loadError, setLoadError] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const toast = useToast()
 
-  const reload = () => api.job(jobId).then(setJob)
+  const reload = () => { setLoadError(false); api.job(jobId).then(setJob).catch(() => setLoadError(true)) }
   useEffect(() => { reload() }, [jobId])
   useEffect(() => {
-    if (tab === 'evidence' && !evidence) api.jobEvidence(jobId).then(setEvidence)
-    if (tab === 'history' && !history) api.changes(jobId).then(setHistory)
+    if (tab === 'evidence' && !evidence) api.jobEvidence(jobId).then(setEvidence).catch(e => toast('error', errMsg(e, '证据加载失败')))
+    if (tab === 'history' && !history) api.changes(jobId).then(setHistory).catch(e => toast('error', errMsg(e, '演化记录加载失败')))
   }, [tab])
 
+  if (loadError) return <ErrorState text="岗位详情加载失败" onRetry={reload} />
   if (!job) return <Spinner />
   const color = CATEGORY_COLORS[job.category] || '#6366F1'
 
   const saveEdit = async (action: string, payload: any) => {
-    await api.manualEdit({ job_id: jobId, action, ...payload })
-    setEditor(null); setEvidence(null); setHistory(null); reload()
+    setSaving(true)
+    try {
+      await api.manualEdit({ job_id: jobId, action, ...payload })
+      toast('success', action === 'remove' ? '能力项已删除' : action === 'add' ? '能力项已新增' : '能力项已更新')
+      setEditor(null); setEvidence(null); setHistory(null); reload()
+    } catch (e) {
+      // 失败保留编辑器内容，便于修正后重试
+      toast('error', errMsg(e, '保存失败，请重试'))
+    } finally { setSaving(false) }
   }
 
   return (
@@ -110,7 +129,7 @@ export default function JobDetail() {
                 {job.required_skills.map(s => (
                   <SkillRow key={s.skill_id} s={s}
                     onEdit={(sk: any) => setEditor({ action: 'update', skill_name: sk.name, importance: sk.importance, weight: sk.weight, level_required: sk.level_required })}
-                    onRemove={(sk: any) => saveEdit('remove', { skill_name: sk.name })} />
+                    onRemove={(sk: any) => setRemoving(sk)} />
                 ))}
               </div>
             </Card>
@@ -253,16 +272,21 @@ export default function JobDetail() {
             </div>
             <div className="flex gap-2 mt-5">
               <button className="btn-ghost flex-1" onClick={() => setEditor(null)}>取消</button>
-              <button className="btn-primary flex-1" disabled={!editor.skill_name}
+              <button className="btn-primary flex-1" disabled={!editor.skill_name || saving}
                 onClick={() => saveEdit(editor.action, {
                   skill_name: editor.skill_name, importance: editor.importance,
                   weight: editor.weight, level_required: editor.level_required })}>
-                保存
+                {saving ? '保存中…' : '保存'}
               </button>
             </div>
           </div>
         </div>
       )}
+
+      <ConfirmDialog open={!!removing} title={`删除能力项「${removing?.name ?? ''}」？`}
+        description="删除后将记录到演化历史，可通过人工新增恢复。"
+        onConfirm={() => { const sk = removing; setRemoving(null); saveEdit('remove', { skill_name: sk.name }) }}
+        onCancel={() => setRemoving(null)} />
     </div>
   )
 }

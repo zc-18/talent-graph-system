@@ -58,3 +58,15 @@ body {
 
 .fade-in { animation: fadeIn .5s ease both; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* 键盘可达性：全局统一的 focus 可见环（鼠标点击不触发） */
+:focus-visible {
+  outline: 2px solid rgba(59,130,246,0.55);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* 尊重系统"减少动态效果"偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

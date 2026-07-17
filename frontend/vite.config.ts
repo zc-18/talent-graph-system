@@ -9,5 +9,18 @@ export default defineConfig({
       '/api': { target: 'http://127.0.0.1:8200', changeOrigin: true },
     },
   },
-  build: { outDir: 'dist', chunkSizeWarningLimit: 1500 },
+  build: {
+    outDir: 'dist',
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        // 大依赖独立分包：echarts 只在图表页用到，路由懒加载后不再进首包
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom'],
+          echarts: ['echarts', 'echarts-for-react'],
+          motion: ['framer-motion'],
+        },
+      },
+    },
+  },
 })

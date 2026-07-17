@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { Network, Filter, Maximize2 } from 'lucide-react'
 import { api, GraphData, CATEGORY_COLORS } from '../api'
-import { Card, Spinner, Badge } from '../components/ui'
+import { Card, Spinner, Badge, ErrorState } from '../components/ui'
 import Select from '../components/Select'
 
 export default function Panorama() {
@@ -14,18 +14,23 @@ export default function Panorama() {
   const [minConf, setMinConf] = useState(0)
   const [sel, setSel] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const chartRef = useRef<any>(null)
 
   useEffect(() => {
-    api.categories().then(d => { setCats(['全部', ...d.categories]); setLevels(['全部', ...d.levels]) })
+    api.categories().then(d => { setCats(['全部', ...d.categories]); setLevels(['全部', ...d.levels]) }).catch(() => {})
   }, [])
-  useEffect(() => {
-    setLoading(true)
+  const load = () => {
+    setLoading(true); setError(false)
     api.panorama(cat, level, minConf).then(d => { setData(d); setLoading(false) })
-  }, [cat, level, minConf])
+      .catch(() => { setError(true); setLoading(false) })
+  }
+  useEffect(load, [cat, level, minConf])
 
   const option = useMemo(() => {
     if (!data) return {}
+    // 窄屏下缩小初始视图并简化标签，避免节点文字被画布左右边缘裁切
+    const isNarrow = typeof window !== 'undefined' && window.innerWidth < 640
     const hex2rgba = (hex: string, a: number) => {
       const m = hex.replace('#', '')
       const r = parseInt(m.slice(0, 2), 16), g = parseInt(m.slice(2, 4), 16), b = parseInt(m.slice(4, 6), 16)
@@ -75,12 +80,14 @@ export default function Panorama() {
               shadowBlur: 9, shadowColor: hex2rgba(light, 0.4),
             },
         label: {
-          show: true,
+          show: isJob || !isNarrow,
           position: isJob ? 'bottom' : 'right',
           distance: isJob ? 8 : 6,
           color: isJob ? '#0F172A' : '#7C8BA3',
-          fontSize: isJob ? 12 : 10,
+          fontSize: isJob ? (isNarrow ? 10 : 12) : 10,
           fontWeight: isJob ? 700 : 500,
+          width: isNarrow ? 96 : undefined,
+          overflow: isNarrow ? 'truncate' : undefined,
           backgroundColor: isJob ? 'rgba(255,255,255,0.85)' : 'transparent',
           padding: isJob ? [3, 7] : 0, borderRadius: 6,
         },
@@ -108,7 +115,9 @@ export default function Panorama() {
       },
       series: [{
         type: 'graph', layout: 'force', roam: true, draggable: true,
-        force: { repulsion: 560, edgeLength: [120, 260], gravity: 0.10, friction: 0.18 },
+        force: isNarrow
+          ? { repulsion: 300, edgeLength: [70, 150], gravity: 0.16, friction: 0.18 }
+          : { repulsion: 560, edgeLength: [120, 260], gravity: 0.10, friction: 0.18 },
         categories: [{ name: '岗位' }, { name: '技能点' }],
         labelLayout: { hideOverlap: true },
         // 平滑状态切换 + 仅节点触发柔和聚焦，杜绝鼠标划过连线时的"屏闪"
@@ -116,7 +125,7 @@ export default function Panorama() {
         emphasis: { focus: 'adjacency',
           label: { show: true }, lineStyle: { width: 2, color: 'rgba(129,140,248,0.6)' } },
         blur: { itemStyle: { opacity: 0.65 }, lineStyle: { opacity: 0.08 }, label: { opacity: 0.45 } },
-        data: nodes, links, scaleLimit: { min: 0.3, max: 4 }, center: ['50%', '50%'], zoom: 0.78,
+        data: nodes, links, scaleLimit: { min: 0.3, max: 4 }, center: ['50%', '50%'], zoom: isNarrow ? 0.6 : 0.78,
       }],
     }
   }, [data])
@@ -158,7 +167,7 @@ export default function Panorama() {
             style={{ backgroundImage: 'url(/graph-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
           <div className="absolute inset-0 rounded-2xl bg-white/25 pointer-events-none" />
           <div className="relative z-10">
-            {loading ? <Spinner label="构建图谱中…" /> : (
+            {loading ? <Spinner label="构建图谱中…" /> : error ? <ErrorState text="图谱加载失败" onRetry={load} /> : (
               <div className="h-[440px] sm:h-[560px] xl:h-[620px]">
                 <ReactECharts ref={chartRef} option={option} style={{ height: '100%' }} onEvents={onEvents}
                   notMerge lazyUpdate />

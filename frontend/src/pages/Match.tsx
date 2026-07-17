@@ -4,9 +4,10 @@ import ReactECharts from 'echarts-for-react'
 import {
   Target, Upload, FileText, Loader2, CheckCircle2, XCircle, Route, Lightbulb, Sparkles, User, ShieldCheck,
 } from 'lucide-react'
-import { api, JobListItem } from '../api'
-import { Card, Badge, Spinner } from '../components/ui'
+import { api, errMsg, JobListItem } from '../api'
+import { Card, Badge, Spinner, ErrorState } from '../components/ui'
 import Select from '../components/Select'
+import { useToast } from '../components/Toast'
 
 export default function Match() {
   const loc = useLocation() as any
@@ -17,16 +18,24 @@ export default function Match() {
   const [extracted, setExtracted] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
+  const [jobsError, setJobsError] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+  const toast = useToast()
 
-  useEffect(() => { api.jobs({ size: 100 }).then(d => { setJobs(d.items); if (!jobId && d.items[0]) setJobId(d.items[0].id) }) }, [])
+  const loadJobs = () => {
+    setJobsError(false)
+    api.jobs({ size: 100 }).then(d => { setJobs(d.items); if (!jobId && d.items[0]) setJobId(d.items[0].id) })
+      .catch(() => setJobsError(true))
+  }
+  useEffect(() => { loadJobs() }, [])
 
   const onFile = async (f: File) => {
     setLoading(true); setExtracted(null); setResult(null)
     try {
       const r = await api.uploadResume(f)
       setExtracted(r.extracted)
-    } catch (e: any) { alert('简历解析失败：' + (e?.response?.data?.detail || e.message)) }
+      toast('success', `简历解析成功，提取 ${r.extracted?.skills?.length ?? 0} 项技能`)
+    } catch (e: any) { toast('error', errMsg(e, '简历解析失败，请确认文件为 PDF/Word 格式')) }
     finally { setLoading(false) }
   }
 
@@ -40,7 +49,8 @@ export default function Match() {
       else if (resumeText) body.resume_text = resumeText
       const r = await api.analyze(body)
       setResult(r)
-    } finally { setLoading(false) }
+    } catch (e) { toast('error', errMsg(e, '匹配诊断失败，请稍后重试')) }
+    finally { setLoading(false) }
   }
 
   const res = result?.result
@@ -88,8 +98,10 @@ export default function Match() {
         <Card className="p-5 space-y-4">
           <div>
             <div className="label mb-1.5">目标岗位</div>
-            <Select value={jobId ?? ''} onChange={v => setJobId(Number(v))}
-              options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
+            {jobsError ? <ErrorState text="岗位列表加载失败" onRetry={loadJobs} /> : (
+              <Select value={jobId ?? ''} onChange={v => setJobId(Number(v))} label="选择目标岗位"
+                options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
+            )}
           </div>
 
           <div className="flex gap-1.5">
@@ -102,14 +114,15 @@ export default function Match() {
           </div>
 
           {mode === 'upload' ? (
-            <div onClick={() => fileRef.current?.click()}
-              className="border-2 border-dashed border-sky-200 rounded-2xl p-8 text-center cursor-pointer hover:border-accent/50 transition bg-sky-50/40">
-              <input ref={fileRef} type="file" accept=".pdf,.docx,.doc,.txt" className="hidden"
+            <button type="button" onClick={() => fileRef.current?.click()}
+              aria-label="上传 PDF 或 Word 简历文件"
+              className="w-full border-2 border-dashed border-sky-200 rounded-2xl p-8 text-center cursor-pointer hover:border-accent/50 transition bg-sky-50/40 outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:border-accent/50">
+              <input ref={fileRef} type="file" accept=".pdf,.docx,.doc,.txt" className="hidden" tabIndex={-1}
                 onChange={e => e.target.files?.[0] && onFile(e.target.files[0])} />
               <Upload className="w-8 h-8 mx-auto text-slate-400" />
               <p className="text-sm text-slate-600 mt-2">点击上传 PDF / Word 简历</p>
               <p className="text-[11px] text-slate-400 mt-1">提取准确率 ≥ 90%</p>
-            </div>
+            </button>
           ) : (
             <textarea value={resumeText} onChange={e => setResumeText(e.target.value)} rows={7}
               className="input resize-none text-xs" placeholder="粘贴简历内容或技能列表…" />

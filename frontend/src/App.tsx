@@ -1,17 +1,21 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   LayoutDashboard, Network, Briefcase, Sparkles, GitBranch, Target, ChevronLeft, ChevronRight, Menu, X,
 } from 'lucide-react'
-import Dashboard from './pages/Dashboard'
-import Panorama from './pages/Panorama'
-import Jobs from './pages/Jobs'
-import JobDetail from './pages/JobDetail'
-import Discovery from './pages/Discovery'
-import Evolution from './pages/Evolution'
-import Match from './pages/Match'
 import ChatBot from './components/ChatBot'
+import { ToastProvider } from './components/Toast'
+import { Spinner } from './components/ui'
+
+// 路由级代码分割：各页面（含 ECharts 等重依赖）按需加载，减小首包
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const Panorama = lazy(() => import('./pages/Panorama'))
+const Jobs = lazy(() => import('./pages/Jobs'))
+const JobDetail = lazy(() => import('./pages/JobDetail'))
+const Discovery = lazy(() => import('./pages/Discovery'))
+const Evolution = lazy(() => import('./pages/Evolution'))
+const Match = lazy(() => import('./pages/Match'))
 
 const NAV = [
   { to: '/', label: '数据驾驶舱', icon: LayoutDashboard, end: true },
@@ -136,32 +140,37 @@ export default function App() {
   const [collapsed, setCollapsed] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   return (
-    <div className="flex min-h-screen">
-      <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
-      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
-      <div className="flex-1 min-w-0 flex flex-col">
-        <MobileTopBar onOpen={() => setDrawerOpen(true)} />
-        <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-6 lg:py-7">
-          <div className="max-w-[1400px] mx-auto">
-            <AnimatePresence mode="wait">
-              <motion.div key={loc.pathname}
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.28 }}>
-                <Routes location={loc}>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/panorama" element={<Panorama />} />
-                  <Route path="/discovery" element={<Discovery />} />
-                  <Route path="/evolution" element={<Evolution />} />
-                  <Route path="/jobs" element={<Jobs />} />
-                  <Route path="/jobs/:id" element={<JobDetail />} />
-                  <Route path="/match" element={<Match />} />
-                </Routes>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </main>
+    <ToastProvider>
+      <div className="flex min-h-screen">
+        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
+        <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+        <div className="flex-1 min-w-0 flex flex-col">
+          <MobileTopBar onOpen={() => setDrawerOpen(true)} />
+          {/* pb-24：为右下角 AI 助手悬浮球预留底部安全区，避免遮挡页面末尾内容 */}
+          <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-6 lg:py-7 pb-24 lg:pb-28">
+            <div className="max-w-[1400px] mx-auto">
+              <AnimatePresence mode="wait">
+                <motion.div key={loc.pathname}
+                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.28 }}>
+                  <Suspense fallback={<Spinner />}>
+                    <Routes location={loc}>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/panorama" element={<Panorama />} />
+                      <Route path="/discovery" element={<Discovery />} />
+                      <Route path="/evolution" element={<Evolution />} />
+                      <Route path="/jobs" element={<Jobs />} />
+                      <Route path="/jobs/:id" element={<JobDetail />} />
+                      <Route path="/match" element={<Match />} />
+                    </Routes>
+                  </Suspense>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </main>
+        </div>
+        <ChatBot />
       </div>
-      <ChatBot />
-    </div>
+    </ToastProvider>
   )
 }

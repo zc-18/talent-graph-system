@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { GitBranch, Loader2, Plus, X, Wand2, ArrowRight } from 'lucide-react'
-import { api, JobListItem } from '../api'
+import { api, errMsg, JobListItem } from '../api'
 import { Card, Badge, Spinner } from '../components/ui'
 import Select from '../components/Select'
+import { useToast } from '../components/Toast'
 
 const SAMPLE_JD = `招聘高级Java开发工程师
 岗位职责：负责核心交易系统研发，参与AI能力中台建设。
@@ -20,9 +21,14 @@ export default function Evolution() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [history, setHistory] = useState<any>(null)
+  const toast = useToast()
 
-  useEffect(() => { api.jobs({ size: 100, is_new: false }).then(d => { setJobs(d.items); const pref = d.items.find(j => j.name === 'Java开发工程师') || d.items[0]; if (pref) setJobId(pref.id) }) }, [])
-  useEffect(() => { if (jobId) { api.changes(jobId).then(setHistory); setResult(null) } }, [jobId])
+  useEffect(() => {
+    api.jobs({ size: 100, is_new: false })
+      .then(d => { setJobs(d.items); const pref = d.items.find(j => j.name === 'Java开发工程师') || d.items[0]; if (pref) setJobId(pref.id) })
+      .catch(e => toast('error', errMsg(e, '岗位列表加载失败')))
+  }, [])
+  useEffect(() => { if (jobId) { api.changes(jobId).then(setHistory).catch(() => setHistory({ items: [] })); setResult(null) } }, [jobId])
 
   const run = async () => {
     if (!jobId) return
@@ -30,7 +36,11 @@ export default function Evolution() {
     try {
       const r = await api.evolve(jobId, jds.filter(j => j.trim()), true)
       setResult(r)
-      api.changes(jobId).then(setHistory)
+      toast('success', `演化完成：新增 ${r.evolution.added} · 删除 ${r.evolution.deleted} · 修改 ${r.evolution.modified}`)
+      api.changes(jobId).then(setHistory).catch(() => {})
+    } catch (e) {
+      // 失败保留已输入的 JD，便于修正后重试
+      toast('error', errMsg(e, '演化失败，请稍后重试'))
     } finally { setLoading(false) }
   }
 
@@ -51,7 +61,7 @@ export default function Evolution() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <Card className="p-5 space-y-3">
           <div className="label">选择待演化岗位</div>
-          <Select value={jobId ?? ''} onChange={v => setJobId(Number(v))}
+          <Select value={jobId ?? ''} onChange={v => setJobId(Number(v))} label="选择待演化岗位"
             options={jobs.map(j => ({ value: String(j.id), label: `${j.name}（${j.category}）` }))} />
           <div className="flex items-center justify-between">
             <div className="label">输入最新 JD（可多条）</div>
@@ -63,8 +73,8 @@ export default function Evolution() {
                 rows={i === 0 ? 8 : 4} className="input resize-none font-mono text-xs leading-relaxed"
                 placeholder="粘贴招聘 JD 文本…" />
               {jds.length > 1 && (
-                <button onClick={() => setJds(jds.filter((_, k) => k !== i))}
-                  className="absolute top-2 right-2 text-slate-400 hover:text-rose-400"><X className="w-4 h-4" /></button>
+                <button onClick={() => setJds(jds.filter((_, k) => k !== i))} aria-label={`删除第 ${i + 1} 条 JD`}
+                  className="absolute top-2 right-2 text-slate-400 hover:text-rose-400 p-1 -m-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-rose-300"><X className="w-4 h-4" /></button>
               )}
             </div>
           ))}
