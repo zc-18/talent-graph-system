@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Network, Filter, Maximize2 } from 'lucide-react'
+import { Filter, Maximize2 } from 'lucide-react'
+import { ITreeStructure } from '../components/icons'
 import { api, GraphData, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, Badge, ErrorState } from '../components/ui'
 import Select from '../components/Select'
@@ -139,7 +140,7 @@ export default function Panorama() {
       <div className="flex items-end justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
-            <Network className="w-6 h-6 text-white" />
+            <ITreeStructure className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900">新一代信息技术岗位全景图谱</h1>

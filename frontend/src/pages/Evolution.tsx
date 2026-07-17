@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { GitBranch, Loader2, Plus, X, Wand2, ArrowRight } from 'lucide-react'
+import { Loader2, Plus, X, Wand2, ArrowRight } from 'lucide-react'
+import { IGitBranch } from '../components/icons'
 import { api, errMsg, JobListItem } from '../api'
 import { Card, Badge, Spinner } from '../components/ui'
 import Select from '../components/Select'
@@ -50,7 +51,7 @@ export default function Evolution() {
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
-          <GitBranch className="w-6 h-6 text-white" />
+          <IGitBranch className="w-6 h-6 text-white" />
         </div>
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">既有岗位能力动态演化</h1>

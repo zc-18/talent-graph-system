@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Briefcase, Search, Sparkles, PlusCircle } from 'lucide-react'
+import { Search, Sparkles, PlusCircle } from 'lucide-react'
+import { IBriefcase } from '../components/icons'
 import { api, JobListItem, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, EmptyState, ErrorState } from '../components/ui'
 import Select from '../components/Select'
@@ -33,7 +34,7 @@ export default function Jobs() {
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow">
-          <Briefcase className="w-6 h-6 text-white" />
+          <IBriefcase className="w-6 h-6 text-white" />
         </div>
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">岗位库管理</h1>

@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ReactECharts from 'echarts-for-react'
 import {
-  Target, Upload, FileText, Loader2, CheckCircle2, XCircle, Route, Lightbulb, Sparkles, User, ShieldCheck,
+  Upload, FileText, Loader2, CheckCircle2, XCircle, Sparkles,
 } from 'lucide-react'
+import { ITarget, IPath, ILightbulb, IUpload, IUser, IShieldCheck } from '../components/icons'
 import { api, errMsg, JobListItem } from '../api'
 import { Card, Badge, Spinner, ErrorState } from '../components/ui'
 import Select from '../components/Select'
@@ -89,7 +90,7 @@ export default function Match() {
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
-          <Target className="w-6 h-6 text-white" />
+          <ITarget className="w-6 h-6 text-white" />
         </div>
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">人岗匹配诊断与差距分析</h1>
@@ -122,7 +123,7 @@ export default function Match() {
               className="w-full border-2 border-dashed border-sky-200 rounded-2xl p-8 text-center cursor-pointer hover:border-accent/50 transition bg-sky-50/40 outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:border-accent/50">
               <input ref={fileRef} type="file" accept=".pdf,.docx,.doc,.txt" className="hidden" tabIndex={-1}
                 onChange={e => e.target.files?.[0] && onFile(e.target.files[0])} />
-              <Upload className="w-8 h-8 mx-auto text-slate-400" />
+              <IUpload className="w-8 h-8 mx-auto text-slate-400" />
               <p className="text-sm text-slate-600 mt-2">点击上传 PDF / Word 简历</p>
               <p className="text-[11px] text-slate-400 mt-1">提取准确率 ≥ 90%</p>
             </button>
@@ -134,7 +135,7 @@ export default function Match() {
           {extracted && (
             <div className="rounded-xl bg-sky-50/70 p-3">
               <div className="flex items-center gap-2 text-sm text-slate-700 mb-2">
-                <User className="w-4 h-4 text-accent" /> {extracted.candidate_name || '候选人'} · {extracted.years_experience}年经验
+                <IUser className="w-4 h-4 text-accent" /> {extracted.candidate_name || '候选人'} · {extracted.years_experience}年经验
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {extracted.skills.map((s: string) => <Badge key={s} tone="slate">{s}</Badge>)}
@@ -144,11 +145,11 @@ export default function Match() {
 
           <button onClick={analyze} disabled={loading || !jobId || !hasInput} className="btn-primary w-full"
             title={hasInput ? undefined : '请先上传简历或粘贴文本'}>
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Target className="w-4 h-4" />} 开始匹配诊断
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ITarget className="w-4 h-4" />} 开始匹配诊断
           </button>
 
           <div className="flex items-start gap-1.5 text-[11px] text-slate-400 leading-relaxed">
-            <ShieldCheck className="w-3.5 h-3.5 shrink-0 mt-0.5 text-emerald-500" />
+            <IShieldCheck className="w-3.5 h-3.5 shrink-0 mt-0.5 text-emerald-500" />
             <span>隐私合规：简历仅在内存中解析用于本次匹配，原始简历与姓名等个人信息<b className="text-slate-500">不在服务器留存</b>，仅保留脱敏技能要素。</span>
           </div>
         </Card>
@@ -159,17 +160,17 @@ export default function Match() {
             <Card className="p-8" delay={0.05}>
               <div className="text-center mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-grad-accent grid place-items-center shadow-glow mx-auto mb-3">
-                  <Target className="w-8 h-8 text-white" />
+                  <ITarget className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-800">上传简历或输入技能，开始诊断</h3>
                 <p className="text-sm text-slate-500 mt-1">系统将对比目标岗位能力图谱，输出多维匹配与提升路径</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
-                  [Target, '综合匹配度', '加权必备/加分/级别/领域四维评分', '#6366F1'],
-                  [Route, '能力差距分析', '清晰列出已具备与缺失的必备技能', '#0EA5E9'],
-                  [Route, '学习路径规划', '按技能先修关系拓扑排序，分步提升', '#A855F7'],
-                  [Lightbulb, '针对性建议', '大模型给出资源方向与达标周期', '#F59E0B'],
+                  [ITarget, '综合匹配度', '加权必备/加分/级别/领域四维评分', '#6366F1'],
+                  [IPath, '能力差距分析', '清晰列出已具备与缺失的必备技能', '#0EA5E9'],
+                  [IPath, '学习路径规划', '按技能先修关系拓扑排序，分步提升', '#A855F7'],
+                  [ILightbulb, '针对性建议', '大模型给出资源方向与达标周期', '#F59E0B'],
                 ].map(([Icon, t, d, c]: any, i: number) => (
                   <div key={i} className="rounded-2xl bg-sky-50/70 border border-slate-200/60 p-4 flex gap-3">
                     <div className="w-9 h-9 rounded-xl grid place-items-center shrink-0" style={{ background: c }}>
@@ -227,7 +228,7 @@ export default function Match() {
 
               {result.learning_path?.length > 0 && (
                 <Card className="p-5">
-                  <div className="flex items-center gap-2 label mb-4"><Route className="w-4 h-4 text-cyan-600" /> 岗位学习路径规划</div>
+                  <div className="flex items-center gap-2 label mb-4"><IPath className="w-4 h-4 text-cyan-600" /> 岗位学习路径规划</div>
                   <div className="relative pl-6">
                     <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-accent to-cyan-400/40" />
                     {result.learning_path.map((p: any) => (
@@ -249,7 +250,7 @@ export default function Match() {
 
               {result.suggestions?.overall_advice && (
                 <Card className="p-5">
-                  <div className="flex items-center gap-2 label mb-3"><Lightbulb className="w-4 h-4 text-amber-600" /> 针对性改进建议</div>
+                  <div className="flex items-center gap-2 label mb-3"><ILightbulb className="w-4 h-4 text-amber-600" /> 针对性改进建议</div>
                   <p className="text-sm text-slate-700 leading-relaxed">{result.suggestions.overall_advice}</p>
                   {result.suggestions.timeline && (
                     <div className="mt-2 text-xs text-cyan-600 flex items-center gap-1"><Sparkles className="w-3 h-3" /> {result.suggestions.timeline}</div>

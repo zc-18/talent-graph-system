@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
-  ArrowLeft, ShieldCheck, FileText, History, Plus, Trash2, Pencil, Target, Layers, Briefcase,
+  ArrowLeft, FileText, History, Plus, Trash2, Pencil,
 } from 'lucide-react'
+import { ITarget, IStack, IShieldCheck, IBriefcase } from '../components/icons'
 import { api, errMsg, JobDetail as TJob, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, ErrorState } from '../components/ui'
 import { useToast } from '../components/Toast'
@@ -101,14 +102,14 @@ export default function JobDetail() {
             <div className="text-3xl font-extrabold gradient-text">{Math.round(job.confidence * 100)}%</div>
             <div className="text-[11px] text-slate-400 mt-1">{job.evidence_count} 条证据支撑</div>
             <button onClick={() => nav('/match', { state: { jobId } })} className="btn-primary mt-3 w-full sm:w-auto justify-center">
-              <Target className="w-4 h-4" /> 匹配此岗位
+              <ITarget className="w-4 h-4" /> 匹配此岗位
             </button>
           </div>
         </div>
       </Card>
 
       <div className="flex flex-wrap gap-1.5">
-        {[['profile', '能力画像', Layers], ['evidence', '溯源证据', ShieldCheck], ['history', '演化历史', History]].map(
+        {[['profile', '能力画像', IStack], ['evidence', '溯源证据', IShieldCheck], ['history', '演化历史', History]].map(
           ([k, label, Icon]: any) => (
             <button key={k} onClick={() => setTab(k)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
@@ -124,7 +125,7 @@ export default function JobDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2 space-y-5">
             <Card className="p-5">
-              <div className="label mb-3 flex items-center gap-2"><Target className="w-4 h-4 text-accent" /> 必备技能 ({job.required_skills.length})</div>
+              <div className="label mb-3 flex items-center gap-2"><ITarget className="w-4 h-4 text-accent" /> 必备技能 ({job.required_skills.length})</div>
               <div className="space-y-2">
                 {job.required_skills.map(s => (
                   <SkillRow key={s.skill_id} s={s}
@@ -149,7 +150,7 @@ export default function JobDetail() {
           {/* 右列高度通常小于左列：sticky 跟随滚动，避免滚到底部时右侧大片留白 */}
           <div className="space-y-5 lg:sticky lg:top-6 self-start">
             <Card className="p-5">
-              <div className="label mb-3 flex items-center gap-2"><Briefcase className="w-4 h-4 text-violet-600" /> 核心职责</div>
+              <div className="label mb-3 flex items-center gap-2"><IBriefcase className="w-4 h-4 text-violet-600" /> 核心职责</div>
               <ul className="space-y-2">
                 {job.core_responsibilities.map((r, i) => (
                   <li key={i} className="text-sm text-slate-600 flex gap-2">
@@ -171,7 +172,7 @@ export default function JobDetail() {
       {tab === 'evidence' && (
         <Card className="p-5">
           <div className="text-sm text-slate-500 mb-4 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <IShieldCheck className="w-4 h-4 text-emerald-600" />
             反幻觉机制：每个能力项均保留多源证据与置信度，可追溯到原始招聘 JD
           </div>
           {!evidence ? <Spinner /> : (

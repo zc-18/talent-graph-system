@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Briefcase, Sparkles, Layers, Database, ShieldCheck, Copy, TrendingUp, ArrowRight,
-} from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { IBriefcase, IStack, IDatabase, ICopy, IShieldCheck, ITrendUp } from '../components/icons'
 import { api, Stats, JobListItem, CATEGORY_COLORS } from '../api'
 import { Card, ConfidencePill, Badge, PageSkeleton, ErrorState } from '../components/ui'
 
@@ -72,13 +71,13 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Kpi delay={0} label="岗位总数" value={stats.total_jobs} sub={`新兴岗位 ${stats.new_jobs} 个`}
-          icon={<Briefcase className="w-5 h-5 text-white" />} tone="bg-grad-accent" />
+          icon={<IBriefcase className="w-5 h-5 text-white" />} tone="bg-grad-accent" />
         <Kpi delay={0.05} label="技能点" value={stats.total_skills} sub="技能级粒度"
-          icon={<Layers className="w-5 h-5 text-white" />} tone="bg-grad-violet" />
+          icon={<IStack className="w-5 h-5 text-white" />} tone="bg-grad-violet" />
         <Kpi delay={0.1} label="已处理 JD" value={stats.total_jds} sub={`覆盖 ${Object.keys(stats.categories).length} 大技术栈`}
-          icon={<Database className="w-5 h-5 text-white" />} tone="bg-cyan-500/80" />
+          icon={<IDatabase className="w-5 h-5 text-white" />} tone="bg-cyan-500/80" />
         <Kpi delay={0.15} label="抄袭/重复拦截" value={stats.duplicate_jds} sub="交叉验证去噪"
-          icon={<Copy className="w-5 h-5 text-white" />} tone="bg-rose-500/80" />
+          icon={<ICopy className="w-5 h-5 text-white" />} tone="bg-rose-500/80" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -88,7 +87,7 @@ export default function Dashboard() {
         </Card>
         <Card delay={0.15} className="p-5">
           <div className="flex items-center gap-2 font-semibold text-slate-700">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" /> 图谱平均置信度
+            <IShieldCheck className="w-4 h-4 text-emerald-600" /> 图谱平均置信度
           </div>
           <ReactECharts option={qualityGauge} style={{ height: 260 }} />
           <div className="text-center text-xs text-slate-500 -mt-2">反幻觉交叉验证 · 来源加权可信度</div>
@@ -120,7 +119,7 @@ export default function Dashboard() {
 
       <Card delay={0.25} className="p-6">
         <div className="flex items-center gap-2 font-semibold text-slate-700 mb-4">
-          <TrendingUp className="w-4 h-4 text-cyan-600" /> 全流程闭环
+          <ITrendUp className="w-4 h-4 text-cyan-600" /> 全流程闭环
         </div>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
           {[

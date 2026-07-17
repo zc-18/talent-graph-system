@@ -2,8 +2,9 @@ import { lazy, Suspense, useState } from 'react'
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  LayoutDashboard, Network, Briefcase, Sparkles, GitBranch, Target, ChevronLeft, ChevronRight, Menu, X,
+  ChevronLeft, ChevronRight, Menu, X,
 } from 'lucide-react'
+import { IGauge, ITreeStructure, ISparkle, IGitBranch, IBriefcase, ITarget } from './components/icons'
 import ChatBot from './components/ChatBot'
 import { ToastProvider } from './components/Toast'
 import { Spinner } from './components/ui'
@@ -18,12 +19,12 @@ const Evolution = lazy(() => import('./pages/Evolution'))
 const Match = lazy(() => import('./pages/Match'))
 
 const NAV = [
-  { to: '/', label: '数据驾驶舱', icon: LayoutDashboard, end: true },
-  { to: '/panorama', label: '全景能力图谱', icon: Network },
-  { to: '/discovery', label: '新岗位发现', icon: Sparkles },
-  { to: '/evolution', label: '岗位能力演化', icon: GitBranch },
-  { to: '/jobs', label: '岗位库管理', icon: Briefcase },
-  { to: '/match', label: '人岗匹配诊断', icon: Target },
+  { to: '/', label: '数据驾驶舱', icon: IGauge, end: true },
+  { to: '/panorama', label: '全景能力图谱', icon: ITreeStructure },
+  { to: '/discovery', label: '新岗位发现', icon: ISparkle },
+  { to: '/evolution', label: '岗位能力演化', icon: IGitBranch },
+  { to: '/jobs', label: '岗位库管理', icon: IBriefcase },
+  { to: '/match', label: '人岗匹配诊断', icon: ITarget },
 ]
 
 // 导航项样式（桌面收起态 collapsed 时居中、无文字）

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sparkles, Search, Globe, Save, Zap, Loader2, ExternalLink } from 'lucide-react'
+import { Search, Loader2, ExternalLink } from 'lucide-react'
+import { ISparkle, IGlobe, ILightning, IFloppyDisk } from '../components/icons'
 import { api, errMsg } from '../api'
 import { Card, Badge, ConfidencePill } from '../components/ui'
 import { useToast } from '../components/Toast'
@@ -35,7 +36,7 @@ export default function Discovery() {
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow animate-float">
-          <Sparkles className="w-6 h-6 text-white" />
+          <ISparkle className="w-6 h-6 text-white" />
         </div>
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">新岗位发现与定义</h1>
@@ -52,7 +53,7 @@ export default function Discovery() {
               className="bg-transparent text-sm outline-none flex-1 min-w-0 text-slate-800 placeholder:text-slate-400" />
           </div>
           <button onClick={() => run(kw)} disabled={loading} className="btn-primary shrink-0 w-full sm:w-auto justify-center whitespace-nowrap">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />} 发现并定义
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ILightning className="w-4 h-4" />} 发现并定义
           </button>
         </div>
         <div className="flex flex-wrap gap-2 mt-3">
@@ -76,15 +77,15 @@ export default function Discovery() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <Card className="lg:col-span-2 p-7" delay={0.05}>
             <div className="flex items-center gap-2 mb-1">
-              <Sparkles className="w-5 h-5 text-violet-500" />
+              <ISparkle className="w-5 h-5 text-violet-500" />
               <h3 className="text-lg font-bold text-slate-800">从一个关键词，发现一个新职业</h3>
             </div>
             <p className="text-sm text-slate-500 mb-5">系统不是凭空想象，而是先检索真实网络证据，再由大模型基于证据生成可溯源的岗位定义。</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
-                [Globe, '多源检索证据', 'Tavily + Serper 双独立来源并行检索，统计独立来源数', '#0EA5E9'],
-                [Zap, '大模型 RAG 接地', '基于证据生成岗位定义，约束"不臆造证据外内容"', '#6366F1'],
-                [Save, '交叉验证入库', '逐项校验证据、评估置信度，沉淀进全景图谱', '#10B981'],
+                [IGlobe, '多源检索证据', 'Tavily + Serper 双独立来源并行检索，统计独立来源数', '#0EA5E9'],
+                [ILightning, '大模型 RAG 接地', '基于证据生成岗位定义，约束"不臆造证据外内容"', '#6366F1'],
+                [IFloppyDisk, '交叉验证入库', '逐项校验证据、评估置信度，沉淀进全景图谱', '#10B981'],
               ].map(([Icon, t, d, c]: any, i: number) => (
                 <div key={i} className="rounded-2xl bg-sky-50/70 border border-slate-200/60 p-4">
                   <div className="w-9 h-9 rounded-xl grid place-items-center mb-2.5" style={{ background: c }}>
@@ -99,7 +100,7 @@ export default function Discovery() {
           </Card>
           <Card className="p-6 flex flex-col items-center justify-center text-center" delay={0.1}>
             <div className="w-20 h-20 rounded-full bg-grad-violet grid place-items-center shadow-glow mb-4 animate-float">
-              <Sparkles className="w-10 h-10 text-white" />
+              <ISparkle className="w-10 h-10 text-white" />
             </div>
             <div className="text-sm font-semibold text-slate-700">已内置 {seeds.length} 个新兴岗位候选</div>
             <div className="text-xs text-slate-400 mt-1.5 leading-relaxed">覆盖大模型应用、AI 智能体、RAG、具身智能、MLOps 等前沿方向</div>
@@ -121,7 +122,7 @@ export default function Discovery() {
                   </div>
                 </div>
                 <button onClick={() => run(def.job_title, true)} disabled={saving} className="btn-primary shrink-0 w-full sm:w-auto justify-center whitespace-nowrap">
-                  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} 保存到图谱
+                  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <IFloppyDisk className="w-4 h-4" />} 保存到图谱
                 </button>
               </div>
               <p className="text-sm text-slate-600 mt-3 leading-relaxed">{def.summary}</p>
@@ -165,7 +166,7 @@ export default function Discovery() {
           </div>
 
           <Card className="p-5">
-            <div className="flex items-center gap-2 label mb-3"><Globe className="w-4 h-4 text-cyan-600" /> 多源证据 ({cand?.evidence_count})</div>
+            <div className="flex items-center gap-2 label mb-3"><IGlobe className="w-4 h-4 text-cyan-600" /> 多源证据 ({cand?.evidence_count})</div>
             <div className="flex gap-2 mb-3">
               <Badge tone="cyan">独立来源 {cand?.independent_sources}</Badge>
               <Badge tone="emerald">交叉验证</Badge>
