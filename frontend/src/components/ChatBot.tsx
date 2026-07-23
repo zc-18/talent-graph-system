@@ -92,15 +92,18 @@ export default function ChatBot() {
             style={{ transformOrigin: 'bottom right' }}
             className="fixed inset-x-2 top-16 bottom-20 sm:inset-auto sm:bottom-24 sm:right-6 z-50 sm:w-[384px] sm:h-[560px] sm:max-h-[calc(100vh-8rem)] flex flex-col rounded-3xl overflow-hidden bg-white shadow-2xl border border-white/80">
             {/* 头部 */}
-            <div className="px-4 py-3.5 flex items-center gap-3 text-white" style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}>
-              <img src="/avatar.webp" alt="" className="w-11 h-11 rounded-full object-cover ring-2 ring-white/70 bg-white" />
-              <div className="flex-1 min-w-0">
+            <div className="relative px-4 py-3.5 flex items-center gap-3 text-white overflow-hidden"
+              style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}>
+              <div aria-hidden className="absolute inset-0 pointer-events-none bg-cover bg-center opacity-80"
+                style={{ backgroundImage: 'url(/chat-banner.webp)' }} />
+              <img src="/avatar.webp" alt="" className="relative z-10 w-11 h-11 rounded-full object-cover ring-2 ring-white/70 bg-white" />
+              <div className="relative z-10 flex-1 min-w-0">
                 <div className="font-bold text-[15px] flex items-center gap-1.5">智岗小助手 <Sparkles className="w-3.5 h-3.5" /></div>
                 <div className="text-[11px] text-white/85 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 inline-block" /> 在线 · 随时为你解答
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} aria-label="关闭对话" className="text-white/80 hover:text-white p-1"><X className="w-5 h-5" /></button>
+              <button onClick={() => setOpen(false)} aria-label="关闭对话" className="relative z-10 text-white/80 hover:text-white p-1"><X className="w-5 h-5" /></button>
             </div>
 
             {/* 消息区 */}

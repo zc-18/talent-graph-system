@@ -5,6 +5,7 @@ import { ISparkle, IGlobe, ILightning, IFloppyDisk } from '../components/icons'
 import { api, errMsg } from '../api'
 import { Card, Badge, ConfidencePill } from '../components/ui'
 import { useToast } from '../components/Toast'
+import { useFloat, useReveal } from '../hooks/gsapFx'
 
 export default function Discovery() {
   const [seeds, setSeeds] = useState<string[]>([])
@@ -14,6 +15,8 @@ export default function Discovery() {
   const [res, setRes] = useState<any>(null)
   const nav = useNavigate()
   const toast = useToast()
+  const floatRef = useFloat<HTMLImageElement>({ y: 12, duration: 3.4, deps: [res, loading] })
+  const revealRef = useReveal('[data-reveal]', { deps: [res, loading] })
 
   useEffect(() => { api.seeds().then(d => setSeeds(d.seeds)).catch(() => {}) }, [])
 
@@ -33,7 +36,7 @@ export default function Discovery() {
   const cand = res?.candidate
 
   return (
-    <div className="space-y-5">
+    <div ref={revealRef} className="space-y-5">
       <div className="flex items-center gap-3">
         <div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow animate-float">
           <ISparkle className="w-6 h-6 text-white" />
@@ -87,7 +90,7 @@ export default function Discovery() {
                 [ILightning, '大模型 RAG 接地', '基于证据生成岗位定义，约束"不臆造证据外内容"', '#6366F1'],
                 [IFloppyDisk, '交叉验证入库', '逐项校验证据、评估置信度，沉淀进全景图谱', '#10B981'],
               ].map(([Icon, t, d, c]: any, i: number) => (
-                <div key={i} className="rounded-2xl bg-sky-50/70 border border-slate-200/60 p-4">
+                <div key={i} data-reveal className="rounded-2xl bg-sky-50/70 border border-slate-200/60 p-4">
                   <div className="w-9 h-9 rounded-xl grid place-items-center mb-2.5" style={{ background: c }}>
                     <Icon className="w-5 h-5 text-white" />
                   </div>
@@ -99,9 +102,8 @@ export default function Discovery() {
             <div className="mt-5 text-xs text-slate-400">💡 点击上方任一推荐岗位，或输入关键词，即可开始发现。</div>
           </Card>
           <Card className="p-6 flex flex-col items-center justify-center text-center" delay={0.1}>
-            <div className="w-20 h-20 rounded-full bg-grad-violet grid place-items-center shadow-glow mb-4 animate-float">
-              <ISparkle className="w-10 h-10 text-white" />
-            </div>
+            <img ref={floatRef} src="/empty-discovery.webp" alt=""
+              className="w-44 h-44 object-contain mb-3 mix-blend-multiply drop-shadow-[0_12px_24px_rgba(99,102,241,0.25)]" />
             <div className="text-sm font-semibold text-slate-700">已内置 {seeds.length} 个新兴岗位候选</div>
             <div className="text-xs text-slate-400 mt-1.5 leading-relaxed">覆盖大模型应用、AI 智能体、RAG、具身智能、MLOps 等前沿方向</div>
           </Card>

@@ -5,15 +5,18 @@ import { ArrowRight } from 'lucide-react'
 import { IBriefcase, IStack, IDatabase, ICopy, IShieldCheck, ITrendUp } from '../components/icons'
 import { api, Stats, JobListItem, CATEGORY_COLORS } from '../api'
 import { Card, ConfidencePill, Badge, PageSkeleton, ErrorState } from '../components/ui'
+import { useCountUp, useReveal } from '../hooks/gsapFx'
 
 function Kpi({ icon, label, value, sub, tone, delay }: any) {
+  const numRef = useCountUp<HTMLDivElement>(typeof value === 'number' ? value : 0)
   return (
-    <Card delay={delay} hover className="p-5 relative overflow-hidden">
+    <Card delay={delay} hover className="p-5 relative overflow-hidden"
+      decor="/kpi-texture.webp" decorClass="opacity-70">
       <div className="flex items-center justify-between">
         <div className="label">{label}</div>
         <div className={`w-9 h-9 rounded-lg grid place-items-center ${tone}`}>{icon}</div>
       </div>
-      <div className="mt-3 text-3xl font-extrabold text-slate-900 tabular-nums">{value}</div>
+      <div ref={numRef} className="mt-3 text-3xl font-extrabold text-slate-900 tabular-nums">{value}</div>
       {sub && <div className="text-xs text-slate-500 mt-1">{sub}</div>}
     </Card>
   )
@@ -31,6 +34,7 @@ export default function Dashboard() {
     api.jobs({ size: 8 }).then(d => setJobs(d.items)).catch(() => {})
   }
   useEffect(load, [])
+  const revealRef = useReveal('[data-reveal]', { scroll: true, deps: [stats] })
 
   if (error) return <ErrorState text="驾驶舱数据加载失败" onRetry={load} />
   if (!stats) return <PageSkeleton />
@@ -63,10 +67,14 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-extrabold text-slate-900">数据驾驶舱</h1>
-        <p className="text-slate-500 mt-1">多源异构数据驱动 · 岗位能力图谱构建与动态演化分析</p>
+    <div ref={revealRef} className="space-y-6">
+      <div className="relative overflow-hidden rounded-2xl glass">
+        <div aria-hidden className="absolute inset-0 pointer-events-none bg-cover bg-right"
+          style={{ backgroundImage: 'url(/hero-dashboard.webp)' }} />
+        <div className="relative z-10 px-6 py-7 sm:px-8 sm:py-9">
+          <h1 className="text-3xl font-extrabold text-slate-900">数据驾驶舱</h1>
+          <p className="text-slate-500 mt-1 max-w-xl">多源异构数据驱动 · 岗位能力图谱构建与动态演化分析</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -130,7 +138,7 @@ export default function Dashboard() {
             ['图谱构建/演化', '动态更新'],
             ['匹配与诊断', '差距+学习路径'],
           ].map(([t, s], i) => (
-            <div key={t} className="relative rounded-xl bg-sky-50/70 border border-slate-200/70 p-3.5">
+            <div key={t} data-reveal className="relative rounded-xl bg-sky-50/70 border border-slate-200/70 p-3.5">
               <div className="text-[11px] text-accent font-bold mb-1">0{i + 1}</div>
               <div className="text-sm font-semibold text-slate-800">{t}</div>
               <div className="text-[11px] text-slate-400 mt-0.5">{s}</div>

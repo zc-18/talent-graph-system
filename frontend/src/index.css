@@ -11,7 +11,7 @@ body {
   background-color: #DCEBFB;
   background-image:
     linear-gradient(180deg, rgba(255,255,255,0.10), rgba(219,235,251,0.22)),
-    url('/bg.png');
+    url('/bg2.webp');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

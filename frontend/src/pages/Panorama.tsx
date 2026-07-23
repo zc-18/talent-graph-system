@@ -5,6 +5,7 @@ import { ITreeStructure } from '../components/icons'
 import { api, GraphData, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, Badge, ErrorState } from '../components/ui'
 import Select from '../components/Select'
+import { useMouseParallax } from '../hooks/gsapFx'
 
 export default function Panorama() {
   const [data, setData] = useState<GraphData | null>(null)
@@ -17,6 +18,7 @@ export default function Panorama() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const chartRef = useRef<any>(null)
+  const parallaxRef = useMouseParallax('.graph-bg-layer', { strength: 18 })
 
   useEffect(() => {
     api.categories().then(d => { setCats(['全部', ...d.categories]); setLevels(['全部', ...d.levels]) }).catch(() => {})
@@ -162,11 +164,14 @@ export default function Panorama() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-5">
-        <Card className="xl:col-span-3 p-2 relative overflow-hidden" hover={false}>
-          {/* 图谱画布背景：柔和蓝白网络底图，避免单调 */}
-          <div className="absolute inset-0 rounded-2xl pointer-events-none"
-            style={{ backgroundImage: 'url(/graph-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
-          <div className="absolute inset-0 rounded-2xl bg-white/25 pointer-events-none" />
+        <div ref={parallaxRef} className="xl:col-span-3">
+        <Card className="p-2 relative overflow-hidden" hover={false}>
+          <div className="absolute inset-0 rounded-2xl overflow-hidden">
+            {/* 图谱画布背景：柔和蓝白网络底图 + 鼠标轻微视差（scale 预留位移余量） */}
+            <div className="graph-bg-layer absolute -inset-4 pointer-events-none will-change-transform"
+              style={{ backgroundImage: 'url(/graph-bg2.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+            <div className="absolute inset-0 bg-white/25 pointer-events-none" />
+          </div>
           <div className="relative z-10">
             {loading ? <Spinner label="构建图谱中…" /> : error ? <ErrorState text="图谱加载失败" onRetry={load} /> : (
               <div className="h-[440px] sm:h-[560px] xl:h-[620px]">
@@ -183,6 +188,7 @@ export default function Panorama() {
             </div>
           )}
         </Card>
+        </div>
 
         <Card className="p-5">
           {sel ? <NodePanel node={sel} /> : (

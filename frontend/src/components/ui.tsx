@@ -19,15 +19,21 @@ export function PageHeader({ title, subtitle, icon, action }: {
   )
 }
 
-export function Card({ children, className = '', hover = false, delay = 0 }: {
+export function Card({ children, className = '', hover = false, delay = 0, decor, decorClass = '' }: {
   children: ReactNode; className?: string; hover?: boolean; delay?: number
+  /** 卡片底层装饰图 URL（绝对定位铺满，内容自动抬到 z-10 之上） */
+  decor?: string; decorClass?: string
 }) {
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay }}
       whileHover={hover ? { y: -4 } : undefined}
-      className={`glass ${hover ? 'glass-hover' : ''} ${className}`}>
-      {children}
+      className={`glass ${hover ? 'glass-hover' : ''} ${decor ? 'relative overflow-hidden' : ''} ${className}`}>
+      {decor && (
+        <div aria-hidden className={`absolute inset-0 pointer-events-none bg-cover bg-center ${decorClass}`}
+          style={{ backgroundImage: `url(${decor})` }} />
+      )}
+      {decor ? <div className="relative z-10">{children}</div> : children}
     </motion.div>
   )
 }

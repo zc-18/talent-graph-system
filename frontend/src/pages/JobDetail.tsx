@@ -8,6 +8,7 @@ import { api, errMsg, JobDetail as TJob, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, ErrorState } from '../components/ui'
 import { useToast } from '../components/Toast'
 import ConfirmDialog from '../components/ConfirmDialog'
+import { useReveal } from '../hooks/gsapFx'
 
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
 const SKILL_LEVEL: Record<string, string> = { familiar: '了解', proficient: '熟练', expert: '精通' }
@@ -54,6 +55,7 @@ export default function JobDetail() {
   const [loadError, setLoadError] = useState(false)
   const [saving, setSaving] = useState(false)
   const toast = useToast()
+  const revealRef = useReveal('[data-reveal]', { scroll: true, stagger: 0.05, deps: [job, tab] })
 
   const reload = () => { setLoadError(false); api.job(jobId).then(setJob).catch(() => setLoadError(true)) }
   useEffect(() => { reload() }, [jobId])
@@ -79,12 +81,15 @@ export default function JobDetail() {
   }
 
   return (
-    <div className="space-y-5">
+    <div ref={revealRef} className="space-y-5">
       <button onClick={() => nav(-1)} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
         <ArrowLeft className="w-4 h-4" /> 返回
       </button>
 
       <Card className="p-6 relative overflow-hidden">
+        <div aria-hidden className="absolute inset-0 pointer-events-none bg-cover bg-right opacity-60"
+          style={{ backgroundImage: 'url(/hero-jobdetail.webp)' }} />
+        <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-l from-white/75 via-white/20 to-transparent" />
         <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full blur-3xl opacity-25" style={{ background: color }} />
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 relative">
           <div className="min-w-0">
@@ -128,9 +133,11 @@ export default function JobDetail() {
               <div className="label mb-3 flex items-center gap-2"><ITarget className="w-4 h-4 text-accent" /> 必备技能 ({job.required_skills.length})</div>
               <div className="space-y-2">
                 {job.required_skills.map(s => (
-                  <SkillRow key={s.skill_id} s={s}
+                  <div key={s.skill_id} data-reveal>
+                  <SkillRow s={s}
                     onEdit={(sk: any) => setEditor({ action: 'update', skill_name: sk.name, importance: sk.importance, weight: sk.weight, level_required: sk.level_required })}
                     onRemove={(sk: any) => setRemoving(sk)} />
+                  </div>
                 ))}
               </div>
             </Card>

@@ -5,6 +5,7 @@ import { api, errMsg, JobListItem } from '../api'
 import { Card, Badge, Spinner } from '../components/ui'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
+import { useFloat } from '../hooks/gsapFx'
 
 const SAMPLE_JD = `招聘高级Java开发工程师
 岗位职责：负责核心交易系统研发，参与AI能力中台建设。
@@ -23,6 +24,7 @@ export default function Evolution() {
   const [result, setResult] = useState<any>(null)
   const [history, setHistory] = useState<any>(null)
   const toast = useToast()
+  const floatRef = useFloat<HTMLImageElement>({ y: 9, duration: 3.6, deps: [history, result, loading] })
 
   useEffect(() => {
     api.jobs({ size: 100, is_new: false })
@@ -120,7 +122,11 @@ export default function Evolution() {
             <div className="text-sm text-slate-500">
               <div className="label mb-3">该岗位历史演化记录</div>
               {!history ? <Spinner /> : history.items.length === 0 ? (
-                <div className="text-slate-400 text-center py-10">暂无演化记录，提交新 JD 开始演化。</div>
+                <div className="text-center py-6">
+                  <img ref={floatRef} src="/decor-evolution.webp" alt=""
+                    className="w-40 h-40 object-contain mx-auto mb-2 mix-blend-multiply drop-shadow-[0_12px_24px_rgba(52,211,153,0.2)]" />
+                  <div className="text-slate-400">暂无演化记录，提交新 JD 开始演化。</div>
+                </div>
               ) : (
                 <div className="space-y-2 max-h-[420px] overflow-auto">
                   {history.items.slice(0, 20).map((c: any, i: number) => {

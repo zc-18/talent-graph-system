@@ -9,6 +9,7 @@ import { api, errMsg, JobListItem } from '../api'
 import { Card, Badge, Spinner, ErrorState } from '../components/ui'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
+import { useFloat, useGrowLine, useReveal } from '../hooks/gsapFx'
 
 export default function Match() {
   const loc = useLocation() as any
@@ -22,6 +23,9 @@ export default function Match() {
   const [jobsError, setJobsError] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
+  const floatRef = useFloat<HTMLImageElement>({ y: 10, duration: 3.2, deps: [result, loading] })
+  const pathRef = useGrowLine('.path-line')
+  const stepsRef = useReveal('[data-reveal]', { scroll: true, deps: [result] })
 
   const loadJobs = () => {
     setJobsError(false)
@@ -154,14 +158,13 @@ export default function Match() {
           </div>
         </Card>
 
-        <div className="lg:col-span-2 space-y-5">
+        <div ref={stepsRef} className="lg:col-span-2 space-y-5">
           {loading && !res && <Card className="p-10"><Spinner label="正在诊断人岗匹配度…" /></Card>}
           {!res && !loading && (
             <Card className="p-8" delay={0.05}>
               <div className="text-center mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-grad-accent grid place-items-center shadow-glow mx-auto mb-3">
-                  <ITarget className="w-8 h-8 text-white" />
-                </div>
+                <img ref={floatRef} src="/empty-match.webp" alt=""
+                  className="w-44 h-44 object-contain mx-auto mb-2 mix-blend-multiply drop-shadow-[0_12px_24px_rgba(99,102,241,0.22)]" />
                 <h3 className="text-lg font-bold text-slate-800">上传简历或输入技能，开始诊断</h3>
                 <p className="text-sm text-slate-500 mt-1">系统将对比目标岗位能力图谱，输出多维匹配与提升路径</p>
               </div>
@@ -229,10 +232,10 @@ export default function Match() {
               {result.learning_path?.length > 0 && (
                 <Card className="p-5">
                   <div className="flex items-center gap-2 label mb-4"><IPath className="w-4 h-4 text-cyan-600" /> 岗位学习路径规划</div>
-                  <div className="relative pl-6">
-                    <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-accent to-cyan-400/40" />
+                  <div ref={pathRef} className="relative pl-6">
+                    <div className="path-line absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-accent to-cyan-400/40" />
                     {result.learning_path.map((p: any) => (
-                      <div key={p.step} className="relative pb-4">
+                      <div key={p.step} data-reveal className="relative pb-4">
                         <span className="absolute -left-[19px] top-0.5 w-3.5 h-3.5 rounded-full bg-grad-accent ring-4 ring-white text-[8px] grid place-items-center font-bold text-slate-900">{p.step}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-semibold text-slate-800">{p.skill}</span>
