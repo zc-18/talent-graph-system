@@ -1,0 +1,30 @@
+{
+  "adapters": {
+    "netease": {
+      "tier": "official",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-07-24T11:50:07",
+      "stats": {
+        "requests": 78,
+        "collected": 408,
+        "robots_blocked": 0,
+        "errors": 4
+      },
+      "notes": "clusters=29"
+    },
+    "tencent": {
+      "tier": "official",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-07-24T12:22:18",
+      "stats": {
+        "requests": 376,
+        "collected": 298,
+        "robots_blocked": 0,
+        "errors": 0
+      },
+      "notes": "clusters=29"
+    }
+  }
+}

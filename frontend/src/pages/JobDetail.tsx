@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
-  ArrowLeft, FileText, History, Plus, Trash2, Pencil,
+  ArrowLeft, FileText, History, Plus, Trash2, Pencil, ExternalLink, Landmark, Sparkles,
 } from 'lucide-react'
 import { ITarget, IStack, IShieldCheck, IBriefcase } from '../components/icons'
-import { api, errMsg, JobDetail as TJob, CATEGORY_COLORS } from '../api'
+import { api, errMsg, JobDetail as TJob, Skill as TSkill, AuthorityItem, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, ErrorState } from '../components/ui'
+import ChangeDiff from '../components/ChangeDiff'
 import { useToast } from '../components/Toast'
 import ConfirmDialog from '../components/ConfirmDialog'
 import { useReveal } from '../hooks/gsapFx'
@@ -13,7 +14,7 @@ import { useReveal } from '../hooks/gsapFx'
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
 const SKILL_LEVEL: Record<string, string> = { familiar: '了解', proficient: '熟练', expert: '精通' }
 
-function SkillRow({ s, onEdit, onRemove }: any) {
+function SkillRow({ s, fineChildren = [], onEdit, onRemove }: any) {
   return (
     <div className="rounded-xl bg-sky-50/70 hover:bg-sky-100/80 px-3.5 py-2.5 transition group">
       {/* 首行：技能名 + 分类/级别；操作按钮固定右侧。徽章不换行，窄屏截断而非竖排 */}
@@ -36,8 +37,20 @@ function SkillRow({ s, onEdit, onRemove }: any) {
         </div>
         <span className="text-[11px] text-slate-400 shrink-0 sm:hidden">{SKILL_LEVEL[s.level_required] || ''}</span>
         <span className="text-[11px] text-slate-400 shrink-0" title="独立来源数">×{s.source_count}</span>
-        <span className="shrink-0"><ConfidencePill value={s.confidence} /></span>
+        <span className="shrink-0"><ConfidencePill value={s.confidence} factors={s.factors} /></span>
       </div>
+      {/* 细分技能点：细粒度技能挂到粗粒度父项下展示 */}
+      {fineChildren.length > 0 && (
+        <div className="mt-2 pt-2 border-t border-sky-100/80 flex items-center gap-1.5 flex-wrap">
+          <span className="text-[10px] text-slate-400 shrink-0">细分技能点</span>
+          {fineChildren.map((f: TSkill) => (
+            <span key={f.skill_id} className="chip border bg-white/80 border-sky-200 text-slate-600 text-[11px]"
+              title={`置信度 ${Math.round(f.confidence * 100)}%`}>
+              {f.name} <span className="text-slate-400">·{Math.round(f.confidence * 100)}%</span>
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -54,11 +67,16 @@ export default function JobDetail() {
   const [removing, setRemoving] = useState<any>(null)
   const [loadError, setLoadError] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [authority, setAuthority] = useState<AuthorityItem[]>([])
   const toast = useToast()
   const revealRef = useReveal('[data-reveal]', { scroll: true, stagger: 0.05, deps: [job, tab] })
 
   const reload = () => { setLoadError(false); api.job(jobId).then(setJob).catch(() => setLoadError(true)) }
   useEffect(() => { reload() }, [jobId])
+  useEffect(() => {
+    setAuthority([])
+    api.jobAuthority(jobId).then(d => setAuthority(d.items || [])).catch(() => {})
+  }, [jobId])
   useEffect(() => {
     if (tab === 'evidence' && !evidence) api.jobEvidence(jobId).then(setEvidence).catch(e => toast('error', errMsg(e, '证据加载失败')))
     if (tab === 'history' && !history) api.changes(jobId).then(setHistory).catch(e => toast('error', errMsg(e, '演化记录加载失败')))
@@ -67,6 +85,20 @@ export default function JobDetail() {
   if (loadError) return <ErrorState text="岗位详情加载失败" onRetry={reload} />
   if (!job) return <Spinner />
   const color = CATEGORY_COLORS[job.category] || '#6366F1'
+  // 粗/细粒度分组：细粒度技能点作为「细分技能点」挂在其父（粗粒度）技能行下
+  const allSkills: TSkill[] = [...job.required_skills, ...job.bonus_skills]
+  const fineByParent = new Map<string, TSkill[]>()
+  for (const s of allSkills) {
+    if (s.granularity === 'fine' && s.parent_name) {
+      const arr = fineByParent.get(s.parent_name) || []
+      arr.push(s); fineByParent.set(s.parent_name, arr)
+    }
+  }
+  const coarseRequired = job.required_skills.filter(s => s.granularity !== 'fine')
+  const coarseBonus = job.bonus_skills.filter(s => s.granularity !== 'fine')
+  const orphanFine = allSkills.filter(s => s.granularity === 'fine' &&
+    (!s.parent_name || !allSkills.some(p => p.granularity !== 'fine' && p.name === s.parent_name)))
+  const emergence = (job as any).emergence_type as string | null
 
   const saveEdit = async (action: string, payload: any) => {
     setSaving(true)
@@ -97,6 +129,8 @@ export default function JobDetail() {
               <Badge tone="indigo">{job.category}</Badge>
               <Badge tone="slate">{LEVEL_LABEL[job.level] || job.level}</Badge>
               {job.is_new && <Badge tone="amber">新兴岗位 · 新兴度 {Math.round(job.emergence_score * 100)}%</Badge>}
+              {emergence === 'new' && <Badge tone="rose"><Sparkles className="w-3 h-3 inline -mt-0.5 mr-0.5" />新出现</Badge>}
+              {emergence === 'revived' && <Badge tone="emerald"><Sparkles className="w-3 h-3 inline -mt-0.5 mr-0.5" />复兴</Badge>}
               <Badge tone="cyan">v{job.version}</Badge>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{job.name}</h1>
@@ -130,22 +164,34 @@ export default function JobDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2 space-y-5">
             <Card className="p-5">
-              <div className="label mb-3 flex items-center gap-2"><ITarget className="w-4 h-4 text-accent" /> 必备技能 ({job.required_skills.length})</div>
+              <div className="label mb-3 flex items-center gap-2"><ITarget className="w-4 h-4 text-accent" /> 必备技能 ({coarseRequired.length})</div>
               <div className="space-y-2">
-                {job.required_skills.map(s => (
+                {coarseRequired.map(s => (
                   <div key={s.skill_id} data-reveal>
-                  <SkillRow s={s}
+                  <SkillRow s={s} fineChildren={fineByParent.get(s.name) || []}
                     onEdit={(sk: any) => setEditor({ action: 'update', skill_name: sk.name, importance: sk.importance, weight: sk.weight, level_required: sk.level_required })}
                     onRemove={(sk: any) => setRemoving(sk)} />
                   </div>
                 ))}
               </div>
+              {orphanFine.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-slate-100">
+                  <div className="text-[11px] text-slate-400 mb-1.5">其他细分技能点</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {orphanFine.map(f => (
+                      <span key={f.skill_id} className="chip border bg-white/80 border-sky-200 text-slate-600 text-[11px]">
+                        {f.name} <span className="text-slate-400">·{Math.round(f.confidence * 100)}%</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </Card>
-            {job.bonus_skills.length > 0 && (
+            {coarseBonus.length > 0 && (
               <Card className="p-5">
-                <div className="label mb-3">加分技能 ({job.bonus_skills.length})</div>
+                <div className="label mb-3">加分技能 ({coarseBonus.length})</div>
                 <div className="flex flex-wrap gap-2">
-                  {job.bonus_skills.map(s => (
+                  {coarseBonus.map(s => (
                     <span key={s.skill_id} className="chip border bg-white/70 border-slate-200 text-slate-600">
                       {s.name} <span className="text-slate-400">·{Math.round(s.confidence * 100)}%</span>
                     </span>
@@ -172,6 +218,34 @@ export default function JobDetail() {
                 {job.typical_scenarios.map((s, i) => <Badge key={i} tone="cyan">{s}</Badge>)}
               </div>
             </Card>
+            {authority.length > 0 && (
+              <Card className="p-5">
+                <div className="label mb-3 flex items-center gap-2">
+                  <Landmark className="w-4 h-4 text-indigo-600" /> 权威依据
+                </div>
+                <div className="space-y-2.5">
+                  {authority.map((a, i) => (
+                    <div key={i} className="rounded-xl bg-sky-50/70 px-3 py-2.5">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge tone={a.kind === 'policy' ? 'indigo' : 'cyan'}>
+                          {a.kind === 'policy' ? '部委文件' : '机构报告'}</Badge>
+                        <span className="text-[11px] text-slate-400">{a.issuer}{a.publish_date ? ` · ${String(a.publish_date).slice(0, 10)}` : ''}</span>
+                      </div>
+                      {a.url ? (
+                        <a href={a.url} target="_blank" rel="noreferrer"
+                          className="mt-1 flex items-start gap-1 text-sm font-medium text-slate-800 hover:text-accent">
+                          <span className="min-w-0">{a.title}</span>
+                          <ExternalLink className="w-3 h-3 text-slate-400 shrink-0 mt-1" />
+                        </a>
+                      ) : (
+                        <div className="mt-1 text-sm font-medium text-slate-800">{a.title}</div>
+                      )}
+                      {a.excerpt && <p className="text-[11px] text-slate-500 mt-1 line-clamp-3">{a.excerpt}</p>}
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
           </div>
         </div>
       )}
@@ -184,7 +258,9 @@ export default function JobDetail() {
           </div>
           {!evidence ? <Spinner /> : (
             <div className="space-y-2">
-              {evidence.items.map((it: any, i: number) => (
+              {evidence.items.map((it: any, i: number) => {
+                const evs = it.evidences || []
+                return (
                 <details key={i} className="rounded-xl bg-sky-50/70 px-4 py-3 group">
                   <summary className="flex items-center justify-between gap-2 flex-wrap cursor-pointer list-none">
                     <div className="flex items-center gap-2">
@@ -195,19 +271,41 @@ export default function JobDetail() {
                       {it.status === 'deprecated' && <Badge tone="rose">已淘汰</Badge>}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-slate-400">
-                      {it.source_count} 来源 · <ConfidencePill value={it.confidence} />
+                      {evs.length > 0 ? `${it.source_count} 来源 · ` : ''}<ConfidencePill value={it.confidence} factors={it.factors} />
                     </div>
                   </summary>
-                  <div className="mt-2 pl-6 space-y-1.5">
-                    {it.evidences.slice(0, 6).map((e: any, j: number) => (
-                      <div key={j} className="text-xs text-slate-500 flex gap-2">
-                        <Badge tone={e.type === 'web' ? 'cyan' : 'slate'}>{e.type}</Badge>
-                        <span className="truncate">{e.snippet}</span>
-                      </div>
-                    ))}
+                  {evs.length === 0 ? (
+                    <div className="mt-2 pl-6 text-xs text-slate-400">该能力项暂无独立JD证据（人工添加或低频项）</div>
+                  ) : (
+                  <div className="mt-2.5 pl-0 sm:pl-6 grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {evs.slice(0, 8).map((e: any, j: number) => {
+                      const inner = (
+                        <>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <Badge tone={e.type === 'web' ? 'cyan' : e.type === 'llm' ? 'amber' : 'indigo'}>
+                              {e.type === 'web' ? '网络佐证' : e.type === 'llm' ? 'LLM' : e.source || '招聘JD'}</Badge>
+                            {e.type === 'web' && e.source && <span className="text-[10px] text-accent">{e.source}</span>}
+                            {e.company && <span className="text-[11px] text-slate-500 truncate">{e.company}</span>}
+                            {e.job_title && <span className="text-[11px] text-slate-400 truncate hidden sm:inline">{e.job_title}</span>}
+                            <span className="flex-1" />
+                            {e.publish_date && <span className="text-[10px] text-slate-400 shrink-0">{String(e.publish_date).slice(0, 10)}</span>}
+                            {e.url && <ExternalLink className="w-3 h-3 text-slate-400 shrink-0" />}
+                          </div>
+                          <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">{e.snippet}</p>
+                        </>
+                      )
+                      const cls = 'block rounded-lg bg-white/80 border border-sky-100 px-3 py-2 transition'
+                      return e.url ? (
+                        <a key={j} href={e.url} target="_blank" rel="noreferrer" className={`${cls} hover:bg-sky-100/70 hover:border-sky-200`}>{inner}</a>
+                      ) : (
+                        <div key={j} className={cls}>{inner}</div>
+                      )
+                    })}
                   </div>
+                  )}
                 </details>
-              ))}
+                )
+              })}
             </div>
           )}
         </Card>
@@ -221,18 +319,17 @@ export default function JobDetail() {
             </div>
           ) : (
             <div className="relative pl-6">
-              <div className="absolute left-2 top-1 bottom-1 w-px bg-white/10" />
+              <div className="absolute left-2 top-1 bottom-1 w-px bg-slate-200" />
               {history.items.map((c: any, i: number) => {
                 const tone = c.change_type === 'add' ? 'emerald' : c.change_type === 'delete' ? 'rose' : 'amber'
-                const label = { add: '新增', delete: '删除', modify: '修改' }[c.change_type] || c.change_type
                 return (
                   <div key={i} className="relative pb-5">
                     <span className={`absolute -left-[18px] top-1 w-3 h-3 rounded-full ring-4 ring-white ${
                       tone === 'emerald' ? 'bg-emerald-400' : tone === 'rose' ? 'bg-rose-400' : 'bg-amber-400'}`} />
-                    <div className="flex items-center gap-2">
-                      <Badge tone={tone}>{label}</Badge>
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-slate-800">{c.skill_name}</span>
-                      <span className="text-[11px] text-slate-400">v{c.version}</span>
+                      <ChangeDiff change={c} />
+                      <span className="text-[11px] text-slate-400">v{c.version}{c.created_at ? ` · ${String(c.created_at).slice(0, 10)}` : ''}</span>
                     </div>
                     <p className="text-xs text-slate-500 mt-1">{c.reason}</p>
                   </div>

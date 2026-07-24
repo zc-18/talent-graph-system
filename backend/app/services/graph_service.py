@@ -18,17 +18,23 @@ def slugify(name: str) -> str:
 
 
 def upsert_skill(db: Session, name: str, category: str | None = None,
-                 stype: str | None = None, with_embedding: bool = False) -> models.Skill:
+                 stype: str | None = None, with_embedding: bool = False,
+                 parent_name: str | None = None) -> models.Skill:
     sk = db.query(models.Skill).filter(models.Skill.normalized_name == name).first()
-    if sk:
-        return sk
-    sk = models.Skill(name=name, normalized_name=name,
-                      category=category or skill_category(name),
-                      skill_type=stype or skill_type(name))
-    if with_embedding:
-        sk.embedding = clients.embed(name)
-    db.add(sk)
-    db.flush()
+    if sk is None:
+        sk = models.Skill(name=name, normalized_name=name,
+                          category=category or skill_category(name),
+                          skill_type=stype or skill_type(name))
+        if with_embedding:
+            sk.embedding = clients.embed(name)
+        db.add(sk)
+        db.flush()
+    # 两级技能体系：细粒度技能挂到粗粒度父技能下（Skill.parent_id 层级树）
+    if parent_name and parent_name != name and not sk.parent_id:
+        parent = upsert_skill(db, parent_name, category, stype, with_embedding)
+        if parent.id != sk.id:
+            sk.parent_id = parent.id
+            db.flush()
     return sk
 
 
@@ -66,19 +72,27 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
         db.query(models.JobSkill).filter(
             models.JobSkill.id.in_(old_js_ids)).delete(synchronize_session=False)
     db.flush()
+    seen_skill_ids: set[int] = set()
     for c in active_caps:
-        sk = upsert_skill(db, c["name"], c.get("category"), c.get("skill_type"), with_embedding)
+        sk = upsert_skill(db, c["name"], c.get("category"), c.get("skill_type"),
+                          with_embedding, parent_name=c.get("parent"))
+        if sk.id in seen_skill_ids:
+            continue  # 粗/细或大小写变体解析到同一技能 → 保留先插入的高置信项（防 uq_job_skill 冲突）
+        seen_skill_ids.add(sk.id)
         js = models.JobSkill(
             job_id=job.id, skill_id=sk.id, importance=c["importance"],
             weight=c.get("weight", 0.5), level_required=c.get("level_required", "familiar"),
-            confidence=c.get("confidence", 0.0), source_count=c.get("source_count", 0),
+            confidence=c.get("confidence", 0.0), factors=c.get("factors"),
+            source_count=c.get("source_count", 0),
             status="active", first_seen=datetime.utcnow(), last_seen=datetime.utcnow())
         db.add(js)
         db.flush()
         for ev in c.get("evidence", [])[:6]:
             db.add(models.Evidence(
                 job_skill_id=js.id, raw_jd_id=ev.get("raw_jd_id"),
-                source_type=ev.get("source_type", "jd"), source_url=ev.get("source_url", ""),
+                source_type=ev.get("source_type", "jd"),
+                source_name=ev.get("source") or ev.get("source_name"),
+                source_url=ev.get("source_url", ""),
                 snippet=(ev.get("snippet") or "")[:500], weight=ev.get("weight", 1.0)))
     db.commit()
     return job
@@ -87,15 +101,21 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
 def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) -> dict:
     js = db.query(models.JobSkill).filter(models.JobSkill.job_id == job.id).all()
     skills = []
+    skill_rows = {s.id: s for s in db.query(models.Skill).filter(
+        models.Skill.id.in_([j.skill_id for j in js]))} if js else {}
     for j in js:
-        sk = db.query(models.Skill).get(j.skill_id)
+        sk = skill_rows.get(j.skill_id)
         if not sk:
             continue
+        parent = skill_rows.get(sk.parent_id) or (
+            db.query(models.Skill).get(sk.parent_id) if sk.parent_id else None)
         skills.append({
             "id": j.id, "skill_id": sk.id, "name": sk.name, "category": sk.category,
             "skill_type": sk.skill_type, "importance": j.importance, "weight": j.weight,
             "level_required": j.level_required, "confidence": j.confidence,
-            "source_count": j.source_count, "status": j.status,
+            "factors": j.factors, "source_count": j.source_count, "status": j.status,
+            "parent_id": sk.parent_id, "parent_name": parent.name if parent else None,
+            "granularity": "fine" if sk.parent_id else "coarse",
         })
     required = [s for s in skills if s["importance"] == "required"]
     bonus = [s for s in skills if s["importance"] == "bonus"]
@@ -108,6 +128,8 @@ def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) 
         "bonus_skills": sorted(bonus, key=lambda x: x["weight"], reverse=True),
         "confidence": job.confidence, "evidence_count": job.evidence_count,
         "emergence_score": job.emergence_score, "version": job.version,
+        "emergence_type": job.emergence_type,
+        "first_seen_date": job.first_seen_date.isoformat() if job.first_seen_date else None,
         "source_summary": job.source_summary or {},
         "created_at": job.created_at.isoformat() if job.created_at else None,
         "updated_at": job.updated_at.isoformat() if job.updated_at else None,
@@ -115,8 +137,12 @@ def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) 
 
 
 def panoramic_graph(db: Session, category: str | None = None, level: str | None = None,
-                    min_confidence: float = 0.0) -> dict:
-    """构建全景图谱：岗位节点 + 技能点节点 + 关系边。"""
+                    min_confidence: float = 0.0, granularity: str = "coarse") -> dict:
+    """构建全景图谱：岗位节点 + 技能点节点 + 关系边。
+
+    granularity="coarse"（默认）只展示粗粒度技能节点（parent_id 为空），
+    细粒度技能在岗位详情页按父类分组展示，避免全景图节点爆炸。
+    """
     q = db.query(models.Job).filter(models.Job.status == "published")
     if category and category != "全部":
         q = q.filter(models.Job.category == category)
@@ -138,6 +164,8 @@ def panoramic_graph(db: Session, category: str | None = None, level: str | None 
             sk = db.query(models.Skill).get(j.skill_id)
             if not sk:
                 continue
+            if granularity == "coarse" and sk.parent_id:
+                continue  # 细粒度技能不进全景图
             if sk.id not in skill_seen:
                 skill_seen[sk.id] = {"id": f"skill-{sk.id}", "name": sk.name, "type": "skill",
                                      "category": sk.category, "skill_type": sk.skill_type,

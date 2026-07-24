@@ -1,6 +1,8 @@
 import { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { WifiOff, RotateCcw, Inbox } from 'lucide-react'
+import ConfidenceExplain from './ConfidenceExplain'
+import type { ConfidenceFactors } from '../api'
 
 export function PageHeader({ title, subtitle, icon, action }: {
   title: string; subtitle?: string; icon?: ReactNode; action?: ReactNode
@@ -47,12 +49,17 @@ export function Spinner({ label = '加载中…' }: { label?: string }) {
   )
 }
 
-export function ConfidencePill({ value }: { value: number }) {
+export function ConfidencePill({ value, factors }: { value: number; factors?: ConfidenceFactors | null }) {
   const pct = Math.round(value * 100)
   const color = value >= 0.75 ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
     : value >= 0.5 ? 'text-sky-700 bg-sky-50 border-sky-200'
     : 'text-amber-700 bg-amber-50 border-amber-200'
-  return <span className={`chip border ${color}`} title="能力置信度（交叉验证）">置信 {pct}%</span>
+  const pill = (
+    <span className={`chip border ${color} ${factors ? 'underline decoration-dotted underline-offset-2' : ''}`}
+      title={factors ? '点击查看置信度计算方式' : '能力置信度（交叉验证）'}>置信 {pct}%</span>
+  )
+  if (!factors) return pill
+  return <ConfidenceExplain value={value} factors={factors}>{pill}</ConfidenceExplain>
 }
 
 export function Badge({ children, tone = 'slate' }: { children: ReactNode; tone?: string }) {

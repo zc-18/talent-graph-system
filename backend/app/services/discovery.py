@@ -4,9 +4,37 @@
 流程：候选发现 → Tavily 检索证据 → 大模型基于证据生成定义 → 交叉验证置信度。
 """
 from __future__ import annotations
+import json
 from datetime import datetime
+from pathlib import Path
 from .. import clients
+from . import confidence as confmod
 from .taxonomy import normalize_skill, clean_skill_name, skill_category, skill_type, CATEGORIES
+
+# 权威佐证登记表（人社部新职业文件 / 头部机构报告），见 data/authority/
+_AUTH_FILE = Path(__file__).resolve().parents[2] / "data" / "authority" / "authority_sources.json"
+
+
+def authority_matches(keyword: str) -> list[dict]:
+    """按关键词匹配权威佐证条目，返回证据格式（kind=policy/report 标记权威级）。"""
+    try:
+        data = json.loads(_AUTH_FILE.read_text("utf-8"))["sources"]
+    except Exception:
+        return []
+    out = []
+    for key, entries in data.items():
+        if key in keyword or keyword in key:
+            for e in entries:
+                if e.get("emergence_type") == "faded":
+                    continue  # 回落佐证不作为新兴证据
+                out.append({
+                    "title": e["title"], "url": e.get("url", ""),
+                    "content": e.get("excerpt", ""), "provider": e.get("issuer", ""),
+                    "kind": e.get("kind"), "publish_date": e.get("publish_date"),
+                    "local_file": e.get("local_file", ""),
+                    "emergence_type": e.get("emergence_type", "new"),
+                })
+    return out
 
 # 新一代信息技术领域典型新兴岗位候选种子
 EMERGING_SEEDS = [
@@ -26,21 +54,31 @@ EMERGING_SEEDS = [
 
 
 def discover_candidates(keyword: str, max_results: int = 6) -> dict:
-    """多源检索某新兴岗位的网络证据（Tavily+Serper 独立来源），评估其新兴度。"""
+    """多源检索某新兴岗位的证据（权威文件置顶 + Tavily+Serper 独立来源），评估其新兴度。"""
+    authority = authority_matches(keyword)
     results = clients.multi_source_search(f"{keyword} 岗位 招聘 任职要求 2025 2026", max_results=max_results)
     news = clients.tavily_search(f"{keyword} 新兴职业 趋势", max_results=4, days=180)
-    evidence = []
+    evidence = list(authority)  # 权威条目置顶
     for r in results:
         evidence.append({"title": r.get("title", ""), "url": r.get("url", ""),
                          "content": (r.get("content") or "")[:600], "provider": r.get("provider", "")})
     for r in news:
         evidence.append({"title": r.get("title", ""), "url": r.get("url", ""),
                          "content": (r.get("content") or "")[:600], "provider": "tavily-news"})
-    # 多源交叉验证：独立来源(provider)数量越多，新兴度越可信
+    # 多源交叉验证：独立来源(provider)数量越多，新兴度越可信；
+    # 权威级重标定：部委政策文件 ≥0.9，头部机构报告 ≥0.75
     providers = {e.get("provider", "") for e in evidence if e.get("provider")}
     emergence = min(1.0, 0.10 * len(results) + 0.15 * len(news) + 0.1 * len(providers))
+    kinds = {e.get("kind") for e in authority}
+    if "policy" in kinds:
+        emergence = max(emergence, 0.9)
+    elif "report" in kinds:
+        emergence = max(emergence, 0.75)
     return {"keyword": keyword, "evidence": evidence, "emergence_score": round(emergence, 3),
-            "evidence_count": len(evidence), "independent_sources": len(providers)}
+            "evidence_count": len(evidence), "independent_sources": len(providers),
+            "authority_count": len(authority),
+            "emergence_type": next((e.get("emergence_type") for e in authority
+                                    if e.get("emergence_type")), None)}
 
 
 _DEFINE_SYS = """你是新兴岗位研究专家，专注新一代信息技术领域(人工智能/大数据/智能系统/物联网)。
@@ -87,6 +125,8 @@ def _postprocess_definition(data: dict, keyword: str, evidence: list[dict]) -> d
     ev_count = len(evidence)
     # 能力项交叉验证：技能名是否在证据文本中出现 → 提升置信度
     ev_blob = " ".join((e.get("content") or "") + " " + (e.get("title") or "") for e in evidence).lower()
+    providers = {e.get("provider", "") for e in evidence if e.get("provider")}
+    has_authority = any(e.get("kind") in ("policy", "report") for e in evidence)
 
     def make_cap(item, importance):
         name = clean_skill_name(item.get("name", "") if isinstance(item, dict) else item)
@@ -94,14 +134,18 @@ def _postprocess_definition(data: dict, keyword: str, evidence: list[dict]) -> d
             return None
         in_evidence = name.lower() in ev_blob or any(
             w in ev_blob for w in name.lower().split() if len(w) > 2)
-        base = 0.55 if importance == "required" else 0.45
-        conf = min(0.95, base + (0.25 if in_evidence else 0.0) + min(0.15, ev_count * 0.02))
+        # 统一置信度公式（services.confidence，与既有岗位同一公式，只是因子来源不同）
+        factors = confmod.factors_from_web(
+            in_evidence=in_evidence, providers=providers, ev_count=ev_count,
+            has_authority_doc=has_authority)
+        conf = confmod.compute(factors)
         return {
             "name": name, "importance": importance,
             "weight": 0.7 if importance == "required" else 0.4,
             "level_required": item.get("level", "familiar") if isinstance(item, dict) else "familiar",
             "category": skill_category(name), "skill_type": skill_type(name),
-            "confidence": round(conf, 4), "source_count": max(1, ev_count // 2 + (1 if in_evidence else 0)),
+            "confidence": conf, "factors": factors,
+            "source_count": max(1, ev_count // 2 + (1 if in_evidence else 0)),
             "support_ratio": round(0.5 + (0.3 if in_evidence else 0), 3),
             "web_verified": in_evidence, "status": "active" if conf >= 0.45 else "candidate",
             "evidence": ([{"source_type": "web", "snippet": f"证据支撑: {name}"}] if in_evidence else []),

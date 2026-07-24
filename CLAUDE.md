@@ -18,16 +18,28 @@ uv run pytest --cov=app --cov-report=term-missing    # tests + coverage (target 
 uv run pytest tests/test_matching.py::test_full_match  # run a single test
 
 # Data / graph pipeline (writes to the CLOUD MySQL the app reads):
-uv run python data/generate_dataset.py        # generate seed_jds.json + ground_truth.json (roles in ROLES dict)
+uv run python data/generate_dataset.py        # ADVERSARIAL TEST FIXTURE (抄袭/通胀注入): seed_jds.json + ground_truth.json — NOT production data
 uv run python data/generate_resumes.py        # generate test_resumes.json
-uv run python data/run_pipeline.py --reset --use-cache   # clean→parse→cross-validate→persist graph
+uv run python data/migrate_202609.py [--db talent_graph_v2]  # idempotent schema migration (new tables + added columns)
+uv run python -X utf8 data/collect/run_collect.py --platforms tencent,netease --batch 2026WNN --per-query 12   # legal crawl (robots+rate-limit+PII guards) → data/raw/{batch}/
+uv run python -X utf8 data/import_raw.py --batch 2026WNN --tier official   # batch jsonl → CrawlBatch + RawJD (URL-dedup, level infer)
+uv run python data/run_pipeline.py --from-db [--platforms x,y]  # build graph from REAL RawJD rows (production path)
+uv run python data/run_pipeline.py --reset --use-cache          # legacy: build from seed_jds.json (test fixture path)
 uv run python data/seed_relations.py          # inject skill prerequisite/related/drives edges
-uv run python data/seed_evolution.py          # seed Java existing-job v1→v2 capability evolution (add/del/modify + sources), idempotent
-uv run python data/rediscover_new_jobs.py     # (re)create the is_new jobs via discovery (KEYWORDS list)
+uv run python data/seed_evolution.py          # OFFLINE DEMO FALLBACK: scripted Java v1→v2 evolution
+uv run python -X utf8 data/run_evolution_batch.py   # REAL v1→v2 evolution from 2025-26 crawl batches
+uv run python -X utf8 data/seed_new_jobs.py [--no-llm]  # 6 evidence-backed emerging jobs + demotions + AuthorityEvidence (replaces rediscover_new_jobs.py)
+uv run python -X utf8 data/build_levels.py [--jobs "..."]  # junior/middle/senior level profiles (job_level_skill)
 uv run python data/evaluate.py all            # JD/resume/match accuracy (reads parsed_cache.json)
 uv run python data/export_deliverables.py     # export test-data samples + 综合测试报告.json
 uv run python data/md_to_docx.py              # convert docs/_source/*.md → docs/*.docx
 ```
+
+**Database targeting**: default DB (`talent_graph`) is the LIVE demo DB — data scripts against it are dangerous. The rebuild sandbox is `talent_graph_v2`; target it with `$env:DB_NAME='talent_graph_v2'` (PowerShell) before running data scripts. Go-live = server `.env` `db_name=talent_graph_v2` + restart (rollback = switch back).
+
+**Parse caches**: `data/parsed_cache.json` (synthetic fixture), `data/parsed_cache_real.json` (real corpus). They store POST-PROCESSED parse results — after changing extraction/taxonomy logic you MUST delete the affected cache or stale shapes persist.
+
+**Real-data provenance**: raw crawl batches live in `data/raw/{batch}/` (jsonl + manifest + crawl_log = 采集台账); authority evidence snapshots (人社部文件/报告) in `data/authority/`; compliance rationale in `data/collect/采集合规说明.md`. Confidence is computed ONLY by `app/services/confidence.py` (linear weighted formula, factors persisted to `job_skill.factors`).
 
 Frontend (from `frontend/`, npm):
 

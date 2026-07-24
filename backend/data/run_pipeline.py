@@ -55,24 +55,36 @@ def main():
     ap.add_argument("--reset", action="store_true")
     ap.add_argument("--workers", type=int, default=5)
     ap.add_argument("--use-cache", action="store_true", help="复用解析缓存，免费快速重建")
+    ap.add_argument("--from-db", action="store_true",
+                    help="从数据库 RawJD（真实采集数据）构建，替代 seed_jds.json")
+    ap.add_argument("--platforms", default="", help="--from-db 时限定平台（逗号分隔）")
     args = ap.parse_args()
 
     init_db()
     if args.reset:
         reset()
 
-    with open(os.path.join(HERE, "seed_jds.json"), encoding="utf-8") as f:
-        dataset = json.load(f)
-    print(f"加载 JD: {len(dataset)} 条，开始构建图谱...")
-
-    parse_fn = make_parse_fn(args.use_cache)
     cache_path = os.path.join(HERE, "parsed_cache.json")  # 始终写出合并后的完整缓存
     db = SessionLocal()
     t0 = time.time()
     try:
-        result = ingest.build_graph_from_dataset(
-            db, dataset, parse_fn=parse_fn, progress=progress, max_workers=args.workers,
-            cache_path=cache_path)
+        if args.from_db:
+            from app import models
+            q = db.query(models.RawJD)
+            if args.platforms:
+                q = q.filter(models.RawJD.platform.in_(args.platforms.split(",")))
+            rows = q.order_by(models.RawJD.id).all()
+            print(f"从数据库加载真实 JD: {len(rows)} 条，开始构建图谱...")
+            result = ingest.build_graph_from_rows(
+                db, rows, parse_fn=make_parse_fn(args.use_cache), progress=progress,
+                max_workers=args.workers, cache_path=cache_path)
+        else:
+            with open(os.path.join(HERE, "seed_jds.json"), encoding="utf-8") as f:
+                dataset = json.load(f)
+            print(f"加载 JD: {len(dataset)} 条，开始构建图谱...")
+            result = ingest.build_graph_from_dataset(
+                db, dataset, parse_fn=make_parse_fn(args.use_cache), progress=progress,
+                max_workers=args.workers, cache_path=cache_path)
     finally:
         db.close()
     dt = time.time() - t0

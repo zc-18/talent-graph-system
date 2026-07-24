@@ -1,0 +1,109 @@
+{
+  "comment": "新兴岗位权威佐证登记表：seed_new_jobs.py 与 discovery 读取。kind: policy=部委文件, report=头部机构报告。excerpt 为原文引用。",
+  "sources": {
+    "智能体开发": [
+      {
+        "kind": "policy",
+        "title": "人社部公示12个新职业（新增新工种：智能体开发员）",
+        "issuer": "人力资源社会保障部",
+        "publish_date": "2026-07-02",
+        "url": "http://society.people.com.cn/n1/2026/0703/c1008-40752636.html",
+        "excerpt": "人力资源社会保障部日前发布公示，拟增加数字孪生工程技术人员、具身智能机器人应用技术员、运动数据分析师等12个新职业，同时新增低空物流员、智能体开发员、新能源汽车检测员、适老化改造设计师等新工种。（公示至2026-07-17）",
+        "local_file": "data/authority/mohrss_2026-07_12新职业公示_人民网.html",
+        "emergence_type": "new"
+      },
+      {
+        "kind": "report",
+        "title": "翰德2025人才趋势报告：AI技术类岗位需求同比增长逾40%",
+        "issuer": "翰德（Hudson）",
+        "publish_date": "2025-02-01",
+        "url": "https://www.jiemian.com/article/14168110.html",
+        "excerpt": "大模型算法、多模态算法、AI基础设施搭建、AI智能体研发等人才跳槽薪资涨幅普遍达到20%-50%。2025年被业界称为智能体爆发元年，企业对Agent工程师等新岗位的需求激增。",
+        "local_file": "",
+        "emergence_type": "new"
+      }
+    ],
+    "具身智能": [
+      {
+        "kind": "policy",
+        "title": "人社部公示12个新职业（新职业：具身智能机器人应用技术员）",
+        "issuer": "人力资源社会保障部",
+        "publish_date": "2026-07-02",
+        "url": "https://cn.chinadaily.com.cn/a/202607/03/WS6a474c43a310d709c2fbbaf8.html",
+        "excerpt": "具身智能机器人应用技术员：使用遥操作设备、空间数字化工具及仿真测试平台，从事具身智能机器人多模态交互数据的采集与处理、算法模型的微调与适配、系统软硬件的现场部署与调试，以及运行效能监控与维护优化的人员。",
+        "local_file": "data/authority/mohrss_2026-07_12新职业公示_中国日报.html",
+        "emergence_type": "new"
+      },
+      {
+        "kind": "report",
+        "title": "翰德2025人才趋势报告",
+        "issuer": "翰德（Hudson）",
+        "publish_date": "2025-02-01",
+        "url": "https://www.jiemian.com/article/14168110.html",
+        "excerpt": "具身智能领域，兼具机械控制与AI算法融合能力的复合型技术人才溢价持续。2025年具身智能从实验室概念走向产业前台。",
+        "local_file": "",
+        "emergence_type": "new"
+      }
+    ],
+    "生成式人工智能系统测试": [
+      {
+        "kind": "policy",
+        "title": "人社部正式发布第七批新职业（新工种：生成式人工智能系统测试员）",
+        "issuer": "人力资源社会保障部",
+        "publish_date": "2025-07-22",
+        "url": "https://m.sh.bendibao.com/news/299711.html",
+        "excerpt": "在\"生成式人工智能系统应用员\"职业下增设\"生成式人工智能系统测试员\"工种。随着人工智能大模型持续迭代升级并加速赋能千行百业，从业人员规模迅速增加、岗位需求更为多样。",
+        "local_file": "data/authority/mohrss_2025-07_第七批新职业_本地宝.html",
+        "emergence_type": "new"
+      }
+    ],
+    "大模型推理优化": [
+      {
+        "kind": "report",
+        "title": "脉脉《2025年AI人才流动报告》",
+        "issuer": "脉脉高聘人才智库",
+        "publish_date": "2025-08-01",
+        "url": "https://eu.36kr.com/en/p/3602071123936263",
+        "excerpt": "2025年2月成为AI岗位增长的关键拐点，7月AI相关岗位量同比增幅突破10倍。DeepSeek开源浪潮下，对负责模型部署、私有化、推理优化、链路监控与成本优化的工程师的需求激增。",
+        "local_file": "",
+        "emergence_type": "new"
+      }
+    ],
+    "数字人训练": [
+      {
+        "kind": "policy",
+        "title": "新职业又添\"数字人\"——人工智能数字人训练师（人社部新增工种）",
+        "issuer": "人力资源社会保障部（中国日报报道）",
+        "publish_date": "2024-08-02",
+        "url": "https://cn.chinadaily.com.cn/a/202408/02/WS66ad6c0fa310054d254eb4c0.html",
+        "excerpt": "人工智能数字人训练师是人社部最新公布增设的数字新工种，归属于人工智能训练师职业类别。虚拟数字人经历2021-2022元宇宙热潮后一度退潮，在大模型技术快速渗透下，数字人产品迎来智能化飞跃、岗位重新兴起。",
+        "local_file": "data/authority/mohrss_2024-08_数字人训练师_中国日报.html",
+        "emergence_type": "revived"
+      }
+    ],
+    "数字孪生": [
+      {
+        "kind": "policy",
+        "title": "人社部公示12个新职业（新职业：数字孪生工程技术人员）",
+        "issuer": "人力资源社会保障部",
+        "publish_date": "2026-07-02",
+        "url": "http://society.people.com.cn/n1/2026/0703/c1008-40752636.html",
+        "excerpt": "拟增加数字孪生工程技术人员、具身智能机器人应用技术员、运动数据分析师、制香香艺师等12个新职业。",
+        "local_file": "data/authority/mohrss_2026-07_12新职业公示_人民网.html",
+        "emergence_type": "new"
+      }
+    ],
+    "提示词工程": [
+      {
+        "kind": "report",
+        "title": "麦肯锡《State of AI 2025》（回落佐证）",
+        "issuer": "麦肯锡",
+        "publish_date": "2025-06-01",
+        "url": "https://eu.36kr.com/en/p/3602071123936263",
+        "excerpt": "企业更青睐能把模型跑通、能解决业务问题的复合型人才。提示词工程、Agent设计、评估和监控等新技能，正逐渐成为AI从业者的新三件套——提示词能力由独立岗位回落为通用技能。",
+        "local_file": "",
+        "emergence_type": "faded"
+      }
+    ]
+  }
+}

@@ -28,6 +28,8 @@ class Job(Base):
     core_responsibilities = Column(JSON)                            # 核心职责 [str]
     typical_scenarios = Column(JSON)                                # 典型行业应用场景 [str]
     emergence_score = Column(Float, default=0.0)                    # 新兴度（新岗位发现打分）
+    emergence_type = Column(String(16), nullable=True)              # 新兴类型：new（新出现）/revived（沉寂后复兴）/NULL（非新兴）
+    first_seen_date = Column(DateTime, nullable=True)               # 岗位（作为新兴岗）首次可考证出现时间
     confidence = Column(Float, default=0.0)                         # 岗位定义整体置信度（反幻觉）
     evidence_count = Column(Integer, default=0)                     # 支撑证据数
     source_summary = Column(JSON)                                   # 数据源摘要
@@ -69,6 +71,7 @@ class JobSkill(Base):
     weight = Column(Float, default=0.5)                            # 重要度权重 0-1
     level_required = Column(String(32), default="familiar")        # 掌握级别：familiar/proficient/expert
     confidence = Column(Float, default=0.0)                        # 该能力项置信度（反幻觉核心）
+    factors = Column(JSON, nullable=True)                          # 置信度因子分解 {support,diversity,freshness,authority,external}
     source_count = Column(Integer, default=0)                      # 独立来源数
     status = Column(String(16), default="active")                 # active/deprecated（演化）
     first_seen = Column(DateTime, default=datetime.utcnow)
@@ -125,6 +128,16 @@ class RawJD(Base):
     inflation_flag = Column(Boolean, default=False)                # 是否能力通胀
     lag_days = Column(Integer, default=0)                          # 时滞天数
     embedding = Column(JSON)                                        # JD 语义向量
+    # ---- 真实采集溯源字段（2026-07 整改新增） ----
+    platform = Column(String(64), index=True)                      # 采集平台标识：bytedance/tencent/iguopin/dataset:tianchi...
+    salary_range = Column(String(64))                              # 薪资区间原文，如 "40-70K"
+    experience_req = Column(String(64))                            # 经验要求原文，如 "3-5年"
+    education_req = Column(String(64))                             # 学历要求原文
+    crawl_batch_id = Column(Integer, ForeignKey("crawl_batch.id"), nullable=True, index=True)
+    raw_file_path = Column(String(256))                            # 本地原始留存文件路径（佐证）
+    inferred_level = Column(String(16), index=True)                # 推断级别：junior/middle/senior
+    cluster_hint = Column(String(64), index=True)                  # 采集检索词对应的岗位簇（聚类辅助）
+    source_authority = Column(Float, default=0.6)                  # 来源权威度：官网/政府1.0 数据集0.7 网络0.6
 
     Index("ix_rawjd_title_company", "job_title", "company")
 
@@ -136,6 +149,7 @@ class Evidence(Base):
     job_skill_id = Column(Integer, ForeignKey("job_skill.id"), index=True)
     raw_jd_id = Column(Integer, ForeignKey("raw_jd.id"), nullable=True)
     source_type = Column(String(32))                               # jd/web/llm
+    source_name = Column(String(128), nullable=True)               # 来源名（web 类证据的站点/报告名）
     source_url = Column(String(512))
     snippet = Column(Text)                                          # 证据原文片段
     weight = Column(Float, default=1.0)                            # 证据权重（源权威度×新鲜度）
@@ -161,6 +175,60 @@ class CapabilityChange(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     job = relationship("Job", back_populates="changes")
+
+
+# ------------------------- 采集批次台账（合规溯源） -------------------------
+class CrawlBatch(Base):
+    __tablename__ = "crawl_batch"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    batch_key = Column(String(64), unique=True, index=True)        # 如 2026W31-bytedance
+    platform = Column(String(64), index=True)
+    tier = Column(String(16), default="official")                  # official（官网/政府）/dataset/aggregator（主流平台，隔离层）
+    method = Column(String(16), default="api")                     # api/html/manual
+    started_at = Column(DateTime)
+    finished_at = Column(DateTime)
+    pages = Column(Integer, default=0)
+    collected = Column(Integer, default=0)                         # 采到条数
+    kept = Column(Integer, default=0)                              # 入库条数
+    robots_ok = Column(Boolean, default=True)
+    rate_limit_s = Column(Float, default=4.0)
+    raw_dir = Column(String(256))                                  # 本地原始留存目录
+    notes = Column(Text)
+
+
+# ------------------------- 权威佐证（政策文件/头部报告） -------------------------
+class AuthorityEvidence(Base):
+    __tablename__ = "authority_evidence"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    job_id = Column(Integer, ForeignKey("job.id"), nullable=True, index=True)  # NULL=库级文件
+    kind = Column(String(16))                                      # policy（部委文件）/report（头部报告）/trend
+    title = Column(String(256))
+    issuer = Column(String(128))                                   # 发布机构：人力资源社会保障部/翰德/脉脉...
+    publish_date = Column(DateTime, nullable=True)
+    url = Column(String(512))
+    excerpt = Column(Text)                                          # 引用原文
+    local_file = Column(String(256))                               # 本地归档文件路径
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ------------------------- 岗位分级能力画像（初/中/高） -------------------------
+class JobLevelSkill(Base):
+    __tablename__ = "job_level_skill"
+    __table_args__ = (UniqueConstraint("job_id", "level", "skill_id", name="uq_job_level_skill"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    job_id = Column(Integer, ForeignKey("job.id"), index=True)
+    level = Column(String(16), index=True)                         # junior/middle/senior
+    skill_id = Column(Integer, ForeignKey("skill.id"), index=True)
+    importance = Column(String(16), default="required")
+    weight = Column(Float, default=0.5)
+    level_required = Column(String(32), default="familiar")
+    confidence = Column(Float, default=0.0)
+    factors = Column(JSON, nullable=True)
+    source_count = Column(Integer, default=0)
+    jd_count = Column(Integer, default=0)                          # 该级别桶内有效 JD 数
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    skill = relationship("Skill")
 
 
 # ------------------------- 简历 -------------------------

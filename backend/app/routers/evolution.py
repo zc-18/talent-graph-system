@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from .. import models
 from ..db import get_db
 from ..schemas import EvolveRequest
-from ..services import extraction, hallucination, evolution, graph_service
+from ..services import extraction, hallucination, evolution, graph_service, leveling
 from .. import clients
 
 router = APIRouter(prefix="/api/evolution", tags=["evolution"])
@@ -22,6 +22,42 @@ def change_history(job_id: int, db: Session = Depends(get_db)):
         "importance": c.importance, "old_value": c.old_value, "new_value": c.new_value,
         "reason": c.reason, "data_source": c.data_source, "confidence": c.confidence,
         "created_at": c.created_at.isoformat() if c.created_at else None} for c in changes]}
+
+
+@router.get("/{job_id}/levels")
+def level_profiles(job_id: int, db: Session = Depends(get_db)):
+    """岗位分级能力画像（初/中/高级）。"""
+    job = db.query(models.Job).get(job_id)
+    if not job:
+        raise HTTPException(404, "岗位不存在")
+    rows = db.query(models.JobLevelSkill, models.Skill).join(
+        models.Skill, models.JobLevelSkill.skill_id == models.Skill.id).filter(
+        models.JobLevelSkill.job_id == job_id).all()
+    levels: dict = {}
+    for jls, sk in rows:
+        lv = levels.setdefault(jls.level, {"jd_count": jls.jd_count, "skills": []})
+        lv["skills"].append({
+            "skill_id": sk.id, "name": sk.name, "importance": jls.importance,
+            "weight": jls.weight, "level_required": jls.level_required,
+            "confidence": jls.confidence, "factors": jls.factors,
+            "source_count": jls.source_count})
+    for lv in levels.values():
+        lv["skills"].sort(key=lambda s: (s["importance"] == "required", s["weight"]),
+                          reverse=True)
+    order = {"junior": 0, "middle": 1, "senior": 2}
+    available = sorted(levels.keys(), key=lambda x: order.get(x, 9))
+    return {"job_id": job_id, "available": available, "levels": levels}
+
+
+@router.get("/{job_id}/level-diff")
+def level_diff(job_id: int, frm: str, to: str, db: Session = Depends(get_db)):
+    """两级能力画像对比（晋升视角的新增/强化/默认前提）。"""
+    if frm not in leveling.LEVELS or to not in leveling.LEVELS:
+        raise HTTPException(400, "级别必须是 junior/middle/senior")
+    job = db.query(models.Job).get(job_id)
+    if not job:
+        raise HTTPException(404, "岗位不存在")
+    return leveling.level_diff(db, job_id, frm, to)
 
 
 @router.post("/update")

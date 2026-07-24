@@ -160,3 +160,145 @@ def clean_skill_name(name: str) -> str:
         n = n[:16]
     return n
 
+
+# ==================== 细粒度技能层（2026-07 整改：老师意见⑤） ====================
+# 设计：两级共存。粗粒度规范名（上面的 SYNONYMS/SKILL_CATEGORY）继续驱动
+# required/bonus 判定、人岗匹配与评测；细粒度技能点作为子节点挂在粗粒度父技能下
+# （Skill.parent_id），从真实 JD 原文抽取，带独立置信度与证据。
+
+# 细粒度别名规整（大小写/中英写法 -> 规范细粒度名）
+FINE_SYNONYMS: dict[str, str] = {
+    "vllm": "vLLM推理部署", "vllm部署": "vLLM推理部署", "sglang": "SGLang推理部署",
+    "tensorrt": "TensorRT加速", "tensorrt-llm": "TensorRT加速", "onnx": "ONNX模型转换",
+    "triton": "Triton推理服务", "triton inference server": "Triton推理服务",
+    "lora": "LoRA微调", "lora微调": "LoRA微调", "qlora": "LoRA微调",
+    "sft": "SFT指令微调", "指令微调": "SFT指令微调", "全参微调": "全参数微调",
+    "rlhf": "RLHF对齐训练", "dpo": "DPO偏好优化", "grpo": "GRPO强化训练",
+    "模型蒸馏": "模型蒸馏", "知识蒸馏": "模型蒸馏", "模型量化": "模型量化(INT8/INT4)",
+    "int8量化": "模型量化(INT8/INT4)", "awq": "模型量化(INT8/INT4)", "gptq": "模型量化(INT8/INT4)",
+    "deepspeed": "DeepSpeed分布式训练", "megatron": "Megatron分布式训练",
+    "fsdp": "FSDP分布式训练", "ddp": "PyTorch分布式训练(DDP)",
+    "分布式训练": "PyTorch分布式训练(DDP)", "cuda": "CUDA编程优化", "cuda编程": "CUDA编程优化",
+    "cutlass": "CUDA编程优化", "flash attention": "FlashAttention优化",
+    "kv cache": "KV Cache优化", "kv缓存": "KV Cache优化",
+    "milvus": "Milvus向量库", "faiss": "FAISS向量检索", "elasticsearch": "Elasticsearch检索",
+    "es": "Elasticsearch检索", "chroma": "Chroma向量库", "qdrant": "Qdrant向量库",
+    "langchain": "LangChain应用开发", "llamaindex": "LlamaIndex应用开发",
+    "langgraph": "LangGraph编排", "autogen": "AutoGen多智能体", "dify": "Dify应用编排",
+    "mcp": "MCP协议接入", "function calling": "Function Calling工具调用",
+    "工具调用": "Function Calling工具调用", "a2a": "A2A智能体协议",
+    "few-shot": "Few-shot提示设计", "cot": "CoT思维链设计", "思维链": "CoT思维链设计",
+    "react": "ReAct智能体模式", "prompt调优": "Prompt调优与评估",
+    "文本嵌入": "Embedding向量化", "embedding": "Embedding向量化", "bge": "Embedding向量化",
+    "重排序": "Rerank重排序", "rerank": "Rerank重排序", "混合检索": "混合检索(稠密+稀疏)",
+    "多路召回": "多路召回策略", "意图识别": "意图识别", "实体识别": "命名实体识别(NER)",
+    "ner": "命名实体识别(NER)", "文本分类": "文本分类", "情感分析": "情感分析",
+    "ocr": "OCR文字识别", "语音识别": "语音识别(ASR)", "asr": "语音识别(ASR)",
+    "tts": "语音合成(TTS)", "语音合成": "语音合成(TTS)", "数字人驱动": "数字人驱动技术",
+    "口型同步": "口型驱动同步", "动作捕捉": "动作捕捉", "yolo": "YOLO目标检测",
+    "目标检测": "YOLO目标检测", "图像分割": "图像分割", "stable diffusion": "扩散模型生图",
+    "sd": "扩散模型生图", "comfyui": "ComfyUI工作流", "controlnet": "ControlNet控制生成",
+    "视频生成": "视频生成模型", "3d重建": "3D重建", "nerf": "NeRF神经渲染",
+    "gaussian splatting": "3D高斯泼溅", "vla": "VLA视觉语言动作模型",
+    "模仿学习": "模仿学习", "运动控制": "机器人运动控制", "运动规划": "运动规划",
+    "路径规划": "路径规划", "轨迹优化": "轨迹优化", "isaac": "Isaac仿真",
+    "mujoco": "MuJoCo仿真", "gazebo": "Gazebo仿真", "ros2": "ROS2开发",
+    "点云处理": "点云处理", "激光雷达": "激光雷达感知", "多传感器融合": "多传感器融合",
+    "bev": "BEV感知", "占用网络": "Occupancy网络",
+    "spark sql": "Spark SQL调优", "spark streaming": "Spark Streaming",
+    "flink sql": "Flink SQL", "flink cdc": "Flink CDC", "实时数仓": "实时数仓建设",
+    "离线数仓": "离线数仓建设", "维度建模": "维度建模", "指标体系": "指标体系建设",
+    "airflow": "Airflow调度", "dolphinscheduler": "DolphinScheduler调度",
+    "数据血缘": "数据血缘治理", "数据质量": "数据质量监控", "ab测试": "A/B实验设计",
+    "a/b测试": "A/B实验设计", "用户画像": "用户画像建模", "归因分析": "归因分析",
+    "helm": "Helm部署", "istio": "Istio服务网格", "服务网格": "Istio服务网格",
+    "prometheus": "Prometheus监控", "grafana": "Grafana可视化",
+    "terraform": "Terraform基础设施", "jenkins": "Jenkins流水线", "gitlab ci": "GitLab CI",
+    "argocd": "ArgoCD持续交付", "jvm调优": "JVM调优", "gc调优": "JVM调优",
+    "mysql调优": "MySQL索引与调优", "分库分表": "分库分表", "sharding": "分库分表",
+    "rocketmq": "RocketMQ", "rabbitmq": "RabbitMQ", "netty": "Netty网络编程",
+    "grpc": "gRPC服务", "graphql": "GraphQL接口", "modbus": "Modbus协议",
+    "opc ua": "OPC UA协议", "nb-iot": "NB-IoT接入", "lorawan": "LoRaWAN组网",
+    "freertos": "FreeRTOS开发", "rt-thread": "RT-Thread开发", "linux驱动": "Linux驱动开发",
+    "设备树": "Linux驱动开发", "can总线": "CAN总线通信", "autosar": "AUTOSAR架构",
+}
+
+# 细粒度技能 -> 粗粒度父技能（粗粒度必须是 SKILL_CATEGORY 中的规范名）
+FINE_PARENT: dict[str, str] = {
+    "vLLM推理部署": "推理加速", "SGLang推理部署": "推理加速", "TensorRT加速": "推理加速",
+    "ONNX模型转换": "推理加速", "Triton推理服务": "模型部署", "FlashAttention优化": "推理加速",
+    "KV Cache优化": "推理加速", "模型量化(INT8/INT4)": "模型量化", "模型蒸馏": "模型量化",
+    "LoRA微调": "模型微调", "SFT指令微调": "模型微调", "全参数微调": "模型微调",
+    "RLHF对齐训练": "强化学习对齐", "DPO偏好优化": "强化学习对齐", "GRPO强化训练": "强化学习对齐",
+    "DeepSpeed分布式训练": "深度学习", "Megatron分布式训练": "深度学习",
+    "FSDP分布式训练": "PyTorch", "PyTorch分布式训练(DDP)": "PyTorch",
+    "CUDA编程优化": "推理加速", "Milvus向量库": "向量数据库", "FAISS向量检索": "向量数据库",
+    "Chroma向量库": "向量数据库", "Qdrant向量库": "向量数据库", "Elasticsearch检索": "检索增强生成",
+    "LangChain应用开发": "LangChain", "LlamaIndex应用开发": "LlamaIndex",
+    "LangGraph编排": "智能体", "AutoGen多智能体": "多智能体", "Dify应用编排": "智能体",
+    "MCP协议接入": "智能体", "Function Calling工具调用": "智能体", "A2A智能体协议": "多智能体",
+    "Few-shot提示设计": "提示工程", "CoT思维链设计": "提示工程", "ReAct智能体模式": "智能体",
+    "Prompt调优与评估": "提示工程", "Embedding向量化": "检索增强生成",
+    "Rerank重排序": "检索增强生成", "混合检索(稠密+稀疏)": "检索增强生成",
+    "多路召回策略": "推荐系统", "意图识别": "自然语言处理", "命名实体识别(NER)": "自然语言处理",
+    "文本分类": "自然语言处理", "情感分析": "自然语言处理", "OCR文字识别": "计算机视觉",
+    "语音识别(ASR)": "多模态", "语音合成(TTS)": "多模态", "数字人驱动技术": "多模态",
+    "口型驱动同步": "多模态", "动作捕捉": "多模态", "YOLO目标检测": "计算机视觉",
+    "图像分割": "计算机视觉", "扩散模型生图": "扩散模型", "ComfyUI工作流": "AIGC",
+    "ControlNet控制生成": "扩散模型", "视频生成模型": "AIGC", "3D重建": "计算机视觉",
+    "NeRF神经渲染": "计算机视觉", "3D高斯泼溅": "计算机视觉", "VLA视觉语言动作模型": "具身智能",
+    "模仿学习": "具身智能", "机器人运动控制": "机器人技术", "运动规划": "机器人技术",
+    "路径规划": "自动驾驶", "轨迹优化": "自动驾驶", "Isaac仿真": "具身智能",
+    "MuJoCo仿真": "具身智能", "Gazebo仿真": "ROS", "ROS2开发": "ROS",
+    "点云处理": "自动驾驶", "激光雷达感知": "自动驾驶", "多传感器融合": "自动驾驶",
+    "BEV感知": "自动驾驶", "Occupancy网络": "自动驾驶",
+    "Spark SQL调优": "Spark", "Spark Streaming": "Spark", "Flink SQL": "Flink",
+    "Flink CDC": "Flink", "实时数仓建设": "实时计算", "离线数仓建设": "数据仓库",
+    "维度建模": "数据建模", "指标体系建设": "数据治理", "Airflow调度": "ETL",
+    "DolphinScheduler调度": "ETL", "数据血缘治理": "数据治理", "数据质量监控": "数据治理",
+    "A/B实验设计": "数据挖掘", "用户画像建模": "数据挖掘", "归因分析": "数据挖掘",
+    "Helm部署": "Kubernetes", "Istio服务网格": "云原生", "Prometheus监控": "DevOps",
+    "Grafana可视化": "DevOps", "Terraform基础设施": "云原生", "Jenkins流水线": "CI/CD",
+    "GitLab CI": "CI/CD", "ArgoCD持续交付": "CI/CD", "JVM调优": "Java",
+    "MySQL索引与调优": "MySQL", "分库分表": "分布式系统", "RocketMQ": "消息队列",
+    "RabbitMQ": "消息队列", "Netty网络编程": "高并发", "gRPC服务": "微服务",
+    "GraphQL接口": "微服务", "Modbus协议": "物联网", "OPC UA协议": "物联网",
+    "NB-IoT接入": "物联网", "LoRaWAN组网": "LoRa通信", "FreeRTOS开发": "实时操作系统",
+    "RT-Thread开发": "实时操作系统", "Linux驱动开发": "嵌入式开发", "CAN总线通信": "嵌入式开发",
+    "AUTOSAR架构": "自动驾驶",
+}
+
+_FINE_MAX_LEN = 24
+
+
+def normalize_fine_skill(name: str) -> str:
+    """细粒度技能名规整：别名合并、去动词前缀/括号说明，但**不**映射回粗粒度。"""
+    if not name:
+        return ""
+    raw = name.strip()
+    low = raw.lower().strip()
+    if low in FINE_SYNONYMS:
+        return FINE_SYNONYMS[low]
+    if raw in FINE_PARENT:
+        return raw
+    n = re.sub(r"^(熟悉|掌握|了解|精通|具备|有)", "", raw).strip()
+    n = re.split(r"[，,；;。]", n)[0].strip()
+    if n.lower() in FINE_SYNONYMS:
+        return FINE_SYNONYMS[n.lower()]
+    if len(n) > _FINE_MAX_LEN:
+        n = n[:_FINE_MAX_LEN]
+    return n
+
+
+def parent_of(fine_name: str, llm_parent: str | None = None, category: str | None = None) -> str | None:
+    """细粒度技能的粗粒度父技能：人工映射表优先，其次 LLM 给的 parent（须为规范名），
+    否则返回 None（该技能按粗粒度独立技能处理）。"""
+    if fine_name in FINE_PARENT:
+        return FINE_PARENT[fine_name]
+    if llm_parent:
+        p = normalize_skill(llm_parent)
+        if p in SKILL_CATEGORY and p != fine_name:
+            return p
+    return None
+
+

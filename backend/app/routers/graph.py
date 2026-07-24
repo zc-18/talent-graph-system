@@ -27,6 +27,59 @@ def categories(db: Session = Depends(get_db)):
     return {"categories": CATEGORIES, "levels": ["junior", "middle", "senior", "expert"]}
 
 
+@router.get("/pipeline-stats")
+def pipeline_stats(db: Session = Depends(get_db)):
+    """全流程闭环漏斗 + 数据源采集台账（驾驶舱用，均为轻量聚合查询）。"""
+    from sqlalchemy import func, cast, String as SAString
+
+    collected = db.query(func.count(models.RawJD.id)).scalar() or 0
+    after_dedup = db.query(func.count(models.RawJD.id)).filter(
+        models.RawJD.is_duplicate == False).scalar() or 0  # noqa: E712
+    validated_caps = db.query(func.count(models.JobSkill.id)).filter(
+        models.JobSkill.status == "active").scalar() or 0
+    total_caps = db.query(func.count(models.JobSkill.id)).scalar() or 0
+    jobs = db.query(func.count(models.Job.id)).scalar() or 0
+    skills = db.query(func.count(models.Skill.id)).scalar() or 0
+
+    platforms = [
+        {"platform": p or "未知", "count": c,
+         "latest": latest.strftime("%Y-%m-%d") if latest else None}
+        for p, c, latest in db.query(
+            models.RawJD.platform, func.count(models.RawJD.id),
+            func.max(models.RawJD.collected_at)
+        ).group_by(models.RawJD.platform).order_by(func.count(models.RawJD.id).desc()).all()
+    ]
+
+    batches = [
+        {"batch_key": b.batch_key, "platform": b.platform, "tier": b.tier,
+         "kept": b.kept,
+         "finished_at": b.finished_at.strftime("%Y-%m-%d %H:%M") if b.finished_at else None}
+        for b in db.query(models.CrawlBatch).order_by(
+            models.CrawlBatch.finished_at.desc()).limit(12).all()
+    ]
+
+    manual_edits = db.query(func.count(models.CapabilityChange.id)).filter(
+        cast(models.CapabilityChange.data_source, SAString).like("%manual%")).scalar() or 0
+    evolution_runs = db.query(func.count(func.distinct(
+        func.concat(models.CapabilityChange.job_id, "-", models.CapabilityChange.version)
+    ))).scalar() or 0
+
+    return {
+        "funnel": {
+            "collected": collected,
+            "after_dedup": after_dedup,
+            "parsed": after_dedup,
+            "validated_caps": validated_caps,
+            "filtered_caps": max(total_caps - validated_caps, 0),
+            "jobs": jobs,
+            "skills": skills,
+        },
+        "platforms": platforms,
+        "batches": batches,
+        "loop": {"manual_edits": manual_edits, "evolution_runs": evolution_runs},
+    }
+
+
 @router.get("/skill/{skill_id}")
 def skill_detail(skill_id: int, db: Session = Depends(get_db)):
     """某技能点关联的岗位（图谱下钻）。"""

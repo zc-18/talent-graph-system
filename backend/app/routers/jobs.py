@@ -52,18 +52,47 @@ def get_job(job_id: int, db: Session = Depends(get_db)):
 
 @router.get("/{job_id}/evidence")
 def job_evidence(job_id: int, db: Session = Depends(get_db)):
-    """返回岗位各能力项的溯源证据（反幻觉可解释性）。"""
+    """返回岗位各能力项的溯源证据（反幻觉可解释性）。
+
+    JD 类证据 join RawJD 补全 来源平台/公司/发布时间/原始URL —— 溯源看得见（2026-07 整改）。
+    """
     js = db.query(models.JobSkill).filter(models.JobSkill.job_id == job_id).all()
     out = []
     for j in js:
         sk = db.query(models.Skill).get(j.skill_id)
         evs = db.query(models.Evidence).filter(models.Evidence.job_skill_id == j.id).all()
+        ev_list = []
+        for e in evs:
+            item = {"type": e.source_type, "snippet": e.snippet,
+                    "url": e.source_url or "", "weight": e.weight,
+                    "source": e.source_name or "", "company": "", "publish_date": None}
+            if e.raw_jd_id:
+                rj = db.query(models.RawJD).get(e.raw_jd_id)
+                if rj:
+                    item["url"] = item["url"] or (rj.source_url or "")
+                    item["source"] = item["source"] or (rj.platform or rj.source or "")
+                    item["company"] = rj.company or ""
+                    item["publish_date"] = rj.publish_date.strftime("%Y-%m-%d") if rj.publish_date else None
+                    item["job_title"] = rj.job_title or ""
+            ev_list.append(item)
         out.append({"skill": sk.name if sk else "", "importance": j.importance,
-                    "confidence": j.confidence, "source_count": j.source_count,
-                    "status": j.status,
-                    "evidences": [{"type": e.source_type, "snippet": e.snippet,
-                                   "url": e.source_url, "weight": e.weight} for e in evs]})
+                    "confidence": j.confidence, "factors": j.factors,
+                    "source_count": j.source_count,
+                    "status": j.status, "evidences": ev_list})
     return {"job_id": job_id, "items": out}
+
+
+@router.get("/{job_id}/authority")
+def job_authority(job_id: int, db: Session = Depends(get_db)):
+    """岗位的权威佐证（部委政策文件 / 头部机构报告）—— 新兴岗位有理有据。"""
+    rows = db.query(models.AuthorityEvidence).filter(
+        models.AuthorityEvidence.job_id == job_id).order_by(
+        models.AuthorityEvidence.publish_date.desc()).all()
+    return {"job_id": job_id, "items": [{
+        "kind": r.kind, "title": r.title, "issuer": r.issuer,
+        "publish_date": r.publish_date.strftime("%Y-%m-%d") if r.publish_date else None,
+        "url": r.url, "excerpt": r.excerpt, "local_file": r.local_file,
+    } for r in rows]}
 
 
 @router.post("")

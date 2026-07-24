@@ -1,0 +1,16 @@
+{
+  "batch": "2018hist-r1",
+  "tier": "dataset",
+  "adapters": {
+    "dataset_51job2018": {
+      "tier": "dataset",
+      "authority": 0.7,
+      "rate_limit_s": 0,
+      "source_url": "https://github.com/north-jewel/data_analysis/blob/master/homework/%E7%8E%8B%E6%98%A5%E5%8D%87-Ezreal/51job_3.csv",
+      "license": "仓库未声明许可证；GitHub 公开仓库，仅科研评测用途，保留出处",
+      "collected": 1980,
+      "kept": 300,
+      "finished_at": "2026-07-24"
+    }
+  }
+}

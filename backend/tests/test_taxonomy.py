@@ -41,3 +41,24 @@ def test_clean_skill_name():
     assert taxonomy.clean_skill_name("") == ""
     # 超长兜底截断
     assert len(taxonomy.clean_skill_name("一二三四五六七八九十一二三四五六七八九十")) <= 16
+
+
+# ==== 细粒度技能层（2026-07 整改） ====
+from app.services.taxonomy import normalize_fine_skill, parent_of, FINE_PARENT, SKILL_CATEGORY
+
+
+def test_fine_synonyms_normalize():
+    assert normalize_fine_skill("vllm") == "vLLM推理部署"
+    assert normalize_fine_skill("精通LoRA微调") == "LoRA微调"
+    assert normalize_fine_skill("lora") == "LoRA微调"
+
+
+def test_fine_parent_mapping_targets_are_canonical():
+    for fine, parent in FINE_PARENT.items():
+        assert parent in SKILL_CATEGORY, f"{fine} 的父级 {parent} 不是粗粒度规范名"
+
+
+def test_parent_of_fallbacks():
+    assert parent_of("LoRA微调") == "模型微调"
+    assert parent_of("完全未知技能点") is None
+    assert parent_of("完全未知技能点", llm_parent="机器学习") == "机器学习"

@@ -17,10 +17,43 @@ export interface JobListItem {
   confidence: number; evidence_count: number; emergence_score: number
   required_count: number; version: number; summary: string
 }
+export interface ConfidenceFactors {
+  support: number; diversity: number; freshness: number; authority: number; external: number
+}
 export interface Skill {
   id: number; skill_id: number; name: string; category: string; skill_type: string
   importance: string; weight: number; level_required: string; confidence: number
   source_count: number; status: string
+  factors?: ConfidenceFactors | null
+  parent_id?: number | null; parent_name?: string | null
+  granularity?: 'coarse' | 'fine'
+}
+export interface EvidenceItem {
+  type: string; snippet: string; url?: string | null; weight?: number
+  source?: string | null; company?: string | null; publish_date?: string | null; job_title?: string | null
+}
+export interface AuthorityItem {
+  kind: 'policy' | 'report'; title: string; issuer: string
+  publish_date?: string | null; url?: string | null; excerpt?: string | null
+}
+export interface CapChange {
+  version: number; change_type: 'add' | 'delete' | 'modify'; skill_name: string
+  old_value?: any; new_value?: any; reason?: string; data_source?: any
+  confidence?: number; created_at?: string
+}
+export interface LevelSkill {
+  name: string; importance: string; weight: number; confidence: number
+  factors?: ConfidenceFactors | null; level_required: string
+}
+export interface JobLevels {
+  available: string[]
+  levels: Record<string, { jd_count: number; skills: LevelSkill[] }>
+}
+export interface PipelineStats {
+  funnel: { collected: number; after_dedup: number; parsed: number; validated_caps: number; filtered_caps: number; jobs: number; skills: number }
+  platforms: { platform: string; count: number; latest?: string | null }[]
+  batches: { batch_key: string; platform: string; tier: string; kept: number; finished_at?: string | null }[]
+  loop: { manual_edits: number; evolution_runs: number }
 }
 export interface JobDetail {
   id: number; name: string; category: string; level: string; is_new: boolean
@@ -48,6 +81,7 @@ export const api = {
   jobs: (params: any = {}) => http.get<{ total: number; items: JobListItem[] }>('/jobs', { params }).then(r => r.data),
   job: (id: number) => http.get<JobDetail>(`/jobs/${id}`).then(r => r.data),
   jobEvidence: (id: number) => http.get(`/jobs/${id}/evidence`).then(r => r.data),
+  jobAuthority: (id: number) => http.get<{ items: AuthorityItem[] }>(`/jobs/${id}/authority`).then(r => r.data),
   createJob: (body: any) => http.post('/jobs', body).then(r => r.data),
   manualEdit: (body: any) => http.post('/jobs/manual-edit', body).then(r => r.data),
   deleteJob: (id: number) => http.delete(`/jobs/${id}`).then(r => r.data),
@@ -57,6 +91,11 @@ export const api = {
     http.post('/discovery/discover', { keyword, save }).then(r => r.data),
 
   changes: (jobId: number) => http.get(`/evolution/${jobId}/changes`).then(r => r.data),
+  jobLevels: (jobId: number) => http.get<JobLevels>(`/evolution/${jobId}/levels`).then(r => r.data),
+  levelDiff: (jobId: number, frm: string, to: string) =>
+    http.get<{ from: string; to: string; from_label: string; to_label: string; changes: CapChange[] }>(
+      `/evolution/${jobId}/level-diff`, { params: { frm, to } }).then(r => r.data),
+  pipelineStats: () => http.get<PipelineStats>('/graph/pipeline-stats').then(r => r.data),
   evolve: (jobId: number, newJds: string[], useWeb = true) =>
     http.post('/evolution/update', { job_id: jobId, new_jds: newJds, use_web: useWeb }).then(r => r.data),
 

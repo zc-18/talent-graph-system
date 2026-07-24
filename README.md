@@ -30,7 +30,7 @@
 
 | JD 解析 F1 | 简历提取 F1 | 人岗匹配准确率 | 测试覆盖率 | 测试 JD |
 |:---:|:---:|:---:|:---:|:---:|
-| **98.2%** | **96.5%** | **100%** | **66%** | **379 条** |
+| **98.25%** | **96.49%** | **100%** | **63%** | **对抗基准 379 + 真实语料 806** |
 
 ---
 
@@ -48,7 +48,7 @@ talent-graph-system/
 ├── backend/
 │   ├── app/                FastAPI 应用（services 分层 + routers）
 │   ├── data/               数据生成 / pipeline / 评测脚本
-│   ├── tests/              单元测试（52 用例，覆盖率 66%）
+│   ├── tests/              单元测试（72 用例，覆盖率 63%）
 │   └── requirements.txt
 ├── frontend/               React + Vite 前端
 ├── deploy/                 Dockerfile / docker-compose / systemd
@@ -61,7 +61,7 @@ talent-graph-system/
 # 后端
 cd backend
 uv sync
-uv run python data/run_pipeline.py --reset    # 构建图谱
+uv run python data/run_pipeline.py --from-db  # 用真实 RawJD 构建图谱（生产路径；--reset 为合成基准评测路径）
 uv run python data/seed_relations.py
 uv run uvicorn app.main:app --port 8200
 

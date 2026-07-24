@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Undo2 } from 'lucide-react'
 import { IBriefcase, IStack, IDatabase, ICopy, IShieldCheck, ITrendUp } from '../components/icons'
-import { api, Stats, JobListItem, CATEGORY_COLORS } from '../api'
+import { api, Stats, JobListItem, PipelineStats, CATEGORY_COLORS } from '../api'
 import { Card, ConfidencePill, Badge, PageSkeleton, ErrorState } from '../components/ui'
 import { useCountUp, useReveal } from '../hooks/gsapFx'
 
@@ -25,6 +25,7 @@ function Kpi({ icon, label, value, sub, tone, delay }: any) {
 export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [jobs, setJobs] = useState<JobListItem[]>([])
+  const [pipe, setPipe] = useState<PipelineStats | null>(null)
   const [error, setError] = useState(false)
   const nav = useNavigate()
 
@@ -32,6 +33,7 @@ export default function Dashboard() {
     setError(false)
     api.stats().then(setStats).catch(() => setError(true))
     api.jobs({ size: 8 }).then(d => setJobs(d.items)).catch(() => {})
+    api.pipelineStats().then(setPipe).catch(() => setPipe(null))
   }
   useEffect(load, [])
   const revealRef = useReveal('[data-reveal]', { scroll: true, deps: [stats] })
@@ -126,25 +128,99 @@ export default function Dashboard() {
       </div>
 
       <Card delay={0.25} className="p-6">
-        <div className="flex items-center gap-2 font-semibold text-slate-700 mb-4">
-          <ITrendUp className="w-4 h-4 text-cyan-600" /> 全流程闭环
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-          {[
-            ['多源数据采集', '招聘JD · 联网检索'],
-            ['清洗·交叉验证', '去抄袭/通胀/时滞'],
-            ['大模型抽取', '结构化能力项'],
-            ['反幻觉聚合', '置信度+溯源'],
-            ['图谱构建/演化', '动态更新'],
-            ['匹配与诊断', '差距+学习路径'],
-          ].map(([t, s], i) => (
-            <div key={t} data-reveal className="relative rounded-xl bg-sky-50/70 border border-slate-200/70 p-3.5">
-              <div className="text-[11px] text-accent font-bold mb-1">0{i + 1}</div>
-              <div className="text-sm font-semibold text-slate-800">{t}</div>
-              <div className="text-[11px] text-slate-400 mt-0.5">{s}</div>
+        <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+          <div className="flex items-center gap-2 font-semibold text-slate-700">
+            <ITrendUp className="w-4 h-4 text-cyan-600" /> 全流程闭环
+          </div>
+          {pipe && (
+            <div className="flex items-center gap-1.5 text-xs text-slate-500">
+              <Undo2 className="w-3.5 h-3.5 text-amber-500" />
+              人工反馈回流 <span className="font-bold text-amber-600 tabular-nums">{pipe.loop.manual_edits}</span> 次
+              · 演化运行 <span className="font-bold text-cyan-600 tabular-nums">{pipe.loop.evolution_runs}</span> 轮
             </div>
-          ))}
+          )}
         </div>
+        {pipe ? (
+          <>
+            <div className="relative">
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                {[
+                  ['采集', `${pipe.funnel.collected}`, '条原始 JD · 多源采集'],
+                  ['清洗', `${pipe.funnel.after_dedup}`, '条去重后有效 JD'],
+                  ['抽取', `${pipe.funnel.parsed}`, '条完成结构化解析'],
+                  ['验证', `${pipe.funnel.validated_caps}`, `项能力通过交叉验证（滤除 ${pipe.funnel.filtered_caps}）`],
+                  ['图谱', `${pipe.funnel.jobs} / ${pipe.funnel.skills}`, '岗位 / 技能点入图'],
+                  ['应用', `${pipe.loop.evolution_runs}`, '轮演化 · 匹配诊断'],
+                ].map(([t, v, s], i) => (
+                  <div key={t as string} data-reveal className="relative rounded-xl bg-sky-50/70 border border-slate-200/70 p-3.5">
+                    <div className="text-[11px] text-accent font-bold mb-1">0{i + 1} · {t}</div>
+                    <div className="text-xl font-extrabold text-slate-900 tabular-nums">{v}</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">{s}</div>
+                    {i < 5 && <ArrowRight className="hidden md:block absolute top-1/2 -right-[13px] -translate-y-1/2 w-3.5 h-3.5 text-slate-300 z-10" />}
+                  </div>
+                ))}
+              </div>
+              {/* 人工反馈回流：从「应用」弯回「验证/图谱」的虚线指示 */}
+              <div className="hidden md:flex items-center justify-end gap-2 mt-2 pr-2">
+                <svg width="260" height="18" className="text-amber-400" aria-hidden>
+                  <path d="M255 2 C 200 22, 60 22, 5 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 3" />
+                  <path d="M11 2 L4 6 L12 10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+                <span className="text-[11px] text-amber-600">人工反馈回流 {pipe.loop.manual_edits} 次（专家修订驱动图谱再验证）</span>
+              </div>
+            </div>
+
+            <div className="mt-5 pt-4 border-t border-slate-100">
+              <div className="text-sm font-semibold text-slate-700 mb-3">数据源采集台账</div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  {(() => {
+                    const max = Math.max(1, ...pipe.platforms.map(p => p.count))
+                    return pipe.platforms.slice(0, 8).map(p => (
+                      <div key={p.platform} className="flex items-center gap-2.5">
+                        <span className="text-xs text-slate-600 w-28 truncate shrink-0" title={p.platform}>{p.platform}</span>
+                        <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
+                          <div className="h-full rounded-full bg-grad-accent" style={{ width: `${Math.max(4, Math.round(p.count / max * 100))}%` }} />
+                        </div>
+                        <span className="text-[11px] text-slate-500 tabular-nums w-10 text-right shrink-0">{p.count}</span>
+                        <span className="text-[10px] text-slate-400 w-20 text-right shrink-0 hidden sm:inline">{p.latest || ''}</span>
+                      </div>
+                    ))
+                  })()}
+                </div>
+                <div className="space-y-1.5 max-h-[180px] overflow-auto pr-1">
+                  {pipe.batches.map(b => (
+                    <div key={b.batch_key} className="flex items-center gap-2 rounded-lg bg-sky-50/70 px-3 py-1.5 text-[11px]">
+                      <span className="font-medium text-slate-700">{b.batch_key}</span>
+                      <Badge tone={b.tier === 'official' ? 'emerald' : b.tier === 'dataset' ? 'cyan' : 'slate'}>{b.tier}</Badge>
+                      <span className="flex-1" />
+                      <span className="text-slate-500 tabular-nums">入库 {b.kept}</span>
+                      <span className="text-slate-400 hidden sm:inline">{b.finished_at || ''}</span>
+                    </div>
+                  ))}
+                  {pipe.batches.length === 0 && <div className="text-xs text-slate-400 py-4 text-center">暂无批次记录</div>}
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+            {[
+              ['多源数据采集', '招聘JD · 联网检索'],
+              ['清洗·交叉验证', '去抄袭/通胀/时滞'],
+              ['大模型抽取', '结构化能力项'],
+              ['反幻觉聚合', '置信度+溯源'],
+              ['图谱构建/演化', '动态更新'],
+              ['匹配与诊断', '差距+学习路径'],
+            ].map(([t, s], i) => (
+              <div key={t} data-reveal className="relative rounded-xl bg-sky-50/70 border border-slate-200/70 p-3.5">
+                <div className="text-[11px] text-accent font-bold mb-1">0{i + 1}</div>
+                <div className="text-sm font-semibold text-slate-800">{t}</div>
+                <div className="text-[11px] text-slate-400 mt-0.5">{s}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </Card>
     </div>
   )

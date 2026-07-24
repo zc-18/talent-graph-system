@@ -18,8 +18,22 @@ def test_cross_validation_confidence_increases_with_sources():
     out = H.aggregate_capabilities(jds)
     ml = [c for c in out["capabilities"] if c["name"] == "机器学习"][0]
     assert ml["source_count"] == 5
-    assert ml["confidence"] > 0.8
+    # 单一平台、无外部验证时线性公式封顶约 0.66；status 应为 active
+    assert ml["confidence"] > 0.6
     assert ml["status"] == "active"
+    assert "factors" in ml
+
+
+def test_confidence_rewards_platform_diversity_and_authority():
+    # 相同支持率下：多平台 + 官方权威来源 → 置信度更高（多样性与权威度因子）
+    jds = [_jd(["机器学习"], rid=i) for i in range(1, 6)]
+    base = H.aggregate_capabilities(jds)["capabilities"][0]["confidence"]
+    meta = {i: {"platform": f"p{i}", "authority": 1.0} for i in range(1, 6)}
+    rich = H.aggregate_capabilities(jds, source_meta=meta)["capabilities"][0]
+    assert rich["confidence"] > base
+    assert rich["confidence"] > 0.85
+    assert rich["factors"]["diversity"] == 1.0
+    assert rich["factors"]["authority"] == 1.0
 
 
 def test_single_source_required_demoted_to_bonus():
