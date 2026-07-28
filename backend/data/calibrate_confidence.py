@@ -4,7 +4,7 @@
 本脚本对存量 JobSkill / JobLevelSkill 的 factors 重算 diversity 与 confidence，
 并按新口径重算各岗位整体置信度。无需重新解析（factors 已落库）。
 
-用法： $env:DB_NAME='talent_graph_v2'; uv run python -X utf8 data/calibrate_confidence.py
+用法： $env:DB_NAME='talent_graph_v3'; uv run python -X utf8 data/calibrate_confidence.py
 """
 from __future__ import annotations
 import os

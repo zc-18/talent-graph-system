@@ -1,13 +1,13 @@
 """数据库迁移脚本（2026-09 版整改）—— 幂等，可反复执行。
 
 用途：
-1. 在目标库（默认读 .env 的 db_name，可用 --db 覆盖，如 talent_graph_v2）创建全部新表
+1. 在目标库（默认读 .env 的 db_name，可用 --db 覆盖，如 talent_graph_v3）创建全部新表
    （crawl_batch / authority_evidence / job_level_skill 由 ORM create_all 自动建）。
 2. 对已有表补加新列（MySQL 8 无 ADD COLUMN IF NOT EXISTS，先查 information_schema）。
 
 用法（backend/ 目录下）：
     uv run python data/migrate_202609.py                 # 迁移 .env 指向的库
-    uv run python data/migrate_202609.py --db talent_graph_v2   # 建/迁移 v2 新库（不存在则先 CREATE DATABASE）
+    uv run python data/migrate_202609.py --db talent_graph_v3   # 建/迁移 v3 新库（不存在则先 CREATE DATABASE）
 """
 from __future__ import annotations
 import argparse
@@ -134,6 +134,6 @@ def migrate(db_name: str) -> None:
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--db", default=settings.db_name,
-                    help="目标库名（默认 .env 的 db_name；建 v2 用 --db talent_graph_v2）")
+                    help="目标库名（默认 .env 的 db_name；建 v3 用 --db talent_graph_v3）")
     args = ap.parse_args()
     migrate(args.db)

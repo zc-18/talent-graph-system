@@ -54,9 +54,12 @@ def parse_resume_text(payload: dict, db: Session = Depends(get_db)):
 def _job_caps(db: Session, job_id: int) -> list[dict]:
     js = db.query(models.JobSkill).filter(models.JobSkill.job_id == job_id,
                                           models.JobSkill.status == "active").all()
+    # 技能名/技术栈一次批量取（历史实现逐条 Skill.get，是 N+1）
+    sk_rows = {r.id: r for r in db.query(models.Skill.id, models.Skill.name, models.Skill.category)
+               .filter(models.Skill.id.in_({j.skill_id for j in js})).all()} if js else {}
     caps = []
     for j in js:
-        sk = db.query(models.Skill).get(j.skill_id)
+        sk = sk_rows.get(j.skill_id)
         if sk:
             caps.append({"name": sk.name, "importance": j.importance, "weight": j.weight,
                          "level_required": j.level_required, "category": sk.category,
@@ -66,11 +69,13 @@ def _job_caps(db: Session, job_id: int) -> list[dict]:
 
 def _skill_relations(db: Session, names: list[str]) -> dict:
     """构造缺失技能的先修关系图（用于学习路径）。"""
+    # 一次 IN 查询取回全部命中技能（历史实现按名字逐个 query，是 N+1）
     name_to_id = {}
-    for nm in names:
-        sk = db.query(models.Skill).filter(models.Skill.normalized_name == nm).first()
-        if sk:
-            name_to_id[nm] = sk.id
+    if names:
+        rows = db.query(models.Skill.normalized_name, models.Skill.id).filter(
+            models.Skill.normalized_name.in_(set(names))).order_by(models.Skill.id).all()
+        for nm, sid in rows:
+            name_to_id.setdefault(nm, sid)   # 同名多行时保留 id 最小的，与原 .first() 一致
     id_to_name = {v: k for k, v in name_to_id.items()}
     rels = {}
     if name_to_id:

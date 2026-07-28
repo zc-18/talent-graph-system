@@ -32,3 +32,6 @@ backend/static/
 .DS_Store
 Thumbs.db
 .playwright-mcp/
+
+# 性能压测临时产物（本地基准，不入库）
+backend/_perf/

@@ -6,7 +6,7 @@
 evolution.compute_changes → evolution.apply_evolution，写入 CapabilityChange
 （data_source 标注真实平台、JD 数与批次）。
 
-用法（backend/ 下，务必 $env:DB_NAME='talent_graph_v2'）：
+用法（backend/ 下，务必 $env:DB_NAME='talent_graph_v3'）：
     uv run python -X utf8 data/run_evolution_batch.py [--min-jds 3] [--platforms tencent,netease]
 """
 from __future__ import annotations
@@ -25,7 +25,7 @@ from app.services.cleaning import exact_hash  # noqa: E402
 
 HERE = Path(__file__).parent
 CACHE_PATH = HERE / "parsed_cache_real.json"
-BATCH_LABEL = "2026W31-r1"
+BATCH_LABEL = "2026W31-r1"      # 默认批次标签，可用 --batch-label 覆盖（多时间切片演化时必须指定）
 
 
 def load_cluster_map() -> dict[str, str]:
@@ -52,7 +52,14 @@ def main():
     ap.add_argument("--platforms", default="tencent,netease")
     ap.add_argument("--min-jds", type=int, default=3)
     ap.add_argument("--workers", type=int, default=5)
+    ap.add_argument("--batch-label", default=BATCH_LABEL,
+                    help="写入 CapabilityChange.data_source.batch 的批次标签；"
+                         "做多时间切片演化（2018→2024→2026）时每次都要指定对应批次")
+    ap.add_argument("--max-version", type=int, default=0,
+                    help="跳过版本号已达该值的岗位（0=不跳过）。多时间切片按时间顺序跑时留 0，"
+                         "让同一岗位可以 v1→v2→v3 连续演化")
     args = ap.parse_args()
+    batch_label = args.batch_label
     platforms = args.platforms.split(",")
 
     cache = json.loads(CACHE_PATH.read_text("utf-8")) if CACHE_PATH.exists() else {}
@@ -62,8 +69,8 @@ def main():
     try:
         jobs = db.query(models.Job).filter(models.Job.is_new == False).all()  # noqa: E712
         for job in jobs:
-            if (job.version or 1) >= 2:
-                print(f"[skip] {job.name} 已是 v{job.version}")
+            if args.max_version and (job.version or 1) >= args.max_version:
+                print(f"[skip] {job.name} 已是 v{job.version}（≥ --max-version）")
                 continue
             cluster = job2cluster.get(job.name)
             if not cluster:
@@ -123,12 +130,18 @@ def main():
                 seen_names.add(c["name"])
                 deduped.append(c)
             agg["capabilities"] = deduped
-            changes = evolution.compute_changes(old_caps, agg["capabilities"])
+            changes = evolution.compute_changes(
+                old_caps, agg["capabilities"],
+                # 先验注入之前、最新窗口 JD 里真实出现过的技能名——淘汰判据的举证基础
+                window_skill_names={s.get("name") for p in parsed
+                                    for s in (p.get("required_skills", [])
+                                              + p.get("bonus_skills", [])) if s.get("name")},
+                window_jd_count=len(rows))
             src_platforms = sorted({r.platform for r in rows})
             for ch in changes:  # 标注真实数据来源
                 ds = ch.get("data_source") or {}
                 ds.update({"platforms": src_platforms, "jd_count": len(rows),
-                           "batch": BATCH_LABEL})
+                           "batch": batch_label})
                 ch["data_source"] = ds
             result = evolution.apply_evolution(db, job, agg["capabilities"], changes)
             print(f"[evolve] {job.name}: v{result['version']} "

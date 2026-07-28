@@ -67,14 +67,16 @@ def update_job(payload: EvolveRequest, db: Session = Depends(get_db)):
     if not job:
         raise HTTPException(404, "岗位不存在")
 
-    # 旧能力项快照
+    # 旧能力项快照（技能名一次批量取，历史实现逐条 Skill.get 是 N+1）
     old_js = db.query(models.JobSkill).filter(models.JobSkill.job_id == job.id,
                                               models.JobSkill.status == "active").all()
+    sk_name = dict(db.query(models.Skill.id, models.Skill.name).filter(
+        models.Skill.id.in_({j.skill_id for j in old_js})).all()) if old_js else {}
     old_caps = []
     for j in old_js:
-        sk = db.query(models.Skill).get(j.skill_id)
-        if sk:
-            old_caps.append({"name": sk.name, "importance": j.importance, "weight": j.weight,
+        nm = sk_name.get(j.skill_id)
+        if nm is not None:
+            old_caps.append({"name": nm, "importance": j.importance, "weight": j.weight,
                              "level_required": j.level_required, "confidence": j.confidence,
                              "source_count": j.source_count})
 

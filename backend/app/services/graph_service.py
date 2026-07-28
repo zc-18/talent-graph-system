@@ -98,17 +98,35 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
     return job
 
 
+def skill_meta(db: Session, skill_ids) -> dict:
+    """批量取技能元信息，返回 {skill_id: Row(id, name, category, skill_type, parent_id)}。
+
+    只选树/详情需要的 5 个列：Skill.embedding 是 512 维 JSON，整行 ORM 取回来时
+    几百个技能就是好几 MB 的传输 + JSON 解析，纯属浪费。
+    """
+    ids = {i for i in skill_ids if i is not None}
+    if not ids:
+        return {}
+    SK = models.Skill
+    rows = db.query(SK.id, SK.name, SK.category, SK.skill_type, SK.parent_id) \
+             .filter(SK.id.in_(ids)).all()
+    return {r.id: r for r in rows}
+
+
 def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) -> dict:
     js = db.query(models.JobSkill).filter(models.JobSkill.job_id == job.id).all()
     skills = []
-    skill_rows = {s.id: s for s in db.query(models.Skill).filter(
-        models.Skill.id.in_([j.skill_id for j in js]))} if js else {}
+    # 技能元信息 1 条 SQL 批量取；父技能名再补 1 条（父技能不一定出现在本岗位的技能里）。
+    # 历史实现对每个有 parent_id 的技能单独 query 一次 Skill（N+1），
+    # 技能多的岗位就是几百次公网往返。
+    skill_rows = skill_meta(db, [j.skill_id for j in js])
+    parent_rows = skill_meta(db, {r.parent_id for r in skill_rows.values()
+                                  if r.parent_id and r.parent_id not in skill_rows})
     for j in js:
         sk = skill_rows.get(j.skill_id)
         if not sk:
             continue
-        parent = skill_rows.get(sk.parent_id) or (
-            db.query(models.Skill).get(sk.parent_id) if sk.parent_id else None)
+        parent = skill_rows.get(sk.parent_id) or parent_rows.get(sk.parent_id)
         skills.append({
             "id": j.id, "skill_id": sk.id, "name": sk.name, "category": sk.category,
             "skill_type": sk.skill_type, "importance": j.importance, "weight": j.weight,
@@ -136,12 +154,26 @@ def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) 
     }
 
 
+#: 全景图技能节点默认上限（力导向图可读性 + 载荷上限的安全阀）。
+#: 当前语料粗粒度技能仅 147/573 个，默认值不会触发截断；
+#: 触发时按 degree（关联岗位数）降序保留 top-N，并在 stats 中如实标注 truncated/skills_total。
+DEFAULT_MAX_SKILLS = 400
+
+
 def panoramic_graph(db: Session, category: str | None = None, level: str | None = None,
-                    min_confidence: float = 0.0, granularity: str = "coarse") -> dict:
+                    min_confidence: float = 0.0, granularity: str = "coarse",
+                    max_skills: int = DEFAULT_MAX_SKILLS) -> dict:
     """构建全景图谱：岗位节点 + 技能点节点 + 关系边。
 
     granularity="coarse"（默认）只展示粗粒度技能节点（parent_id 为空），
     细粒度技能在岗位详情页按父类分组展示，避免全景图节点爆炸。
+
+    性能：整图只用 2 条 SQL（岗位 1 条 + job_skill⋈skill 批量 join 1 条），
+    组装在内存里完成。历史实现对每条 JobSkill 单独 query 一次 Skill（N+1），
+    在云 MySQL 上是几千次公网往返，单请求要几十秒。
+
+    max_skills：技能节点上限，超出时按 degree 降序截断，
+    并置 stats.truncated=True + stats.skills_total（不静默丢数据）。
     """
     q = db.query(models.Job).filter(models.Job.status == "published")
     if category and category != "全部":
@@ -150,35 +182,69 @@ def panoramic_graph(db: Session, category: str | None = None, level: str | None 
         q = q.filter(models.Job.level == level)
     jobs = q.all()
 
-    nodes, edges = [], []
+    nodes: list[dict] = [
+        {"id": f"job-{job.id}", "name": job.name, "type": "job",
+         "category": job.category, "level": job.level, "is_new": bool(job.is_new),
+         "confidence": job.confidence, "value": 30}
+        for job in jobs
+    ]
+    if not jobs:
+        return {"nodes": nodes, "edges": [],
+                "stats": {"jobs": 0, "skills": 0, "relations": 0,
+                          "skills_total": 0, "truncated": False, "max_skills": max_skills}}
+
+    # 一次性把「岗位-技能」关系连同技能属性 join 出来，粗/细粒度过滤下推到 SQL，
+    # 避免捞出细粒度技能后在 Python 里丢掉（本库 4567 技能中仅 573 个是粗粒度）。
+    JS, SK = models.JobSkill, models.Skill
+    rows_q = (
+        db.query(JS.job_id, JS.importance, JS.weight, JS.confidence,
+                 SK.id, SK.name, SK.category, SK.skill_type)
+        .join(SK, SK.id == JS.skill_id)
+        .filter(JS.job_id.in_([j.id for j in jobs]),
+                JS.status == "active",
+                JS.confidence >= min_confidence)
+    )
+    if granularity == "coarse":
+        rows_q = rows_q.filter(SK.parent_id.is_(None))
+    # 按 (job_id, skill_id) 排序：复现原「逐岗位查询」的行序——MySQL 对 job_id 等值条件
+    # 会走 uq_job_skill(job_id, skill_id) 索引，天然按 skill_id 升序返回，因此节点/边的
+    # 输出顺序与优化前逐字节一致。（本查询实际由 skill.parent_id 侧驱动 + filesort，
+    # 但结果集只有几百行，排序开销可忽略，无需为此加索引。）
+    rows = rows_q.order_by(JS.job_id, JS.skill_id).all()
+
+    by_job: dict[int, list] = {}
+    for r in rows:
+        by_job.setdefault(r[0], []).append(r)
+
+    edges: list[dict] = []
     skill_seen: dict[int, dict] = {}
-    for job in jobs:
-        nodes.append({"id": f"job-{job.id}", "name": job.name, "type": "job",
-                      "category": job.category, "level": job.level, "is_new": bool(job.is_new),
-                      "confidence": job.confidence, "value": 30})
-        js = db.query(models.JobSkill).filter(
-            models.JobSkill.job_id == job.id,
-            models.JobSkill.status == "active",
-            models.JobSkill.confidence >= min_confidence).all()
-        for j in js:
-            sk = db.query(models.Skill).get(j.skill_id)
-            if not sk:
-                continue
-            if granularity == "coarse" and sk.parent_id:
-                continue  # 细粒度技能不进全景图
-            if sk.id not in skill_seen:
-                skill_seen[sk.id] = {"id": f"skill-{sk.id}", "name": sk.name, "type": "skill",
-                                     "category": sk.category, "skill_type": sk.skill_type,
+    for job in jobs:  # 外层顺序沿用 jobs 查询顺序，保证与原实现一致
+        for _, importance, weight, confidence, sk_id, sk_name, sk_cat, sk_type in by_job.get(job.id, ()):
+            if sk_id not in skill_seen:
+                skill_seen[sk_id] = {"id": f"skill-{sk_id}", "name": sk_name, "type": "skill",
+                                     "category": sk_cat, "skill_type": sk_type,
                                      "value": 10, "degree": 0}
-            skill_seen[sk.id]["degree"] += 1
-            edges.append({"source": f"job-{job.id}", "target": f"skill-{sk.id}",
-                          "importance": j.importance, "weight": round(j.weight, 3),
-                          "confidence": round(j.confidence, 3)})
+            skill_seen[sk_id]["degree"] += 1
+            edges.append({"source": f"job-{job.id}", "target": f"skill-{sk_id}",
+                          "importance": importance, "weight": round(weight, 3),
+                          "confidence": round(confidence, 3)})
+
+    skills_total = len(skill_seen)
+    truncated = max_skills is not None and max_skills > 0 and skills_total > max_skills
+    if truncated:
+        # 保留热度（关联岗位数）最高的 top-N 技能节点，并同步剔除悬空边
+        keep = {s["id"] for s in sorted(skill_seen.values(),
+                                        key=lambda s: s["degree"], reverse=True)[:max_skills]}
+        skill_seen = {k: v for k, v in skill_seen.items() if v["id"] in keep}
+        edges = [e for e in edges if e["target"] in keep]
+
     for s in skill_seen.values():
         s["value"] = 8 + min(40, s["degree"] * 4)
         nodes.append(s)
     return {"nodes": nodes, "edges": edges,
-            "stats": {"jobs": len(jobs), "skills": len(skill_seen), "relations": len(edges)}}
+            "stats": {"jobs": len(jobs), "skills": len(skill_seen), "relations": len(edges),
+                      "skills_total": skills_total, "truncated": truncated,
+                      "max_skills": max_skills}}
 
 
 def stats_overview(db: Session) -> dict:

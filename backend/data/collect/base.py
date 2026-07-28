@@ -44,7 +44,9 @@ def mask_pii(text: str) -> str:
     text = _RE_PHONE.sub("1**********", text)
     text = _RE_EMAIL.sub("***@***", text)
     text = _RE_WECHAT.sub(r"\1:***", text)
-    return text
+    # U+2028/U+2029 是 Unicode 行分隔符：json.dumps 不转义，但 str.splitlines() 会在此断行，
+    # 会把一条 jsonl 记录劈成两半导致读取端解析失败，落盘前统一换成普通换行。
+    return text.replace(" ", "\n").replace(" ", "\n")
 
 
 class RobotsGate:

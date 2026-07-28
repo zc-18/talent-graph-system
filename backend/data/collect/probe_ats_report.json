@@ -1,0 +1,351 @@
+{
+  "feishu": [
+    {
+      "tenant": "01ai",
+      "base": "https://01ai.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 405,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "horizon",
+      "base": "https://horizon.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 405,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "moonshotai",
+      "base": "https://moonshotai.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 400,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "minimax",
+      "base": "https://minimax.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 400,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "zhipu",
+      "base": "https://zhipu.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 400,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "megvii",
+      "base": "https://megvii.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 400,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "unitree",
+      "base": "https://unitree.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 400,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "modelbest",
+      "base": "https://modelbest.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 405,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "wps",
+      "base": "https://wps.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 400,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "sensetime",
+      "base": "https://sensetime.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 405,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    },
+    {
+      "tenant": "cambricon",
+      "base": "https://cambricon.jobs.feishu.cn",
+      "hits": [
+        {
+          "method": "POST",
+          "path": "/api/v1/search/job/posts",
+          "status": 400,
+          "ctype": "",
+          "len": 0
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/job/posts/search",
+          "status": 404,
+          "ctype": "text/plain",
+          "len": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/search/job/posts?limit=5&offset=0",
+          "status": 200,
+          "ctype": "text/html; charset=utf-8",
+          "len": 4089
+        }
+      ]
+    }
+  ],
+  "others": [
+    {
+      "name": "国聘网-职位搜索",
+      "url": "https://www.iguopin.com/api/job/search?page=1&limit=5",
+      "status": 200,
+      "ctype": "text/html",
+      "len": 1025,
+      "preview": "<!doctype html><html><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><link rel=\"apple-touch-icon\" href=\"/logo192.png\"/><link rel=\"manifest\" href=\"/mani"
+    },
+    {
+      "name": "国聘网-api子域",
+      "url": "https://api.iguopin.com/api/job/list?page=1&limit=5",
+      "status": 200,
+      "ctype": "text/html",
+      "len": 592,
+      "preview": "<!doctype html><html><head><meta charset=\"utf-8\"/><link rel=\"icon\" href=\"/favicon.ico\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><meta name=\"theme-color\" content=\"#000000\"/>"
+    },
+    {
+      "name": "中国公共招聘网",
+      "url": "http://job.mohrss.gov.cn/",
+      "status": 200,
+      "ctype": "text/html; charset=UTF-8",
+      "len": 66064,
+      "preview": "<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n\t\t<title>中国公共招聘网</title>\n                <script language=\"javascript\" src=\"/r/cms/www/default/gaib"
+    },
+    {
+      "name": "Moka-示例(用友)",
+      "url": "https://app.mokahr.com/api/outer/jobs?orgId=yonyou&page=1",
+      "status": 404,
+      "ctype": "application/json; charset=utf-",
+      "len": 33,
+      "preview": "{\"message\":\"您访问的页面不存在\",\"code\":-1}"
+    },
+    {
+      "name": "大疆we.dji",
+      "url": "https://we.dji.com/api/v1/job/list?page=1&size=5",
+      "status": 200,
+      "ctype": "text/html; charset=utf-8",
+      "len": 53914,
+      "preview": "<!DOCTYPE html><html lang=\"zh-CN\"><head><script>(function(){function retry(link){try{var u=new URL(link.href);if(u.searchParams.has('_r'))return;u.searchParams.set('_r',Date.now().toString(36));var n="
+    },
+    {
+      "name": "华为career",
+      "url": "https://career.huawei.com/reccampportal/services/portal/portalpub/getJobList",
+      "status": 404,
+      "ctype": "application/json;charset=UTF-8",
+      "len": 191,
+      "preview": "{\"code\":\"unknown\",\"httpCode\":404,\"entity\":null,\"message\":\"非常抱歉，系统处理您的请求时发生了未知错误！请稍后再试，如果问题持续存在，请将屏幕截图反馈给IT热线或本系统的IT支持人员。问题编码：-bsj74-Anonymous-27-1-10-49-2-143。\",\"faultUid\":\"\",\"stackTrace\":\"\"}"
+    }
+  ]
+}

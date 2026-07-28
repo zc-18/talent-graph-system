@@ -20,15 +20,16 @@ from sqlalchemy import text  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESET_TABLES = ["evidence", "capability_change", "match_result", "job_skill",
                 "skill_relation", "resume", "raw_jd", "job", "skill", "tech_trend"]
+# --from-db 时 raw_jd 是**数据源**而不是产物，清空它等于把采集结果删掉，必须保留
+KEEP_ON_FROM_DB = {"raw_jd"}
 
 
-def make_parse_fn(use_cache: bool):
-    """use_cache=True 时复用 parsed_cache.json，避免重复调用大模型（免费快速重建）。"""
+def make_parse_fn(use_cache: bool, cache_path: str):
+    """use_cache=True 时复用解析缓存，避免重复调用大模型（免费快速重建）。"""
     cache = {}
-    path = os.path.join(HERE, "parsed_cache.json")
-    if use_cache and os.path.exists(path):
-        cache = json.load(open(path, encoding="utf-8"))
-        print(f"复用解析缓存 {len(cache)} 条")
+    if use_cache and os.path.exists(cache_path):
+        cache = json.load(open(cache_path, encoding="utf-8"))
+        print(f"复用解析缓存 {len(cache)} 条 ← {os.path.basename(cache_path)}")
 
     def fn(t):
         h = exact_hash(t)
@@ -36,13 +37,15 @@ def make_parse_fn(use_cache: bool):
     return fn
 
 
-def reset():
+def reset(keep_raw: bool = False):
+    tables = [t for t in RESET_TABLES if not (keep_raw and t in KEEP_ON_FROM_DB)]
     with engine.begin() as conn:
         conn.execute(text("SET FOREIGN_KEY_CHECKS=0"))
-        for t in RESET_TABLES:
+        for t in tables:
             conn.execute(text(f"TRUNCATE TABLE {t}"))
         conn.execute(text("SET FOREIGN_KEY_CHECKS=1"))
-    print(f"已清空 {len(RESET_TABLES)} 张业务表")
+    kept = "（保留 raw_jd 采集数据）" if keep_raw else ""
+    print(f"已清空 {len(tables)} 张业务表{kept}")
 
 
 def progress(stage, cur, total):
@@ -58,13 +61,18 @@ def main():
     ap.add_argument("--from-db", action="store_true",
                     help="从数据库 RawJD（真实采集数据）构建，替代 seed_jds.json")
     ap.add_argument("--platforms", default="", help="--from-db 时限定平台（逗号分隔）")
+    ap.add_argument("--cache-file", default="",
+                    help="解析缓存文件名（默认：--from-db 用 parsed_cache_real.json，否则 parsed_cache.json）")
+    ap.add_argument("--skip-existing-jobs", action="store_true",
+                    help="只补建库里还不存在的岗位（分时间切片建图时，避免全量聚合冲掉已演化岗位的能力项）")
     args = ap.parse_args()
 
     init_db()
     if args.reset:
-        reset()
+        reset(keep_raw=args.from_db)
 
-    cache_path = os.path.join(HERE, "parsed_cache.json")  # 始终写出合并后的完整缓存
+    default_cache = "parsed_cache_real.json" if args.from_db else "parsed_cache.json"
+    cache_path = os.path.join(HERE, args.cache_file or default_cache)  # 始终写出合并后的完整缓存
     db = SessionLocal()
     t0 = time.time()
     try:
@@ -76,14 +84,15 @@ def main():
             rows = q.order_by(models.RawJD.id).all()
             print(f"从数据库加载真实 JD: {len(rows)} 条，开始构建图谱...")
             result = ingest.build_graph_from_rows(
-                db, rows, parse_fn=make_parse_fn(args.use_cache), progress=progress,
-                max_workers=args.workers, cache_path=cache_path)
+                db, rows, parse_fn=make_parse_fn(args.use_cache, cache_path), progress=progress,
+                max_workers=args.workers, cache_path=cache_path,
+                skip_existing=args.skip_existing_jobs)
         else:
             with open(os.path.join(HERE, "seed_jds.json"), encoding="utf-8") as f:
                 dataset = json.load(f)
             print(f"加载 JD: {len(dataset)} 条，开始构建图谱...")
             result = ingest.build_graph_from_dataset(
-                db, dataset, parse_fn=make_parse_fn(args.use_cache), progress=progress,
+                db, dataset, parse_fn=make_parse_fn(args.use_cache, cache_path), progress=progress,
                 max_workers=args.workers, cache_path=cache_path)
     finally:
         db.close()

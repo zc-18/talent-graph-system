@@ -1,7 +1,7 @@
 """构建岗位分级（初/中/高级）能力画像。
 
 用法（backend/ 目录）：
-    $env:DB_NAME='talent_graph_v2'
+    $env:DB_NAME='talent_graph_v3'
     uv run python -X utf8 data/build_levels.py [--jobs "Java开发工程师,大模型算法工程师"]
 
 默认遍历所有岗位；不满足「每档≥3条有效JD 且 ≥2档」规则的岗位自动跳过。

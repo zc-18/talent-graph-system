@@ -3,10 +3,13 @@ import { Badge } from './ui'
 
 const IMPORTANCE: Record<string, string> = { required: '必备', bonus: '加分' }
 const LEVEL: Record<string, string> = { familiar: '了解', proficient: '熟练', expert: '精通' }
+const STATUS: Record<string, string> = { active: '确认能力项', candidate: '候选能力项', deprecated: '已淘汰' }
 
 const fmtImportance = (v: any) => IMPORTANCE[v] || String(v)
 const fmtLevel = (v: any) => LEVEL[v] || String(v)
 const fmtWeight = (v: any) => (typeof v === 'number' ? `${Math.round(v * 100)}%` : String(v))
+const fmtStatus = (v: any) => STATUS[v] || String(v)
+const fmtConf = (v: any) => (typeof v === 'number' ? v.toFixed(2) : String(v))
 
 /** 从可能残缺的 old/new JSON 对象中提取一个简短摘要（新增/删除用） */
 function summarize(v: any): string {
@@ -65,6 +68,12 @@ export default function ChangeDiff({ change, compact = false }: { change: any; c
       diffs.push(<DiffArrow key="w" label="权重" from={fmtWeight(o.weight)} to={fmtWeight(n.weight)} />)
     if (o.level_required != null && n.level_required != null && o.level_required !== n.level_required)
       diffs.push(<DiffArrow key="lv" label="掌握深度" from={fmtLevel(o.level_required)} to={fmtLevel(n.level_required)} />)
+    // 判据④「降级为候选能力项」：仅 status/confidence 变化，不落入上面三个字段，
+    // 若不单独渲染会退化成一个没有任何说明的「修改」徽标。
+    if (o.status !== n.status && (o.status != null || n.status != null))
+      diffs.push(<DiffArrow key="st" label="状态" from={fmtStatus(o.status ?? 'active')} to={fmtStatus(n.status ?? 'active')} />)
+    if (typeof o.confidence === 'number' && typeof n.confidence === 'number' && o.confidence !== n.confidence)
+      diffs.push(<DiffArrow key="cf" label="置信度" from={fmtConf(o.confidence)} to={fmtConf(n.confidence)} />)
     return (
       <span className="inline-flex items-center gap-1.5 flex-wrap">
         <Badge tone="amber">修改</Badge>

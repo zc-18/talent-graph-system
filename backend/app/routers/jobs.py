@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from .. import models
 from ..db import get_db
 from ..schemas import JobUpsert, ManualSkillEdit
@@ -29,15 +29,18 @@ def list_jobs(category: str | None = None, level: str | None = None,
     total = query.count()
     jobs = query.order_by(models.Job.is_new.desc(), models.Job.confidence.desc()) \
                 .offset((page - 1) * size).limit(size).all()
+    # 必备能力项数一次 GROUP BY 聚合出来（历史实现是每个岗位一条 count()）
+    req_counts = dict(db.query(models.JobSkill.job_id, func.count(models.JobSkill.id))
+                      .filter(models.JobSkill.job_id.in_({j.id for j in jobs}),
+                              models.JobSkill.importance == "required",
+                              models.JobSkill.status == "active")
+                      .group_by(models.JobSkill.job_id).all()) if jobs else {}
     items = []
     for j in jobs:
-        req = db.query(models.JobSkill).filter(models.JobSkill.job_id == j.id,
-                                               models.JobSkill.importance == "required",
-                                               models.JobSkill.status == "active").count()
         items.append({"id": j.id, "name": j.name, "category": j.category, "level": j.level,
                       "is_new": bool(j.is_new), "confidence": j.confidence,
                       "evidence_count": j.evidence_count, "emergence_score": j.emergence_score,
-                      "required_count": req, "version": j.version,
+                      "required_count": req_counts.get(j.id, 0), "version": j.version,
                       "summary": (j.summary or "")[:120]})
     return {"total": total, "page": page, "size": size, "items": items}
 
@@ -55,19 +58,38 @@ def job_evidence(job_id: int, db: Session = Depends(get_db)):
     """返回岗位各能力项的溯源证据（反幻觉可解释性）。
 
     JD 类证据 join RawJD 补全 来源平台/公司/发布时间/原始URL —— 溯源看得见（2026-07 整改）。
+
+    性能：固定 4 条 SQL（能力项 / 技能名 / 证据 / RawJD 溯源字段），组装在内存完成。
+    历史实现对每个能力项各查 1 次 Skill + 1 次 Evidence、再对每条证据查 1 次 RawJD
+    （能力项最多的岗位是 2536 条 SQL / 45 秒），且 RawJD 整行取回会连 raw_text 全文一起传。
     """
+    E, R, SK = models.Evidence, models.RawJD, models.Skill
     js = db.query(models.JobSkill).filter(models.JobSkill.job_id == job_id).all()
+    skill_names = dict(db.query(SK.id, SK.name).filter(
+        SK.id.in_({j.skill_id for j in js})).all()) if js else {}
+    # 证据按 (job_skill_id, id) 排序分组：复现原「逐能力项查询」时二级索引
+    # ix_evidence_job_skill_id 的天然返回序，证据顺序逐字节不变。
+    ev_by_js: dict[int, list] = {}
+    if js:
+        for e in db.query(E.job_skill_id, E.source_type, E.snippet, E.source_url,
+                          E.weight, E.source_name, E.raw_jd_id) \
+                   .filter(E.job_skill_id.in_({j.id for j in js})) \
+                   .order_by(E.job_skill_id, E.id).all():
+            ev_by_js.setdefault(e.job_skill_id, []).append(e)
+    jd_ids = {e.raw_jd_id for evs in ev_by_js.values() for e in evs if e.raw_jd_id}
+    jd_rows = {r.id: r for r in db.query(
+        R.id, R.source_url, R.platform, R.source, R.company, R.publish_date, R.job_title)
+        .filter(R.id.in_(jd_ids)).all()} if jd_ids else {}
+
     out = []
     for j in js:
-        sk = db.query(models.Skill).get(j.skill_id)
-        evs = db.query(models.Evidence).filter(models.Evidence.job_skill_id == j.id).all()
         ev_list = []
-        for e in evs:
+        for e in ev_by_js.get(j.id, ()):
             item = {"type": e.source_type, "snippet": e.snippet,
                     "url": e.source_url or "", "weight": e.weight,
                     "source": e.source_name or "", "company": "", "publish_date": None}
             if e.raw_jd_id:
-                rj = db.query(models.RawJD).get(e.raw_jd_id)
+                rj = jd_rows.get(e.raw_jd_id)
                 if rj:
                     item["url"] = item["url"] or (rj.source_url or "")
                     item["source"] = item["source"] or (rj.platform or rj.source or "")
@@ -75,7 +97,7 @@ def job_evidence(job_id: int, db: Session = Depends(get_db)):
                     item["publish_date"] = rj.publish_date.strftime("%Y-%m-%d") if rj.publish_date else None
                     item["job_title"] = rj.job_title or ""
             ev_list.append(item)
-        out.append({"skill": sk.name if sk else "", "importance": j.importance,
+        out.append({"skill": skill_names.get(j.skill_id, ""), "importance": j.importance,
                     "confidence": j.confidence, "factors": j.factors,
                     "source_count": j.source_count,
                     "status": j.status, "evidences": ev_list})

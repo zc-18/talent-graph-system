@@ -230,12 +230,17 @@ export default function Evolution() {
               ) : (
                 <div className="space-y-2 max-h-[420px] overflow-auto">
                   {history.items.slice(0, 20).map((c: any, i: number) => (
-                    <div key={i} className="flex items-center gap-2 text-xs flex-wrap">
+                    <div key={i} className="flex items-center gap-2 text-xs flex-wrap" title={c.reason || ''}>
                       <span className="text-slate-700">{c.skill_name}</span>
                       <ChangeDiff change={c} compact />
                       <span className="text-slate-400">v{c.version}</span>
                     </div>
                   ))}
+                  {history.items.length > 20 && (
+                    <div className="text-[11px] text-slate-400 pt-1">
+                      显示前 20 条 / 共 {history.items.length} 条变更
+                    </div>
+                  )}
                 </div>
               )}
             </div>

@@ -1,0 +1,16 @@
+{
+  "batch": "2024hist-r1",
+  "tier": "dataset",
+  "adapters": {
+    "dataset_aijob2024": {
+      "tier": "dataset",
+      "authority": 0.7,
+      "rate_limit_s": 0,
+      "source_url": "https://huggingface.co/datasets/RocXuLi/AI_Job_DataSet_1000_list/blob/main/res.csv",
+      "license": "AFL-3.0（Academic Free License 3.0，数据集卡片声明）；公开可直接下载，无需登录；保留出处",
+      "collected": 697,
+      "kept": 300,
+      "finished_at": "2026-07-27"
+    }
+  }
+}

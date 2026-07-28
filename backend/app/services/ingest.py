@@ -11,6 +11,7 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict, Counter
 from datetime import datetime
+from functools import lru_cache
 from pathlib import Path
 from statistics import median
 from sqlalchemy.orm import Session
@@ -25,7 +26,9 @@ _TITLE_STRIP = re.compile(
     r"高级|资深|专家|首席|初级|中级|助理|实习|校招|应届|Senior|Junior|Staff|Principal", re.I)
 
 
+@lru_cache(maxsize=1)
 def _cluster_name_map() -> dict[str, str]:
+    """簇名 -> 规范岗位名（只读，调用方不要就地修改返回的 dict）。"""
     p = Path(__file__).resolve().parents[2] / "data" / "collect" / "title_map.json"
     try:
         return json.loads(p.read_text("utf-8"))["cluster_job_name"]
@@ -33,6 +36,65 @@ def _cluster_name_map() -> dict[str, str]:
         return {}
 
 
+# 检索词表之外的同义写法：真实标题里常见、但 queries.json 里没有的说法。
+# 键=标题中的关键词（小写），值=title_map.json 里的簇名。只补真正缺的，
+# 不要加 "agent"/"cv" 这类过短的通用词——会把"销售Agent"之类误判进技术岗簇。
+_KEYWORD_ALIASES = {
+    "大语言模型": "大模型算法", "语言大模型": "大模型算法", "llm": "大模型算法",
+    "生成式大模型": "大模型算法", "预训练大模型": "大模型算法",
+}
+
+
+@lru_cache(maxsize=1)
+def _keyword_cluster_map() -> tuple[tuple[str, str], ...]:
+    """检索词 -> 规范岗位名，按关键词长度倒序（长词优先，避免"数据"抢走"大数据平台"）。
+
+    用于**没有 cluster_hint** 的来源（如按企业目录全量采集的招聘官网）：
+    这类数据不是按检索词采的，只能从标题反推所属岗位簇。
+    结果只依赖磁盘上的两个映射文件，进程内缓存（几千条 JD 的循环里每条都会调用）。
+    """
+    qp = Path(__file__).resolve().parents[2] / "data" / "collect" / "queries.json"
+    names = _cluster_name_map()
+    pairs: list[tuple[str, str]] = []
+    try:
+        for cluster, kws in json.loads(qp.read_text("utf-8"))["queries"].items():
+            job = names.get(cluster)
+            if not job:
+                continue
+            for kw in kws:
+                pairs.append((kw.lower(), job))
+            pairs.append((cluster.lower(), job))
+    except Exception:
+        return ()
+    for kw, cluster in _KEYWORD_ALIASES.items():
+        job = names.get(cluster)
+        if job:
+            pairs.append((kw.lower(), job))
+    # 岗位规范名本身也是最强的匹配词
+    for job in set(names.values()):
+        pairs.append((job.lower(), job))
+    return tuple(sorted(set(pairs), key=lambda x: -len(x[0])))
+
+
+_INTERNAL_TITLE_MAP = {
+    "java开发工程师": "Java开发工程师", "java工程师": "Java开发工程师",
+    "机器学习工程师": "机器学习工程师", "算法工程师": "算法工程师",
+    "大数据开发工程师": "大数据开发工程师", "数据工程师": "大数据开发工程师",
+    "数据分析师": "数据分析师", "深度学习工程师": "深度学习工程师",
+    "nlp工程师": "自然语言处理工程师", "自然语言处理工程师": "自然语言处理工程师",
+    "计算机视觉工程师": "计算机视觉工程师", "cv工程师": "计算机视觉工程师",
+    "物联网开发工程师": "物联网开发工程师", "嵌入式工程师": "嵌入式工程师",
+    "后端开发工程师": "后端开发工程师", "python开发工程师": "Python开发工程师",
+}
+
+
+@lru_cache(maxsize=1)
+def canonical_job_names() -> frozenset[str]:
+    """全部"可建图"的规范岗位名。不在此集合内的聚类键一律进待映射清单，不建图。"""
+    return frozenset(_cluster_name_map().values()) | frozenset(_INTERNAL_TITLE_MAP.values())
+
+
+@lru_cache(maxsize=8192)
 def title_key(title: str, cluster_hint: str | None = None) -> str:
     """岗位标题归一化为聚类键。真实数据优先用采集时的簇提示（cluster_hint）。"""
     if cluster_hint:
@@ -41,17 +103,15 @@ def title_key(title: str, cluster_hint: str | None = None) -> str:
             return mapped
     t = (title or "").strip()
     t_clean = _TITLE_STRIP.sub("", t).strip("-—_ ")
-    mapping = {
-        "java开发工程师": "Java开发工程师", "java工程师": "Java开发工程师",
-        "机器学习工程师": "机器学习工程师", "算法工程师": "算法工程师",
-        "大数据开发工程师": "大数据开发工程师", "数据工程师": "大数据开发工程师",
-        "数据分析师": "数据分析师", "深度学习工程师": "深度学习工程师",
-        "nlp工程师": "自然语言处理工程师", "自然语言处理工程师": "自然语言处理工程师",
-        "计算机视觉工程师": "计算机视觉工程师", "cv工程师": "计算机视觉工程师",
-        "物联网开发工程师": "物联网开发工程师", "嵌入式工程师": "嵌入式工程师",
-        "后端开发工程师": "后端开发工程师", "python开发工程师": "Python开发工程师",
-    }
-    return mapping.get(t_clean.lower(), mapping.get(t.lower(), t_clean or t))
+    hit = _INTERNAL_TITLE_MAP.get(t_clean.lower()) or _INTERNAL_TITLE_MAP.get(t.lower())
+    if hit:
+        return hit
+    # 无簇提示时按关键词反推所属岗位簇（长词优先）
+    low = t.lower()
+    for kw, job in _keyword_cluster_map():
+        if kw and kw in low:
+            return job
+    return t_clean or t
 
 
 def ingest_one(db: Session, jd: dict, dedup_pool: list[dict]) -> models.RawJD:
@@ -138,12 +198,22 @@ def build_graph_from_dataset(db: Session, dataset: list[dict], parse_fn=None,
             "duplicates": db.query(models.RawJD).filter(models.RawJD.is_duplicate == True).count()}  # noqa: E712
 
 
-def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dict]) -> list[dict]:
-    """通胀检测 + 交叉验证聚合 + 落库（build_graph_from_dataset / _rows 共用主体）。"""
+def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dict],
+                        skip_existing: bool = False) -> list[dict]:
+    """通胀检测 + 交叉验证聚合 + 落库（build_graph_from_dataset / _rows 共用主体）。
+
+    skip_existing=True 时跳过库里已存在的岗位，只补建缺失的岗位。
+    用于"分时间切片建图"：先用历史切片建 v1 基线并跑完演化链，最后再补建
+    历史切片里根本不存在的新岗位——此时不能让全量聚合覆盖已演化岗位的能力项
+    （upsert_job 是整体重建能力关系，会把演化结果冲掉）。
+    """
     results = []
     for key, items in clusters.items():
         if key.startswith("其他-"):
             continue  # 待映射簇不建图（清单由调用方输出）
+        if skip_existing and db.query(models.Job).filter(
+                models.Job.slug == graph_service.slugify(key)).first():
+            continue
         parsed_list = []
         skill_counts, all_skill_names = [], []
         for it in items:
@@ -203,13 +273,15 @@ def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dic
 
 def build_graph_from_rows(db: Session, rows: list[models.RawJD], parse_fn=None,
                           progress=None, max_workers: int = 5,
-                          cache_path: str | None = None) -> dict:
+                          cache_path: str | None = None,
+                          skip_existing: bool = False) -> dict:
     """从已入库的真实采集 RawJD 行构建图谱（2026-07 整改：真实数据主入口）。
 
     与 build_graph_from_dataset 共用聚合主体；此入口补做 SimHash 近似去重、
     时滞计算，并按 cluster_hint（采集检索簇）优先聚类。
     """
     parse_fn = parse_fn or extraction.parse_jd
+    _CANONICAL = canonical_job_names()
     # 1) 清洗补全：simhash / 近似去重 / 时滞
     dedup_pool: list[dict] = []
     clusters: dict[str, list[dict]] = defaultdict(list)
@@ -230,8 +302,10 @@ def build_graph_from_rows(db: Session, rows: list[models.RawJD], parse_fn=None,
         row.quality_score = cleaning.quality_score(text, row.lag_days, is_dup)
         dedup_pool.append({"id": row.id, "hash": h, "simhash": sh})
         key = title_key(row.job_title or "", getattr(row, "cluster_hint", None))
-        if not getattr(row, "cluster_hint", None) and key == (row.job_title or "").strip():
-            # 无簇提示且标题未命中映射 → 待映射桶
+        if key not in _CANONICAL:
+            # 未落到任何规范岗位 → 待映射桶（不建图，只留台账）
+            # 注意：判据是"是否规范岗位名"，不能用 key == 原标题——标题装饰词被剥离后
+            # 两者本就不相等，会让噪声标题被误判成已映射，图里长出几百个一次性岗位。
             unmapped[key] += 1
             key = f"其他-{key}"
         clusters[key].append({"row": row, "jd": None})
@@ -265,7 +339,7 @@ def build_graph_from_rows(db: Session, rows: list[models.RawJD], parse_fn=None,
             json.dump(cache, f, ensure_ascii=False)
 
     # 3) 聚合落库（共用主体）
-    results = _aggregate_clusters(db, clusters, parsed_cache)
+    results = _aggregate_clusters(db, clusters, parsed_cache, skip_existing=skip_existing)
     db.commit()
     if unmapped:
         print("[ingest] 待映射标题（未建图，需补 title_map/cluster）：")

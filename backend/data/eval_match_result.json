@@ -10,105 +10,105 @@
       "id": 1,
       "target": "机器学习工程师",
       "acc": 1.0,
-      "score": 49.83,
+      "score": 40.51,
       "wrong": []
     },
     {
       "id": 2,
       "target": "机器学习工程师",
       "acc": 1.0,
-      "score": 40.98,
+      "score": 36.62,
       "wrong": []
     },
     {
       "id": 3,
       "target": "自然语言处理工程师",
       "acc": 1.0,
-      "score": 54.2,
+      "score": 42.01,
       "wrong": []
     },
     {
       "id": 4,
       "target": "自然语言处理工程师",
       "acc": 1.0,
-      "score": 42.29,
+      "score": 35.47,
       "wrong": []
     },
     {
       "id": 5,
       "target": "大数据开发工程师",
       "acc": 1.0,
-      "score": 43.29,
+      "score": 35.37,
       "wrong": []
     },
     {
       "id": 6,
       "target": "大数据开发工程师",
       "acc": 1.0,
-      "score": 21.52,
+      "score": 22.82,
       "wrong": []
     },
     {
       "id": 7,
       "target": "Java开发工程师",
       "acc": 1.0,
-      "score": 56.3,
+      "score": 37.96,
       "wrong": []
     },
     {
       "id": 8,
       "target": "Java开发工程师",
       "acc": 1.0,
-      "score": 47.06,
+      "score": 32.34,
       "wrong": []
     },
     {
       "id": 10,
       "target": "计算机视觉工程师",
       "acc": 1.0,
-      "score": 52.51,
+      "score": 41.58,
       "wrong": []
     },
     {
       "id": 11,
       "target": "物联网开发工程师",
       "acc": 1.0,
-      "score": 44.21,
+      "score": 45.19,
       "wrong": []
     },
     {
       "id": 12,
       "target": "物联网开发工程师",
       "acc": 1.0,
-      "score": 41.89,
+      "score": 31.73,
       "wrong": []
     },
     {
       "id": 13,
       "target": "数据分析师",
       "acc": 1.0,
-      "score": 68.67,
+      "score": 43.34,
       "wrong": []
     },
     {
       "id": 14,
       "target": "后端开发工程师",
       "acc": 1.0,
-      "score": 44.41,
+      "score": 40.76,
       "wrong": []
     },
     {
       "id": 15,
       "target": "后端开发工程师",
       "acc": 1.0,
-      "score": 38.06,
+      "score": 31.07,
       "wrong": []
     },
     {
       "id": 18,
       "target": "计算机视觉工程师",
       "acc": 1.0,
-      "score": 63.38,
+      "score": 43.81,
       "wrong": []
     }
   ]

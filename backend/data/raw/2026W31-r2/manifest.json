@@ -1,0 +1,30 @@
+{
+  "adapters": {
+    "feishu_ats": {
+      "tier": "official",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-07-27T15:40:10",
+      "stats": {
+        "requests": 203,
+        "collected": 1829,
+        "robots_blocked": 0,
+        "errors": 0
+      },
+      "notes": "full_catalog, max_per_tenant=500"
+    },
+    "iguopin": {
+      "tier": "gov",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-07-27T14:44:59",
+      "stats": {
+        "requests": 78,
+        "collected": 633,
+        "robots_blocked": 0,
+        "errors": 0
+      },
+      "notes": "clusters=29"
+    }
+  }
+}

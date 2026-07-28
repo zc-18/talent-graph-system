@@ -20,7 +20,7 @@ uv run pytest tests/test_matching.py::test_full_match  # run a single test
 # Data / graph pipeline (writes to the CLOUD MySQL the app reads):
 uv run python data/generate_dataset.py        # ADVERSARIAL TEST FIXTURE (抄袭/通胀注入): seed_jds.json + ground_truth.json — NOT production data
 uv run python data/generate_resumes.py        # generate test_resumes.json
-uv run python data/migrate_202609.py [--db talent_graph_v2]  # idempotent schema migration (new tables + added columns)
+uv run python data/migrate_202609.py [--db talent_graph_v3]  # idempotent schema migration (new tables + added columns)
 uv run python -X utf8 data/collect/run_collect.py --platforms tencent,netease --batch 2026WNN --per-query 12   # legal crawl (robots+rate-limit+PII guards) → data/raw/{batch}/
 uv run python -X utf8 data/import_raw.py --batch 2026WNN --tier official   # batch jsonl → CrawlBatch + RawJD (URL-dedup, level infer)
 uv run python data/run_pipeline.py --from-db [--platforms x,y]  # build graph from REAL RawJD rows (production path)
@@ -35,7 +35,7 @@ uv run python data/export_deliverables.py     # export test-data samples + 综�
 uv run python data/md_to_docx.py              # convert docs/_source/*.md → docs/*.docx
 ```
 
-**Database targeting**: default DB (`talent_graph`) is the LIVE demo DB — data scripts against it are dangerous. The rebuild sandbox is `talent_graph_v2`; target it with `$env:DB_NAME='talent_graph_v2'` (PowerShell) before running data scripts. Go-live = server `.env` `db_name=talent_graph_v2` + restart (rollback = switch back).
+**Database targeting**: default DB (`talent_graph`) is the ORIGINAL demo DB — data scripts against it are dangerous. The **current production graph is `talent_graph_v3`** (2306 real JDs / 29 jobs / 4561 skills / 621 evolution changes); `talent_graph_v2` is the previous round's graph (806 JDs) kept intact as a rollback target. Target a rebuild with `$env:DB_NAME='talent_graph_v3'` (PowerShell) before running data scripts. Go-live = server `.env` `db_name=talent_graph_v3` + restart (rollback = switch back to `talent_graph_v2` or `talent_graph`).
 
 **Parse caches**: `data/parsed_cache.json` (synthetic fixture), `data/parsed_cache_real.json` (real corpus). They store POST-PROCESSED parse results — after changing extraction/taxonomy logic you MUST delete the affected cache or stale shapes persist.
 
