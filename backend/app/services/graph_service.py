@@ -11,6 +11,11 @@ from .. import models, clients
 from .taxonomy import skill_category, skill_type
 from .hallucination import job_confidence
 
+# 每个能力项最多留存的证据条数。source_count（提及该技能的 JD 数）可达上千，
+# 全存下来是六位数行且对说服力没有边际收益；但只存 6 条时前端「87 来源」只能
+# 展开出 6 张卡，看着像坏了。12 条够填满两列网格。
+MAX_EVIDENCE_PER_SKILL = 12
+
 
 def slugify(name: str) -> str:
     s = re.sub(r"[^\w一-鿿]+", "-", name.strip().lower()).strip("-")
@@ -38,11 +43,85 @@ def upsert_skill(db: Session, name: str, category: str | None = None,
     return sk
 
 
+def write_evidence(db: Session, job_skill_id: int, evidence: list[dict],
+                   cap: int = MAX_EVIDENCE_PER_SKILL) -> int:
+    """为某条岗位-能力关系写入证据行，按 raw_jd_id 去重后返回新增条数。
+
+    抽成公共函数是因为 evolution.apply_evolution 此前**根本不写证据**：
+    交叉验证聚合明明在 capability["evidence"] 里给出了带 raw_jd_id 的证据，
+    演化路径直接忽略了它，于是每一条经演化新增/刷新的能力在「溯源证据」页
+    都落到「该能力项暂无独立JD证据」分支——一个卖点是可溯源的系统，
+    演化出来的能力反而无据可查。两条写库路径共用同一个函数，避免再次漂移。
+    """
+    if not evidence:
+        return 0
+    seen = {r[0] for r in db.query(models.Evidence.raw_jd_id).filter(
+        models.Evidence.job_skill_id == job_skill_id).all() if r[0] is not None}
+    n = 0
+    for ev in evidence:
+        if n >= cap:
+            break
+        rid = ev.get("raw_jd_id")
+        if rid is not None and rid in seen:
+            continue          # 同一条 JD 不重复举证（演化可能被跑很多次）
+        if rid is not None:
+            seen.add(rid)
+        db.add(models.Evidence(
+            job_skill_id=job_skill_id, raw_jd_id=rid,
+            source_type=ev.get("source_type", "jd"),
+            source_name=ev.get("source") or ev.get("source_name"),
+            source_url=ev.get("source_url", ""),
+            snippet=(ev.get("snippet") or "")[:500], weight=ev.get("weight", 1.0)))
+        n += 1
+    return n
+
+
+def rebuild_conflict(db: Session, job_title: str) -> dict | None:
+    """岗位已跑过演化时返回冲突说明，否则 None。**全量重建前必须问一次。**
+
+    `upsert_job` 是「先清空 JobSkill/Evidence 再重建」，对一个已经跑过
+    v1→v2→v3 演化的岗位重跑聚合，会把演化结果连同 143 条淘汰、111 条修改
+    对应的库表事实一起冲掉，而 capability_change 表里的审计记录还留着——
+    审计日志与库表事实背离，正是 repair_click_damage.py 记录的那类事故。
+
+    判据取「version > 1 或存在任何 capability_change 行」而不是只看版本号：
+    人工编辑（jobs.manual_edit）也会写变更记录，那同样是不该被无声抹掉的人工产出。
+
+    刻意不放进 upsert_job 内部：它的返回值是 Job，在里面抛异常会打断
+    人工编辑等合法调用方。由调用层（ingest 编排、脚本）决定跳过还是 --force。
+    """
+    job = db.query(models.Job).filter(models.Job.slug == slugify(job_title)).first()
+    if not job:
+        return None
+    n_changes = db.query(models.CapabilityChange).filter(
+        models.CapabilityChange.job_id == job.id).count()
+    if (job.version or 1) <= 1 and n_changes == 0:
+        return None
+    n_caps = db.query(models.JobSkill).filter(
+        models.JobSkill.job_id == job.id,
+        models.JobSkill.status == "active").count()
+    return {
+        "reason": "job_has_evolution_history",
+        "job_id": job.id, "job_name": job.name, "version": job.version,
+        "changes": n_changes, "active_capabilities": n_caps,
+        "message": (f"「{job.name}」已跑过演化（v{job.version}，{n_changes} 条变更记录，"
+                    f"{n_caps} 项已验证能力），跳过重建以免冲掉演化结果。"
+                    "确需重建请显式加 --force-rebuild-evolved。"),
+    }
+
+
 def upsert_job(db: Session, *, job_title: str, category: str, level: str,
                responsibilities: list, scenarios: list, capabilities: list[dict],
-               is_new: bool = False, summary: str = "", source_summary: dict | None = None,
-               emergence_score: float = 0.0, with_embedding: bool = True) -> models.Job:
-    """根据聚合能力项创建/更新岗位及其能力关系。"""
+               is_new: bool | None = False, summary: str = "",
+               source_summary: dict | None = None,
+               emergence_score: float | None = 0.0, with_embedding: bool = True) -> models.Job:
+    """根据聚合能力项创建/更新岗位及其能力关系。
+
+    is_new / emergence_score 传 None 表示「保留库中现值」。这是给全量语料重建用的：
+    流水线对每个岗位一律传 is_new=False，而 6 个新兴岗位的 is_new/emergence_score
+    是 seed_new_jobs.py 依据人社部文件单独标注的策展信息——重建一次就被抹平一次，
+    新兴岗位数从 6 掉到 0。让「不知道」和「确定为 False」在签名上可区分。
+    """
     slug = slugify(job_title)
     job = db.query(models.Job).filter(models.Job.slug == slug).first()
     if not job:
@@ -51,11 +130,13 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
         db.flush()
     job.category = category
     job.level = level
-    job.is_new = is_new
+    if is_new is not None:
+        job.is_new = is_new
     job.summary = summary
     job.core_responsibilities = responsibilities
     job.typical_scenarios = scenarios
-    job.emergence_score = emergence_score
+    if emergence_score is not None:
+        job.emergence_score = emergence_score
     job.source_summary = source_summary or {}
     active_caps = [c for c in capabilities if c.get("status") == "active"]
     job.confidence = job_confidence(capabilities)
@@ -73,9 +154,24 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
             models.JobSkill.id.in_(old_js_ids)).delete(synchronize_session=False)
     db.flush()
     seen_skill_ids: set[int] = set()
-    for c in active_caps:
+    # active 全落；candidate **只落细粒度技能点**。
+    #
+    # 落 candidate 是因为赛题要求颗粒度到技能点，前端要能展开查看未通过交叉验证的
+    # 技能点，演化判据④「降级为候选能力项，保留观察」也依赖它们真实存在于库中。
+    # 但只限细粒度：全库既有 candidate 行 100% 是细粒度（Java 岗 169 条、AI产品经理
+    # 86 条全部有 parent），「候选 = 单来源细粒度技能点」是文档与前端一致的口径。
+    # 粗粒度落选项（某岗位 105 条 JD 里只有 1 条提到 Flask）属于「低置信过滤」，
+    # 落库会一次多出四百来行、前端一处都不渲染（它掉进 coarse/fine 两套分组的缝里），
+    # 单个岗位详情响应从 100 行涨到 1050 行，纯属负担。
+    for c in capabilities:
+        status = c.get("status", "active")
+        if status == "candidate" and c.get("granularity") != "fine":
+            continue
+        if status not in ("active", "candidate"):
+            continue          # deprecated 等历史状态由演化路径维护，重建不复制
         sk = upsert_skill(db, c["name"], c.get("category"), c.get("skill_type"),
-                          with_embedding, parent_name=c.get("parent"))
+                          with_embedding and status == "active",
+                          parent_name=c.get("parent"))
         if sk.id in seen_skill_ids:
             continue  # 粗/细或大小写变体解析到同一技能 → 保留先插入的高置信项（防 uq_job_skill 冲突）
         seen_skill_ids.add(sk.id)
@@ -84,16 +180,11 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
             weight=c.get("weight", 0.5), level_required=c.get("level_required", "familiar"),
             confidence=c.get("confidence", 0.0), factors=c.get("factors"),
             source_count=c.get("source_count", 0),
-            status="active", first_seen=datetime.utcnow(), last_seen=datetime.utcnow())
+            status=status,
+            first_seen=datetime.utcnow(), last_seen=datetime.utcnow())
         db.add(js)
         db.flush()
-        for ev in c.get("evidence", [])[:6]:
-            db.add(models.Evidence(
-                job_skill_id=js.id, raw_jd_id=ev.get("raw_jd_id"),
-                source_type=ev.get("source_type", "jd"),
-                source_name=ev.get("source") or ev.get("source_name"),
-                source_url=ev.get("source_url", ""),
-                snippet=(ev.get("snippet") or "")[:500], weight=ev.get("weight", 1.0)))
+        write_evidence(db, js.id, c.get("evidence", []))
     db.commit()
     return job
 

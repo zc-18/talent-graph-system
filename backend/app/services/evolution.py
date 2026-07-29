@@ -120,7 +120,7 @@ def _imp(x):
 def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
                     changes: list[dict]) -> dict:
     """应用演化：更新 JobSkill、写入变更记录、版本号 +1。"""
-    from .graph_service import upsert_skill
+    from .graph_service import upsert_skill, write_evidence
     new_version = (job.version or 1) + 1
 
     active_new = [c for c in new_caps if c.get("status") == "active"]
@@ -158,7 +158,11 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
 
     # 新增/更新项
     for c in active_new:
-        sk = upsert_skill(db, c["name"], c.get("category"), c.get("skill_type"))
+        # parent_name 是两级技能体系的唯一驱动键（graph_service.upsert_skill 靠它设
+        # Skill.parent_id，granularity 再由 parent_id 派生）。此处历史上没传，
+        # 于是演化新增的细粒度技能点全部落成粗粒度，和新岗位发现路径同一个坑。
+        sk = upsert_skill(db, c["name"], c.get("category"), c.get("skill_type"),
+                          parent_name=c.get("parent"))
         js = existing_map.get(c["name"])
         if js:
             js.importance = c["importance"]
@@ -169,11 +173,18 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
             js.status = "active"
             js.last_seen = datetime.utcnow()
         else:
-            db.add(models.JobSkill(
+            js = models.JobSkill(
                 job_id=job.id, skill_id=sk.id, importance=c["importance"],
                 weight=c.get("weight", 0.5), level_required=c.get("level_required", "familiar"),
                 confidence=c.get("confidence", 0.0), source_count=c.get("source_count", 0),
-                status="active", first_seen=datetime.utcnow(), last_seen=datetime.utcnow()))
+                status="active", first_seen=datetime.utcnow(), last_seen=datetime.utcnow())
+            db.add(js)
+            db.flush()
+        # 证据落库：聚合结果里本来就带着 raw_jd_id，此前被整个忽略，于是每一条经
+        # 演化新增/刷新的能力在「溯源证据」页都落到「暂无独立JD证据」分支——
+        # 一个卖点是可溯源的系统，演化出来的能力反而无据可查。按 raw_jd_id 去重，
+        # 演化跑多次不会堆叠。
+        write_evidence(db, js.id, c.get("evidence", []))
 
     # 写变更记录
     for ch in changes:
@@ -186,6 +197,9 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
 
     job.version = new_version
     job.confidence = job_confidence(new_caps)
+    # 卡片上的「JD 支撑」口径与 upsert_job 保持一致（active 项的 source_count 之和）。
+    # 此前只有建图时算一次，演化改了能力集却不重算，岗位列表的数字越跑越旧。
+    job.evidence_count = sum(c.get("source_count", 0) for c in active_new)
     job.updated_at = datetime.utcnow()
     db.commit()
     return {"version": new_version, "changes_applied": len(changes),

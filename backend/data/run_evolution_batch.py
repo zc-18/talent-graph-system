@@ -102,6 +102,9 @@ def main():
             for row, p in zip(rows, parsed):
                 agg_input.append({"required_skills": p.get("required_skills", []),
                                   "bonus_skills": p.get("bonus_skills", []),
+                                  # 细粒度技能点同样参与（与路由一致）：漏了它，
+                                  # 跑过演化的岗位反而比新建的岗位更粗。
+                                  "fine_skills": p.get("fine_skills", []),
                                   "lag_days": 0, "is_duplicate": False,
                                   "raw_jd_id": row.id, "source": row.platform})
             for c in old_caps:  # 旧能力作为先验来源之一（与路由一致）

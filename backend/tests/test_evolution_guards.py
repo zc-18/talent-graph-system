@@ -103,3 +103,66 @@ def test_discovery_refuses_to_overwrite_existing_job(db):
     # 关键：原能力关系未被清空，is_new 未被翻成 True
     assert _active_names(db, job) == {"提示工程", "LangChain", "Python编程"}
     assert not job.is_new
+
+
+# ------------------------------------------------- 演化路径的溯源/颗粒度补全
+# 演化此前只更新 JobSkill：不写证据、不传 parent、不重算 evidence_count。
+# 后果是经演化新增的能力在「溯源证据」页一律落到「暂无独立JD证据」分支，
+# 细粒度技能点全部退化成粗粒度——一个卖点是可溯源的系统，演化出来的能力无据可查。
+
+def _cap_with_evidence(name, jd_ids, **kw):
+    c = _cap(name)
+    c.update(kw)
+    c["evidence"] = [{"raw_jd_id": i, "source_type": "jd", "source": "tencent",
+                      "source_url": f"https://x/{i}", "snippet": name} for i in jd_ids]
+    return c
+
+
+def test_apply_evolution_writes_evidence_for_new_capabilities(db):
+    """新增能力必须带着证据落库，而不是只写一行 JobSkill。"""
+    job = _job_with_skills(db, ["Java"])
+    evolution.apply_evolution(db, job, [_cap_with_evidence("大语言模型", [1, 2, 3])], changes=[])
+
+    js = db.query(models.JobSkill).join(
+        models.Skill, models.Skill.id == models.JobSkill.skill_id).filter(
+        models.Skill.name == "大语言模型").first()
+    evs = db.query(models.Evidence).filter(models.Evidence.job_skill_id == js.id).all()
+    assert len(evs) == 3
+    assert {e.raw_jd_id for e in evs} == {1, 2, 3}
+    assert all(e.source_url for e in evs), "证据必须带可点的原始 JD 链接"
+
+
+def test_apply_evolution_does_not_duplicate_evidence_on_rerun(db):
+    """同一批 JD 反复跑演化不许堆叠证据（演化批次会被重跑）。"""
+    job = _job_with_skills(db, ["Java"])
+    cap = _cap_with_evidence("大语言模型", [1, 2])
+    evolution.apply_evolution(db, job, [cap], changes=[])
+    evolution.apply_evolution(db, job, [cap], changes=[])
+
+    js = db.query(models.JobSkill).join(
+        models.Skill, models.Skill.id == models.JobSkill.skill_id).filter(
+        models.Skill.name == "大语言模型").first()
+    assert db.query(models.Evidence).filter(
+        models.Evidence.job_skill_id == js.id).count() == 2
+
+
+def test_apply_evolution_sets_parent_for_fine_skill(db):
+    """演化新增的细粒度技能点要真的挂到父技能下，否则退化成粗粒度。"""
+    job = _job_with_skills(db, ["Java"])
+    evolution.apply_evolution(db, job, [
+        _cap("大语言模型"),
+        dict(_cap("vLLM推理部署"), parent="大语言模型"),
+    ], changes=[])
+
+    fine = db.query(models.Skill).filter(models.Skill.name == "vLLM推理部署").first()
+    parent = db.query(models.Skill).filter(models.Skill.name == "大语言模型").first()
+    assert fine.parent_id == parent.id
+
+
+def test_apply_evolution_recomputes_evidence_count(db):
+    """岗位卡片的「JD 支撑」要跟着演化后的能力集走，不能一直是建图时那个旧值。"""
+    job = _job_with_skills(db, ["Java"])
+    job.evidence_count = 999
+    db.commit()
+    evolution.apply_evolution(db, job, [_cap("Java"), _cap("大语言模型")], changes=[])
+    assert job.evidence_count == 6      # 两条 active × source_count 3

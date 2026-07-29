@@ -82,7 +82,10 @@ export default function Jobs() {
                 </div>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-200/70 text-[11px] text-slate-400">
                   <span>{j.required_count} 项必备技能</span>
-                  <span>证据 {j.evidence_count} · v{j.version}</span>
+                  {/* evidence_count 是 active 能力项的 source_count 之和，即「多少条 JD 支撑了
+                      这个岗位的能力集」，不是证据表的行数。原来写「证据 N」与详情页
+                      「留存证据 M 条」口径打架，两处统一成 JD 支撑。 */}
+                  <span title="该岗位能力集累计获得的真实 JD 支撑数">JD 支撑 {j.evidence_count} · v{j.version}</span>
                 </div>
               </div>
             </Card>

@@ -29,11 +29,16 @@ def list_jobs(category: str | None = None, level: str | None = None,
     total = query.count()
     jobs = query.order_by(models.Job.is_new.desc(), models.Job.confidence.desc()) \
                 .offset((page - 1) * size).limit(size).all()
-    # 必备能力项数一次 GROUP BY 聚合出来（历史实现是每个岗位一条 count()）
+    # 必备能力项数一次 GROUP BY 聚合出来（历史实现是每个岗位一条 count()）。
+    # 只数**粗粒度**：详情页的「必备技能 (N)」也只列粗粒度项，细粒度技能点作为
+    # 「细分技能点」chip 挂在父项下。两处口径不一致时卡片会喊 120、点进去只有 38，
+    # 这种自相矛盾比数字大小本身更伤可信度。
     req_counts = dict(db.query(models.JobSkill.job_id, func.count(models.JobSkill.id))
+                      .join(models.Skill, models.Skill.id == models.JobSkill.skill_id)
                       .filter(models.JobSkill.job_id.in_({j.id for j in jobs}),
                               models.JobSkill.importance == "required",
-                              models.JobSkill.status == "active")
+                              models.JobSkill.status == "active",
+                              models.Skill.parent_id.is_(None))
                       .group_by(models.JobSkill.job_id).all()) if jobs else {}
     items = []
     for j in jobs:

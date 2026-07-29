@@ -57,6 +57,32 @@ def _cluster_category_map() -> dict[str, str]:
         return {}
 
 
+# 平台 -> 时间切片。三个切片是演化链的观测点：2018 与 2024 各为一个公开数据集，
+# 2026 是四个现网来源。用平台名而不是 publish_date 判切片，因为历史数据集里
+# 相当一部分行没有可用发布日期。
+_ERA_BY_PLATFORM = {"dataset_51job2018": "2018", "dataset_aijob2024": "2024"}
+
+
+def _era_stats(items: list[dict]) -> dict:
+    """按时间切片统计该岗位簇的 JD 数，落进 job.source_summary。
+
+    为的是让岗位详情页能如实说出「本岗位在 2018 / 2024 历史语料中检索到 0 条 JD」——
+    新兴岗位没有跨切片演化记录，不是功能没做，而是历史语料里根本不存在这个岗位，
+    这本身就是新兴性最硬的量化证据。预计算在这里，避免详情页每次多查一次库。
+    """
+    counts: Counter = Counter()
+    earliest = None
+    for it in items:
+        row = it["row"]
+        platform = getattr(row, "platform", None) or row.source or ""
+        counts[_ERA_BY_PLATFORM.get(platform, "2026")] += 1
+        pd = getattr(row, "publish_date", None)
+        if pd and (earliest is None or pd < earliest):
+            earliest = pd
+    return {"era_counts": {k: counts.get(k, 0) for k in ("2018", "2024", "2026")},
+            "earliest_jd": earliest.strftime("%Y-%m-%d") if earliest else None}
+
+
 # 检索词表之外的同义写法：真实标题里常见、但 queries.json 里没有的说法。
 # 键=标题中的关键词（小写），值=title_map.json 里的簇名。只补真正缺的，
 # 不要加 "agent"/"cv" 这类过短的通用词——会把"销售Agent"之类误判进技术岗簇。
@@ -168,7 +194,9 @@ def ingest_one(db: Session, jd: dict, dedup_pool: list[dict]) -> models.RawJD:
 
 def build_graph_from_dataset(db: Session, dataset: list[dict], parse_fn=None,
                              progress=None, max_workers: int = 5,
-                             cache_path: str | None = None) -> dict:
+                             cache_path: str | None = None,
+                             only_jobs: set[str] | None = None,
+                             force: bool = False) -> dict:
     """完整 pipeline：入库清洗 → 解析 → 聚类聚合 → 落库岗位图谱。
 
     dataset: [{job_title, company, raw_text, source, source_url, publish_date, ...}]
@@ -212,29 +240,46 @@ def build_graph_from_dataset(db: Session, dataset: list[dict], parse_fn=None,
             json.dump(text_cache, f, ensure_ascii=False)
 
     # 3) 每个岗位聚类：通胀检测 + 交叉验证聚合 + 落库
-    results = _aggregate_clusters(db, clusters, parsed_cache)
+    results, skipped = _aggregate_clusters(db, clusters, parsed_cache,
+                                           only_jobs=only_jobs, force=force)
     db.commit()
     return {"jobs_built": len(results), "details": results,
-            "total_jds": len(dataset),
+            "total_jds": len(dataset), "skipped_evolved": skipped,
             "duplicates": db.query(models.RawJD).filter(models.RawJD.is_duplicate == True).count()}  # noqa: E712
 
 
 def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dict],
-                        skip_existing: bool = False) -> list[dict]:
+                        skip_existing: bool = False, only_jobs: set[str] | None = None,
+                        force: bool = False) -> tuple[list[dict], list[dict]]:
     """通胀检测 + 交叉验证聚合 + 落库（build_graph_from_dataset / _rows 共用主体）。
+
+    返回 (results, skipped)。
 
     skip_existing=True 时跳过库里已存在的岗位，只补建缺失的岗位。
     用于"分时间切片建图"：先用历史切片建 v1 基线并跑完演化链，最后再补建
     历史切片里根本不存在的新岗位——此时不能让全量聚合覆盖已演化岗位的能力项
     （upsert_job 是整体重建能力关系，会把演化结果冲掉）。
+
+    only_jobs 给定时只重建白名单内的岗位（其余簇连聚合都不跑）。这是"只修某几个
+    岗位"的正道：此前想重建单个岗位只能全量重跑，而全量重跑会冲掉所有已演化岗位。
+
+    force=False 时对已跑过演化的岗位（rebuild_conflict）拒绝重建并记入 skipped。
     """
-    results = []
+    results, skipped = [], []
     for key, items in clusters.items():
         if key.startswith("其他-"):
             continue  # 待映射簇不建图（清单由调用方输出）
+        if only_jobs is not None and key not in only_jobs:
+            continue
         if skip_existing and db.query(models.Job).filter(
                 models.Job.slug == graph_service.slugify(key)).first():
             continue
+        if not force:
+            conflict = graph_service.rebuild_conflict(db, key)
+            if conflict:
+                print(f"[ingest] 跳过重建：{conflict['message']}")
+                skipped.append(conflict)
+                continue
         parsed_list = []
         skill_counts, all_skill_names = [], []
         for it in items:
@@ -283,24 +328,33 @@ def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dic
             level=rp.get("level", "middle"),
             responsibilities=rp.get("core_responsibilities", []),
             scenarios=rp.get("typical_scenarios", []),
-            capabilities=agg["capabilities"], is_new=False,
+            capabilities=agg["capabilities"],
+            # None = 保留库中现值：新兴岗位的 is_new/emergence_score 由 seed_new_jobs.py
+            # 依据人社部文件单独标注，一律传 False 会把这份策展信息抹掉。
+            is_new=None, emergence_score=None,
             summary=rp.get("summary", f"{key}（基于{agg['stats']['valid_jds']}条有效JD交叉验证构建）"),
-            source_summary={"jd_count": len(items), **agg["stats"]},
+            source_summary={"jd_count": len(items), **agg["stats"], **_era_stats(items)},
             with_embedding=False)
         db.commit()
         results.append({"job": key, "job_id": job.id, "stats": agg["stats"],
                         "confidence": job.confidence})
-    return results
+    return results, skipped
 
 
 def build_graph_from_rows(db: Session, rows: list[models.RawJD], parse_fn=None,
                           progress=None, max_workers: int = 5,
                           cache_path: str | None = None,
-                          skip_existing: bool = False) -> dict:
+                          skip_existing: bool = False,
+                          only_jobs: set[str] | None = None,
+                          force: bool = False,
+                          dry_run: bool = False) -> dict:
     """从已入库的真实采集 RawJD 行构建图谱（2026-07 整改：真实数据主入口）。
 
     与 build_graph_from_dataset 共用聚合主体；此入口补做 SimHash 近似去重、
     时滞计算，并按 cluster_hint（采集检索簇）优先聚类。
+
+    dry_run=True 时做完清洗/聚类就返回，不解析、不落库图谱（清洗结果本身
+    是幂等的，仍会提交）。用于重建前确认"到底会动哪几个岗位"。
     """
     parse_fn = parse_fn or extraction.parse_jd
     _CANONICAL = canonical_job_names()
@@ -335,11 +389,39 @@ def build_graph_from_rows(db: Session, rows: list[models.RawJD], parse_fn=None,
             progress("clean", i + 1, len(rows))
     db.commit()
 
+    if dry_run:
+        plan, skipped = [], []
+        for key, items in sorted(clusters.items(), key=lambda kv: -len(kv[1])):
+            if key.startswith("其他-"):
+                continue
+            if only_jobs is not None and key not in only_jobs:
+                continue
+            n_dup = sum(1 for it in items if it["row"].is_duplicate)
+            conflict = None if force else graph_service.rebuild_conflict(db, key)
+            if conflict:
+                skipped.append(conflict)
+                print(f"  [跳过] {key:24s} JD={len(items):4d}  {conflict['message']}")
+            else:
+                plan.append({"job": key, "jds": len(items), "duplicates": n_dup,
+                             **_era_stats(items)})
+                print(f"  [重建] {key:24s} JD={len(items):4d} 重复={n_dup:3d} "
+                      f"切片={_era_stats(items)['era_counts']}")
+        missing = sorted(only_jobs - {p["job"] for p in plan} - {s["job_name"] for s in skipped}
+                         ) if only_jobs else []
+        if missing:
+            print(f"  [警告] 白名单里这些岗位一条 JD 都没聚到：{missing}")
+        return {"dry_run": True, "jobs_built": 0, "details": [], "plan": plan,
+                "skipped_evolved": skipped, "missing": missing,
+                "total_jds": len(rows), "unmapped_titles": dict(unmapped),
+                "duplicates": sum(1 for r in rows if r.is_duplicate)}
+
     # 2) 解析（仅非重复，缓存复用）
     cache: dict[str, dict] = {}
     if cache_path and os.path.exists(cache_path):
         cache = json.load(open(cache_path, encoding="utf-8"))
-    to_parse = [it["row"] for k, items in clusters.items() if not k.startswith("其他-")
+    # 只解析将要重建的簇：白名单模式下没必要为不建的岗位掏 LLM 钱
+    to_parse = [it["row"] for k, items in clusters.items()
+                if not k.startswith("其他-") and (only_jobs is None or k in only_jobs)
                 for it in items if not it["row"].is_duplicate]
     parsed_cache: dict[int, dict] = {}
     done = [0]
@@ -361,12 +443,15 @@ def build_graph_from_rows(db: Session, rows: list[models.RawJD], parse_fn=None,
             json.dump(cache, f, ensure_ascii=False)
 
     # 3) 聚合落库（共用主体）
-    results = _aggregate_clusters(db, clusters, parsed_cache, skip_existing=skip_existing)
+    results, skipped = _aggregate_clusters(db, clusters, parsed_cache,
+                                           skip_existing=skip_existing,
+                                           only_jobs=only_jobs, force=force)
     db.commit()
     if unmapped:
         print("[ingest] 待映射标题（未建图，需补 title_map/cluster）：")
         for t, n in unmapped.most_common(20):
             print(f"    {t} ×{n}")
     return {"jobs_built": len(results), "details": results, "total_jds": len(rows),
+            "skipped_evolved": skipped,
             "unmapped_titles": dict(unmapped),
             "duplicates": sum(1 for r in rows if r.is_duplicate)}

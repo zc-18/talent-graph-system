@@ -14,6 +14,12 @@
 
 用法： uv run python -X utf8 data/seed_new_jobs.py [--no-llm 跳过重新定义只补证据/标记]
 幂等：重复执行只更新标记与证据，不重复插入。
+
+**对已在图谱中的岗位默认不再重新定义能力项**（2026-07 修订）：这 6 个岗位的能力
+现在由真实 JD 语料经交叉验证建成（run_pipeline --only-jobs），而 LLM 重定义
+只产出 4-6 个粗粒度大概念且会清空重建，跑一次就把语料成果抹掉。确需重定义
+加 --allow-redefine。本脚本此后的常规用法就是 --no-llm：只回补
+is_new / emergence_type / first_seen_date / emergence_score 与权威佐证。
 """
 from __future__ import annotations
 import argparse
@@ -91,7 +97,7 @@ def upsert_authority(db, job, entries: list[dict]) -> int:
     return n
 
 
-def main(no_llm: bool = False):
+def main(no_llm: bool = False, allow_redefine: bool = False):
     init_db()
     db = SessionLocal()
     try:
@@ -103,7 +109,19 @@ def main(no_llm: bool = False):
             if no_llm and not existing:
                 print(f"  跳过（--no-llm 且库中不存在）")
                 continue
-            if no_llm:
+            # 已在图谱中的岗位默认**不再走 LLM 重定义**：define_new_job 返回的是
+            # 4-6 个粗粒度大概念（其 JSON schema 里根本没有 parent 字段，见
+            # discovery._DEFINE_TPL），而 upsert_job 会先清空 JobSkill/Evidence 再重建。
+            # 对一个已由真实 JD 交叉验证建好的岗位跑一次，就是用弱证据物理删除强证据——
+            # 与 /api/discovery/discover 那次线上事故一字不差，只差一个命令行参数。
+            if existing and not no_llm and not allow_redefine:
+                n_caps = db.query(models.JobSkill).filter(
+                    models.JobSkill.job_id == existing.id,
+                    models.JobSkill.status == "active").count()
+                print(f"  已在图谱中（v{existing.version}，{n_caps} 项已验证能力）"
+                      f"→ 只补标记与权威证据，不重新定义能力项"
+                      f"（确需重定义加 --allow-redefine）")
+            if no_llm or (existing and not allow_redefine):
                 job = existing
                 auth = discovery.authority_matches(cfg["auth_key"])
             else:
@@ -122,9 +140,10 @@ def main(no_llm: bool = False):
             job.is_new = True
             job.emergence_type = cfg["etype"]
             job.first_seen_date = datetime.strptime(cfg["first_seen"], "%Y-%m-%d")
-            if job.emergence_score < 0.9 and any(e.get("kind") == "policy" for e in auth):
+            score = job.emergence_score or 0.0
+            if score < 0.9 and any(e.get("kind") == "policy" for e in auth):
                 job.emergence_score = 0.9
-            elif job.emergence_score < 0.8 and any(e.get("kind") == "report" for e in auth):
+            elif score < 0.8 and any(e.get("kind") == "report" for e in auth):
                 job.emergence_score = 0.8
             n = upsert_authority(db, job, auth)
             db.commit()
@@ -137,5 +156,7 @@ def main(no_llm: bool = False):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-llm", action="store_true", help="不调 LLM 重定义，仅补标记与权威证据")
+    ap.add_argument("--allow-redefine", action="store_true",
+                    help="允许对已存在岗位重新调 LLM 定义能力项（会清空并覆盖其现有能力与证据）")
     args = ap.parse_args()
-    main(no_llm=args.no_llm)
+    main(no_llm=args.no_llm, allow_redefine=args.allow_redefine)

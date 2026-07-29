@@ -65,7 +65,19 @@ def main():
                     help="解析缓存文件名（默认：--from-db 用 parsed_cache_real.json，否则 parsed_cache.json）")
     ap.add_argument("--skip-existing-jobs", action="store_true",
                     help="只补建库里还不存在的岗位（分时间切片建图时，避免全量聚合冲掉已演化岗位的能力项）")
+    ap.add_argument("--only-jobs", default="",
+                    help="只重建这些岗位（规范岗位名，逗号分隔）。修单个岗位的正道——"
+                         "此前只能全量重跑，而全量重跑会冲掉所有已演化岗位的能力项")
+    ap.add_argument("--force-rebuild-evolved", action="store_true",
+                    help="允许重建已跑过演化的岗位（默认拒绝）。会丢失该岗位的演化结果，除非你确知在做什么")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="只跑清洗/聚类并打印将重建/将跳过的岗位，不解析、不改图谱"
+                         "（清洗字段本身幂等，仍会写回 raw_jd）")
     args = ap.parse_args()
+
+    only_jobs = {s.strip() for s in args.only_jobs.split(",") if s.strip()} or None
+    if only_jobs and not args.from_db:
+        ap.error("--only-jobs 目前只支持 --from-db（真实语料）路径")
 
     init_db()
     if args.reset:
@@ -83,10 +95,14 @@ def main():
                 q = q.filter(models.RawJD.platform.in_(args.platforms.split(",")))
             rows = q.order_by(models.RawJD.id).all()
             print(f"从数据库加载真实 JD: {len(rows)} 条，开始构建图谱...")
+            if only_jobs:
+                print(f"仅重建白名单岗位（{len(only_jobs)} 个）：{'、'.join(sorted(only_jobs))}")
             result = ingest.build_graph_from_rows(
                 db, rows, parse_fn=make_parse_fn(args.use_cache, cache_path), progress=progress,
                 max_workers=args.workers, cache_path=cache_path,
-                skip_existing=args.skip_existing_jobs)
+                skip_existing=args.skip_existing_jobs,
+                only_jobs=only_jobs, force=args.force_rebuild_evolved,
+                dry_run=args.dry_run)
         else:
             with open(os.path.join(HERE, "seed_jds.json"), encoding="utf-8") as f:
                 dataset = json.load(f)
@@ -97,9 +113,19 @@ def main():
     finally:
         db.close()
     dt = time.time() - t0
+    if result.get("dry_run"):
+        print(f"\n[dry-run] 未改动图谱，用时 {dt:.1f}s；"
+              f"将重建 {len(result['plan'])} 个岗位，跳过 {len(result['skipped_evolved'])} 个")
+        return
     print(f"\n构建完成，用时 {dt:.1f}s")
     print(json.dumps({"jobs_built": result["jobs_built"], "total_jds": result["total_jds"],
                       "duplicates": result["duplicates"]}, ensure_ascii=False, indent=2))
+    skipped = result.get("skipped_evolved") or []
+    if skipped:
+        print(f"\n⚠ 已跳过 {len(skipped)} 个跑过演化的岗位（未重建，演化结果保留）：")
+        for s in skipped:
+            print(f"  {s['job_name']}  v{s['version']}  {s['changes']} 条变更  "
+                  f"{s['active_capabilities']} 项能力")
     print("\n各岗位置信度：")
     for d in sorted(result["details"], key=lambda x: -x["confidence"]):
         s = d["stats"]

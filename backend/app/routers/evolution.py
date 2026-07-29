@@ -86,6 +86,9 @@ def update_job(payload: EvolveRequest, db: Session = Depends(get_db)):
         parsed = extraction.parse_jd(jd_text)
         agg_input.append({"required_skills": parsed.get("required_skills", []),
                           "bonus_skills": parsed.get("bonus_skills", []),
+                          # 细粒度技能点也参与演化聚合：漏了它，演化只会更新粗粒度大概念，
+                          # 而赛题要求颗粒度到技能点，岗位跑过演化反而比新建时更粗。
+                          "fine_skills": parsed.get("fine_skills", []),
                           "lag_days": 0, "is_duplicate": False, "raw_jd_id": None,
                           "source": "evolution-input"})
     if not agg_input:

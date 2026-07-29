@@ -1,0 +1,2829 @@
+{
+ "taken_at": "2026-07-29T21:45:26",
+ "db": "talent_graph_v3",
+ "jobs": [
+  {
+   "id": 24,
+   "name": "AI智能体开发工程师",
+   "slug": "ai智能体开发工程师",
+   "category": "人工智能",
+   "level": "middle",
+   "is_new": true,
+   "status": "published",
+   "summary": "负责AI智能体产品的全生命周期开发，包括智能体设计、编排、工具调用、任务规划与执行反馈。需掌握大模型应用、Agent工程体系及后端开发技术，将AI能力落地到实际业务场景。",
+   "core_responsibilities": [
+    "参与AI智能体产品的需求分析、架构设计与开发",
+    "实现Agent Loop、工具调用、任务编排、上下文管理等功能",
+    "构建RAG知识库、提示工程及模型微调等AI应用",
+    "负责智能体系统的部署、测试与性能优化"
+   ],
+   "typical_scenarios": [
+    "企业内部AI场景应用开发，如智能客服、知识库问答",
+    "具身智能机器人中的大模型应用与智能体方向",
+    "多智能体博弈与决策技术开发",
+    "AI智能体产品运营与优化"
+   ],
+   "emergence_score": 1.0,
+   "emergence_type": "new",
+   "first_seen_date": "2026-07-02T00:00:00",
+   "confidence": 0.8885,
+   "evidence_count": 96,
+   "source_summary": {
+    "sources": [
+     "http://society.people.com.cn/n1/2026/0703/c1008-40752636.html",
+     "https://www.jiemian.com/article/14168110.html",
+     "https://www.gaoxiaojob.com/hotword/sazf937280",
+     "https://www.gaoxiaojob.com/hotword/nqex216304",
+     "https://www.liepin.com/zpzntsfgcs5p6i",
+     "https://m.jobui.com/salary/guangzhou-airengongzhinengkaifagongchengshi"
+    ],
+    "generated_at": "2026-07-27T14:38:18.033524",
+    "evidence_count": 18
+   },
+   "version": 1,
+   "embedding": null,
+   "created_at": "2026-07-27T14:35:29",
+   "updated_at": "2026-07-27T14:43:03"
+  },
+  {
+   "id": 22,
+   "name": "人工智能数字人训练师",
+   "slug": "人工智能数字人训练师",
+   "category": "人工智能",
+   "level": "junior",
+   "is_new": true,
+   "status": "published",
+   "summary": "人工智能数字人训练师是人社部新增的数字新工种，归属于人工智能训练师职业类别。该岗位负责AI模型的数据标注、清洗、语料整理，以及数字人交互能力的优化，确保数字人产品智能化水平。",
+   "core_responsibilities": [
+    "负责AI模型数据标注、数据清洗、语料整理",
+    "按照规范完成文本、对话、内容审核、数据归类等任务",
+    "协助优化AI提示词、对话逻辑、知识库内容",
+    "记录工作数据，按时完成每日工作量，保证数据质量"
+   ],
+   "typical_scenarios": [
+    "智能客服对话数据标注与分类",
+    "图像识别模型训练数据验证",
+    "数字人直播间AI标识与伦理合规"
+   ],
+   "emergence_score": 1.0,
+   "emergence_type": "revived",
+   "first_seen_date": "2024-08-02T00:00:00",
+   "confidence": 0.8976,
+   "evidence_count": 78,
+   "source_summary": {
+    "sources": [
+     "https://cn.chinadaily.com.cn/a/202408/02/WS66ad6c0fa310054d254eb4c0.html",
+     "https://www.liepin.com/zprgznxls",
+     "https://www.ncss.cn/student/jobs/AmeTsJ9GPhNTnZfbzi3GFz/detail.html",
+     "https://m.sohu.com/a/1054109609_122546172",
+     "https://baike.baidu.com/item/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%95%B0%E5%AD%97%E4%BA%BA%E8%AE%AD%E7%BB%83%E5%B8%88/64734349",
+     "https://adg.csdn.net/697067bd437a6b40336a1f5b.html"
+    ],
+    "generated_at": "2026-07-27T14:39:13.515470",
+    "evidence_count": 16
+   },
+   "version": 1,
+   "embedding": null,
+   "created_at": "2026-07-27T14:35:12",
+   "updated_at": "2026-07-27T14:43:03"
+  },
+  {
+   "id": 25,
+   "name": "具身智能工程师",
+   "slug": "具身智能工程师",
+   "category": "人工智能",
+   "level": "senior",
+   "is_new": true,
+   "status": "published",
+   "summary": "负责具身智能大模型算法研发，包括数据生成、模型训练优化、真机部署与系统集成。需融合计算机视觉、机器人控制与深度学习技术，推动算法在机器人本体上的落地应用。",
+   "core_responsibilities": [
+    "参与具身智能大模型前沿算法研究，支撑数据生成、模型训练优化与评测迭代",
+    "跟踪最新研究进展，维护算法框架，开发、集成和优化具身智能系统",
+    "协同工程团队推动真机部署和开源项目，加速算法落地应用",
+    "使用遥操作设备、仿真平台进行多模态交互数据采集与处理"
+   ],
+   "typical_scenarios": [
+    "人形机器人算法研发与部署",
+    "工业场景具身智能系统定制开发",
+    "空间灵巧机构与感知算法开发",
+    "自动驾驶与机器人导航"
+   ],
+   "emergence_score": 1.0,
+   "emergence_type": "new",
+   "first_seen_date": "2026-07-02T00:00:00",
+   "confidence": 0.9509,
+   "evidence_count": 88,
+   "source_summary": {
+    "sources": [
+     "https://cn.chinadaily.com.cn/a/202607/03/WS6a474c43a310d709c2fbbaf8.html",
+     "https://www.jiemian.com/article/14168110.html",
+     "https://github.com/Xbotics-Embodied-AI-club/Xbotics-Embodied-AI-Job",
+     "https://github.com/StarCycle/Awesome-Embodied-AI-Job",
+     "https://www.21jingji.com/article/20250701/herald/9ac9d0ae16c90645b0fbcfd1c9b0e4cf.html",
+     "http://finance.sina.com.cn/jjxw/2026-03-19/doc-inhrpnfx7451339.shtml"
+    ],
+    "generated_at": "2026-07-27T14:38:30.447271",
+    "evidence_count": 18
+   },
+   "version": 1,
+   "embedding": null,
+   "created_at": "2026-07-27T14:36:16",
+   "updated_at": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 19,
+   "name": "大模型推理优化工程师",
+   "slug": "大模型推理优化工程师",
+   "category": "人工智能",
+   "level": "senior",
+   "is_new": true,
+   "status": "published",
+   "summary": "负责大模型推理系统的性能优化与工程化落地，包括模型量化、分布式推理、显存优化等，以降低推理成本并提升服务吞吐量。该岗位需深入理解Transformer架构及GPU底层技术，构建高可用推理服务。",
+   "core_responsibilities": [
+    "设计并实现模型量化（如AWQ、SmoothQuant）、投机解码、MoE推理等优化技术",
+    "基于vLLM、TGI、Ollama等框架开发高性能推理服务系统",
+    "优化GPU通信与显存管理，突破算力与内存瓶颈",
+    "构建推理链路监控与成本优化体系，保障工业级SLA"
+   ],
+   "typical_scenarios": [
+    "云端大模型推理服务部署与优化",
+    "边缘设备上的大模型推理加速",
+    "企业级私有化大模型推理系统建设",
+    "AI Infra推理框架研发"
+   ],
+   "emergence_score": 1.0,
+   "emergence_type": "new",
+   "first_seen_date": "2025-02-01T00:00:00",
+   "confidence": 0.9669,
+   "evidence_count": 124,
+   "source_summary": {
+    "sources": [
+     "https://eu.36kr.com/en/p/3602071123936263",
+     "https://www.liepin.com/zpaitlyhgcsa23b",
+     "https://zhaopin.meituan.com/web/position/detail?jobUnionId=3093645365&highlightType=social",
+     "https://www.shlab.org.cn/joinus/detail/7511994333059418379?mode=social",
+     "https://www.gaoxiaojob.com/bk_jobs/byozb2rm",
+     "https://careers.tencent.com/jobdesc.html?postId=2046923451989651456"
+    ],
+    "generated_at": "2026-07-27T14:38:57.666655",
+    "evidence_count": 17
+   },
+   "version": 1,
+   "embedding": null,
+   "created_at": "2026-07-27T14:34:05",
+   "updated_at": "2026-07-27T14:43:03"
+  },
+  {
+   "id": 29,
+   "name": "数字孪生工程技术人员",
+   "slug": "数字孪生工程技术人员",
+   "category": "智能系统",
+   "level": "middle",
+   "is_new": true,
+   "status": "published",
+   "summary": "数字孪生工程技术人员负责构建数字孪生系统，实现物理实体与虚拟模型的实时映射与交互。该岗位需掌握三维建模、仿真计算、数据接入与可视化开发等技能，并具备项目全流程交付能力。",
+   "core_responsibilities": [
+    "负责数字孪生系统的三维建模与仿真计算开发与实施",
+    "负责物联网数据接入、场景搭建与系统联调",
+    "参与数字孪生方案设计、科研创新与成果凝练",
+    "进行现场数据采集、系统功能配置与维护"
+   ],
+   "typical_scenarios": [
+    "智慧园区",
+    "智能制造",
+    "城市治理",
+    "能源巡检",
+    "轨道交通",
+    "仓储物流"
+   ],
+   "emergence_score": 1.0,
+   "emergence_type": "new",
+   "first_seen_date": "2026-07-02T00:00:00",
+   "confidence": 1.0,
+   "evidence_count": 90,
+   "source_summary": {
+    "sources": [
+     "http://society.people.com.cn/n1/2026/0703/c1008-40752636.html",
+     "https://www.liepin.com/zpszlsy3d5d",
+     "https://www.gaoxiaojob.com/announcement/detail/349415.html",
+     "https://www.sohu.com/a/1047500699_122883326",
+     "https://dt.uino.com/recruitment.html",
+     "http://www.cjw.gov.cn/zwzc/zdgk/rsgl/rszl/qyrs/202602/P020260213580585965984.pdf"
+    ],
+    "generated_at": "2026-07-27T14:39:26.897181",
+    "evidence_count": 16
+   },
+   "version": 1,
+   "embedding": null,
+   "created_at": "2026-07-27T14:37:17",
+   "updated_at": "2026-07-27T14:39:28"
+  },
+  {
+   "id": 26,
+   "name": "生成式人工智能系统测试员",
+   "slug": "生成式人工智能系统测试员",
+   "category": "人工智能",
+   "level": "middle",
+   "is_new": true,
+   "status": "published",
+   "summary": "负责对生成式人工智能系统进行功能、性能、安全等方面的测试，确保系统稳定可靠。该岗位需掌握AI模型评估、测试用例设计及自动化测试工具，以应对大模型迭代和行业应用需求。",
+   "core_responsibilities": [
+    "设计并执行生成式AI系统的测试用例",
+    "评估模型输出质量、准确性与安全性",
+    "编写测试报告并跟踪缺陷修复",
+    "参与测试自动化工具的开发与维护"
+   ],
+   "typical_scenarios": [
+    "金融领域AI客服系统测试",
+    "医疗影像生成模型测试",
+    "教育个性化学习系统测试"
+   ],
+   "emergence_score": 1.0,
+   "emergence_type": "new",
+   "first_seen_date": "2025-07-22T00:00:00",
+   "confidence": 0.7725,
+   "evidence_count": 56,
+   "source_summary": {
+    "sources": [
+     "https://m.sh.bendibao.com/news/299711.html",
+     "https://www.sohu.com/a/900007645_120701485",
+     "https://chrm.mohrss.gov.cn/%E8%81%8C%E4%B8%9A%E4%B8%8A%E6%96%B0%EF%BC%8142%E4%B8%AA%E6%96%B0%E5%B7%A5%E7%A7%8D%E4%BA%AE%E7%9B%B8",
+     "http://m.cyol.com/gb/articles/2026-03/13/content_Aj46dLhzLo.html",
+     "http://m.cyol.com/gb/articles/2026-03/19/content_qbA7Qoupe6.html",
+     "https://xinwen.bjd.com.cn/content/s69bbd5bee4b0687a2892c3f0.html"
+    ],
+    "generated_at": "2026-07-27T14:38:43.703767",
+    "evidence_count": 17
+   },
+   "version": 1,
+   "embedding": null,
+   "created_at": "2026-07-27T14:36:37",
+   "updated_at": "2026-07-27T14:38:44"
+  }
+ ],
+ "job_skill": [
+  {
+   "id": 5870,
+   "job_id": 19,
+   "skill_id": 10,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5861,
+   "job_id": 19,
+   "skill_id": 74,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5863,
+   "job_id": 19,
+   "skill_id": 386,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5862,
+   "job_id": 19,
+   "skill_id": 955,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "expert",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5857,
+   "job_id": 19,
+   "skill_id": 1171,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "expert",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5866,
+   "job_id": 19,
+   "skill_id": 1186,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5858,
+   "job_id": 19,
+   "skill_id": 1197,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5868,
+   "job_id": 19,
+   "skill_id": 1385,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5860,
+   "job_id": 19,
+   "skill_id": 1410,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5867,
+   "job_id": 19,
+   "skill_id": 1417,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5859,
+   "job_id": 19,
+   "skill_id": 1420,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5865,
+   "job_id": 19,
+   "skill_id": 1649,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5864,
+   "job_id": 19,
+   "skill_id": 2019,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5869,
+   "job_id": 19,
+   "skill_id": 4137,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:58",
+   "last_seen": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 5872,
+   "job_id": 22,
+   "skill_id": 763,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5876,
+   "job_id": 22,
+   "skill_id": 1385,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5873,
+   "job_id": 22,
+   "skill_id": 1407,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5878,
+   "job_id": 22,
+   "skill_id": 3388,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5871,
+   "job_id": 22,
+   "skill_id": 3585,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5874,
+   "job_id": 22,
+   "skill_id": 4138,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5875,
+   "job_id": 22,
+   "skill_id": 4139,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5877,
+   "job_id": 22,
+   "skill_id": 4140,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5879,
+   "job_id": 22,
+   "skill_id": 4141,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:14",
+   "last_seen": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 5831,
+   "job_id": 24,
+   "skill_id": 1,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5834,
+   "job_id": 24,
+   "skill_id": 10,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5840,
+   "job_id": 24,
+   "skill_id": 64,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:19",
+   "last_seen": "2026-07-27T14:38:19"
+  },
+  {
+   "id": 5835,
+   "job_id": 24,
+   "skill_id": 113,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5836,
+   "job_id": 24,
+   "skill_id": 175,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5832,
+   "job_id": 24,
+   "skill_id": 644,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5839,
+   "job_id": 24,
+   "skill_id": 1164,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5837,
+   "job_id": 24,
+   "skill_id": 1385,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5838,
+   "job_id": 24,
+   "skill_id": 1407,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5833,
+   "job_id": 24,
+   "skill_id": 4132,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:18",
+   "last_seen": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 5841,
+   "job_id": 25,
+   "skill_id": 1,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5844,
+   "job_id": 25,
+   "skill_id": 74,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5843,
+   "job_id": 25,
+   "skill_id": 644,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5845,
+   "job_id": 25,
+   "skill_id": 927,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5842,
+   "job_id": 25,
+   "skill_id": 1171,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5848,
+   "job_id": 25,
+   "skill_id": 1175,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5849,
+   "job_id": 25,
+   "skill_id": 1385,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5846,
+   "job_id": 25,
+   "skill_id": 1410,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5847,
+   "job_id": 25,
+   "skill_id": 4133,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 10,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:31",
+   "last_seen": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 5852,
+   "job_id": 26,
+   "skill_id": 850,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:44",
+   "last_seen": "2026-07-27T14:38:44"
+  },
+  {
+   "id": 5856,
+   "job_id": 26,
+   "skill_id": 1178,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:44",
+   "last_seen": "2026-07-27T14:38:44"
+  },
+  {
+   "id": 5854,
+   "job_id": 26,
+   "skill_id": 1407,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:44",
+   "last_seen": "2026-07-27T14:38:44"
+  },
+  {
+   "id": 5855,
+   "job_id": 26,
+   "skill_id": 1457,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:44",
+   "last_seen": "2026-07-27T14:38:44"
+  },
+  {
+   "id": 5850,
+   "job_id": 26,
+   "skill_id": 4134,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:44",
+   "last_seen": "2026-07-27T14:38:44"
+  },
+  {
+   "id": 5851,
+   "job_id": 26,
+   "skill_id": 4135,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:44",
+   "last_seen": "2026-07-27T14:38:44"
+  },
+  {
+   "id": 5853,
+   "job_id": 26,
+   "skill_id": 4136,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 0.7725,
+   "factors": {
+    "support": 0.35,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 8,
+   "status": "active",
+   "first_seen": "2026-07-27T14:38:44",
+   "last_seen": "2026-07-27T14:38:44"
+  },
+  {
+   "id": 5886,
+   "job_id": 29,
+   "skill_id": 333,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5887,
+   "job_id": 29,
+   "skill_id": 1210,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5885,
+   "job_id": 29,
+   "skill_id": 1213,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5884,
+   "job_id": 29,
+   "skill_id": 1524,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5880,
+   "job_id": 29,
+   "skill_id": 3045,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5881,
+   "job_id": 29,
+   "skill_id": 4142,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "proficient",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5882,
+   "job_id": 29,
+   "skill_id": 4143,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5883,
+   "job_id": 29,
+   "skill_id": 4144,
+   "importance": "required",
+   "weight": 0.7,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5888,
+   "job_id": 29,
+   "skill_id": 4145,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 5889,
+   "job_id": 29,
+   "skill_id": 4146,
+   "importance": "bonus",
+   "weight": 0.4,
+   "level_required": "familiar",
+   "confidence": 1.0,
+   "factors": {
+    "support": 1.0,
+    "external": 1.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 1.0
+   },
+   "source_count": 9,
+   "status": "active",
+   "first_seen": "2026-07-27T14:39:27",
+   "last_seen": "2026-07-27T14:39:27"
+  }
+ ],
+ "skill_names": {
+  "1": "Python",
+  "10": "检索增强生成",
+  "64": "Java",
+  "74": "C++",
+  "113": "Node.js",
+  "175": "Docker",
+  "333": "机器学习",
+  "386": "推理加速",
+  "644": "大语言模型",
+  "763": "数据清洗",
+  "850": "Python编程",
+  "927": "ROS",
+  "955": "Transformer",
+  "1164": "多智能体",
+  "1171": "PyTorch",
+  "1175": "强化学习",
+  "1178": "数据分析",
+  "1186": "DeepSpeed",
+  "1197": "模型量化",
+  "1210": "大数据",
+  "1213": "人工智能",
+  "1385": "模型微调",
+  "1407": "提示工程",
+  "1410": "CUDA",
+  "1417": "Megatron-LM",
+  "1420": "分布式推理",
+  "1457": "大模型微调",
+  "1524": "系统联调",
+  "1649": "Ollama",
+  "2019": "TGI",
+  "3045": "三维建模",
+  "3388": "联邦学习",
+  "3585": "数据标注",
+  "4132": "Agent工程体系",
+  "4133": "Omniverse",
+  "4134": "测试用例设计",
+  "4135": "模型评估方法",
+  "4136": "自动化测试工具",
+  "4137": "知识蒸馏",
+  "4138": "对话逻辑",
+  "4139": "知识库管理",
+  "4140": "多模态标注",
+  "4141": "大模型精调",
+  "4142": "仿真计算",
+  "4143": "物联网数据接入",
+  "4144": "可视化开发",
+  "4145": "增强现实",
+  "4146": "虚拟现实"
+ },
+ "evidence": [
+  {
+   "id": 7772,
+   "job_skill_id": 5831,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Python",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 7773,
+   "job_skill_id": 5835,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Node.js",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 7774,
+   "job_skill_id": 5836,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Docker",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 7775,
+   "job_skill_id": 5837,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 模型微调",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:18"
+  },
+  {
+   "id": 7776,
+   "job_skill_id": 5839,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 多智能体",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:19"
+  },
+  {
+   "id": 7777,
+   "job_skill_id": 5840,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Java",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:19"
+  },
+  {
+   "id": 7778,
+   "job_skill_id": 5841,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Python",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 7779,
+   "job_skill_id": 5842,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: PyTorch",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 7780,
+   "job_skill_id": 5844,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: C++",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 7781,
+   "job_skill_id": 5845,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: ROS",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 7782,
+   "job_skill_id": 5846,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: CUDA",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 7783,
+   "job_skill_id": 5847,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Omniverse",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 7784,
+   "job_skill_id": 5848,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 强化学习",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:31"
+  },
+  {
+   "id": 7785,
+   "job_skill_id": 5857,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: PyTorch",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7786,
+   "job_skill_id": 5858,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 模型量化",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7787,
+   "job_skill_id": 5859,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 分布式推理",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7788,
+   "job_skill_id": 5860,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: CUDA",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7789,
+   "job_skill_id": 5861,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: C++",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7790,
+   "job_skill_id": 5862,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Transformer",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7791,
+   "job_skill_id": 5863,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 推理加速",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7792,
+   "job_skill_id": 5864,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: TGI",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7793,
+   "job_skill_id": 5865,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Ollama",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7794,
+   "job_skill_id": 5866,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: DeepSpeed",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7795,
+   "job_skill_id": 5867,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: Megatron-LM",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7796,
+   "job_skill_id": 5869,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 知识蒸馏",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:38:58"
+  },
+  {
+   "id": 7797,
+   "job_skill_id": 5871,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 数据标注",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 7798,
+   "job_skill_id": 5872,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 数据清洗",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 7799,
+   "job_skill_id": 5874,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 对话逻辑",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 7800,
+   "job_skill_id": 5877,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 多模态标注",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 7801,
+   "job_skill_id": 5878,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 联邦学习",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 7802,
+   "job_skill_id": 5879,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 大模型精调",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:14"
+  },
+  {
+   "id": 7803,
+   "job_skill_id": 5880,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 三维建模",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7804,
+   "job_skill_id": 5881,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 仿真计算",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7805,
+   "job_skill_id": 5882,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 物联网数据接入",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7806,
+   "job_skill_id": 5883,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 可视化开发",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7807,
+   "job_skill_id": 5884,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 系统联调",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7808,
+   "job_skill_id": 5885,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 人工智能",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7809,
+   "job_skill_id": 5886,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 机器学习",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7810,
+   "job_skill_id": 5887,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 大数据",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7811,
+   "job_skill_id": 5888,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 增强现实",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:27"
+  },
+  {
+   "id": 7812,
+   "job_skill_id": 5889,
+   "raw_jd_id": null,
+   "source_type": "web",
+   "source_name": null,
+   "source_url": "",
+   "snippet": "证据支撑: 虚拟现实",
+   "weight": 1.0,
+   "created_at": "2026-07-27T14:39:28"
+  }
+ ],
+ "job_level_skill": [
+  {
+   "id": 4841,
+   "job_id": 19,
+   "level": "junior",
+   "skill_id": 1171,
+   "importance": "required",
+   "weight": 0.5286,
+   "level_required": "proficient",
+   "confidence": 0.5295,
+   "factors": {
+    "support": 0.42857142857142855,
+    "external": 0.0,
+    "authority": 0.9,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.44093501376610184
+   },
+   "source_count": 6,
+   "jd_count": 14,
+   "created_at": "2026-07-29T04:50:26"
+  },
+  {
+   "id": 4838,
+   "job_id": 19,
+   "level": "middle",
+   "skill_id": 10,
+   "importance": "required",
+   "weight": 0.1488,
+   "level_required": "familiar",
+   "confidence": 0.4945,
+   "factors": {
+    "support": 0.04878048780487805,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.960460173569431
+   },
+   "source_count": 2,
+   "jd_count": 41,
+   "created_at": "2026-07-29T04:50:26"
+  },
+  {
+   "id": 4836,
+   "job_id": 19,
+   "level": "middle",
+   "skill_id": 74,
+   "importance": "required",
+   "weight": 0.7585,
+   "level_required": "proficient",
+   "confidence": 0.6734,
+   "factors": {
+    "support": 0.6585365853658537,
+    "external": 0.0,
+    "authority": 0.8555555555555556,
+    "diversity": 1.0,
+    "freshness": 0.4784149980397756
+   },
+   "source_count": 27,
+   "jd_count": 41,
+   "created_at": "2026-07-29T04:50:25"
+  },
+  {
+   "id": 4839,
+   "job_id": 19,
+   "level": "middle",
+   "skill_id": 386,
+   "importance": "required",
+   "weight": 0.2951,
+   "level_required": "proficient",
+   "confidence": 0.4886,
+   "factors": {
+    "support": 0.1951219512195122,
+    "external": 0.0,
+    "authority": 0.8125,
+    "diversity": 1.0,
+    "freshness": 0.3854913405229593
+   },
+   "source_count": 8,
+   "jd_count": 41,
+   "created_at": "2026-07-29T04:50:26"
+  },
+  {
+   "id": 4840,
+   "job_id": 19,
+   "level": "middle",
+   "skill_id": 955,
+   "importance": "required",
+   "weight": 0.1488,
+   "level_required": "proficient",
+   "confidence": 0.4713,
+   "factors": {
+    "support": 0.04878048780487805,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.8061853823114272
+   },
+   "source_count": 2,
+   "jd_count": 41,
+   "created_at": "2026-07-29T04:50:26"
+  },
+  {
+   "id": 4837,
+   "job_id": 19,
+   "level": "middle",
+   "skill_id": 1171,
+   "importance": "required",
+   "weight": 0.4902,
+   "level_required": "proficient",
+   "confidence": 0.5627,
+   "factors": {
+    "support": 0.3902439024390244,
+    "external": 0.0,
+    "authority": 0.83125,
+    "diversity": 1.0,
+    "freshness": 0.39916104174910655
+   },
+   "source_count": 16,
+   "jd_count": 41,
+   "created_at": "2026-07-29T04:50:26"
+  },
+  {
+   "id": 4843,
+   "job_id": 19,
+   "level": "senior",
+   "skill_id": 74,
+   "importance": "required",
+   "weight": 0.5,
+   "level_required": "proficient",
+   "confidence": 0.6403,
+   "factors": {
+    "support": 0.4,
+    "external": 0.0,
+    "authority": 0.97,
+    "diversity": 1.0,
+    "freshness": 0.7087510980932299
+   },
+   "source_count": 10,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:27"
+  },
+  {
+   "id": 4844,
+   "job_id": 19,
+   "level": "senior",
+   "skill_id": 955,
+   "importance": "required",
+   "weight": 0.26,
+   "level_required": "proficient",
+   "confidence": 0.4872,
+   "factors": {
+    "support": 0.16,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.6521482408321628
+   },
+   "source_count": 4,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:27"
+  },
+  {
+   "id": 4842,
+   "job_id": 19,
+   "level": "senior",
+   "skill_id": 1171,
+   "importance": "required",
+   "weight": 0.66,
+   "level_required": "proficient",
+   "confidence": 0.6868,
+   "factors": {
+    "support": 0.56,
+    "external": 0.0,
+    "authority": 0.9357142857142856,
+    "diversity": 1.0,
+    "freshness": 0.691126879049445
+   },
+   "source_count": 14,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:27"
+  },
+  {
+   "id": 4943,
+   "job_id": 24,
+   "level": "junior",
+   "skill_id": 1,
+   "importance": "required",
+   "weight": 0.6667,
+   "level_required": "proficient",
+   "confidence": 0.7063,
+   "factors": {
+    "support": 0.5666666666666667,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.7194536599904924
+   },
+   "source_count": 17,
+   "jd_count": 30,
+   "created_at": "2026-07-29T04:50:43"
+  },
+  {
+   "id": 4942,
+   "job_id": 24,
+   "level": "junior",
+   "skill_id": 644,
+   "importance": "required",
+   "weight": 0.9333,
+   "level_required": "familiar",
+   "confidence": 0.7952,
+   "factors": {
+    "support": 0.8333333333333334,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.6901949622062097
+   },
+   "source_count": 25,
+   "jd_count": 30,
+   "created_at": "2026-07-29T04:50:43"
+  },
+  {
+   "id": 4944,
+   "job_id": 24,
+   "level": "junior",
+   "skill_id": 1164,
+   "importance": "required",
+   "weight": 0.6667,
+   "level_required": "familiar",
+   "confidence": 0.632,
+   "factors": {
+    "support": 0.5666666666666667,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.6689598798657007
+   },
+   "source_count": 17,
+   "jd_count": 30,
+   "created_at": "2026-07-29T04:50:43"
+  },
+  {
+   "id": 4938,
+   "job_id": 24,
+   "level": "middle",
+   "skill_id": 1,
+   "importance": "required",
+   "weight": 0.6849,
+   "level_required": "proficient",
+   "confidence": 0.7398,
+   "factors": {
+    "support": 0.5849056603773585,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.9003348858744302
+   },
+   "source_count": 31,
+   "jd_count": 53,
+   "created_at": "2026-07-29T04:50:42"
+  },
+  {
+   "id": 4939,
+   "job_id": 24,
+   "level": "middle",
+   "skill_id": 64,
+   "importance": "required",
+   "weight": 0.2321,
+   "level_required": "proficient",
+   "confidence": 0.5865,
+   "factors": {
+    "support": 0.1320754716981132,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.9353104018777254
+   },
+   "source_count": 7,
+   "jd_count": 53,
+   "created_at": "2026-07-29T04:50:42"
+  },
+  {
+   "id": 4940,
+   "job_id": 24,
+   "level": "middle",
+   "skill_id": 175,
+   "importance": "required",
+   "weight": 0.1943,
+   "level_required": "proficient",
+   "confidence": 0.4991,
+   "factors": {
+    "support": 0.09433962264150944,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.8846589411646303
+   },
+   "source_count": 5,
+   "jd_count": 53,
+   "created_at": "2026-07-29T04:50:42"
+  },
+  {
+   "id": 4936,
+   "job_id": 24,
+   "level": "middle",
+   "skill_id": 644,
+   "importance": "required",
+   "weight": 0.8736,
+   "level_required": "proficient",
+   "confidence": 0.8034,
+   "factors": {
+    "support": 0.7735849056603774,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.8843354272633722
+   },
+   "source_count": 41,
+   "jd_count": 53,
+   "created_at": "2026-07-29T04:50:42"
+  },
+  {
+   "id": 4937,
+   "job_id": 24,
+   "level": "middle",
+   "skill_id": 1164,
+   "importance": "required",
+   "weight": 0.7415,
+   "level_required": "proficient",
+   "confidence": 0.7596,
+   "factors": {
+    "support": 0.6415094339622641,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.9003162947660396
+   },
+   "source_count": 34,
+   "jd_count": 53,
+   "created_at": "2026-07-29T04:50:42"
+  },
+  {
+   "id": 4941,
+   "job_id": 24,
+   "level": "middle",
+   "skill_id": 1407,
+   "importance": "required",
+   "weight": 0.1377,
+   "level_required": "proficient",
+   "confidence": 0.4863,
+   "factors": {
+    "support": 0.03773584905660377,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.9318614569951074
+   },
+   "source_count": 2,
+   "jd_count": 53,
+   "created_at": "2026-07-29T04:50:42"
+  },
+  {
+   "id": 4947,
+   "job_id": 24,
+   "level": "senior",
+   "skill_id": 1,
+   "importance": "required",
+   "weight": 0.3727,
+   "level_required": "proficient",
+   "confidence": 0.6267,
+   "factors": {
+    "support": 0.2727272727272727,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.8749004723205168
+   },
+   "source_count": 6,
+   "jd_count": 22,
+   "created_at": "2026-07-29T04:50:44"
+  },
+  {
+   "id": 4945,
+   "job_id": 24,
+   "level": "senior",
+   "skill_id": 644,
+   "importance": "required",
+   "weight": 0.8273,
+   "level_required": "proficient",
+   "confidence": 0.7844,
+   "factors": {
+    "support": 0.7272727272727273,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.8653924542720266
+   },
+   "source_count": 16,
+   "jd_count": 22,
+   "created_at": "2026-07-29T04:50:44"
+  },
+  {
+   "id": 4946,
+   "job_id": 24,
+   "level": "senior",
+   "skill_id": 1164,
+   "importance": "required",
+   "weight": 0.6455,
+   "level_required": "familiar",
+   "confidence": 0.7226,
+   "factors": {
+    "support": 0.5454545454545454,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.8781285179143653
+   },
+   "source_count": 12,
+   "jd_count": 22,
+   "created_at": "2026-07-29T04:50:44"
+  },
+  {
+   "id": 4954,
+   "job_id": 25,
+   "level": "junior",
+   "skill_id": 1,
+   "importance": "required",
+   "weight": 0.8143,
+   "level_required": "proficient",
+   "confidence": 0.6922,
+   "factors": {
+    "support": 0.7142857142857143,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.725614228598567
+   },
+   "source_count": 5,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:48"
+  },
+  {
+   "id": 4959,
+   "job_id": 25,
+   "level": "junior",
+   "skill_id": 74,
+   "importance": "bonus",
+   "weight": 0.2429,
+   "level_required": "proficient",
+   "confidence": 0.4519,
+   "factors": {
+    "support": 0.14285714285714285,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.3333333333333333,
+    "freshness": 0.9012504626108302
+   },
+   "source_count": 1,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4958,
+   "job_id": 25,
+   "level": "junior",
+   "skill_id": 644,
+   "importance": "required",
+   "weight": 0.5286,
+   "level_required": "proficient",
+   "confidence": 0.5532,
+   "factors": {
+    "support": 0.42857142857142855,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.46571908655079425
+   },
+   "source_count": 3,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4957,
+   "job_id": 25,
+   "level": "junior",
+   "skill_id": 927,
+   "importance": "required",
+   "weight": 0.3857,
+   "level_required": "familiar",
+   "confidence": 0.5584,
+   "factors": {
+    "support": 0.2857142857142857,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.8339573174728152
+   },
+   "source_count": 2,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4955,
+   "job_id": 25,
+   "level": "junior",
+   "skill_id": 1171,
+   "importance": "required",
+   "weight": 0.6714,
+   "level_required": "proficient",
+   "confidence": 0.6356,
+   "factors": {
+    "support": 0.5714285714285714,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.6817051700955011
+   },
+   "source_count": 4,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4956,
+   "job_id": 25,
+   "level": "junior",
+   "skill_id": 1175,
+   "importance": "required",
+   "weight": 0.6714,
+   "level_required": "familiar",
+   "confidence": 0.6322,
+   "factors": {
+    "support": 0.5714285714285714,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.6589357991824728
+   },
+   "source_count": 4,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4950,
+   "job_id": 25,
+   "level": "middle",
+   "skill_id": 1,
+   "importance": "required",
+   "weight": 0.34,
+   "level_required": "proficient",
+   "confidence": 0.611,
+   "factors": {
+    "support": 0.24,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.8465190841270244
+   },
+   "source_count": 6,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:48"
+  },
+  {
+   "id": 4953,
+   "job_id": 25,
+   "level": "middle",
+   "skill_id": 74,
+   "importance": "required",
+   "weight": 0.34,
+   "level_required": "expert",
+   "confidence": 0.5477,
+   "factors": {
+    "support": 0.24,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.8693017248667559
+   },
+   "source_count": 6,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:48"
+  },
+  {
+   "id": 4948,
+   "job_id": 25,
+   "level": "middle",
+   "skill_id": 644,
+   "importance": "required",
+   "weight": 0.38,
+   "level_required": "proficient",
+   "confidence": 0.6321,
+   "factors": {
+    "support": 0.28,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.8942325363753619
+   },
+   "source_count": 7,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:47"
+  },
+  {
+   "id": 4952,
+   "job_id": 25,
+   "level": "middle",
+   "skill_id": 927,
+   "importance": "required",
+   "weight": 0.38,
+   "level_required": "proficient",
+   "confidence": 0.5612,
+   "factors": {
+    "support": 0.28,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.8659887947436172
+   },
+   "source_count": 7,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:48"
+  },
+  {
+   "id": 4951,
+   "job_id": 25,
+   "level": "middle",
+   "skill_id": 1171,
+   "importance": "required",
+   "weight": 0.26,
+   "level_required": "proficient",
+   "confidence": 0.5859,
+   "factors": {
+    "support": 0.16,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.8659747480955697
+   },
+   "source_count": 4,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:48"
+  },
+  {
+   "id": 4949,
+   "job_id": 25,
+   "level": "middle",
+   "skill_id": 1175,
+   "importance": "required",
+   "weight": 0.38,
+   "level_required": "proficient",
+   "confidence": 0.6213,
+   "factors": {
+    "support": 0.28,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 1.0,
+    "freshness": 0.8219481487726601
+   },
+   "source_count": 7,
+   "jd_count": 25,
+   "created_at": "2026-07-29T04:50:48"
+  },
+  {
+   "id": 4962,
+   "job_id": 25,
+   "level": "senior",
+   "skill_id": 1,
+   "importance": "required",
+   "weight": 0.5286,
+   "level_required": "proficient",
+   "confidence": 0.5706,
+   "factors": {
+    "support": 0.42857142857142855,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.5819543493581741
+   },
+   "source_count": 3,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4961,
+   "job_id": 25,
+   "level": "senior",
+   "skill_id": 74,
+   "importance": "required",
+   "weight": 0.5286,
+   "level_required": "proficient",
+   "confidence": 0.5706,
+   "factors": {
+    "support": 0.42857142857142855,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.5819543493581741
+   },
+   "source_count": 3,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4964,
+   "job_id": 25,
+   "level": "senior",
+   "skill_id": 644,
+   "importance": "bonus",
+   "weight": 0.2429,
+   "level_required": "proficient",
+   "confidence": 0.4545,
+   "factors": {
+    "support": 0.14285714285714285,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.3333333333333333,
+    "freshness": 0.9187713517408406
+   },
+   "source_count": 1,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4960,
+   "job_id": 25,
+   "level": "senior",
+   "skill_id": 927,
+   "importance": "required",
+   "weight": 0.5286,
+   "level_required": "proficient",
+   "confidence": 0.6,
+   "factors": {
+    "support": 0.42857142857142855,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.777974866238124
+   },
+   "source_count": 3,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4965,
+   "job_id": 25,
+   "level": "senior",
+   "skill_id": 1171,
+   "importance": "bonus",
+   "weight": 0.2429,
+   "level_required": "proficient",
+   "confidence": 0.4545,
+   "factors": {
+    "support": 0.14285714285714285,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.3333333333333333,
+    "freshness": 0.9187713517408406
+   },
+   "source_count": 1,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  },
+  {
+   "id": 4963,
+   "job_id": 25,
+   "level": "senior",
+   "skill_id": 1175,
+   "importance": "required",
+   "weight": 0.5286,
+   "level_required": "familiar",
+   "confidence": 0.5669,
+   "factors": {
+    "support": 0.42857142857142855,
+    "external": 0.0,
+    "authority": 1.0,
+    "diversity": 0.6666666666666666,
+    "freshness": 0.5567884426117676
+   },
+   "source_count": 3,
+   "jd_count": 7,
+   "created_at": "2026-07-29T04:50:49"
+  }
+ ],
+ "authority_evidence": [
+  {
+   "id": 1,
+   "job_id": 24,
+   "kind": "policy",
+   "title": "人社部公示12个新职业（新增新工种：智能体开发员）",
+   "issuer": "人力资源社会保障部",
+   "publish_date": "2026-07-02T00:00:00",
+   "url": "http://society.people.com.cn/n1/2026/0703/c1008-40752636.html",
+   "excerpt": "人力资源社会保障部日前发布公示，拟增加数字孪生工程技术人员、具身智能机器人应用技术员、运动数据分析师等12个新职业，同时新增低空物流员、智能体开发员、新能源汽车检测员、适老化改造设计师等新工种。（公示至2026-07-17）",
+   "local_file": "data/authority/mohrss_2026-07_12新职业公示_人民网.html",
+   "created_at": "2026-07-27T10:34:29"
+  },
+  {
+   "id": 2,
+   "job_id": 24,
+   "kind": "report",
+   "title": "翰德2025人才趋势报告：AI技术类岗位需求同比增长逾40%",
+   "issuer": "翰德（Hudson）",
+   "publish_date": "2025-02-01T00:00:00",
+   "url": "https://www.jiemian.com/article/14168110.html",
+   "excerpt": "大模型算法、多模态算法、AI基础设施搭建、AI智能体研发等人才跳槽薪资涨幅普遍达到20%-50%。2025年被业界称为智能体爆发元年，企业对Agent工程师等新岗位的需求激增。",
+   "local_file": "",
+   "created_at": "2026-07-27T10:34:29"
+  },
+  {
+   "id": 3,
+   "job_id": 25,
+   "kind": "policy",
+   "title": "人社部公示12个新职业（新职业：具身智能机器人应用技术员）",
+   "issuer": "人力资源社会保障部",
+   "publish_date": "2026-07-02T00:00:00",
+   "url": "https://cn.chinadaily.com.cn/a/202607/03/WS6a474c43a310d709c2fbbaf8.html",
+   "excerpt": "具身智能机器人应用技术员：使用遥操作设备、空间数字化工具及仿真测试平台，从事具身智能机器人多模态交互数据的采集与处理、算法模型的微调与适配、系统软硬件的现场部署与调试，以及运行效能监控与维护优化的人员。",
+   "local_file": "data/authority/mohrss_2026-07_12新职业公示_中国日报.html",
+   "created_at": "2026-07-27T10:34:46"
+  },
+  {
+   "id": 4,
+   "job_id": 25,
+   "kind": "report",
+   "title": "翰德2025人才趋势报告",
+   "issuer": "翰德（Hudson）",
+   "publish_date": "2025-02-01T00:00:00",
+   "url": "https://www.jiemian.com/article/14168110.html",
+   "excerpt": "具身智能领域，兼具机械控制与AI算法融合能力的复合型技术人才溢价持续。2025年具身智能从实验室概念走向产业前台。",
+   "local_file": "",
+   "created_at": "2026-07-27T10:34:47"
+  },
+  {
+   "id": 5,
+   "job_id": 26,
+   "kind": "policy",
+   "title": "人社部正式发布第七批新职业（新工种：生成式人工智能系统测试员）",
+   "issuer": "人力资源社会保障部",
+   "publish_date": "2025-07-22T00:00:00",
+   "url": "https://m.sh.bendibao.com/news/299711.html",
+   "excerpt": "在\"生成式人工智能系统应用员\"职业下增设\"生成式人工智能系统测试员\"工种。随着人工智能大模型持续迭代升级并加速赋能千行百业，从业人员规模迅速增加、岗位需求更为多样。",
+   "local_file": "data/authority/mohrss_2025-07_第七批新职业_本地宝.html",
+   "created_at": "2026-07-27T10:35:01"
+  },
+  {
+   "id": 6,
+   "job_id": 19,
+   "kind": "report",
+   "title": "脉脉《2025年AI人才流动报告》",
+   "issuer": "脉脉高聘人才智库",
+   "publish_date": "2025-08-01T00:00:00",
+   "url": "https://eu.36kr.com/en/p/3602071123936263",
+   "excerpt": "2025年2月成为AI岗位增长的关键拐点，7月AI相关岗位量同比增幅突破10倍。DeepSeek开源浪潮下，对负责模型部署、私有化、推理优化、链路监控与成本优化的工程师的需求激增。",
+   "local_file": "",
+   "created_at": "2026-07-27T10:35:13"
+  },
+  {
+   "id": 7,
+   "job_id": 22,
+   "kind": "policy",
+   "title": "新职业又添\"数字人\"——人工智能数字人训练师（人社部新增工种）",
+   "issuer": "人力资源社会保障部（中国日报报道）",
+   "publish_date": "2024-08-02T00:00:00",
+   "url": "https://cn.chinadaily.com.cn/a/202408/02/WS66ad6c0fa310054d254eb4c0.html",
+   "excerpt": "人工智能数字人训练师是人社部最新公布增设的数字新工种，归属于人工智能训练师职业类别。虚拟数字人经历2021-2022元宇宙热潮后一度退潮，在大模型技术快速渗透下，数字人产品迎来智能化飞跃、岗位重新兴起。",
+   "local_file": "data/authority/mohrss_2024-08_数字人训练师_中国日报.html",
+   "created_at": "2026-07-27T10:35:27"
+  },
+  {
+   "id": 8,
+   "job_id": 29,
+   "kind": "policy",
+   "title": "人社部公示12个新职业（新职业：数字孪生工程技术人员）",
+   "issuer": "人力资源社会保障部",
+   "publish_date": "2026-07-02T00:00:00",
+   "url": "http://society.people.com.cn/n1/2026/0703/c1008-40752636.html",
+   "excerpt": "拟增加数字孪生工程技术人员、具身智能机器人应用技术员、运动数据分析师、制香香艺师等12个新职业。",
+   "local_file": "data/authority/mohrss_2026-07_12新职业公示_人民网.html",
+   "created_at": "2026-07-27T10:35:39"
+  }
+ ]
+}
