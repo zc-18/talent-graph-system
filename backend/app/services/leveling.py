@@ -99,6 +99,21 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
         caps = [c for c in agg["capabilities"]
                 if c.get("status") == "active" and c.get("granularity") != "fine"]
 
+        # 再与该岗位「已确认的能力集」取交集。分级聚合是按级别桶独立跑的，桶内样本
+        # 小、交叉验证口径与全量建图不同，直接落库会让分级画像出现岗位能力集里根本
+        # 没有的技能（实测越界率 45.5%）——同一个岗位，岗位页显示 7 项能力、级别页
+        # 却列出 88 项，评委点开就是硬伤。以岗位能力集为准，分级画像只做「级别内的
+        # 子集划分」，不引入新能力项。
+        confirmed = {
+            name.lower()
+            for (name,) in db.query(models.Skill.name)
+            .join(models.JobSkill, models.JobSkill.skill_id == models.Skill.id)
+            .filter(models.JobSkill.job_id == job.id,
+                    models.JobSkill.status == "active").all()
+        }
+        if confirmed:
+            caps = [c for c in caps if c["name"].lower() in confirmed]
+
         # 落库：先清该 job+level 旧行
         db.query(models.JobLevelSkill).filter(
             models.JobLevelSkill.job_id == job.id,
@@ -114,6 +129,16 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
                 source_count=c.get("source_count", 0), jd_count=len(level_rows)))
         db.commit()
         out[level] = {"jd_count": len(level_rows), "capabilities": caps}
+
+    # 与岗位能力集取交集后，可能只剩一档还有能力项（实测生成式AI系统测试员只剩
+    # 中级 1 项）。分级画像的价值在于跨级对比，单档无从对比，出一张只有一行的
+    # 「中级画像」反而像数据没跑通。与 bucket_rows 的「≥2 档」是同一条规则，
+    # 只是那条按 JD 条数判、这条按交集结果判——判据晚了一步，得在这里补上。
+    if sum(1 for v in out.values() if v["capabilities"]) < MIN_BUCKETS:
+        db.query(models.JobLevelSkill).filter(
+            models.JobLevelSkill.job_id == job.id).delete()
+        db.commit()
+        return {}
 
     if cache_dirty and cache_path:
         with open(cache_path, "w", encoding="utf-8") as f:

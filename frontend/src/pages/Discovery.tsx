@@ -27,6 +27,12 @@ export default function Discovery() {
       const r = await api.discover(keyword, save)
       setRes(r)
       if (save && r.saved) { toast('success', `「${r.saved.name ?? keyword}」已保存到图谱`); nav(`/jobs/${r.saved.id}`) }
+      // 岗位已存在时后端拒绝落库（避免用弱证据覆盖已交叉验证的能力集），
+      // 这不是错误而是设计约束，给出去处而不是静默无反应
+      else if (save && r.conflict) {
+        toast('info', r.conflict.message)
+        if (r.conflict.job_id) nav(`/jobs/${r.conflict.job_id}`)
+      }
     } catch (e) {
       toast('error', errMsg(e, save ? '保存失败，请重试' : '发现失败：联网检索或大模型服务暂不可用'))
     } finally { setLoading(false); setSaving(false) }

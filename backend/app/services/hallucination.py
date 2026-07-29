@@ -160,7 +160,10 @@ def aggregate_capabilities(
             avg_freshness=fa["fresh_sum"] / max(1, sc),
             avg_authority=fa["authority_sum"] / max(1, sc),
             has_web=name in web_evidence_skills)
-        # 细粒度天然低频：≥1 个独立来源即可展示（active），但标 required 仍需 ≥2 来源
+        # 细粒度技能点同样必须通过交叉验证：单一 JD 提及的表述不进入岗位能力集。
+        # 单来源恰恰是抄袭/通胀/幻觉最难排除的情形——实测单来源细粒度里大量是 JD 短语
+        # 碎片（"顶会论文发表"、"智能客服项目经验"）而非技能点。降级为 candidate 而非
+        # 删除：保留观察、可审计，与演化判据④「降级为候选能力项」一致。
         importance = "required" if (fa["required_votes"] >= fa["bonus_votes"]
                                     and sc >= MIN_SOURCES_REQUIRED) else "bonus"
         capabilities.append({
@@ -171,7 +174,8 @@ def aggregate_capabilities(
             "confidence": conf.compute(factors), "factors": factors,
             "source_count": sc, "support_ratio": round(sc / total, 4),
             "web_verified": name in web_evidence_skills,
-            "status": "active" if sc >= 1 else "candidate",
+            "status": "active" if (sc >= MIN_SOURCES_REQUIRED
+                                   or name in web_evidence_skills) else "candidate",
             "granularity": "fine", "parent": parent,
             "evidence": fa["evidence"][:6],
         })

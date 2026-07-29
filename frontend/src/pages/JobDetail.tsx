@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
-  ArrowLeft, FileText, History, Plus, Trash2, Pencil, ExternalLink, Landmark, Sparkles,
+  ArrowLeft, FileText, History, Plus, Trash2, Pencil, ExternalLink, Landmark, Sparkles, ChevronRight,
 } from 'lucide-react'
 import { ITarget, IStack, IShieldCheck, IBriefcase } from '../components/icons'
 import { api, errMsg, JobDetail as TJob, Skill as TSkill, AuthorityItem, CATEGORY_COLORS } from '../api'
@@ -14,7 +14,48 @@ import { useReveal } from '../hooks/gsapFx'
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
 const SKILL_LEVEL: Record<string, string> = { familiar: '了解', proficient: '熟练', expert: '精通' }
 
-function SkillRow({ s, fineChildren = [], onEdit, onRemove }: any) {
+function FineChips({ items }: { items: TSkill[] }) {
+  return (
+    <>
+      {items.map((f: TSkill) => (
+        <span key={f.skill_id} className="chip border bg-white/80 border-sky-200 text-slate-600 text-[11px]"
+          title={`置信度 ${Math.round(f.confidence * 100)}%`}>
+          {f.name} <span className="text-slate-400">·{Math.round(f.confidence * 100)}%</span>
+        </span>
+      ))}
+    </>
+  )
+}
+
+/** 候选技能点：单来源、未通过交叉验证，默认折叠。
+ *  题目要求颗粒度到「技能点」级别，所以不能删；但把上百个未验证碎片和已确认能力
+ *  平铺在一起，页面会拉到一万多像素，且看起来像「这个岗位有 880 项能力要求」。
+ *  折叠后既保留可展开的技能点颗粒度，也让「已确认 vs 待验证」的分界自己说话。 */
+function CandidateChips({ items }: { items: TSkill[] }) {
+  const [open, setOpen] = useState(false)
+  if (!items.length) return null
+  return (
+    <div className="mt-2 pt-2 border-t border-slate-100">
+      <button onClick={() => setOpen(o => !o)}
+        className="text-[11px] text-slate-400 hover:text-slate-600 transition inline-flex items-center gap-1">
+        <ChevronRight className={`w-3 h-3 transition-transform ${open ? 'rotate-90' : ''}`} />
+        候选技能点 {items.length} 项（单来源，待交叉验证）
+      </button>
+      {open && (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {items.map((f: TSkill) => (
+            <span key={f.skill_id} className="chip border border-dashed bg-slate-50/80 border-slate-300 text-slate-500 text-[11px]"
+              title={`置信度 ${Math.round(f.confidence * 100)}% · 仅 ${f.source_count} 个来源`}>
+              {f.name} <span className="text-slate-400">·{Math.round(f.confidence * 100)}%</span>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function SkillRow({ s, fineChildren = [], fineCandidates = [], onEdit, onRemove }: any) {
   return (
     <div className="rounded-xl bg-sky-50/70 hover:bg-sky-100/80 px-3.5 py-2.5 transition group">
       {/* 首行：技能名 + 分类/级别；操作按钮固定右侧。徽章不换行，窄屏截断而非竖排 */}
@@ -39,18 +80,14 @@ function SkillRow({ s, fineChildren = [], onEdit, onRemove }: any) {
         <span className="text-[11px] text-slate-400 shrink-0" title="独立来源数">×{s.source_count}</span>
         <span className="shrink-0"><ConfidencePill value={s.confidence} factors={s.factors} /></span>
       </div>
-      {/* 细分技能点：细粒度技能挂到粗粒度父项下展示 */}
+      {/* 细分技能点：已通过交叉验证的挂父项下直接展示 */}
       {fineChildren.length > 0 && (
         <div className="mt-2 pt-2 border-t border-sky-100/80 flex items-center gap-1.5 flex-wrap">
           <span className="text-[10px] text-slate-400 shrink-0">细分技能点</span>
-          {fineChildren.map((f: TSkill) => (
-            <span key={f.skill_id} className="chip border bg-white/80 border-sky-200 text-slate-600 text-[11px]"
-              title={`置信度 ${Math.round(f.confidence * 100)}%`}>
-              {f.name} <span className="text-slate-400">·{Math.round(f.confidence * 100)}%</span>
-            </span>
-          ))}
+          <FineChips items={fineChildren} />
         </div>
       )}
+      <CandidateChips items={fineCandidates} />
     </div>
   )
 }
@@ -85,19 +122,26 @@ export default function JobDetail() {
   if (loadError) return <ErrorState text="岗位详情加载失败" onRetry={reload} />
   if (!job) return <Spinner />
   const color = CATEGORY_COLORS[job.category] || '#6366F1'
-  // 粗/细粒度分组：细粒度技能点作为「细分技能点」挂在其父（粗粒度）技能行下
+  // 粗/细粒度分组：细粒度技能点作为「细分技能点」挂在其父（粗粒度）技能行下。
+  // 再按 status 分流——active 是通过 ≥2 独立来源交叉验证的，直接展示；candidate 是
+  // 单来源待验证的，折叠收起（后端 job_to_dict 不按 status 过滤，两类都会返回）。
   const allSkills: TSkill[] = [...job.required_skills, ...job.bonus_skills]
+  const isCandidate = (s: TSkill) => (s as any).status === 'candidate'
   const fineByParent = new Map<string, TSkill[]>()
+  const candByParent = new Map<string, TSkill[]>()
   for (const s of allSkills) {
     if (s.granularity === 'fine' && s.parent_name) {
-      const arr = fineByParent.get(s.parent_name) || []
-      arr.push(s); fineByParent.set(s.parent_name, arr)
+      const m = isCandidate(s) ? candByParent : fineByParent
+      const arr = m.get(s.parent_name) || []
+      arr.push(s); m.set(s.parent_name, arr)
     }
   }
-  const coarseRequired = job.required_skills.filter(s => s.granularity !== 'fine')
-  const coarseBonus = job.bonus_skills.filter(s => s.granularity !== 'fine')
-  const orphanFine = allSkills.filter(s => s.granularity === 'fine' &&
-    (!s.parent_name || !allSkills.some(p => p.granularity !== 'fine' && p.name === s.parent_name)))
+  const coarseRequired = job.required_skills.filter(s => s.granularity !== 'fine' && !isCandidate(s))
+  const coarseBonus = job.bonus_skills.filter(s => s.granularity !== 'fine' && !isCandidate(s))
+  const isOrphan = (s: TSkill) => s.granularity === 'fine' &&
+    (!s.parent_name || !allSkills.some(p => p.granularity !== 'fine' && p.name === s.parent_name))
+  const orphanFine = allSkills.filter(s => isOrphan(s) && !isCandidate(s))
+  const orphanCand = allSkills.filter(s => isOrphan(s) && isCandidate(s))
   const emergence = (job as any).emergence_type as string | null
 
   const saveEdit = async (action: string, payload: any) => {
@@ -169,21 +213,21 @@ export default function JobDetail() {
                 {coarseRequired.map(s => (
                   <div key={s.skill_id} data-reveal>
                   <SkillRow s={s} fineChildren={fineByParent.get(s.name) || []}
+                    fineCandidates={candByParent.get(s.name) || []}
                     onEdit={(sk: any) => setEditor({ action: 'update', skill_name: sk.name, importance: sk.importance, weight: sk.weight, level_required: sk.level_required })}
                     onRemove={(sk: any) => setRemoving(sk)} />
                   </div>
                 ))}
               </div>
-              {orphanFine.length > 0 && (
+              {(orphanFine.length > 0 || orphanCand.length > 0) && (
                 <div className="mt-3 pt-3 border-t border-slate-100">
-                  <div className="text-[11px] text-slate-400 mb-1.5">其他细分技能点</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {orphanFine.map(f => (
-                      <span key={f.skill_id} className="chip border bg-white/80 border-sky-200 text-slate-600 text-[11px]">
-                        {f.name} <span className="text-slate-400">·{Math.round(f.confidence * 100)}%</span>
-                      </span>
-                    ))}
-                  </div>
+                  {orphanFine.length > 0 && (
+                    <>
+                      <div className="text-[11px] text-slate-400 mb-1.5">其他细分技能点</div>
+                      <div className="flex flex-wrap gap-1.5"><FineChips items={orphanFine} /></div>
+                    </>
+                  )}
+                  <CandidateChips items={orphanCand} />
                 </div>
               )}
             </Card>

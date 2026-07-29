@@ -1,0 +1,56 @@
+{
+  "adapters": {
+    "iguopin": {
+      "tier": "gov",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-07-29T14:43:09",
+      "stats": {
+        "requests": 12,
+        "collected": 140,
+        "robots_blocked": 0,
+        "errors": 1
+      },
+      "notes": "clusters=5"
+    },
+    "feishu_ats": {
+      "tier": "official",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-07-29T14:51:18",
+      "stats": {
+        "requests": 136,
+        "collected": 364,
+        "robots_blocked": 0,
+        "errors": 3
+      },
+      "notes": "clusters=5"
+    },
+    "tencent": {
+      "tier": "official",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-07-29T15:17:00",
+      "stats": {
+        "requests": 18,
+        "collected": 7,
+        "robots_blocked": 0,
+        "errors": 0
+      },
+      "notes": "clusters=5"
+    },
+    "netease": {
+      "tier": "official",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-07-29T15:18:31",
+      "stats": {
+        "requests": 16,
+        "collected": 31,
+        "robots_blocked": 0,
+        "errors": 1
+      },
+      "notes": "clusters=5"
+    }
+  }
+}

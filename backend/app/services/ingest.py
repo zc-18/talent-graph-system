@@ -36,6 +36,27 @@ def _cluster_name_map() -> dict[str, str]:
         return {}
 
 
+@lru_cache(maxsize=1)
+def _cluster_category_map() -> dict[str, str]:
+    """规范岗位名 -> 钉住的技术栈领域（title_map.json 里未声明的岗位不钉，走 LLM 解析）。
+
+    岗位的技术栈领域原本取「代表 JD 解析结果里的 category」，而同一个簇里不同 JD 的
+    category 会漂移（同是工业互联网岗，有的 JD 被判成人工智能、有的判成智能系统），
+    取代表条目等于随机挑一个——实测新建的工业互联网/车联网/智能硬件三个岗位全部
+    没落到物联网。领域归属是稳定的人工判断，属于和「簇 -> 规范岗位名」同一层的
+    策展信息，声明比推断可靠。
+    """
+    p = Path(__file__).resolve().parents[2] / "data" / "collect" / "title_map.json"
+    try:
+        raw = json.loads(p.read_text("utf-8"))
+        names = raw.get("cluster_job_name", {})
+        # 键从「簇名」翻成「规范岗位名」，聚合阶段拿到的是后者
+        return {names[k]: v for k, v in raw.get("cluster_category", {}).items()
+                if k in names}
+    except Exception:
+        return {}
+
+
 # 检索词表之外的同义写法：真实标题里常见、但 queries.json 里没有的说法。
 # 键=标题中的关键词（小写），值=title_map.json 里的簇名。只补真正缺的，
 # 不要加 "agent"/"cv" 这类过短的通用词——会把"销售Agent"之类误判进技术岗簇。
@@ -257,7 +278,8 @@ def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dic
         rep = max(parsed_list, key=lambda x: len(x["parsed"].get("core_responsibilities", [])))
         rp = rep["parsed"]
         job = graph_service.upsert_job(
-            db, job_title=key, category=rp.get("category", "人工智能"),
+            db, job_title=key,
+            category=_cluster_category_map().get(key) or rp.get("category", "人工智能"),
             level=rp.get("level", "middle"),
             responsibilities=rp.get("core_responsibilities", []),
             scenarios=rp.get("typical_scenarios", []),

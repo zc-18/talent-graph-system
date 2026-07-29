@@ -124,9 +124,7 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
     new_version = (job.version or 1) + 1
 
     active_new = [c for c in new_caps if c.get("status") == "active"]
-    new_names = {c["name"] for c in active_new}
 
-    # 删除项：标记 deprecated（保留历史）
     existing = db.query(models.JobSkill).filter(models.JobSkill.job_id == job.id).all()
     # 技能名一次批量取（历史实现逐条 Skill.get，是 N+1）
     name_of = dict(db.query(models.Skill.id, models.Skill.name).filter(
@@ -136,8 +134,25 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
         nm = name_of.get(js.skill_id)
         if nm is not None:
             existing_map[nm] = js
+
+    # 淘汰项：**只降级 compute_changes 判定为 delete 的能力项**。
+    #
+    # 这里历史上是 `if name not in new_names`（new_names = 本轮聚合出的 active 集合），
+    # 与 compute_changes 的淘汰判据完全脱钩，后果是变更日志与库表各说各话：
+    # 交互式演化只贴 1-3 条 JD，旧能力仅靠 history 先验注入拿到 1 个来源，过不了
+    # 「≥2 来源」闸门 → 不在 new_names 里 → 被静默降级；而 compute_changes 因为
+    # 先验注入使旧能力仍存在于 new_caps，一条 delete 记录都不会写。实测线上误点
+    # 三次，AI产品经理 102 行被降级、delete 记录 0 条，Java 211 行被降级、v3-v5
+    # delete 记录 0 条。对一个以「可溯源、反幻觉」为卖点的系统，日志与事实背离
+    # 比丢数据更致命。
+    #
+    # 改为以变更日志为唯一真相源：日志说淘汰什么，库里就淘汰什么，两者按构造一致。
+    # 少量 JD 的交互式演化因此只会新增/修改，不会淘汰——这正是 compute_changes
+    # 里 MIN_JDS_FOR_DELETE 想表达的「缺证据不等于反证」，只是当初没落到写库这一侧。
+    delete_names = {ch["skill_name"] for ch in changes
+                    if ch.get("change_type") == "delete"}
     for name, js in existing_map.items():
-        if name not in new_names:
+        if name in delete_names and js.status == "active":
             js.status = "deprecated"
             js.last_seen = datetime.utcnow()
 

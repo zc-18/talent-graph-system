@@ -43,8 +43,9 @@ def main():
                 for r in rows:
                     lvl = getattr(r, "inferred_level", None)
                     by_level[lvl] = by_level.get(lvl, 0) + 1
-                print(f"  - {job.name}: 跳过（JD分布 {by_level or '无'}，不满足 每档≥"
-                      f"{leveling.MIN_JDS_PER_BUCKET}条 且 ≥{leveling.MIN_BUCKETS}档）")
+                print(f"  - {job.name}: 跳过（JD分布 {by_level or '无'}；未满足 每档≥"
+                      f"{leveling.MIN_JDS_PER_BUCKET}条 且 ≥{leveling.MIN_BUCKETS}档，"
+                      f"或与岗位能力集取交集后不足 {leveling.MIN_BUCKETS} 档有能力项）")
                 continue
             built += 1
             desc = ", ".join(f"{leveling.LEVEL_LABELS[lv]}({p['jd_count']}条JD/"
