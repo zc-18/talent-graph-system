@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import {
   ChevronLeft, ChevronRight, Menu, X,
 } from 'lucide-react'
-import { IGauge, ITreeStructure, ISparkle, IGitBranch, IBriefcase, ITarget } from './components/icons'
+import { IGauge, ITreeStructure, ISparkle, IGitBranch, IBriefcase, ITarget, IUsersThree } from './components/icons'
 import ChatBot from './components/ChatBot'
 import { ToastProvider } from './components/Toast'
 import { Spinner } from './components/ui'
@@ -17,6 +17,7 @@ const JobDetail = lazy(() => import('./pages/JobDetail'))
 const Discovery = lazy(() => import('./pages/Discovery'))
 const Evolution = lazy(() => import('./pages/Evolution'))
 const Match = lazy(() => import('./pages/Match'))
+const Talent = lazy(() => import('./pages/Talent'))
 
 const NAV = [
   { to: '/', label: '数据驾驶舱', icon: IGauge, end: true },
@@ -25,6 +26,7 @@ const NAV = [
   { to: '/evolution', label: '岗位能力演化', icon: IGitBranch },
   { to: '/jobs', label: '岗位库管理', icon: IBriefcase },
   { to: '/match', label: '人岗匹配诊断', icon: ITarget },
+  { to: '/talent', label: '人才与团队盘点', icon: IUsersThree },
 ]
 
 // 导航项样式（桌面收起态 collapsed 时居中、无文字）
@@ -163,6 +165,7 @@ export default function App() {
                       <Route path="/jobs" element={<Jobs />} />
                       <Route path="/jobs/:id" element={<JobDetail />} />
                       <Route path="/match" element={<Match />} />
+                      <Route path="/talent" element={<Talent />} />
                     </Routes>
                   </Suspense>
                 </motion.div>

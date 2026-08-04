@@ -5,6 +5,8 @@
 证据与溯源：RawJD（原始招聘数据）、Evidence（能力项证据，反幻觉溯源）
 演化追踪：CapabilityChange（能力项变更记录）
 匹配：Resume（简历）、MatchResult（匹配结果）
+人才侧（意见⑧）：ResumeBatch（语料台账）、TalentProfile（脱敏人才画像）、
+                  Team/TeamMember（团队盘点）、SkillAlias（从简历学到的技能表述）
 """
 from datetime import datetime
 from sqlalchemy import (
@@ -258,4 +260,107 @@ class MatchResult(Base):
     missing_bonus = Column(JSON)
     suggestions = Column(JSON)                                      # 改进建议
     learning_path = Column(JSON)                                    # 学习路径
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ======================= 人才侧图层（2026-08 整改，老师意见⑧）=======================
+# 简历语料 → 脱敏人才画像 → 团队盘点 → 技能别名学习。
+# 与岗位侧（需求侧）解耦：不写入 job_skill.confidence，不改动置信度公式。
+
+
+# ------------------------- 简历语料批次台账 -------------------------
+class ResumeBatch(Base):
+    """简历语料的采集台账。刻意与 CrawlBatch 分表：JD 批次数是对外口径
+    （"6 平台 15 批次"），把简历批次混进去会污染那个数字。"""
+    __tablename__ = "resume_batch"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    batch_key = Column(String(64), unique=True, index=True)        # 如 2026W31-res-dataset
+    source_type = Column(String(16), index=True)                   # dataset/web/sample
+    source_name = Column(String(128))                              # brackozi/Resume、应届毕业生网...
+    source_url = Column(String(512))
+    license = Column(String(128))                                  # MIT / Apache-2.0 / 页面公开
+    tier = Column(String(16), default="dataset")                   # dataset/web/sample
+    authority = Column(Float, default=0.7)                         # 来源权威度（仅用于语料排序，不入置信度公式）
+    method = Column(String(16), default="api")                     # api/html
+    robots_ok = Column(Boolean, default=True)
+    rate_limit_s = Column(Float, default=4.0)
+    collected = Column(Integer, default=0)                         # 采到条数
+    kept = Column(Integer, default=0)                              # 入库条数
+    raw_dir = Column(String(256))                                  # 本地归档目录（佐证）
+    started_at = Column(DateTime)
+    finished_at = Column(DateTime)
+    notes = Column(Text)
+
+
+# ------------------------- 脱敏人才画像 -------------------------
+class TalentProfile(Base):
+    """简历落库后的**唯一**形态：只有技能要素，没有身份。
+
+    刻意不设 raw_text / candidate_name / 任何联系方式列 —— 不是"存了但不填"，
+    而是结构上就存不下，延续 resume.redact_for_storage 的隐私最小化口径。
+    """
+    __tablename__ = "talent_profile"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    code = Column(String(16), unique=True, index=True)             # 化名编号 T001（对外展示用，不含真名）
+    batch_id = Column(Integer, ForeignKey("resume_batch.id"), index=True)
+    source_type = Column(String(16), index=True)                   # dataset/web/sample/upload
+    source_name = Column(String(128))
+    source_url = Column(String(512))                               # 可回溯出处
+    license = Column(String(128))
+    language = Column(String(8), default="zh", index=True)         # zh/en
+    target_cluster = Column(String(64), index=True)                # 映射到 queries.json 的岗位簇
+    matched_job_id = Column(Integer, ForeignKey("job.id"), nullable=True, index=True)
+    years_experience = Column(Float, default=0.0)
+    education = Column(String(64))
+    skills = Column(JSON)                                          # 归一化技能名 [str]
+    skill_levels = Column(JSON)                                    # {技能: familiar/proficient/expert}
+    raw_skill_terms = Column(JSON)                                 # 归一化**前**的原始表述（别名学习的输入）
+    skill_count = Column(Integer, default=0)
+    text_len = Column(Integer, default=0)                          # 原文长度（只记长度，不记原文）
+    text_hash = Column(String(40), index=True)                     # 正文摘要，仅用于去重（不可还原原文）
+    quality_score = Column(Float, default=0.0)                     # 语料质量分
+    holdout = Column(Boolean, default=False, index=True)           # 是否留出集（不参与别名学习，只做评测）
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ------------------------- 团队与成员 -------------------------
+class Team(Base):
+    __tablename__ = "team"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(64), index=True)
+    description = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    members = relationship("TeamMember", back_populates="team", cascade="all, delete-orphan")
+
+
+class TeamMember(Base):
+    __tablename__ = "team_member"
+    __table_args__ = (UniqueConstraint("team_id", "talent_id", name="uq_team_member"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    team_id = Column(Integer, ForeignKey("team.id"), index=True)
+    talent_id = Column(Integer, ForeignKey("talent_profile.id"), index=True)
+    display_name = Column(String(64))                              # 化名（如"成员A"），不存真名
+    role_label = Column(String(64))                                # 团队内角色标签
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    team = relationship("Team", back_populates="members")
+    talent = relationship("TalentProfile")
+
+
+# ------------------------- 从简历学到的技能表述 -------------------------
+class SkillAlias(Base):
+    """别名学习台账。status=accepted 的才会回写进归一化词典，
+    候选/拒绝的也留档，说明"学了什么、拒了什么、为什么"。"""
+    __tablename__ = "skill_alias"
+    __table_args__ = (UniqueConstraint("alias", name="uq_skill_alias"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    skill_id = Column(Integer, ForeignKey("skill.id"), nullable=True, index=True)
+    alias = Column(String(128), index=True)                        # 学到的表述
+    canonical = Column(String(128))                                # 映射到的规范技能名
+    source = Column(String(32), default="resume_corpus")
+    talent_count = Column(Integer, default=0)                      # 出现在几份简历里
+    status = Column(String(16), default="candidate", index=True)   # candidate/accepted/rejected
+    reject_reason = Column(String(128))                            # 拒绝原因（三道护栏哪一道拦的）
+    confidence = Column(Float, default=0.0)
     created_at = Column(DateTime, default=datetime.utcnow)

@@ -1,0 +1,16 @@
+{"ts": "2026-08-03T00:21:05", "platform": "sample_yjbys", "url": "https://www.yjbys.com/jianli/", "status": 200, "latency_ms": 136}
+{"ts": "2026-08-03T00:21:09", "platform": "sample_yjbys", "url": "https://www.yjbys.com/jianli/jianlimoban/gerenjianlimoban/656828.html", "status": 200, "latency_ms": 222}
+{"ts": "2026-08-03T00:21:15", "platform": "sample_yjbys", "url": "https://www.yjbys.com/jianli/jianlimoban/gerenjianlimoban/656803.html", "status": 200, "latency_ms": 223}
+{"ts": "2026-08-03T00:21:16", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/jianli/", "status": 200, "latency_ms": 110}
+{"ts": "2026-08-03T00:21:21", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/gerenjianli/", "status": 200, "latency_ms": 35}
+{"ts": "2026-08-03T00:21:26", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/jianli/1162175.html", "status": 200, "latency_ms": 82}
+{"ts": "2026-08-03T00:21:26", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/jianli/1162175.html", "status": "rejected:技术词过少(tech=1<3)"}
+{"ts": "2026-08-03T00:21:30", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/jianli/1111579.html", "status": 200, "latency_ms": 160}
+{"ts": "2026-08-03T00:21:30", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/jianli/1111579.html", "status": "rejected:技术词过少(tech=1<3)"}
+{"ts": "2026-08-03T00:21:36", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/jianli/1117306.html", "status": 200, "latency_ms": 223}
+{"ts": "2026-08-03T00:21:42", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/jianli/1098982.html", "status": 200, "latency_ms": 207}
+{"ts": "2026-08-03T00:21:47", "platform": "sample_ruiwen", "url": "https://www.ruiwen.com/jianli/1081571.html", "status": 200, "latency_ms": 231}
+{"ts": "2026-08-03T00:21:49", "platform": "sample_jianliben", "url": "https://www.jianliben.com/article", "status": 200, "latency_ms": 286}
+{"ts": "2026-08-03T00:21:54", "platform": "sample_jianliben", "url": "https://www.jianliben.com/article/detail/1045", "status": 200, "latency_ms": 109}
+{"ts": "2026-08-03T00:22:00", "platform": "sample_jianliben", "url": "https://www.jianliben.com/article/detail/1053", "status": 200, "latency_ms": 267}
+{"ts": "2026-08-03T00:22:05", "platform": "sample_jianliben", "url": "https://www.jianliben.com/article/detail/119", "status": 200, "latency_ms": 101}

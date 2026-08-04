@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from .config import settings
 from .db import init_db
-from .routers import jobs, graph, discovery, evolution, match, chat
+from .routers import jobs, graph, discovery, evolution, match, chat, talent
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("talent-graph")
@@ -32,6 +32,7 @@ app.include_router(graph.router)
 app.include_router(discovery.router)
 app.include_router(evolution.router)
 app.include_router(match.router)
+app.include_router(talent.router)
 app.include_router(chat.router)
 
 

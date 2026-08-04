@@ -3,9 +3,9 @@
     "metric": "JD解析",
     "n": 371,
     "precision": 0.9859,
-    "recall": 0.9798,
-    "f1": 0.9825,
-    "importance_acc": 0.9775
+    "recall": 0.9795,
+    "f1": 0.9824,
+    "importance_acc": 0.9771
   },
   "rows": [
     {
@@ -1263,9 +1263,11 @@
       "id": 155,
       "role": "数据架构师",
       "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
-      "missed": []
+      "recall": 0.889,
+      "f1": 0.941,
+      "missed": [
+        "数据建模"
+      ]
     },
     {
       "id": 156,

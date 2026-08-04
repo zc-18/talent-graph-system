@@ -1,0 +1,635 @@
+{"ts": "2026-08-03T00:37:26", "platform": "web_personal", "url": "https://r.easycv.cn/machine-learning", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:37:27", "platform": "web_personal", "url": "https://raw.githubusercontent.com/zsc/interview_tutorial/main/chapter17.md", "status": 200, "latency_ms": 523}
+{"ts": "2026-08-03T00:37:27", "platform": "web_personal", "url": "https://github.com/zsc/interview_tutorial/blob/main/chapter17.md", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:37:27", "platform": "web_personal", "url": "https://www.liepin.com/mould/H0009-N000081.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:37:32", "platform": "web_personal", "url": "https://raw.githubusercontent.com/amusi/AI-Job-Notes/master/Q&A.md", "status": 200, "latency_ms": 462}
+{"ts": "2026-08-03T00:37:32", "platform": "web_personal", "url": "https://github.com/amusi/AI-Job-Notes/blob/master/Q&A.md", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:37:42", "platform": "web_personal", "url": "https://stxy.btbu.edu.cn/xsgz/xgdt/363ec00a3a694fb48519c86a4cc46582.htm", "status": "error:ConnectError"}
+{"ts": "2026-08-03T00:37:42", "platform": "web_personal", "url": "https://stxy.btbu.edu.cn/xsgz/xgdt/363ec00a3a694fb48519c86a4cc46582.htm", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:37:43", "platform": "web_personal", "url": "https://www.ibm.com/cn-zh/think/topics/pytorch", "status": 200, "latency_ms": 451}
+{"ts": "2026-08-03T00:37:43", "platform": "web_personal", "url": "https://www.ibm.com/cn-zh/think/topics/pytorch", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:37:43", "platform": "web_personal", "url": "https://tianchi.aliyun.com/forum/post/62131", "status": 200, "latency_ms": 281}
+{"ts": "2026-08-03T00:37:43", "platform": "web_personal", "url": "https://tianchi.aliyun.com/forum/post/62131", "status": "rejected:正文过短(139<500)"}
+{"ts": "2026-08-03T00:37:44", "platform": "web_personal", "url": "https://pytorch.org/foundation", "status": 200, "latency_ms": 668}
+{"ts": "2026-08-03T00:37:44", "platform": "web_personal", "url": "https://pytorch.org/foundation", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:37:44", "platform": "web_personal", "url": "https://www.qmjianli.com/content/guide/4618", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:37:46", "platform": "web_personal", "url": "https://www.upcv.tech/jianlimoban/7441.html", "status": 200, "latency_ms": 290}
+{"ts": "2026-08-03T00:37:46", "platform": "web_personal", "url": "https://www.upcv.tech/jianlimoban/7441.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:37:46", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/23533748407", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:37:46", "platform": "web_personal", "url": "https://www.qmjianli.com/content/guide/4615", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:37:47", "platform": "web_personal", "url": "https://developer.aliyun.com/article/1677181", "status": 200, "latency_ms": 555}
+{"ts": "2026-08-03T00:37:47", "platform": "web_personal", "url": "https://developer.aliyun.com/article/1677181", "status": "rejected:正文过短(0<500)"}
+{"ts": "2026-08-03T00:37:48", "platform": "web_personal", "url": "https://datawhalechina.github.io/dive-into-cv-pytorch/", "status": 200, "latency_ms": 605}
+{"ts": "2026-08-03T00:37:48", "platform": "web_personal", "url": "https://datawhalechina.github.io/dive-into-cv-pytorch/", "status": "rejected:正文过短(13<500)"}
+{"ts": "2026-08-03T00:37:48", "platform": "web_personal", "url": "https://upcv.tech/jianlimoban/7430.html", "status": 200, "latency_ms": 299}
+{"ts": "2026-08-03T00:37:48", "platform": "web_personal", "url": "https://upcv.tech/jianlimoban/7430.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:37:51", "platform": "web_personal", "url": "https://raw.githubusercontent.com/AccumulateMore/CV/main/README.md", "status": 200, "latency_ms": 561}
+{"ts": "2026-08-03T00:37:51", "platform": "web_personal", "url": "https://github.com/AccumulateMore/CV", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:37:56", "platform": "web_personal", "url": "https://raw.githubusercontent.com/foocker/deeplearningtheory/main/README.md", "status": 200, "latency_ms": 360}
+{"ts": "2026-08-03T00:37:56", "platform": "web_personal", "url": "https://github.com/foocker/deeplearningtheory", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:38:01", "platform": "web_personal", "url": "https://raw.githubusercontent.com/amusi/Deep-Learning-Interview-Book/master/docs/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C.md", "status": 200, "latency_ms": 247}
+{"ts": "2026-08-03T00:38:01", "platform": "web_personal", "url": "https://github.com/amusi/Deep-Learning-Interview-Book/blob/master/docs/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C.md", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:38:03", "platform": "web_personal", "url": "https://gist.github.com/06f6c9ddf795aefa26b76f1ba36fb9d5", "status": 200, "latency_ms": 1060}
+{"ts": "2026-08-03T00:38:03", "platform": "web_personal", "url": "https://gist.github.com/06f6c9ddf795aefa26b76f1ba36fb9d5", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:38:08", "platform": "web_personal", "url": "https://raw.githubusercontent.com/amusi/Deep-Learning-Interview-Book/master/docs/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C.md?plain=1", "status": 200, "latency_ms": 598}
+{"ts": "2026-08-03T00:38:08", "platform": "web_personal", "url": "https://github.com/amusi/Deep-Learning-Interview-Book/blob/master/docs/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C.md?plain=1", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:38:09", "platform": "web_personal", "url": "https://hellojialee.github.io/2023/10/12/Tutorial4DL&CV", "status": 200, "latency_ms": 891}
+{"ts": "2026-08-03T00:38:09", "platform": "web_personal", "url": "https://hellojialee.github.io/2023/10/12/Tutorial4DL&CV", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:38:09", "platform": "web_personal", "url": "https://www.cvmart.net/community/detail/527", "status": 200, "latency_ms": 201}
+{"ts": "2026-08-03T00:38:09", "platform": "web_personal", "url": "https://www.cvmart.net/community/detail/527", "status": "rejected:正文过短(187<500)"}
+{"ts": "2026-08-03T00:38:14", "platform": "web_personal", "url": "https://raw.githubusercontent.com/adongwanai/AgentGuide/main/README.md", "status": 200, "latency_ms": 473}
+{"ts": "2026-08-03T00:38:14", "platform": "web_personal", "url": "https://github.com/adongwanai/AgentGuide", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:38:14", "platform": "web_personal", "url": "https://donghande.github.io/files/%E8%91%A3%E6%B1%89%E5%BE%B7_%E7%AE%80%E5%8E%86.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:38:20", "platform": "web_personal", "url": "https://raw.githubusercontent.com/QinSun197/CV-and-deep-learning/main/README.md", "status": 200, "latency_ms": 443}
+{"ts": "2026-08-03T00:38:20", "platform": "web_personal", "url": "https://github.com/QinSun197/CV-and-deep-learning/blob/main/README.md", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:38:20", "platform": "web_personal", "url": "https://jjayyyyyyy.github.io/resume/", "status": 200, "latency_ms": 209}
+{"ts": "2026-08-03T00:38:20", "platform": "web_personal", "url": "https://jjayyyyyyy.github.io/resume/", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:38:27", "platform": "web_personal", "url": "https://raw.githubusercontent.com/chencodeX/chencodeX.github.io/main/README.md", "status": 404, "latency_ms": 372}
+{"ts": "2026-08-03T00:38:33", "platform": "web_personal", "url": "https://raw.githubusercontent.com/chencodeX/chencodeX.github.io/master/README.md", "status": 200, "latency_ms": 404}
+{"ts": "2026-08-03T00:38:33", "platform": "web_personal", "url": "https://yuanxiaosc.github.io/about/index/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E8%A2%81%E5%AE%B5%E7%9A%84%E7%AE%80%E5%8E%86.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:38:38", "platform": "web_personal", "url": "https://raw.githubusercontent.com/adongwanai/LLM-Resume-Template/main/README.md", "status": 200, "latency_ms": 472}
+{"ts": "2026-08-03T00:38:38", "platform": "web_personal", "url": "https://github.com/adongwanai/LLM-Resume-Template", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:38:38", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/8Z6tOig.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:38:43", "platform": "web_personal", "url": "https://raw.githubusercontent.com/lcylmhlcy/Awesome-algorithm-interview/main/README.md", "status": 404, "latency_ms": 263}
+{"ts": "2026-08-03T00:38:48", "platform": "web_personal", "url": "https://raw.githubusercontent.com/lcylmhlcy/Awesome-algorithm-interview/master/README.md", "status": 200, "latency_ms": 258}
+{"ts": "2026-08-03T00:38:48", "platform": "web_personal", "url": "https://github.com/lcylmhlcy/Awesome-algorithm-interview", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:38:49", "platform": "web_personal", "url": "https://www.gaoxiaojob.com/bk_jobs/8c2efwcx", "status": 200, "latency_ms": 500}
+{"ts": "2026-08-03T00:38:49", "platform": "web_personal", "url": "https://www.gaoxiaojob.com/bk_jobs/8c2efwcx", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:38:50", "platform": "web_personal", "url": "https://ecywang.com/pic/%E7%AE%80%E5%8E%86%E6%95%99%E8%82%B2%E7%BB%8F%E5%8E%86", "status": 200, "latency_ms": 915}
+{"ts": "2026-08-03T00:38:50", "platform": "web_personal", "url": "https://ecywang.com/pic/%E7%AE%80%E5%8E%86%E6%95%99%E8%82%B2%E7%BB%8F%E5%8E%86", "status": "rejected:技术词过少(tech=0<5)"}
+{"ts": "2026-08-03T00:38:52", "platform": "web_personal", "url": "https://dongfengchi.github.io/algo_engineer_zero_to_one/", "status": 200, "latency_ms": 391}
+{"ts": "2026-08-03T00:38:52", "platform": "web_personal", "url": "https://dongfengchi.github.io/algo_engineer_zero_to_one/", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:38:52", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/102816078", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:38:54", "platform": "web_personal", "url": "https://raw.githubusercontent.com/harleyszhang/cv_note/main/README.md", "status": 404, "latency_ms": 518}
+{"ts": "2026-08-03T00:38:59", "platform": "web_personal", "url": "https://raw.githubusercontent.com/harleyszhang/cv_note/master/README.md", "status": 200, "latency_ms": 305}
+{"ts": "2026-08-03T00:38:59", "platform": "web_personal", "url": "https://github.com/harleyszhang/cv_note", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:00", "platform": "web_personal", "url": "https://harleyszhang.github.io/cv_note/", "status": 200, "latency_ms": 701}
+{"ts": "2026-08-03T00:39:00", "platform": "web_personal", "url": "https://harleyszhang.github.io/cv_note/", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:01", "platform": "web_personal", "url": "https://cloud.tencent.com/developer/article/1518965", "status": 200, "latency_ms": 710}
+{"ts": "2026-08-03T00:39:01", "platform": "web_personal", "url": "https://cloud.tencent.com/developer/article/1518965", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:39:03", "platform": "web_personal", "url": "https://m.liepin.com/mould/H0009-N000090.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:03", "platform": "web_personal", "url": "https://www.qmjianli.com/content/guide/4430", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:03", "platform": "web_personal", "url": "https://www.qmjianli.com/content/guide/4441", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:03", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/WsxKFuA.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:03", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/653583943", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:03", "platform": "web_personal", "url": "https://baike.baidu.com/item/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%B7%A5%E7%A8%8B%E5%B8%88/67209216", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:03", "platform": "web_personal", "url": "https://blog.csdn.net/sxnuqk/article/details/136089927", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:04", "platform": "web_personal", "url": "https://cn.indeed.com/q-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E8%81%8C%E4%BD%8D.html", "status": 403, "latency_ms": 284}
+{"ts": "2026-08-03T00:39:04", "platform": "web_personal", "url": "https://cn.indeed.com/q-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E8%81%8C%E4%BD%8D.html", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:39:04", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/BSyTp6Q.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:04", "platform": "web_personal", "url": "https://www.liepin.com/mould/H0017-N000090.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:04", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/l4hlDyU.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:04", "platform": "web_personal", "url": "https://career.cuhk.edu.cn/attachment/careercuhk/ueditor/file/20250103/2581_13_17_NLP%E7%AE%97%E6%B3%95%E5%B7%A5%E7%A8%8B%E5%B8%88%EF%BC%88%E6%A0%A1%E6%8B%9B%EF%BC%89NLP+%E5%A4%A7%E6%A8%A1%E5%9E%8B.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:39:06", "platform": "web_personal", "url": "https://www.biaodianfu.com/bert.html", "status": 200, "latency_ms": 301}
+{"ts": "2026-08-03T00:39:06", "platform": "web_personal", "url": "https://www.biaodianfu.com/bert.html", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:07", "platform": "web_personal", "url": "https://zh.wikipedia.org/wiki/BERT", "status": 200, "latency_ms": 643}
+{"ts": "2026-08-03T00:39:07", "platform": "web_personal", "url": "https://zh.wikipedia.org/wiki/BERT", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:08", "platform": "web_personal", "url": "https://shmc.tongji.edu.cn/8c/8e/c32676a298126/page.htm", "status": 200, "latency_ms": 294}
+{"ts": "2026-08-03T00:39:08", "platform": "web_personal", "url": "https://shmc.tongji.edu.cn/8c/8e/c32676a298126/page.htm", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:09", "platform": "web_personal", "url": "https://www.coursera.org/learn/transformer-models-and-bert-model-zhtw", "status": 200, "latency_ms": 1119}
+{"ts": "2026-08-03T00:39:09", "platform": "web_personal", "url": "https://www.coursera.org/learn/transformer-models-and-bert-model-zhtw", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:10", "platform": "web_personal", "url": "https://www.nvidia.cn/glossary/bert", "status": 200, "latency_ms": 445}
+{"ts": "2026-08-03T00:39:10", "platform": "web_personal", "url": "https://www.nvidia.cn/glossary/bert", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:11", "platform": "web_personal", "url": "https://mokahr.com/blog/25995.html", "status": 200, "latency_ms": 162}
+{"ts": "2026-08-03T00:39:11", "platform": "web_personal", "url": "https://mokahr.com/blog/25995.html", "status": "rejected:技术词过少(tech=3<5)"}
+{"ts": "2026-08-03T00:39:12", "platform": "web_personal", "url": "https://forums.leadtek.com/en/post/12915", "status": 200, "latency_ms": 643}
+{"ts": "2026-08-03T00:39:12", "platform": "web_personal", "url": "https://forums.leadtek.com/en/post/12915", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:12", "platform": "web_personal", "url": "http://www.crownpku.com/2020/10/23/%E5%9F%BA%E4%BA%8E%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%9A%84%E7%AE%80%E5%8E%86%E5%88%9D%E7%AD%9B%E9%80%89.html", "status": 200, "latency_ms": 111}
+{"ts": "2026-08-03T00:39:12", "platform": "web_personal", "url": "http://www.crownpku.com/2020/10/23/%E5%9F%BA%E4%BA%8E%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%9A%84%E7%AE%80%E5%8E%86%E5%88%9D%E7%AD%9B%E9%80%89.html", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:12", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/49271699", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:12", "platform": "web_personal", "url": "https://www.liepin.com/mould/dmxnlpsfgcsf87g.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:12", "platform": "web_personal", "url": "https://blog.csdn.net/weixin_57616691/article/details/162372991", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:39:13", "platform": "web_personal", "url": "https://www.bilibili.com/video/BV1G14y1e7S2/", "status": 200, "latency_ms": 464}
+{"ts": "2026-08-03T00:39:13", "platform": "web_personal", "url": "https://www.bilibili.com/video/BV1G14y1e7S2/", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:22", "platform": "web_personal", "url": "https://raw.githubusercontent.com/rezi-io/resume-standard/main/README.md", "status": 200, "latency_ms": 516}
+{"ts": "2026-08-03T00:39:22", "platform": "web_personal", "url": "https://github.com/rezi-io/resume-standard", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:28", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Deep4GB/Resume-NLP-Parser/main/README.md", "status": 200, "latency_ms": 779}
+{"ts": "2026-08-03T00:39:28", "platform": "web_personal", "url": "https://github.com/Deep4GB/Resume-NLP-Parser", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:32", "platform": "web_personal", "url": "https://resumeworded.com/nlp-natural-language-processing-engineer-resume-example", "status": 200, "latency_ms": 1963}
+{"ts": "2026-08-03T00:39:32", "platform": "web_personal", "url": "https://resumeworded.com/nlp-natural-language-processing-engineer-resume-example", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:34", "platform": "web_personal", "url": "https://raw.githubusercontent.com/topics/cv/main/README.md", "status": 404, "latency_ms": 443}
+{"ts": "2026-08-03T00:39:40", "platform": "web_personal", "url": "https://raw.githubusercontent.com/topics/cv/master/README.md", "status": 404, "latency_ms": 469}
+{"ts": "2026-08-03T00:39:41", "platform": "web_personal", "url": "https://github.com/topics/cv", "status": 200, "latency_ms": 1093}
+{"ts": "2026-08-03T00:39:41", "platform": "web_personal", "url": "https://github.com/topics/cv", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:45", "platform": "web_personal", "url": "https://raw.githubusercontent.com/amusi/AI-Job-Recommend/master/%E7%A4%BE%E6%8B%9B/README.md", "status": 200, "latency_ms": 402}
+{"ts": "2026-08-03T00:39:45", "platform": "web_personal", "url": "https://github.com/amusi/AI-Job-Recommend/blob/master/%E7%A4%BE%E6%8B%9B/README.md", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:39:50", "platform": "web_personal", "url": "https://raw.githubusercontent.com/topics/resume-scoring/main/README.md", "status": 404, "latency_ms": 251}
+{"ts": "2026-08-03T00:39:55", "platform": "web_personal", "url": "https://raw.githubusercontent.com/topics/resume-scoring/master/README.md", "status": 404, "latency_ms": 236}
+{"ts": "2026-08-03T00:39:56", "platform": "web_personal", "url": "https://github.com/topics/resume-scoring", "status": 200, "latency_ms": 1015}
+{"ts": "2026-08-03T00:39:56", "platform": "web_personal", "url": "https://github.com/topics/resume-scoring", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:39:59", "platform": "web_personal", "url": "https://www.wozber.com/en-us/resume-examples/data-science-and-analytics/nlp-engineer-resume-example", "status": 200, "latency_ms": 1443}
+{"ts": "2026-08-03T00:39:59", "platform": "web_personal", "url": "https://www.wozber.com/en-us/resume-examples/data-science-and-analytics/nlp-engineer-resume-example", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:40:03", "platform": "web_personal", "url": "https://github.com/topics/ai-resume?o=desc&s=stars", "status": 200, "latency_ms": 1193}
+{"ts": "2026-08-03T00:40:03", "platform": "web_personal", "url": "https://github.com/topics/ai-resume?o=desc&s=stars", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:40:04", "platform": "web_personal", "url": "https://raw.githubusercontent.com/luozhouyang/resume/main/README.md", "status": 404, "latency_ms": 394}
+{"ts": "2026-08-03T00:40:09", "platform": "web_personal", "url": "https://raw.githubusercontent.com/luozhouyang/resume/master/README.md", "status": 200, "latency_ms": 407}
+{"ts": "2026-08-03T00:40:10", "platform": "web_personal", "url": "https://github.com/luozhouyang/resume", "status": 200, "latency_ms": 1122}
+{"ts": "2026-08-03T00:40:10", "platform": "web_personal", "url": "https://github.com/luozhouyang/resume", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:40:11", "platform": "web_personal", "url": "https://resume.github.io/", "status": 200, "latency_ms": 530}
+{"ts": "2026-08-03T00:40:11", "platform": "web_personal", "url": "https://resume.github.io/", "status": "rejected:正文过短(13<500)"}
+{"ts": "2026-08-03T00:40:12", "platform": "web_personal", "url": "https://nlp.csai.tsinghua.edu.cn/job/29", "status": 200, "latency_ms": 89}
+{"ts": "2026-08-03T00:40:12", "platform": "web_personal", "url": "https://nlp.csai.tsinghua.edu.cn/job/29", "status": "rejected:正文过短(9<500)"}
+{"ts": "2026-08-03T00:40:13", "platform": "web_personal", "url": "https://gist.github.com/06b45fa959fde355a877", "status": 200, "latency_ms": 937}
+{"ts": "2026-08-03T00:40:13", "platform": "web_personal", "url": "https://gist.github.com/06b45fa959fde355a877", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:40:15", "platform": "web_personal", "url": "https://www.pandaresume.cn/jianli/909.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:15", "platform": "web_personal", "url": "https://www.liepin.com/mould/mbjcb6w3u.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:16", "platform": "web_personal", "url": "https://www.mianlingai.com/blog/computer-vision-interview-ai-guide-2026", "status": 200, "latency_ms": 283}
+{"ts": "2026-08-03T00:40:16", "platform": "web_personal", "url": "https://www.mianlingai.com/blog/computer-vision-interview-ai-guide-2026", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://www.ultralytics.com/zh/blog/becoming-a-computer-vision-engineer", "status": 200, "latency_ms": 901}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://www.ultralytics.com/zh/blog/becoming-a-computer-vision-engineer", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://100chui.com/article/313872.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://www.pandaresume.cn/jianli/16707.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/jisuanji", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://m.liepin.com/mould/jsjsjaigcsu8o1.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/16308753659", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://www.huanzhucv.com/news/48318.html", "status": 200, "latency_ms": 238}
+{"ts": "2026-08-03T00:40:18", "platform": "web_personal", "url": "https://www.huanzhucv.com/news/48318.html", "status": "rejected:正文是'讲怎么写简历'的内容页(meta=11)"}
+{"ts": "2026-08-03T00:40:19", "platform": "web_personal", "url": "https://upcv.tech/jianlimoban/2314.html", "status": 200, "latency_ms": 299}
+{"ts": "2026-08-03T00:40:19", "platform": "web_personal", "url": "https://upcv.tech/jianlimoban/2314.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:40:19", "platform": "web_personal", "url": "https://www.liepin.com/mould/zscvsjsfgcsgninr0li.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:21", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Wscats/CV/main/README.md", "status": 404, "latency_ms": 592}
+{"ts": "2026-08-03T00:40:27", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Wscats/CV/master/README.md", "status": 200, "latency_ms": 550}
+{"ts": "2026-08-03T00:40:28", "platform": "web_personal", "url": "https://blog.nowcoder.net/n/bd4413ee94f449949511b01b97df7775", "status": 200, "latency_ms": 394}
+{"ts": "2026-08-03T00:40:28", "platform": "web_personal", "url": "https://blog.nowcoder.net/n/bd4413ee94f449949511b01b97df7775", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:40:28", "platform": "web_personal", "url": "https://www.liepin.com/mould/cvtxsfgcsj59x.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:28", "platform": "web_personal", "url": "https://www.wondercv.com/sample/suanfangongchengshijianlifanli", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:29", "platform": "web_personal", "url": "https://harleyszhang.github.io/cv_note/interview_summary/1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%B2%972019%E5%B1%8A%E5%AE%9E%E4%B9%A0%E9%9D%A2%E7%BB%8F.html", "status": 200, "latency_ms": 598}
+{"ts": "2026-08-03T00:40:29", "platform": "web_personal", "url": "https://harleyszhang.github.io/cv_note/interview_summary/1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%B2%972019%E5%B1%8A%E5%AE%9E%E4%B9%A0%E9%9D%A2%E7%BB%8F.html", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:40:32", "platform": "web_personal", "url": "https://raw.githubusercontent.com/amusi/AI-Job-Resume/main/README.md", "status": 404, "latency_ms": 281}
+{"ts": "2026-08-03T00:40:37", "platform": "web_personal", "url": "https://raw.githubusercontent.com/amusi/AI-Job-Resume/master/README.md", "status": 200, "latency_ms": 262}
+{"ts": "2026-08-03T00:40:37", "platform": "web_personal", "url": "https://github.com/amusi/AI-Job-Resume", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:40:44", "platform": "web_personal", "url": "https://www.chaojijianli.com/sample/suanfangongchengshijianlifanli", "status": 200, "latency_ms": 604}
+{"ts": "2026-08-03T00:40:44", "platform": "web_personal", "url": "https://www.chaojijianli.com/sample/suanfangongchengshijianlifanli", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:40:45", "platform": "web_personal", "url": "https://m.zhiyeapp.com/jlgl/LKWmEF.html", "status": 200, "latency_ms": 561}
+{"ts": "2026-08-03T00:40:45", "platform": "web_personal", "url": "https://m.zhiyeapp.com/jlgl/LKWmEF.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:40:45", "platform": "web_personal", "url": "https://www.wondercv.com/sample/jisuanjikexueyujishuzhuanyejia", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:45", "platform": "web_personal", "url": "https://www.100chui.com/article/485582.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:45", "platform": "web_personal", "url": "https://blog.csdn.net/Datawhale/article/details/123813083", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:45", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/1965760785771893712", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:46", "platform": "web_personal", "url": "https://www.codecvcv.com/suanfagongchengshi", "status": 200, "latency_ms": 704}
+{"ts": "2026-08-03T00:40:46", "platform": "web_personal", "url": "https://www.codecvcv.com/suanfagongchengshi", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:40:48", "platform": "web_personal", "url": "https://www.notion.com/zh-cn/templates/generic-cv", "status": 200, "latency_ms": 797}
+{"ts": "2026-08-03T00:40:48", "platform": "web_personal", "url": "https://www.notion.com/zh-cn/templates/generic-cv", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:40:48", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/suanfa/", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:50", "platform": "web_personal", "url": "https://notes.kamacoder.com/jianli/llm/llm_8.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:50", "platform": "web_personal", "url": "https://notes.kamacoder.com/jianli/llm/llm_15.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:50", "platform": "web_personal", "url": "https://adg.csdn.net/6952390e5b9f5f31781b39c1.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:50", "platform": "web_personal", "url": "https://developer.aliyun.com/article/1663644", "status": 200, "latency_ms": 584}
+{"ts": "2026-08-03T00:40:50", "platform": "web_personal", "url": "https://developer.aliyun.com/article/1663644", "status": "rejected:正文过短(0<500)"}
+{"ts": "2026-08-03T00:40:50", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/1994828132595754871", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:52", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/19e14b9c6dfe44f7b39cc18530656fcf", "status": 200, "latency_ms": 1584}
+{"ts": "2026-08-03T00:40:52", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/19e14b9c6dfe44f7b39cc18530656fcf", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:40:53", "platform": "web_personal", "url": "https://raw.githubusercontent.com/lizhe2004/Awesome-LLM-RAG-Application/main/README.md", "status": 200, "latency_ms": 612}
+{"ts": "2026-08-03T00:40:53", "platform": "web_personal", "url": "https://github.com/lizhe2004/Awesome-LLM-RAG-Application", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:40:53", "platform": "web_personal", "url": "https://www.alphaxiv.org/zh/overview/2504.02870", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:54", "platform": "web_personal", "url": "https://www.53ai.com/news/qianyanjishu/1599.html", "status": 200, "latency_ms": 606}
+{"ts": "2026-08-03T00:40:54", "platform": "web_personal", "url": "https://www.53ai.com/news/qianyanjishu/1599.html", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:40:54", "platform": "web_personal", "url": "https://notes.kamacoder.com/jianli/llm/llm_5.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:54", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/681209056", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:55", "platform": "web_personal", "url": "https://www.bilibili.com/video/BV143VKzjE68/", "status": 200, "latency_ms": 1341}
+{"ts": "2026-08-03T00:40:55", "platform": "web_personal", "url": "https://www.bilibili.com/video/BV143VKzjE68/", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:40:57", "platform": "web_personal", "url": "https://www.wondercv.com/blog/ubbmXeM3.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:57", "platform": "web_personal", "url": "https://www.jianliben.com/article/detail/13108", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:57", "platform": "web_personal", "url": "https://www.liepin.com/mould/dyymxsfgcst12a.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:40:58", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/88015ab7e78a46e585a77ad1732efb40", "status": 200, "latency_ms": 302}
+{"ts": "2026-08-03T00:40:58", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/88015ab7e78a46e585a77ad1732efb40", "status": "rejected:正文过短(182<500)"}
+{"ts": "2026-08-03T00:40:58", "platform": "web_personal", "url": "https://upcv.tech/jianlimoban/2062.html", "status": 200, "latency_ms": 296}
+{"ts": "2026-08-03T00:40:58", "platform": "web_personal", "url": "https://upcv.tech/jianlimoban/2062.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:40:58", "platform": "web_personal", "url": "https://www.resumemakeroffer.com/resume-examples/llm-suanfa", "status": 200, "latency_ms": 126}
+{"ts": "2026-08-03T00:40:59", "platform": "web_personal", "url": "https://www.resumemakeroffer.com/resume-examples/llm-suanfa", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:41:05", "platform": "web_personal", "url": "https://raw.githubusercontent.com/couragec/LLMInternSkill/main/README.md", "status": 200, "latency_ms": 602}
+{"ts": "2026-08-03T00:41:05", "platform": "web_personal", "url": "https://github.com/couragec/LLMInternSkill", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:41:05", "platform": "web_personal", "url": "https://fanqiwan.github.io/images/Fanqi_Wan_s_CV_ZH.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:41:07", "platform": "web_personal", "url": "https://changwangzhang.github.io/cv-cn", "status": 200, "latency_ms": 949}
+{"ts": "2026-08-03T00:41:07", "platform": "web_personal", "url": "https://changwangzhang.github.io/cv-cn", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:41:08", "platform": "web_personal", "url": "https://hzg0601.github.io", "status": 200, "latency_ms": 615}
+{"ts": "2026-08-03T00:41:11", "platform": "web_personal", "url": "https://raw.githubusercontent.com/andaoai/resume/main/README.md", "status": 200, "latency_ms": 638}
+{"ts": "2026-08-03T00:41:11", "platform": "web_personal", "url": "https://github.com/andaoai/resume", "status": "rejected:技术词过少(tech=3<5)"}
+{"ts": "2026-08-03T00:41:16", "platform": "web_personal", "url": "https://raw.githubusercontent.com/luhengshiwo/LLMForEverybody/main/README.md", "status": 200, "latency_ms": 315}
+{"ts": "2026-08-03T00:41:16", "platform": "web_personal", "url": "https://github.com/luhengshiwo/LLMForEverybody", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:41:20", "platform": "web_personal", "url": "https://raw.githubusercontent.com/WangMinan/WangMinan.github.io/main/README.md", "status": 200, "latency_ms": 355}
+{"ts": "2026-08-03T00:41:20", "platform": "web_personal", "url": "https://github.com/WangMinan/WangMinan.github.io", "status": "rejected:缺少个人经历时间段(spans=1<2)"}
+{"ts": "2026-08-03T00:41:22", "platform": "web_personal", "url": "https://vampireachao.github.io/2026/06/25/hiring-agent/index.html", "status": 200, "latency_ms": 382}
+{"ts": "2026-08-03T00:41:22", "platform": "web_personal", "url": "https://vampireachao.github.io/2026/06/25/hiring-agent/index.html", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:41:27", "platform": "web_personal", "url": "https://raw.githubusercontent.com/struggle3014/Resume/main/README.md", "status": 404, "latency_ms": 508}
+{"ts": "2026-08-03T00:41:32", "platform": "web_personal", "url": "https://raw.githubusercontent.com/struggle3014/Resume/master/README.md", "status": 200, "latency_ms": 389}
+{"ts": "2026-08-03T00:41:34", "platform": "web_personal", "url": "https://taccisum.github.io/resume", "status": 200, "latency_ms": 741}
+{"ts": "2026-08-03T00:41:36", "platform": "web_personal", "url": "https://juice-resume.github.io/%E7%AE%80%E5%8E%86%E6%A8%A1%E6%9D%BF.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:41:37", "platform": "web_personal", "url": "https://cv.mianlingai.com/guide/project-experience", "status": 200, "latency_ms": 440}
+{"ts": "2026-08-03T00:41:37", "platform": "web_personal", "url": "https://cv.mianlingai.com/guide/project-experience", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:41:39", "platform": "web_personal", "url": "https://gist.github.com/6f3c4c56589dcc0a9cd5", "status": 200, "latency_ms": 2027}
+{"ts": "2026-08-03T00:41:39", "platform": "web_personal", "url": "https://gist.github.com/6f3c4c56589dcc0a9cd5", "status": "rejected:缺少个人经历时间段(spans=1<2)"}
+{"ts": "2026-08-03T00:41:40", "platform": "web_personal", "url": "https://zhuang-xiaoyan.github.io/zhuangxiaoyan", "status": 200, "latency_ms": 464}
+{"ts": "2026-08-03T00:41:40", "platform": "web_personal", "url": "https://zhuang-xiaoyan.github.io/zhuangxiaoyan", "status": "rejected:技术词过少(tech=4<5)"}
+{"ts": "2026-08-03T00:41:40", "platform": "web_personal", "url": "https://raw.githubusercontent.com/wufeiqun/resume/main/README.md", "status": 404, "latency_ms": 387}
+{"ts": "2026-08-03T00:41:46", "platform": "web_personal", "url": "https://raw.githubusercontent.com/wufeiqun/resume/master/README.md", "status": 200, "latency_ms": 472}
+{"ts": "2026-08-03T00:41:47", "platform": "web_personal", "url": "https://github.com/wufeiqun/resume", "status": 200, "latency_ms": 877}
+{"ts": "2026-08-03T00:41:47", "platform": "web_personal", "url": "https://github.com/wufeiqun/resume", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:41:48", "platform": "web_personal", "url": "https://zhoukekestar.github.io/resume.html", "status": 200, "latency_ms": 483}
+{"ts": "2026-08-03T00:41:51", "platform": "web_personal", "url": "https://raw.githubusercontent.com/balloonwj/CppGuide/master/articles/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E7%AE%80%E5%8E%86/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%A6%82%E4%BD%95%E5%86%99%E7%AE%80%E5%8E%86.md", "status": 200, "latency_ms": 263}
+{"ts": "2026-08-03T00:41:51", "platform": "web_personal", "url": "https://github.com/balloonwj/CppGuide/blob/master/articles/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E7%AE%80%E5%8E%86/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%A6%82%E4%BD%95%E5%86%99%E7%AE%80%E5%8E%86.md", "status": "rejected:正文是'讲怎么写简历'的内容页(meta=3)"}
+{"ts": "2026-08-03T00:41:52", "platform": "web_personal", "url": "https://zjffun.github.io/online-resume/", "status": 200, "latency_ms": 473}
+{"ts": "2026-08-03T00:41:52", "platform": "web_personal", "url": "https://zjffun.github.io/online-resume/", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:42:00", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/486868071555088384", "status": 200, "latency_ms": 443}
+{"ts": "2026-08-03T00:42:00", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/486868071555088384", "status": "rejected:正文过短(180<500)"}
+{"ts": "2026-08-03T00:42:01", "platform": "web_personal", "url": "https://www.codecvcv.com/post/def9fa8469076e8701df42d732e8183c", "status": 200, "latency_ms": 628}
+{"ts": "2026-08-03T00:42:01", "platform": "web_personal", "url": "https://www.codecvcv.com/post/def9fa8469076e8701df42d732e8183c", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:42:02", "platform": "web_personal", "url": "https://www.cnblogs.com/way2backend/p/17666142.html", "status": 200, "latency_ms": 289}
+{"ts": "2026-08-03T00:42:02", "platform": "web_personal", "url": "https://www.cnblogs.com/way2backend/p/17666142.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:42:02", "platform": "web_personal", "url": "https://javaguide.cn/interview-preparation/resume-guide.html", "status": 200, "latency_ms": 198}
+{"ts": "2026-08-03T00:42:02", "platform": "web_personal", "url": "https://javaguide.cn/interview-preparation/resume-guide.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:42:02", "platform": "web_personal", "url": "https://www.jianliben.com/article/detail/11839", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:02", "platform": "web_personal", "url": "https://m.jianliben.com/article/detail/1725", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:02", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/354695232", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:02", "platform": "web_personal", "url": "https://www.100chui.com/article/475240.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:04", "platform": "web_personal", "url": "https://www.crazy-coder.cn/1900/01/01/ge-ren-jian-li/", "status": 200, "latency_ms": 945}
+{"ts": "2026-08-03T00:42:06", "platform": "web_personal", "url": "https://kubernetes.io/zh-cn/case-studies/daocloud", "status": 200, "latency_ms": 761}
+{"ts": "2026-08-03T00:42:06", "platform": "web_personal", "url": "https://kubernetes.io/zh-cn/case-studies/daocloud", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:07", "platform": "web_personal", "url": "https://jimmysong.io/zh/book/kubernetes-handbook/cloud-native/quick-start", "status": 200, "latency_ms": 471}
+{"ts": "2026-08-03T00:42:07", "platform": "web_personal", "url": "https://jimmysong.io/zh/book/kubernetes-handbook/cloud-native/quick-start", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:09", "platform": "web_personal", "url": "https://www.youtube.com/watch?v=M9WIekHdHQs", "status": 200, "latency_ms": 1134}
+{"ts": "2026-08-03T00:42:09", "platform": "web_personal", "url": "https://www.youtube.com/watch?v=M9WIekHdHQs", "status": "rejected:正文过短(232<500)"}
+{"ts": "2026-08-03T00:42:09", "platform": "web_personal", "url": "https://raw.githubusercontent.com/coracoo/awesome_docker_cn/main/README.md", "status": 200, "latency_ms": 683}
+{"ts": "2026-08-03T00:42:09", "platform": "web_personal", "url": "https://github.com/coracoo/awesome_docker_cn", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:11", "platform": "web_personal", "url": "https://kubernetes.io/zh-cn/training", "status": 200, "latency_ms": 550}
+{"ts": "2026-08-03T00:42:11", "platform": "web_personal", "url": "https://kubernetes.io/zh-cn/training", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:42:12", "platform": "web_personal", "url": "https://www.redhat.com/zh-cn/topics/containers/what-is-docker", "status": 200, "latency_ms": 199}
+{"ts": "2026-08-03T00:42:12", "platform": "web_personal", "url": "https://www.redhat.com/zh-cn/topics/containers/what-is-docker", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:12", "platform": "web_personal", "url": "https://www.liepin.com/mould/kuberneteskfgcs.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:12", "platform": "web_personal", "url": "https://www.wondercv.com/mianjing/2025-186", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:12", "platform": "web_personal", "url": "https://www.codefather.cn/post/2029156872631005186", "status": "robots_disallow"}
+{"ts": "2026-08-03T00:42:12", "platform": "web_personal", "url": "https://www.codefather.cn/post/2029156872631005186", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:42:13", "platform": "web_personal", "url": "https://blog.opskumu.com/resume.html", "status": "error:ConnectError"}
+{"ts": "2026-08-03T00:42:13", "platform": "web_personal", "url": "https://blog.opskumu.com/resume.html", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:42:13", "platform": "web_personal", "url": "https://upcv.tech/jianlifanwen/523.html", "status": 200, "latency_ms": 450}
+{"ts": "2026-08-03T00:42:13", "platform": "web_personal", "url": "https://upcv.tech/jianlifanwen/523.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:42:14", "platform": "web_personal", "url": "https://blog.ihypo.net/resume-2024.html", "status": "error:ConnectError"}
+{"ts": "2026-08-03T00:42:14", "platform": "web_personal", "url": "https://blog.ihypo.net/resume-2024.html", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:42:16", "platform": "web_personal", "url": "https://www.liepin.com/mould/k8sywkfgcss17c.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:16", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/689467314", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:16", "platform": "web_personal", "url": "https://www.cnblogs.com/zhoutuo/p/18689348", "status": 200, "latency_ms": 301}
+{"ts": "2026-08-03T00:42:16", "platform": "web_personal", "url": "https://www.cnblogs.com/zhoutuo/p/18689348", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:17", "platform": "web_personal", "url": "https://hezhiqiang.gitbook.io/about-the-author", "status": 200, "latency_ms": 570}
+{"ts": "2026-08-03T00:42:17", "platform": "web_personal", "url": "https://www.wondercv.com/sample/yunweirenjianlifanli_moban_gou", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:17", "platform": "web_personal", "url": "https://m.liepin.com/mould/yunjisuancunchukaifagcs.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:18", "platform": "web_personal", "url": "https://juejin.cn/post/7067074241811709988", "status": 200, "latency_ms": 222}
+{"ts": "2026-08-03T00:42:18", "platform": "web_personal", "url": "https://juejin.cn/post/7067074241811709988", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:18", "platform": "web_personal", "url": "https://www.liepin.com/mould/k8sjqywkfgcse54o.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:18", "platform": "web_personal", "url": "https://developer.aliyun.com/article/1363600", "status": 200, "latency_ms": 445}
+{"ts": "2026-08-03T00:42:18", "platform": "web_personal", "url": "https://developer.aliyun.com/article/1363600", "status": "rejected:正文过短(0<500)"}
+{"ts": "2026-08-03T00:42:24", "platform": "web_personal", "url": "https://gist.github.com/0859f5902d75828b094757139992fdb6", "status": 200, "latency_ms": 1267}
+{"ts": "2026-08-03T00:42:24", "platform": "web_personal", "url": "https://gist.github.com/0859f5902d75828b094757139992fdb6", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:26", "platform": "web_personal", "url": "https://wsgzao.github.io/post/sre", "status": 200, "latency_ms": 659}
+{"ts": "2026-08-03T00:42:26", "platform": "web_personal", "url": "https://wsgzao.github.io/post/sre", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:26", "platform": "web_personal", "url": "https://raw.githubusercontent.com/topics/site-reliability-engineer/main/README.md", "status": 404, "latency_ms": 547}
+{"ts": "2026-08-03T00:42:32", "platform": "web_personal", "url": "https://raw.githubusercontent.com/topics/site-reliability-engineer/master/README.md", "status": 404, "latency_ms": 425}
+{"ts": "2026-08-03T00:42:33", "platform": "web_personal", "url": "https://github.com/topics/site-reliability-engineer", "status": 200, "latency_ms": 1019}
+{"ts": "2026-08-03T00:42:33", "platform": "web_personal", "url": "https://github.com/topics/site-reliability-engineer", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:34", "platform": "web_personal", "url": "https://linkedin.github.io/school-of-sre", "status": 200, "latency_ms": 743}
+{"ts": "2026-08-03T00:42:34", "platform": "web_personal", "url": "https://linkedin.github.io/school-of-sre", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:36", "platform": "web_personal", "url": "http://tvvomomo.github.io/about", "status": 200, "latency_ms": 800}
+{"ts": "2026-08-03T00:42:36", "platform": "web_personal", "url": "http://tvvomomo.github.io/about", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:42:37", "platform": "web_personal", "url": "https://rickhw.github.io/2018/08/03/DevOps/An-Introduction-to-SRE", "status": 200, "latency_ms": 1076}
+{"ts": "2026-08-03T00:42:37", "platform": "web_personal", "url": "https://rickhw.github.io/2018/08/03/DevOps/An-Introduction-to-SRE", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:38", "platform": "web_personal", "url": "https://datawhalechina.github.io/hello-claw/cn/university/group-debate", "status": 200, "latency_ms": 1081}
+{"ts": "2026-08-03T00:42:38", "platform": "web_personal", "url": "https://datawhalechina.github.io/hello-claw/cn/university/group-debate", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:39", "platform": "web_personal", "url": "https://gist.github.com/lsylsy2/c60747de58792fa37766c3e7f6fe20b6", "status": 200, "latency_ms": 778}
+{"ts": "2026-08-03T00:42:39", "platform": "web_personal", "url": "https://gist.github.com/lsylsy2/c60747de58792fa37766c3e7f6fe20b6", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:42:39", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/554274122", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:40", "platform": "web_personal", "url": "https://chennima.github.io/resume/", "status": 200, "latency_ms": 576}
+{"ts": "2026-08-03T00:42:40", "platform": "web_personal", "url": "https://chennima.github.io/resume/", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:42:41", "platform": "web_personal", "url": "https://raw.githubusercontent.com/alibaba/SREWorks/main/README-CN.md", "status": 200, "latency_ms": 489}
+{"ts": "2026-08-03T00:42:41", "platform": "web_personal", "url": "https://github.com/alibaba/SREWorks/blob/main/README-CN.md", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:41", "platform": "web_personal", "url": "https://www.bilibili.com/video/BV1Ra411P7f6/", "status": 200, "latency_ms": 534}
+{"ts": "2026-08-03T00:42:41", "platform": "web_personal", "url": "https://www.bilibili.com/video/BV1Ra411P7f6/", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:43", "platform": "web_personal", "url": "https://m.jianliben.com/article/detail/21259", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:47", "platform": "web_personal", "url": "https://raw.githubusercontent.com/ZhongYi-LinuxDriverDev/EmbeddedSoftwareEngineerInterview/main/%E7%AC%94%E8%AF%95%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%BB%BD%E5%90%88%E6%A0%BC%E7%9A%84%E7%AE%80%E5%8E%86.md", "status": 200, "latency_ms": 507}
+{"ts": "2026-08-03T00:42:47", "platform": "web_personal", "url": "https://github.com/ZhongYi-LinuxDriverDev/EmbeddedSoftwareEngineerInterview/blob/main/%E7%AC%94%E8%AF%95%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7/%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%BB%BD%E5%90%88%E6%A0%BC%E7%9A%84%E7%AE%80%E5%8E%86.md", "status": "rejected:正文是'讲怎么写简历'的内容页(meta=3)"}
+{"ts": "2026-08-03T00:42:47", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/qianru", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:47", "platform": "web_personal", "url": "https://bbs.csdn.net/weixin_42522575/article/details/100192123", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:47", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/520265709704757248", "status": 200, "latency_ms": 392}
+{"ts": "2026-08-03T00:42:47", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/520265709704757248", "status": "rejected:正文过短(181<500)"}
+{"ts": "2026-08-03T00:42:48", "platform": "web_personal", "url": "https://m.nowcoder.com/discuss/520265709704757248", "status": 200, "latency_ms": 1016}
+{"ts": "2026-08-03T00:42:48", "platform": "web_personal", "url": "https://m.nowcoder.com/discuss/520265709704757248", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:42:50", "platform": "web_personal", "url": "https://www.siliconmotion.com/company/careers/3LI/detail", "status": 200, "latency_ms": 1028}
+{"ts": "2026-08-03T00:42:50", "platform": "web_personal", "url": "https://www.siliconmotion.com/company/careers/3LI/detail", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:42:52", "platform": "web_personal", "url": "https://www.robook.org/docs/handbook/embedded/qianrushiluxian", "status": 200, "latency_ms": 1012}
+{"ts": "2026-08-03T00:42:52", "platform": "web_personal", "url": "https://www.robook.org/docs/handbook/embedded/qianrushiluxian", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:42:52", "platform": "web_personal", "url": "https://m.jianliben.com/article/detail/1734", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:52", "platform": "web_personal", "url": "https://www.liepin.com/mould/qrslinuxcxkfgcspgsanx6g.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:52", "platform": "web_personal", "url": "https://upcv.tech/jianlimoban/7420.html", "status": 200, "latency_ms": 294}
+{"ts": "2026-08-03T00:42:52", "platform": "web_personal", "url": "https://upcv.tech/jianlimoban/7420.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:42:52", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/686217752", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:53", "platform": "web_personal", "url": "https://www.huanzhucv.com/news/52219.html", "status": 200, "latency_ms": 295}
+{"ts": "2026-08-03T00:42:53", "platform": "web_personal", "url": "https://www.huanzhucv.com/news/52219.html", "status": "rejected:正文是'讲怎么写简历'的内容页(meta=10)"}
+{"ts": "2026-08-03T00:42:53", "platform": "web_personal", "url": "https://www.bilibili.com/video/BV1kVfHYSEHA/", "status": 200, "latency_ms": 452}
+{"ts": "2026-08-03T00:42:53", "platform": "web_personal", "url": "https://www.bilibili.com/video/BV1kVfHYSEHA/", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:42:53", "platform": "web_personal", "url": "https://www.100fenjianli.com/my_template/619", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:53", "platform": "web_personal", "url": "https://www.100chui.com/article/485797.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:56", "platform": "web_personal", "url": "https://community.infineon.com/t5/%E5%8D%9A%E5%AE%A2/%E4%B8%80%E5%8F%AA%E8%80%81%E9%B8%9F%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E8%A1%80%E6%B3%AA%E5%8F%B2/ba-p/527648", "status": 403, "latency_ms": 298}
+{"ts": "2026-08-03T00:42:56", "platform": "web_personal", "url": "https://community.infineon.com/t5/%E5%8D%9A%E5%AE%A2/%E4%B8%80%E5%8F%AA%E8%80%81%E9%B8%9F%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E8%A1%80%E6%B3%AA%E5%8F%B2/ba-p/527648", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:42:56", "platform": "web_personal", "url": "https://m.wondercv.com/blog/AaWSqJ0P", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:57", "platform": "web_personal", "url": "https://m.gaoding.com/article/t-gongzuojingli", "status": 200, "latency_ms": 399}
+{"ts": "2026-08-03T00:42:57", "platform": "web_personal", "url": "https://m.gaoding.com/article/t-gongzuojingli", "status": "rejected:技术词过少(tech=2<5)"}
+{"ts": "2026-08-03T00:42:57", "platform": "web_personal", "url": "https://m.jianliben.com/article/detail/43420", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:57", "platform": "web_personal", "url": "https://m.jianliben.com/article/detail/35999", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:57", "platform": "web_personal", "url": "https://www.liepin.com/mould/qrsdpjv9r9.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:57", "platform": "web_personal", "url": "https://www.100fenjianli.com/my_template/616", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:42:57", "platform": "web_personal", "url": "https://blog.csdn.net/zhengnianli/article/details/122572206", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:02", "platform": "web_personal", "url": "http://huaqianlee.github.io/resume_cn", "status": 200, "latency_ms": 623}
+{"ts": "2026-08-03T00:43:02", "platform": "web_personal", "url": "http://huaqianlee.github.io/resume_cn", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:43:03", "platform": "web_personal", "url": "https://raw.githubusercontent.com/ZhongYi-LinuxDriverDev/EmbeddedSoftwareEngineerInterview/main/%E7%A7%8B%E6%8B%9B%E9%9D%A2%E7%BB%8F%E6%80%BB%E7%BB%93/%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E7%A7%8B%E6%8B%9B%E4%B9%8B%E8%B7%AF.md", "status": 200, "latency_ms": 526}
+{"ts": "2026-08-03T00:43:03", "platform": "web_personal", "url": "https://github.com/ZhongYi-LinuxDriverDev/EmbeddedSoftwareEngineerInterview/blob/main/%E7%A7%8B%E6%8B%9B%E9%9D%A2%E7%BB%8F%E6%80%BB%E7%BB%93/%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E7%A7%8B%E6%8B%9B%E4%B9%8B%E8%B7%AF.md", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:43:03", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/WAqBL2Y.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:09", "platform": "web_personal", "url": "https://raw.githubusercontent.com/ZhongYi-LinuxDriverDev/EmbeddedSoftwareEngineerInterview/main/README.md", "status": 200, "latency_ms": 385}
+{"ts": "2026-08-03T00:43:09", "platform": "web_personal", "url": "https://github.com/ZhongYi-LinuxDriverDev/EmbeddedSoftwareEngineerInterview", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:43:09", "platform": "web_personal", "url": "https://www.cnblogs.com/yychuyu/p/19546930", "status": 200, "latency_ms": 326}
+{"ts": "2026-08-03T00:43:09", "platform": "web_personal", "url": "https://www.cnblogs.com/yychuyu/p/19546930", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:43:15", "platform": "web_personal", "url": "https://raw.githubusercontent.com/OSHEIG/EmbedRoadAndCSInEU/main/README.md", "status": 200, "latency_ms": 600}
+{"ts": "2026-08-03T00:43:15", "platform": "web_personal", "url": "https://github.com/OSHEIG/EmbedRoadAndCSInEU", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:43:17", "platform": "web_personal", "url": "https://stm32f407-tech-doc.readthedocs.io/en/latest/pre/1%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%85%A5%E9%97%A8/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%85%A5%E9%97%A8.html", "status": 200, "latency_ms": 433}
+{"ts": "2026-08-03T00:43:17", "platform": "web_personal", "url": "https://stm32f407-tech-doc.readthedocs.io/en/latest/pre/1%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%85%A5%E9%97%A8/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%85%A5%E9%97%A8.html", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:43:20", "platform": "web_personal", "url": "https://raw.githubusercontent.com/latelee/resume/main/README.md", "status": 404, "latency_ms": 286}
+{"ts": "2026-08-03T00:43:26", "platform": "web_personal", "url": "https://raw.githubusercontent.com/latelee/resume/master/README.md", "status": 200, "latency_ms": 708}
+{"ts": "2026-08-03T00:43:26", "platform": "web_personal", "url": "https://www.zhihu.com/question/617848340", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:26", "platform": "web_personal", "url": "https://blog.csdn.net/sinat_41883985/article/details/162688755", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:27", "platform": "web_personal", "url": "https://taccisum.github.io/resume/index_advanced.html", "status": 200, "latency_ms": 643}
+{"ts": "2026-08-03T00:43:29", "platform": "web_personal", "url": "https://www.gaoxiaojob.com/bk_jobs/pelc2dbw", "status": 200, "latency_ms": 410}
+{"ts": "2026-08-03T00:43:29", "platform": "web_personal", "url": "https://www.gaoxiaojob.com/bk_jobs/pelc2dbw", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:43:29", "platform": "web_personal", "url": "https://help.aliyun.com/zh/iot/use-cases/overview-35", "status": 200, "latency_ms": 392}
+{"ts": "2026-08-03T00:43:29", "platform": "web_personal", "url": "https://help.aliyun.com/zh/iot/use-cases/overview-35", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:43:30", "platform": "web_personal", "url": "https://gcjs.ougd.cn/info/1042/10374.htm", "status": 200, "latency_ms": 275}
+{"ts": "2026-08-03T00:43:30", "platform": "web_personal", "url": "https://gcjs.ougd.cn/info/1042/10374.htm", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:43:30", "platform": "web_personal", "url": "https://files.seeedstudio.com/cc_files/products/S62211290D/%E7%AE%A1%E5%BC%8F%E5%A4%9A%E5%B1%82%E5%9C%9F%E5%A3%A4%E5%A2%92%E6%83%85%E4%BC%A0%E6%84%9F%E5%99%A8%E7%A7%81%E6%9C%89MQTT%E6%B6%88%E6%81%AF%E6%9C%8D%E5%8A%A1-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97v2.0.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:43:32", "platform": "web_personal", "url": "https://zh.digi.com/blog/post/the-explosive-growth-of-iiot-mqtt-is-the-1-choice", "status": 200, "latency_ms": 1033}
+{"ts": "2026-08-03T00:43:32", "platform": "web_personal", "url": "https://zh.digi.com/blog/post/the-explosive-growth-of-iiot-mqtt-is-the-1-choice", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:43:34", "platform": "web_personal", "url": "https://mu.microchip.com/design-considerations-for-your-first-iot-project-iot1-sc", "status": 200, "latency_ms": 1402}
+{"ts": "2026-08-03T00:43:34", "platform": "web_personal", "url": "https://mu.microchip.com/design-considerations-for-your-first-iot-project-iot1-sc", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:43:35", "platform": "web_personal", "url": "https://sxbys.ncss.cn/student/m/jobs/6QXQ17VjBRi6bXZzrnkUDJ/detail.html", "status": 200, "latency_ms": 242}
+{"ts": "2026-08-03T00:43:35", "platform": "web_personal", "url": "https://sxbys.ncss.cn/student/m/jobs/6QXQ17VjBRi6bXZzrnkUDJ/detail.html", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:43:35", "platform": "web_personal", "url": "https://www.emqx.com/zh/blog/mqtt-platform-essential-features-and-use-cases", "status": 200, "latency_ms": 229}
+{"ts": "2026-08-03T00:43:35", "platform": "web_personal", "url": "https://www.emqx.com/zh/blog/mqtt-platform-essential-features-and-use-cases", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:43:35", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/e0f709a5cd6b620a.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:36", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/f1ad31473cc64cc4b1e6f6f6797df041?sourceSSR=post", "status": 200, "latency_ms": 1004}
+{"ts": "2026-08-03T00:43:36", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/f1ad31473cc64cc4b1e6f6f6797df041?sourceSSR=post", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:43:36", "platform": "web_personal", "url": "https://www.zhipin.com/zhaopin/be253f72de9143011Xd52dS-/", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:36", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/690653283", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:37", "platform": "web_personal", "url": "https://juejin.cn/post/7251780440268718117", "status": 200, "latency_ms": 668}
+{"ts": "2026-08-03T00:43:37", "platform": "web_personal", "url": "https://juejin.cn/post/7251780440268718117", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:43:37", "platform": "web_personal", "url": "https://www.csdn.net/thesis/iot", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:40", "platform": "web_personal", "url": "https://m.jianliben.com/article/detail/5579", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://www.opal-rt.com/zh/%E5%8D%9A%E5%AE%A2/%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84-6-%E7%A7%8D%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE", "status": 200, "latency_ms": 805}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://www.opal-rt.com/zh/%E5%8D%9A%E5%AE%A2/%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84-6-%E7%A7%8D%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://zh.digi.com/blog/post/how-do-iot-devices-communicate", "status": 200, "latency_ms": 459}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://zh.digi.com/blog/post/how-do-iot-devices-communicate", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://www.zhaopin.com/zhaopin/60176df4a76740098b9238983b0dd3b8", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/1904285295987367991", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://www.jianliben.com/article/detail/5580", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://cloud.tencent.com/developer/news/1313286", "status": 200, "latency_ms": 282}
+{"ts": "2026-08-03T00:43:42", "platform": "web_personal", "url": "https://cloud.tencent.com/developer/news/1313286", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:44:03", "platform": "web_personal", "url": "https://www.eet-china.com/mp/a463.html", "status": "error:ReadTimeout"}
+{"ts": "2026-08-03T00:44:03", "platform": "web_personal", "url": "https://www.eet-china.com/mp/a463.html", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:44:04", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/849398876749459456", "status": 200, "latency_ms": 891}
+{"ts": "2026-08-03T00:44:04", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/849398876749459456", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:44:09", "platform": "web_personal", "url": "https://www.xjtlu.edu.cn/zh/study/departments/school-of-internet-of-things", "status": 200, "latency_ms": 424}
+{"ts": "2026-08-03T00:44:09", "platform": "web_personal", "url": "https://www.xjtlu.edu.cn/zh/study/departments/school-of-internet-of-things", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:09", "platform": "web_personal", "url": "https://pdf.dfcfw.com/pdf/H3_AP202209281578735547_1.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:44:10", "platform": "web_personal", "url": "https://www.edu.cn/xxh/focus/zctp/202511/t20251117_2701089.shtml", "status": 200, "latency_ms": 261}
+{"ts": "2026-08-03T00:44:10", "platform": "web_personal", "url": "https://www.edu.cn/xxh/focus/zctp/202511/t20251117_2701089.shtml", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:11", "platform": "web_personal", "url": "https://zh.digi.com/blog/post/what-do-iot-devices-do", "status": 200, "latency_ms": 1227}
+{"ts": "2026-08-03T00:44:11", "platform": "web_personal", "url": "https://zh.digi.com/blog/post/what-do-iot-devices-do", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:11", "platform": "web_personal", "url": "https://smartdev.jdcloud.com", "status": 200, "latency_ms": 107}
+{"ts": "2026-08-03T00:44:11", "platform": "web_personal", "url": "https://smartdev.jdcloud.com", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:11", "platform": "web_personal", "url": "https://m.liepin.com/mould/H0010-N000149.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:11", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/4952afbf41e57af9.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:12", "platform": "web_personal", "url": "https://iot.jiangnan.edu.cn/info/1032/4763.htm", "status": 200, "latency_ms": 241}
+{"ts": "2026-08-03T00:44:12", "platform": "web_personal", "url": "https://iot.jiangnan.edu.cn/info/1032/4763.htm", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:44:12", "platform": "web_personal", "url": "https://m.jianliben.com/article/detail/23015", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:13", "platform": "web_personal", "url": "https://report.iresearch.cn/report/202408/4369.shtml", "status": 200, "latency_ms": 316}
+{"ts": "2026-08-03T00:44:13", "platform": "web_personal", "url": "https://report.iresearch.cn/report/202408/4369.shtml", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:13", "platform": "web_personal", "url": "https://www.zhihu.com/question/2851670059", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:15", "platform": "web_personal", "url": "https://www.jianliben.com/article/detail/13086", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:15", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/shuju", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:15", "platform": "web_personal", "url": "https://www.bilibili.com/read/cv7355513", "status": 200, "latency_ms": 378}
+{"ts": "2026-08-03T00:44:15", "platform": "web_personal", "url": "https://www.bilibili.com/read/cv7355513", "status": "rejected:正文过短(0<500)"}
+{"ts": "2026-08-03T00:44:15", "platform": "web_personal", "url": "https://cv.mianlingai.com/guide/data-analyst", "status": 200, "latency_ms": 293}
+{"ts": "2026-08-03T00:44:15", "platform": "web_personal", "url": "https://cv.mianlingai.com/guide/data-analyst", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:44:17", "platform": "web_personal", "url": "https://www.youtube.com/watch?v=YKSH8XmSPUk", "status": 200, "latency_ms": 1095}
+{"ts": "2026-08-03T00:44:17", "platform": "web_personal", "url": "https://www.youtube.com/watch?v=YKSH8XmSPUk", "status": "rejected:正文过短(232<500)"}
+{"ts": "2026-08-03T00:44:18", "platform": "web_personal", "url": "https://ofm.wa.gov/zh-CN/hr-policies/compensation-job-classes/job-classes-salaries/listing/specifications/5869", "status": 200, "latency_ms": 479}
+{"ts": "2026-08-03T00:44:18", "platform": "web_personal", "url": "https://ofm.wa.gov/zh-CN/hr-policies/compensation-job-classes/job-classes-salaries/listing/specifications/5869", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:44:20", "platform": "web_personal", "url": "https://learn.microsoft.com/zh-cn/sql/machine-learning/tutorials/python-taxi-classification-explore-data?view=sql-server-ver17", "status": 200, "latency_ms": 1531}
+{"ts": "2026-08-03T00:44:20", "platform": "web_personal", "url": "https://learn.microsoft.com/zh-cn/sql/machine-learning/tutorials/python-taxi-classification-explore-data?view=sql-server-ver17", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:21", "platform": "web_personal", "url": "https://tech.meituan.com/2018/08/02/mt-r-practice.html", "status": 200, "latency_ms": 129}
+{"ts": "2026-08-03T00:44:21", "platform": "web_personal", "url": "https://tech.meituan.com/2018/08/02/mt-r-practice.html", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:21", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/419376275", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:21", "platform": "web_personal", "url": "https://developer.aliyun.com/article/1319443", "status": 200, "latency_ms": 455}
+{"ts": "2026-08-03T00:44:21", "platform": "web_personal", "url": "https://developer.aliyun.com/article/1319443", "status": "rejected:正文过短(0<500)"}
+{"ts": "2026-08-03T00:44:21", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/457858684", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:21", "platform": "web_personal", "url": "https://cv.zhipin.com/job/p100511/j5/", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:23", "platform": "web_personal", "url": "https://www.reddit.com/r/SQL/comments/ew9lso/my_data_analyst_resume_sql_code_included?tl=zh-hans", "status": "robots_disallow"}
+{"ts": "2026-08-03T00:44:23", "platform": "web_personal", "url": "https://www.reddit.com/r/SQL/comments/ew9lso/my_data_analyst_resume_sql_code_included?tl=zh-hans", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:44:24", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/353158936775827456", "status": 200, "latency_ms": 294}
+{"ts": "2026-08-03T00:44:24", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/353158936775827456", "status": "rejected:正文过短(185<500)"}
+{"ts": "2026-08-03T00:44:25", "platform": "web_personal", "url": "https://m.36kr.com/p/1668013919789064", "status": 200, "latency_ms": 740}
+{"ts": "2026-08-03T00:44:25", "platform": "web_personal", "url": "https://m.36kr.com/p/1668013919789064", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:26", "platform": "web_personal", "url": "https://maobucv.com/articles/2025/07/366", "status": 200, "latency_ms": 308}
+{"ts": "2026-08-03T00:44:26", "platform": "web_personal", "url": "https://maobucv.com/articles/2025/07/366", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:26", "platform": "web_personal", "url": "https://www.sensorsdata.cn/blog/20220228-3", "status": 200, "latency_ms": 92}
+{"ts": "2026-08-03T00:44:26", "platform": "web_personal", "url": "https://www.sensorsdata.cn/blog/20220228-3", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:26", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/648303052", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:26", "platform": "web_personal", "url": "https://blog.csdn.net/luoluo96321/article/details/113667831", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:44:26", "platform": "web_personal", "url": "https://www.fanruan.com/blog/article/369820/", "status": 200, "latency_ms": 160}
+{"ts": "2026-08-03T00:44:26", "platform": "web_personal", "url": "https://www.fanruan.com/blog/article/369820/", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:30", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/463674901103235072", "status": 200, "latency_ms": 358}
+{"ts": "2026-08-03T00:44:30", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/463674901103235072", "status": "rejected:正文过短(181<500)"}
+{"ts": "2026-08-03T00:44:36", "platform": "web_personal", "url": "https://raw.githubusercontent.com/ShawnXiha/RESUME/master/%E4%B8%AD%E6%96%87%E7%AE%80%E5%8E%860.md", "status": 200, "latency_ms": 417}
+{"ts": "2026-08-03T00:44:36", "platform": "web_personal", "url": "https://github.com/ShawnXiha/RESUME/blob/master/%E4%B8%AD%E6%96%87%E7%AE%80%E5%8E%860.md", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:44:37", "platform": "web_personal", "url": "https://worktile.com/kb/ask/519558.html", "status": 200, "latency_ms": 260}
+{"ts": "2026-08-03T00:44:37", "platform": "web_personal", "url": "https://worktile.com/kb/ask/519558.html", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:44:42", "platform": "web_personal", "url": "https://raw.githubusercontent.com/nzbin/resume-boilerplate/main/README.md", "status": 404, "latency_ms": 571}
+{"ts": "2026-08-03T00:44:48", "platform": "web_personal", "url": "https://raw.githubusercontent.com/nzbin/resume-boilerplate/master/README.md", "status": 200, "latency_ms": 427}
+{"ts": "2026-08-03T00:44:48", "platform": "web_personal", "url": "https://github.com/nzbin/resume-boilerplate", "status": "rejected:技术词过少(tech=3<5)"}
+{"ts": "2026-08-03T00:44:49", "platform": "web_personal", "url": "https://gist.github.com/f839b2ad3eba798d7c2808d891edb4b7", "status": 200, "latency_ms": 988}
+{"ts": "2026-08-03T00:44:49", "platform": "web_personal", "url": "https://gist.github.com/f839b2ad3eba798d7c2808d891edb4b7", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:50", "platform": "web_personal", "url": "https://github.com/FrontEndGitHub/FrontEndGitHub/issues/15", "status": 200, "latency_ms": 1268}
+{"ts": "2026-08-03T00:44:50", "platform": "web_personal", "url": "https://github.com/FrontEndGitHub/FrontEndGitHub/issues/15", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:44:56", "platform": "web_personal", "url": "https://gist.github.com/6a3a3814f128c13665ae6e6084483d44", "status": 200, "latency_ms": 1198}
+{"ts": "2026-08-03T00:44:56", "platform": "web_personal", "url": "https://gist.github.com/6a3a3814f128c13665ae6e6084483d44", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:44:57", "platform": "web_personal", "url": "https://stevenjokess.github.io/2bPM/chapter_interview/CV.html", "status": 200, "latency_ms": 424}
+{"ts": "2026-08-03T00:44:57", "platform": "web_personal", "url": "https://stevenjokess.github.io/2bPM/chapter_interview/CV.html", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:44:57", "platform": "web_personal", "url": "https://www.reddit.com/r/dataanalysis/comments/16x3xqa/megathread_how_to_get_into_data_analysis/?tl=zh-hans", "status": "robots_disallow"}
+{"ts": "2026-08-03T00:44:57", "platform": "web_personal", "url": "https://www.reddit.com/r/dataanalysis/comments/16x3xqa/megathread_how_to_get_into_data_analysis/?tl=zh-hans", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:44:58", "platform": "web_personal", "url": "https://madlogos.github.io/vueresume/", "status": 200, "latency_ms": 388}
+{"ts": "2026-08-03T00:44:58", "platform": "web_personal", "url": "https://madlogos.github.io/vueresume/", "status": "rejected:正文过短(10<500)"}
+{"ts": "2026-08-03T00:44:59", "platform": "web_personal", "url": "https://huangjj27.github.io/resume.html", "status": 200, "latency_ms": 385}
+{"ts": "2026-08-03T00:44:59", "platform": "web_personal", "url": "https://huangjj27.github.io/resume.html", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:44:59", "platform": "web_personal", "url": "https://raw.githubusercontent.com/leforyou/resume.github.io/main/README.md", "status": 404, "latency_ms": 538}
+{"ts": "2026-08-03T00:45:04", "platform": "web_personal", "url": "https://raw.githubusercontent.com/leforyou/resume.github.io/master/README.md", "status": 200, "latency_ms": 370}
+{"ts": "2026-08-03T00:45:04", "platform": "web_personal", "url": "https://github.com/leforyou/resume.github.io", "status": "rejected:正文过短(320<500)"}
+{"ts": "2026-08-03T00:45:04", "platform": "web_personal", "url": "https://www.reddit.com/r/dataanalysis/comments/17mg6ep/megathread_how_to_get_into_data_analysis/?tl=zh-hans", "status": "robots_disallow"}
+{"ts": "2026-08-03T00:45:04", "platform": "web_personal", "url": "https://www.reddit.com/r/dataanalysis/comments/17mg6ep/megathread_how_to_get_into_data_analysis/?tl=zh-hans", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:45:06", "platform": "web_personal", "url": "https://www.100fenjianli.com/my_template/381", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:06", "platform": "web_personal", "url": "http://xiihoo.com/static/file/DIY_A_SLAM_Navigation_Robot/%E7%AC%AC2%E7%AB%A0%EF%BC%9AROS%E5%85%A5%E9%97%A8.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:45:10", "platform": "web_personal", "url": "https://raw.githubusercontent.com/xiihoo/DIY_A_SLAM_Navigation_Robot/main/README.md", "status": 200, "latency_ms": 595}
+{"ts": "2026-08-03T00:45:10", "platform": "web_personal", "url": "https://github.com/xiihoo/DIY_A_SLAM_Navigation_Robot", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:45:10", "platform": "web_personal", "url": "https://www.100fenjianli.com/my_template/383", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:11", "platform": "web_personal", "url": "https://www.wjx.cn/vm/ruL99MG.aspx", "status": 200, "latency_ms": 299}
+{"ts": "2026-08-03T00:45:11", "platform": "web_personal", "url": "https://www.wjx.cn/vm/ruL99MG.aspx", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:45:11", "platform": "web_personal", "url": "https://miatbiolab.csr.unibo.it/wp-content/uploads/2021/11/ROS_scucchia.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:45:11", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/499864960", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:11", "platform": "web_personal", "url": "https://www.wondercv.com/sample/campus_galileo-ti_ce7e2ef9a8", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:13", "platform": "web_personal", "url": "https://www.ncss.cn/student/m/jobs/A6tv1vjF9PYPKt1Qjs1Xfw/detail.html", "status": 200, "latency_ms": 434}
+{"ts": "2026-08-03T00:45:13", "platform": "web_personal", "url": "https://www.ncss.cn/student/m/jobs/A6tv1vjF9PYPKt1Qjs1Xfw/detail.html", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:45:13", "platform": "web_personal", "url": "https://www.pandaresume.cn/jianli/819.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:13", "platform": "web_personal", "url": "https://m.liepin.com/mould/zdjsslamdwsfgcs643c2g3.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:19", "platform": "web_personal", "url": "https://www.zhilepin.com/home/resume/9611", "status": 200, "latency_ms": 4872}
+{"ts": "2026-08-03T00:45:19", "platform": "web_personal", "url": "https://www.zhilepin.com/home/resume/9611", "status": "rejected:技术词过少(tech=4<5)"}
+{"ts": "2026-08-03T00:45:19", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/429978998", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:19", "platform": "web_personal", "url": "https://aiot.csdn.net/6a2a7ccd662f9a54cb7d2897.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:21", "platform": "web_personal", "url": "https://www.liepin.com/mould/jqrydkzzrgcs0f1ej.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:22", "platform": "web_personal", "url": "http://iai.ustc.edu.cn/xmzp/6421.jhtml", "status": 200, "latency_ms": 989}
+{"ts": "2026-08-03T00:45:22", "platform": "web_personal", "url": "http://iai.ustc.edu.cn/xmzp/6421.jhtml", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:45:22", "platform": "web_personal", "url": "http://kzyjc.alljournals.cn/html/2022/2/20220203.htm", "status": 200, "latency_ms": 143}
+{"ts": "2026-08-03T00:45:22", "platform": "web_personal", "url": "http://kzyjc.alljournals.cn/html/2022/2/20220203.htm", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:45:22", "platform": "web_personal", "url": "https://www.wondercv.com/jobs/jM0c68s.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:23", "platform": "web_personal", "url": "https://cn.indeed.com/q-%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B7%A5%E7%A8%8B%E5%B8%88-%E8%81%8C%E4%BD%8D.html", "status": 403, "latency_ms": 408}
+{"ts": "2026-08-03T00:45:23", "platform": "web_personal", "url": "https://cn.indeed.com/q-%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B7%A5%E7%A8%8B%E5%B8%88-%E8%81%8C%E4%BD%8D.html", "status": "rejected:取不到页面"}
+{"ts": "2026-08-03T00:45:24", "platform": "web_personal", "url": "https://www.unitree.com/mobile/position/1526050171207548928", "status": 200, "latency_ms": 510}
+{"ts": "2026-08-03T00:45:24", "platform": "web_personal", "url": "https://www.unitree.com/mobile/position/1526050171207548928", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:45:24", "platform": "web_personal", "url": "https://x-humanoid.com/news-view-215.html", "status": 200, "latency_ms": 686}
+{"ts": "2026-08-03T00:45:24", "platform": "web_personal", "url": "https://x-humanoid.com/news-view-215.html", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:45:25", "platform": "web_personal", "url": "https://campushr.hikvision.com/JobDetails.html?id=4bfca9387f034878a5c500dde81366da&type=0&batchId=f6bb29aecd1046d8a431dcb7810664b9", "status": 200, "latency_ms": 92}
+{"ts": "2026-08-03T00:45:25", "platform": "web_personal", "url": "https://campushr.hikvision.com/JobDetails.html?id=4bfca9387f034878a5c500dde81366da&type=0&batchId=f6bb29aecd1046d8a431dcb7810664b9", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:45:25", "platform": "web_personal", "url": "https://www.jianliben.com/article/detail/16376", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:25", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/2356ae93d772b3d4.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:25", "platform": "web_personal", "url": "https://www.pandaresume.cn/jianli/836.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:28", "platform": "web_personal", "url": "https://bebee.com/cn/jobs/shenzhen-guangdong--t7xk-774871586", "status": 200, "latency_ms": 1843}
+{"ts": "2026-08-03T00:45:28", "platform": "web_personal", "url": "https://bebee.com/cn/jobs/shenzhen-guangdong--t7xk-774871586", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:45:28", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/571040095", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:45:29", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/beaf94fe33cd4ca88c9c447e4eeb0a2d?urlSource=home-api", "status": 200, "latency_ms": 1084}
+{"ts": "2026-08-03T00:45:29", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/beaf94fe33cd4ca88c9c447e4eeb0a2d?urlSource=home-api", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:45:33", "platform": "web_personal", "url": "https://jingwenwang95.github.io/resume/CV_CN.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:45:35", "platform": "web_personal", "url": "https://liuyu-code.github.io/about", "status": 200, "latency_ms": 838}
+{"ts": "2026-08-03T00:45:35", "platform": "web_personal", "url": "https://liuyu-code.github.io/about", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:45:35", "platform": "web_personal", "url": "https://raw.githubusercontent.com/xiihoo/Books_Robot_SLAM_Navigation/main/README.md", "status": 200, "latency_ms": 496}
+{"ts": "2026-08-03T00:45:35", "platform": "web_personal", "url": "https://github.com/xiihoo/Books_Robot_SLAM_Navigation", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:45:37", "platform": "web_personal", "url": "https://ppbangkgt.github.io/resume", "status": 200, "latency_ms": 782}
+{"ts": "2026-08-03T00:45:40", "platform": "web_personal", "url": "https://raw.githubusercontent.com/topics/slam/main/README.md", "status": 404, "latency_ms": 239}
+{"ts": "2026-08-03T00:45:46", "platform": "web_personal", "url": "https://raw.githubusercontent.com/topics/slam/master/README.md", "status": 404, "latency_ms": 340}
+{"ts": "2026-08-03T00:45:47", "platform": "web_personal", "url": "https://github.com/topics/slam", "status": 200, "latency_ms": 1089}
+{"ts": "2026-08-03T00:45:47", "platform": "web_personal", "url": "https://github.com/topics/slam", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:45:53", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Vincentqyw/Recent-Stars-2025/main/README.md", "status": 404, "latency_ms": 390}
+{"ts": "2026-08-03T00:45:58", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Vincentqyw/Recent-Stars-2025/master/README.md", "status": 200, "latency_ms": 301}
+{"ts": "2026-08-03T00:45:58", "platform": "web_personal", "url": "https://github.com/Vincentqyw/Recent-Stars-2025", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:46:00", "platform": "web_personal", "url": "https://yongcaiwang.github.io", "status": 200, "latency_ms": 559}
+{"ts": "2026-08-03T00:46:00", "platform": "web_personal", "url": "https://yongcaiwang.github.io", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:46:01", "platform": "web_personal", "url": "https://www.youtube.com/watch?v=P5UswHkdF1A", "status": 200, "latency_ms": 1203}
+{"ts": "2026-08-03T00:46:01", "platform": "web_personal", "url": "https://www.youtube.com/watch?v=P5UswHkdF1A", "status": "rejected:正文过短(232<500)"}
+{"ts": "2026-08-03T00:46:04", "platform": "web_personal", "url": "https://raw.githubusercontent.com/taobataoma/resume/main/README.md", "status": 404, "latency_ms": 554}
+{"ts": "2026-08-03T00:46:10", "platform": "web_personal", "url": "https://raw.githubusercontent.com/taobataoma/resume/master/README.md", "status": 404, "latency_ms": 526}
+{"ts": "2026-08-03T00:46:11", "platform": "web_personal", "url": "https://github.com/taobataoma/resume", "status": 200, "latency_ms": 1162}
+{"ts": "2026-08-03T00:46:11", "platform": "web_personal", "url": "https://github.com/taobataoma/resume", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:46:12", "platform": "web_personal", "url": "https://lsxiang.github.io/Journey2SLAM/aboutSLAM/", "status": 200, "latency_ms": 466}
+{"ts": "2026-08-03T00:46:12", "platform": "web_personal", "url": "https://lsxiang.github.io/Journey2SLAM/aboutSLAM/", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:46:16", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Taeyoung96/SLAM-Resources-for-Beginner/main/README.md", "status": 404, "latency_ms": 491}
+{"ts": "2026-08-03T00:46:22", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Taeyoung96/SLAM-Resources-for-Beginner/master/README.md", "status": 200, "latency_ms": 433}
+{"ts": "2026-08-03T00:46:22", "platform": "web_personal", "url": "https://github.com/Taeyoung96/SLAM-Resources-for-Beginner", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:46:24", "platform": "web_personal", "url": "https://www.mianlingai.com/blog/autonomous-driving-engineer-interview-ai-guide", "status": 200, "latency_ms": 569}
+{"ts": "2026-08-03T00:46:24", "platform": "web_personal", "url": "https://www.mianlingai.com/blog/autonomous-driving-engineer-interview-ai-guide", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:46:26", "platform": "web_personal", "url": "https://momenta.ai/beisen.php?view=jobinfo&job_id=620312059&location=%E5%8C%97%E4%BA%AC%E5%B8%82%2C%E8%8B%8F%E5%B7%9E%E5%B8%82&pname=Lidar%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88+-MSD%E7%A4%BE%E6%8B%9B%28J11109%29&HeadCount=%E8%8B%A5%E5%B9%B2&KindDescription=%E5%85%A8%E8%81%8C&CategoryDescription=%E7%A4%BE%E4%BC%9A%E6%8B%9B%E8%81%98&Salary=%E9%9D%A2%E8%AE%AE", "status": 200, "latency_ms": 1283}
+{"ts": "2026-08-03T00:46:26", "platform": "web_personal", "url": "https://momenta.ai/beisen.php?view=jobinfo&job_id=620312059&location=%E5%8C%97%E4%BA%AC%E5%B8%82%2C%E8%8B%8F%E5%B7%9E%E5%B8%82&pname=Lidar%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88+-MSD%E7%A4%BE%E6%8B%9B%28J11109%29&HeadCount=%E8%8B%A5%E5%B9%B2&KindDescription=%E5%85%A8%E8%81%8C&CategoryDescription=%E7%A4%BE%E4%BC%9A%E6%8B%9B%E8%81%98&Salary=%E9%9D%A2%E8%AE%AE", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.cjig.cn/zh/article/doi/10.11834/jig.200276", "status": 200, "latency_ms": 356}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.cjig.cn/zh/article/doi/10.11834/jig.200276", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/03d839be53ae8594.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://journal.bit.edu.cn/zr/cn/article/pdf/preview/10.15918/j.tbit1001-0645.2022.095.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.liepin.com/mould/zdjsgzsffzrg5nzz74m.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.qmjianli.com/content/guide/4789", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/674917858", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://upcv.tech/jianlifanwen/3546.html", "status": 200, "latency_ms": 433}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://upcv.tech/jianlifanwen/3546.html", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.pandaresume.cn/jianli/858.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.liepin.com/mould/zdjskzsfb44j.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.jlqnw.com/muban/38263.html", "status": 200, "latency_ms": 231}
+{"ts": "2026-08-03T00:46:27", "platform": "web_personal", "url": "https://www.jlqnw.com/muban/38263.html", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:46:29", "platform": "web_personal", "url": "https://drwuz.com/csc4050/files/pointspread.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:46:29", "platform": "web_personal", "url": "https://www.ai-tools.cn/resume/examples?keyword=%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6", "status": 200, "latency_ms": 464}
+{"ts": "2026-08-03T00:46:29", "platform": "web_personal", "url": "https://www.ai-tools.cn/resume/examples?keyword=%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:46:31", "platform": "web_personal", "url": "https://valser.org/thread-1486-1-1.html", "status": 200, "latency_ms": 1123}
+{"ts": "2026-08-03T00:46:31", "platform": "web_personal", "url": "https://valser.org/thread-1486-1-1.html", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:46:31", "platform": "web_personal", "url": "https://raw.githubusercontent.com/libing64/jobs_in_deeproute_ai/main/README.md", "status": 404, "latency_ms": 449}
+{"ts": "2026-08-03T00:46:38", "platform": "web_personal", "url": "https://raw.githubusercontent.com/libing64/jobs_in_deeproute_ai/master/README.md", "status": 200, "latency_ms": 465}
+{"ts": "2026-08-03T00:46:38", "platform": "web_personal", "url": "https://github.com/libing64/jobs_in_deeproute_ai", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:46:38", "platform": "web_personal", "url": "https://people.ucas.ac.cn/~csxfzhang", "status": 200, "latency_ms": 216}
+{"ts": "2026-08-03T00:46:38", "platform": "web_personal", "url": "https://people.ucas.ac.cn/~csxfzhang", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:46:39", "platform": "web_personal", "url": "https://www2.ie.tsinghua.edu.cn/kbwang", "status": 200, "latency_ms": 191}
+{"ts": "2026-08-03T00:46:39", "platform": "web_personal", "url": "https://www2.ie.tsinghua.edu.cn/kbwang", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:46:39", "platform": "web_personal", "url": "https://valser.org/thread-1531-1-1.html", "status": 200, "latency_ms": 443}
+{"ts": "2026-08-03T00:46:39", "platform": "web_personal", "url": "https://valser.org/thread-1531-1-1.html", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:46:40", "platform": "web_personal", "url": "https://gr.xjtu.edu.cn/jiansun?p_p_id=com_liferay_login_web_portlet_LoginPortlet&p_p_lifecycle=0&p_p_state=normal&p_p_state_rcv=1", "status": 200, "latency_ms": 292}
+{"ts": "2026-08-03T00:46:40", "platform": "web_personal", "url": "https://gr.xjtu.edu.cn/jiansun?p_p_id=com_liferay_login_web_portlet_LoginPortlet&p_p_lifecycle=0&p_p_state=normal&p_p_state_rcv=1", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:46:40", "platform": "web_personal", "url": "https://www.liepin.com/mould/znjsrjcsgcsb88i.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:42", "platform": "web_personal", "url": "https://www.jdjianli.com/resume/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6-%7C-%E6%A0%A1%E6%8B%9B-1463", "status": 200, "latency_ms": 2051}
+{"ts": "2026-08-03T00:46:42", "platform": "web_personal", "url": "https://www.jdjianli.com/resume/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6-%7C-%E6%A0%A1%E6%8B%9B-1463", "status": "rejected:正文过短(495<500)"}
+{"ts": "2026-08-03T00:46:43", "platform": "web_personal", "url": "https://careers.tencent.com/jobdesc.html?postId=1610171352088584192", "status": 200, "latency_ms": 266}
+{"ts": "2026-08-03T00:46:43", "platform": "web_personal", "url": "https://careers.tencent.com/jobdesc.html?postId=1610171352088584192", "status": "rejected:正文过短(11<500)"}
+{"ts": "2026-08-03T00:46:43", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/642667880", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:43", "platform": "web_personal", "url": "https://www.pandaresume.cn/jianli/1378.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:46:43", "platform": "web_personal", "url": "https://rcjlzx.hrss.zhumadian.gov.cn/shownews?id=64857&newtit=%E9%A9%BB%E9%A9%AC%E5%BA%97%E5%B8%82%E6%96%B0%E9%B2%B8%E6%95%B0%E6%8D%AE%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%8B%9B%E8%81%98%E7%AE%80%E7%AB%A0", "status": 200, "latency_ms": 191}
+{"ts": "2026-08-03T00:46:43", "platform": "web_personal", "url": "https://rcjlzx.hrss.zhumadian.gov.cn/shownews?id=64857&newtit=%E9%A9%BB%E9%A9%AC%E5%BA%97%E5%B8%82%E6%96%B0%E9%B2%B8%E6%95%B0%E6%8D%AE%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%8B%9B%E8%81%98%E7%AE%80%E7%AB%A0", "status": "rejected:正文过短(34<500)"}
+{"ts": "2026-08-03T00:46:50", "platform": "web_personal", "url": "https://raw.githubusercontent.com/autodriving-heart/Awesome-Autonomous-Driving/main/README.md", "status": 200, "latency_ms": 587}
+{"ts": "2026-08-03T00:46:50", "platform": "web_personal", "url": "https://github.com/autodriving-heart/Awesome-Autonomous-Driving", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:46:56", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Charmve/autopilot-perception/main/README.md", "status": 200, "latency_ms": 510}
+{"ts": "2026-08-03T00:46:56", "platform": "web_personal", "url": "https://github.com/Charmve/autopilot-perception", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:47:02", "platform": "web_personal", "url": "https://raw.githubusercontent.com/zhuzhipeng-123/resume-auto-fill/main/README.md", "status": 404, "latency_ms": 402}
+{"ts": "2026-08-03T00:47:07", "platform": "web_personal", "url": "https://raw.githubusercontent.com/zhuzhipeng-123/resume-auto-fill/master/README.md", "status": 200, "latency_ms": 290}
+{"ts": "2026-08-03T00:47:07", "platform": "web_personal", "url": "https://github.com/zhuzhipeng-123/resume-auto-fill", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:47:13", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Charmve/autopilot-perception/main/docs/04-%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B62D%E5%92%8C3D%E8%A7%86%E8%A7%89%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0.md", "status": 200, "latency_ms": 412}
+{"ts": "2026-08-03T00:47:13", "platform": "web_personal", "url": "https://github.com/Charmve/autopilot-perception/blob/main/docs/04-%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B62D%E5%92%8C3D%E8%A7%86%E8%A7%89%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0.md", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:47:14", "platform": "web_personal", "url": "https://gist.github.com/c457041d07f5e48e37d0", "status": 200, "latency_ms": 971}
+{"ts": "2026-08-03T00:47:14", "platform": "web_personal", "url": "https://gist.github.com/c457041d07f5e48e37d0", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:47:18", "platform": "web_personal", "url": "https://raw.githubusercontent.com/autodriving-heart/Paper-Recommend-Autodriving-Heart/main/README.md", "status": 200, "latency_ms": 330}
+{"ts": "2026-08-03T00:47:18", "platform": "web_personal", "url": "https://github.com/autodriving-heart/Paper-Recommend-Autodriving-Heart", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:47:19", "platform": "web_personal", "url": "https://charmve.github.io/autopilot-perception/", "status": 200, "latency_ms": 385}
+{"ts": "2026-08-03T00:47:19", "platform": "web_personal", "url": "https://charmve.github.io/autopilot-perception/", "status": "rejected:正文过短(77<500)"}
+{"ts": "2026-08-03T00:47:20", "platform": "web_personal", "url": "https://github.com/datawhalechina/tiny-universe/issues/33", "status": 200, "latency_ms": 896}
+{"ts": "2026-08-03T00:47:20", "platform": "web_personal", "url": "https://github.com/datawhalechina/tiny-universe/issues/33", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:47:23", "platform": "web_personal", "url": "https://raw.githubusercontent.com/Kemo-Huang/kemo-cv/master/resume/resume-zh.tex", "status": 200, "latency_ms": 304}
+{"ts": "2026-08-03T00:47:23", "platform": "web_personal", "url": "https://github.com/Kemo-Huang/kemo-cv/blob/master/resume/resume-zh.tex", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:47:29", "platform": "web_personal", "url": "https://m.jianliben.com/article/fanwen/job_108", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:47:29", "platform": "web_personal", "url": "https://www.wondercv.com/blog/6G8rdWcW.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:47:29", "platform": "web_personal", "url": "https://maobucv.com/articles/2025/07/359/", "status": 200, "latency_ms": 384}
+{"ts": "2026-08-03T00:47:29", "platform": "web_personal", "url": "https://maobucv.com/articles/2025/07/359/", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:47:38", "platform": "web_personal", "url": "https://aws.amazon.com/cn/blogs/china/optimization-practice-of-the-ranking-model-of-the-recommendation-system-series", "status": 200, "latency_ms": 749}
+{"ts": "2026-08-03T00:47:38", "platform": "web_personal", "url": "https://aws.amazon.com/cn/blogs/china/optimization-practice-of-the-ranking-model-of-the-recommendation-system-series", "status": "rejected:简历要素不足(pos=0<4)"}
+{"ts": "2026-08-03T00:47:40", "platform": "web_personal", "url": "https://richardwang.me/docs/ai/applications/building-llm-resume-recommender", "status": 200, "latency_ms": 1155}
+{"ts": "2026-08-03T00:47:40", "platform": "web_personal", "url": "https://richardwang.me/docs/ai/applications/building-llm-resume-recommender", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:47:40", "platform": "web_personal", "url": "https://image0.lietou-static.com/img/66c598135156161ecbd98d0806u.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:47:40", "platform": "web_personal", "url": "https://www.liepin.com/mould/tjxtgjgcs.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:47:41", "platform": "web_personal", "url": "https://patents.google.com/patent/CN113191728B/zh", "status": 200, "latency_ms": 772}
+{"ts": "2026-08-03T00:47:41", "platform": "web_personal", "url": "https://patents.google.com/patent/CN113191728B/zh", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:47:41", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/zb9W_1c.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:47:41", "platform": "web_personal", "url": "https://www.100fenjianli.com/my_template/420", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:47:41", "platform": "web_personal", "url": "https://www.100chui.com/resume/detail-729.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:47:41", "platform": "web_personal", "url": "https://www.liepin.com/mould/sfgsxsmhz4rv9.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:47:41", "platform": "web_personal", "url": "https://zhuanlan.zhihu.com/p/389797257", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:47:49", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/599161685500358656", "status": 200, "latency_ms": 1357}
+{"ts": "2026-08-03T00:47:49", "platform": "web_personal", "url": "https://www.nowcoder.com/discuss/599161685500358656", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:47:49", "platform": "web_personal", "url": "https://www.cnblogs.com/JavaArchitect/p/14247947.html", "status": 200, "latency_ms": 447}
+{"ts": "2026-08-03T00:47:49", "platform": "web_personal", "url": "https://www.cnblogs.com/JavaArchitect/p/14247947.html", "status": "rejected:简历要素不足(pos=2<4)"}
+{"ts": "2026-08-03T00:47:50", "platform": "web_personal", "url": "https://raw.githubusercontent.com/zhuzhiqiang18/resume/main/README.md", "status": 404, "latency_ms": 406}
+{"ts": "2026-08-03T00:47:56", "platform": "web_personal", "url": "https://raw.githubusercontent.com/zhuzhiqiang18/resume/master/README.md", "status": 200, "latency_ms": 418}
+{"ts": "2026-08-03T00:47:56", "platform": "web_personal", "url": "https://github.com/zhuzhiqiang18/resume", "status": "rejected:简历要素不足(pos=3<4)"}
+{"ts": "2026-08-03T00:47:56", "platform": "web_personal", "url": "http://jacsonlee.github.io/Blog/p/jason.pdf", "status": "rejected:非HTML"}
+{"ts": "2026-08-03T00:48:02", "platform": "web_personal", "url": "https://www.liepin.com/mould/javahdkfzc6wo3.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:48:03", "platform": "web_personal", "url": "https://m.nowcoder.com/feed/main/detail/fa42a596dab04d89b081b6b2fb383875", "status": 200, "latency_ms": 1304}
+{"ts": "2026-08-03T00:48:03", "platform": "web_personal", "url": "https://m.nowcoder.com/feed/main/detail/fa42a596dab04d89b081b6b2fb383875", "status": "rejected:缺少个人经历时间段(spans=0<2)"}
+{"ts": "2026-08-03T00:48:05", "platform": "web_personal", "url": "https://cv.devtool.tech/templates/java-intern", "status": 200, "latency_ms": 818}
+{"ts": "2026-08-03T00:48:05", "platform": "web_personal", "url": "https://cv.devtool.tech/templates/java-intern", "status": "rejected:标题/URL 显示是模板或教程页，非本人简历"}
+{"ts": "2026-08-03T00:48:05", "platform": "web_personal", "url": "https://www.wondercv.com/jianlimoban/TTd55Zo.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:48:07", "platform": "web_personal", "url": "https://www.cnkirito.moe/talk-about-middleware-develop", "status": 200, "latency_ms": 911}
+{"ts": "2026-08-03T00:48:07", "platform": "web_personal", "url": "https://www.cnkirito.moe/talk-about-middleware-develop", "status": "rejected:简历要素不足(pos=1<4)"}
+{"ts": "2026-08-03T00:48:07", "platform": "web_personal", "url": "https://www.liepin.com/mould/javazhongjianjian.shtml", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:48:07", "platform": "web_personal", "url": "https://100chui.com/article/477951.html", "status": "rejected:blocked_host"}
+{"ts": "2026-08-03T00:48:07", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/fa42a596dab04d89b081b6b2fb383875", "status": 200, "latency_ms": 339}
+{"ts": "2026-08-03T00:48:07", "platform": "web_personal", "url": "https://www.nowcoder.com/feed/main/detail/fa42a596dab04d89b081b6b2fb383875", "status": "rejected:缺少个人经历时间段(spans=0<2)"}

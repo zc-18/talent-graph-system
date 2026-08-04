@@ -4,7 +4,10 @@
 覆盖新一代信息技术：人工智能、大数据、智能系统、物联网、云计算/工程支撑。
 """
 from __future__ import annotations
+import json
+import os
 import re
+from pathlib import Path
 
 # 技术栈分类
 CATEGORIES = ["人工智能", "大数据", "智能系统", "物联网", "云计算与工程", "数据工程"]
@@ -101,6 +104,71 @@ TOOL_SKILLS = {"PyTorch", "TensorFlow", "scikit-learn", "HuggingFace", "LangChai
                "Kafka", "Hadoop", "Hive", "HBase", "MySQL", "Redis", "MongoDB", "Spring",
                "ClickHouse", "Doris", "Presto", "ROS"}
 SOFT_SKILLS = {"沟通能力", "团队协作", "项目管理", "学习能力", "问题解决能力"}
+
+
+# ---------- 从简历语料学到的技能表述（意见⑧：简历"读取学习"的落点）----------
+# 由 data/learn_aliases.py 产出 data/learned_aliases.json，分两级并入：
+#   Tier A `aliases`      → 并入 SYNONYMS，影响**全局**归一化（JD 解析也走这条路），护栏最严；
+#   Tier B `node_aliases` → 只放进 NODE_ALIASES，映射到图谱**已有技能节点**，
+#                           **不进 SYNONYMS**，所以 JD 主链路零影响，只在人才侧解析时用。
+# 刻意不改硬编码词典源码：学习结果单独成文件，可复现、可回滚、可一键关掉
+# （置 TALENT_DISABLE_LEARNED_ALIASES=1，评测"学之前 vs 学之后"用的就是它）。
+LEARNED_ALIASES: dict[str, str] = {}
+NODE_ALIASES: dict[str, str] = {}
+
+
+def _read_learned() -> dict:
+    if os.getenv("TALENT_DISABLE_LEARNED_ALIASES") == "1":
+        return {}
+    p = Path(__file__).resolve().parents[2] / "data" / "learned_aliases.json"
+    try:
+        return json.loads(p.read_text("utf-8"))
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def _load_learned_aliases(raw: dict) -> dict[str, str]:
+    """Tier A：并入前再把三道护栏防御性地过一遍：
+       ① 映射目标必须是已有规范技能  ② 不覆盖硬编码 SYNONYMS  ③ 键非空。
+    学习脚本已经把过一次关，这里是第二道 —— 词典文件是会被手改的。
+    """
+    out: dict[str, str] = {}
+    for alias, canonical in (raw.get("aliases") or {}).items():
+        key = (alias or "").strip().lower()
+        if not key or key in SYNONYMS:
+            continue
+        if canonical not in SKILL_CATEGORY and canonical not in SOFT_SKILLS:
+            continue
+        out[key] = canonical
+    return out
+
+
+def _load_node_aliases(raw: dict) -> dict[str, str]:
+    """Tier B：映射到图谱既有节点，不做规范技能校验（节点集在库里，此处无法校验），
+    但同样不允许覆盖硬编码词典。"""
+    out: dict[str, str] = {}
+    for alias, node in (raw.get("node_aliases") or {}).items():
+        key = (alias or "").strip().lower()
+        if key and node and key not in SYNONYMS:
+            out[key] = node
+    return out
+
+
+_RAW_LEARNED = _read_learned()
+LEARNED_ALIASES = _load_learned_aliases(_RAW_LEARNED)
+NODE_ALIASES = _load_node_aliases(_RAW_LEARNED)
+SYNONYMS.update(LEARNED_ALIASES)
+
+
+def resolve_skill(name: str) -> str:
+    """人才侧技能解析：先走标准归一化，再套 Tier B 的图谱节点别名。
+
+    与 normalize_skill 的区别：normalize_skill 是 JD/图谱构建共用的主链路，
+    只认词典里的规范技能；resolve_skill 额外把"简历里的写法"对齐到图谱已有节点
+    （Numpy→NumPy、Core Java→Java），仅供人才侧使用，不影响 JD 解析结果。
+    """
+    nm = normalize_skill(name)
+    return NODE_ALIASES.get(nm.lower(), nm)
 
 
 def normalize_skill(name: str) -> str:

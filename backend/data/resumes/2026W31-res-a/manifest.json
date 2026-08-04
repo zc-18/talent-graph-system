@@ -1,0 +1,35 @@
+{
+  "batch": "2026W31-res-a",
+  "source_type": "dataset",
+  "adapters": {
+    "dataset_brackozi_resume": {
+      "source_name": "brackozi/Resume",
+      "source_url": "https://huggingface.co/datasets/brackozi/Resume",
+      "license": "MIT",
+      "tier": "dataset",
+      "authority": 0.7,
+      "method": "api",
+      "rate_limit_s": 0.5,
+      "robots_ok": true,
+      "collected": 962,
+      "kept": 12,
+      "filters": {
+        "categories": [
+          "Data Science",
+          "Python Developer",
+          "Java Developer",
+          "DevOps Engineer",
+          "Hadoop",
+          "ETL Developer",
+          "Database"
+        ],
+        "min_len": 600,
+        "per_category_cap": 2,
+        "total_cap": 12,
+        "dedup": "sha1(正文归一化)"
+      },
+      "privacy": "正文经 mask_pii + mask_contacts 双重脱敏后落盘，并做写盘前自检",
+      "finished_at": "2026-08-02 16:03:07"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "adapters": {
+    "web_personal": {
+      "source_type": "web",
+      "source_name": "web_personal",
+      "source_url": "（多来源，逐条见 source_url）",
+      "license": "作者本人公开发布的个人页面（仅提取技能要素，不留存正文与身份信息）",
+      "tier": "web",
+      "authority": 0.6,
+      "method": "html",
+      "robots_ok": false,
+      "rate_limit_s": 4.0,
+      "collected": 11,
+      "stats": {
+        "requests": 258,
+        "collected": 11,
+        "robots_blocked": 4,
+        "errors": 4,
+        "rejected": 369,
+        "pii_dropped": 0
+      },
+      "privacy": "正文 mask_pii + mask_contacts 双重脱敏后落盘，自检未过的整条丢弃",
+      "rejected_samples": [
+        {
+          "url": "https://r.easycv.cn/machine-learning",
+          "reason": "blocked_host"
+        },
+        {
+          "url": "https://github.com/zsc/interview_tutorial/blob/main/chapter17.md",
+          "reason": "缺少个人经历时间段(spans=0<2)"
+        },
+        {
+          "url": "https://www.liepin.com/mould/H0009-N000081.shtml",
+          "reason": "blocked_host"
+        },
+        {
+          "url": "https://github.com/amusi/AI-Job-Notes/blob/master/Q&A.md",
+          "reason": "缺少个人经历时间段(spans=0<2)"
+        },
+        {
+          "url": "https://stxy.btbu.edu.cn/xsgz/xgdt/363ec00a3a694fb48519c86a4cc46582.htm",
+          "reason": "取不到页面"
+        },
+        {
+          "url": "https://www.ibm.com/cn-zh/think/topics/pytorch",
+          "reason": "简历要素不足(pos=0<4)"
+        },
+        {
+          "url": "https://tianchi.aliyun.com/forum/post/62131",
+          "reason": "正文过短(139<500)"
+        },
+        {
+          "url": "https://pytorch.org/foundation",
+          "reason": "简历要素不足(pos=0<4)"
+        },
+        {
+          "url": "https://www.qmjianli.com/content/guide/4618",
+          "reason": "blocked_host"
+        },
+        {
+          "url": "https://www.upcv.tech/jianlimoban/7441.html",
+          "reason": "标题/URL 显示是模板或教程页，非本人简历"
+        },
+        {
+          "url": "https://zhuanlan.zhihu.com/p/23533748407",
+          "reason": "blocked_host"
+        },
+        {
+          "url": "https://www.qmjianli.com/content/guide/4615",
+          "reason": "blocked_host"
+        },
+        {
+          "url": "https://developer.aliyun.com/article/1677181",
+          "reason": "正文过短(0<500)"
+        },
+        {
+          "url": "https://datawhalechina.github.io/dive-into-cv-pytorch/",
+          "reason": "正文过短(13<500)"
+        },
+        {
+          "url": "https://upcv.tech/jianlimoban/7430.html",
+          "reason": "标题/URL 显示是模板或教程页，非本人简历"
+        },
+        {
+          "url": "https://github.com/AccumulateMore/CV",
+          "reason": "简历要素不足(pos=0<4)"
+        },
+        {
+          "url": "https://github.com/foocker/deeplearningtheory",
+          "reason": "简历要素不足(pos=0<4)"
+        },
+        {
+          "url": "https://github.com/amusi/Deep-Learning-Interview-Book/blob/master/docs/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C.md",
+          "reason": "简历要素不足(pos=0<4)"
+        },
+        {
+          "url": "https://gist.github.com/06f6c9ddf795aefa26b76f1ba36fb9d5",
+          "reason": "简历要素不足(pos=3<4)"
+        },
+        {
+          "url": "https://github.com/amusi/Deep-Learning-Interview-Book/blob/master/docs/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C.md?plain=1",
+          "reason": "简历要素不足(pos=0<4)"
+        }
+      ],
+      "finished_at": "2026-08-03T00:48:07",
+      "notes": "Tavily/Serper 检索发现，逐条 robots 检查后抓取公开页面"
+    }
+  }
+}

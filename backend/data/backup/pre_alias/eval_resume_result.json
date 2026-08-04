@@ -1,0 +1,137 @@
+{
+  "summary": {
+    "metric": "简历提取",
+    "n": 18,
+    "precision": 0.9371,
+    "recall": 1.0,
+    "f1": 0.9649
+  },
+  "rows": [
+    {
+      "id": 1,
+      "target": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 2,
+      "target": "机器学习工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 3,
+      "target": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 4,
+      "target": "自然语言处理工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 5,
+      "target": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 6,
+      "target": "大数据开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 7,
+      "target": "Java开发工程师",
+      "precision": 0.778,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 8,
+      "target": "Java开发工程师",
+      "precision": 0.75,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 9,
+      "target": "算法工程师",
+      "precision": 0.857,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 10,
+      "target": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 11,
+      "target": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 12,
+      "target": "物联网开发工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 13,
+      "target": "数据分析师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 14,
+      "target": "后端开发工程师",
+      "precision": 0.875,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 15,
+      "target": "后端开发工程师",
+      "precision": 0.75,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 16,
+      "target": "Python开发工程师",
+      "precision": 0.857,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 17,
+      "target": "算法工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    },
+    {
+      "id": 18,
+      "target": "计算机视觉工程师",
+      "precision": 1.0,
+      "recall": 1.0,
+      "missed": []
+    }
+  ]
+}

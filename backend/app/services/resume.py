@@ -72,7 +72,8 @@ def parse_resume(text: str) -> dict:
     """结构化解析简历。"""
     if not text or len(text.strip()) < 10:
         return {"candidate_name": "", "years_experience": 0, "skills": [], "skill_levels": {},
-                "education": "", "projects": [], "titles": [], "raw_skill_count": 0}
+                "education": "", "projects": [], "titles": [], "raw_skill_count": 0,
+                "raw_skill_terms": []}
     messages = [
         {"role": "system", "content": _RESUME_SYS},
         {"role": "user", "content": _RESUME_TPL.format(resume=text[:5000])},
@@ -85,8 +86,12 @@ def _postprocess_resume(data: dict, text: str) -> dict:
     raw_skills = data.get("skills", []) or []
     levels_in = data.get("skill_levels", {}) or {}
     norm_levels, norm_skills, seen = {}, [], set()
+    raw_terms: list[str] = []                # 归一化**前**的原始表述（供别名学习，意见⑧）
     for s in raw_skills:
-        nm = normalize_skill(s if isinstance(s, str) else s.get("name", ""))
+        term = s if isinstance(s, str) else s.get("name", "")
+        if isinstance(term, str) and term.strip():
+            raw_terms.append(term.strip())
+        nm = normalize_skill(term)
         if not nm or nm in seen:
             continue
         seen.add(nm)
@@ -115,11 +120,51 @@ def _postprocess_resume(data: dict, text: str) -> dict:
         "projects": data.get("projects", [])[:10],
         "titles": data.get("titles", [])[:5],
         "raw_skill_count": len(raw_skills),
+        "raw_skill_terms": raw_terms,
     }
 
 
 # 个人信息（PII）字段：依据数据合规与隐私最小化原则，不在服务端持久化
 _PII_FIELDS = {"candidate_name", "projects", "titles"}
+
+
+# ---------------- 简历正文脱敏（落盘/入库前的强制关口，意见⑧）----------------
+# collect/base.py::mask_pii 只覆盖中国大陆手机号/邮箱/微信，简历语料还会出现
+# 美式电话、QQ、身份证、个人主页链接，故在此扩一层。两者叠加使用。
+_RE_PHONE_CN = re.compile(r"(?<!\d)1[3-9]\d{9}(?!\d)")
+_RE_PHONE_INTL = re.compile(r"(?<![\d-])(?:\+?\d{1,2}[ .-]?)?\(?\d{3}\)?[ .-]\d{3}[ .-]\d{4}(?![\d-])")
+_RE_EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+_RE_WECHAT = re.compile(r"(微信|weixin|wechat)\s*[:：]?\s*[A-Za-z0-9_-]{5,20}", re.I)
+_RE_QQ = re.compile(r"(QQ|qq)\s*[:：]?\s*\d{5,12}")
+_RE_IDCARD = re.compile(r"(?<!\d)\d{17}[\dXx](?!\d)")
+_RE_URL = re.compile(r"https?://[^\s，,；;）)】\]]+")
+
+
+def mask_contacts(text: str) -> str:
+    """抹掉简历正文里的联系方式与个人链接。
+
+    简历不同于 JD：JD 是企业主动公开的商业信息，正文原样留档；简历涉及真人，
+    因此归档前先过这道关口。**注意口径**：这里去掉的是**联系方式**，不是"去标识化"——
+    姓名/年龄/性别不在本函数处理范围内，归档 jsonl 仍属可识别个人数据，
+    只有入库形态 `TalentProfile` 才是结构上不含身份的
+    （见 采集合规说明「简历语料来源与合规」的分层口径说明）。
+    """
+    if not text:
+        return text
+    text = _RE_EMAIL.sub("[邮箱已脱敏]", text)
+    text = _RE_PHONE_CN.sub("[电话已脱敏]", text)
+    text = _RE_PHONE_INTL.sub("[电话已脱敏]", text)
+    text = _RE_WECHAT.sub(r"\1:[已脱敏]", text)
+    text = _RE_QQ.sub(r"\1:[已脱敏]", text)
+    text = _RE_IDCARD.sub("[证件号已脱敏]", text)
+    text = _RE_URL.sub("[链接已脱敏]", text)
+    return text
+
+
+def contains_contacts(text: str) -> bool:
+    """脱敏结果自检：还能匹配到联系方式就说明漏了（供落盘前断言用）。"""
+    return any(p.search(text or "") for p in
+               (_RE_EMAIL, _RE_PHONE_CN, _RE_PHONE_INTL, _RE_QQ, _RE_IDCARD, _RE_URL))
 
 
 def redact_for_storage(parsed: dict) -> dict:

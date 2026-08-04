@@ -1,0 +1,75 @@
+{
+  "holdout_size": 6,
+  "total_terms": 214,
+  "alignment_rate_before": 0.4579,
+  "alignment_rate_after": 0.4907,
+  "aligned_before": 98,
+  "aligned_after": 105,
+  "match_score_before": 36.97,
+  "match_score_after": 36.97,
+  "scored_profiles": 6,
+  "tier_a_aliases": 0,
+  "tier_b_aliases": 26,
+  "detail": [
+    {
+      "code": "T001",
+      "language": "en",
+      "terms": 60,
+      "aligned_before": 20,
+      "aligned_after": 22,
+      "job": "运维开发工程师(SRE)",
+      "score_before": 22.84,
+      "score_after": 22.84
+    },
+    {
+      "code": "T004",
+      "language": "en",
+      "terms": 23,
+      "aligned_before": 10,
+      "aligned_after": 10,
+      "job": "大数据平台工程师",
+      "score_before": 32.84,
+      "score_after": 32.84
+    },
+    {
+      "code": "T010",
+      "language": "en",
+      "terms": 15,
+      "aligned_before": 1,
+      "aligned_after": 1,
+      "job": "大数据开发工程师",
+      "score_before": 24.57,
+      "score_after": 24.57
+    },
+    {
+      "code": "T013",
+      "language": "zh",
+      "terms": 53,
+      "aligned_before": 24,
+      "aligned_after": 26,
+      "job": "深度学习工程师",
+      "score_before": 60.1,
+      "score_after": 60.1
+    },
+    {
+      "code": "T016",
+      "language": "zh",
+      "terms": 20,
+      "aligned_before": 16,
+      "aligned_after": 16,
+      "job": "大数据平台工程师",
+      "score_before": 55.24,
+      "score_after": 55.24
+    },
+    {
+      "code": "T022",
+      "language": "zh",
+      "terms": 43,
+      "aligned_before": 27,
+      "aligned_after": 30,
+      "job": "嵌入式软件工程师",
+      "score_before": 26.24,
+      "score_after": 26.24
+    }
+  ]
+}

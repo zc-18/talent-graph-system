@@ -1,0 +1,549 @@
+[
+  {
+    "group": "dataset",
+    "name": "brackozi/Resume",
+    "url": "https://huggingface.co/datasets/brackozi/Resume",
+    "meta_status": 200,
+    "license": "mit",
+    "gated": false,
+    "private": false,
+    "downloads": 122,
+    "rows_status": 200,
+    "columns": [
+      "Category",
+      "Resume"
+    ],
+    "sample_len": 4746
+  },
+  {
+    "group": "dataset",
+    "name": "ahmedheakl/resume-atlas",
+    "url": "https://huggingface.co/datasets/ahmedheakl/resume-atlas",
+    "meta_status": 200,
+    "license": "mit",
+    "gated": false,
+    "private": false,
+    "downloads": 699,
+    "rows_status": 200,
+    "columns": [
+      "Category",
+      "Text"
+    ],
+    "sample_len": 2194
+  },
+  {
+    "group": "dataset",
+    "name": "InferencePrince555/Resume-Dataset",
+    "url": "https://huggingface.co/datasets/InferencePrince555/Resume-Dataset",
+    "meta_status": 200,
+    "license": "apache-2.0",
+    "gated": false,
+    "private": false,
+    "downloads": 252,
+    "rows_status": 200,
+    "columns": [
+      "instruction",
+      "input",
+      "Resume_test"
+    ],
+    "sample_len": 8776
+  },
+  {
+    "group": "dataset",
+    "name": "Sachinkelenjaguri/Resume_dataset",
+    "url": "https://huggingface.co/datasets/Sachinkelenjaguri/Resume_dataset",
+    "meta_status": 200,
+    "license": null,
+    "gated": false,
+    "private": false,
+    "downloads": 139,
+    "rows_status": 200,
+    "columns": [
+      "Category",
+      "Resume"
+    ],
+    "sample_len": 4746
+  },
+  {
+    "group": "dataset",
+    "name": "ganchengguang/resume_seven_class",
+    "url": "https://huggingface.co/datasets/ganchengguang/resume_seven_class",
+    "meta_status": 200,
+    "license": "apache-2.0",
+    "gated": false,
+    "private": false,
+    "downloads": 50,
+    "rows_status": 200,
+    "columns": [
+      "text"
+    ],
+    "sample_len": 23
+  },
+  {
+    "group": "sample",
+    "name": "应届毕业生网",
+    "host": "www.yjbys.com",
+    "paths": [
+      {
+        "url": "https://www.yjbys.com/jianli/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://www.yjbys.com/jianli/",
+        "len": 60146,
+        "charset": "gb18030",
+        "login_hint": [],
+        "content_hits": {
+          "简历范文": 12,
+          "简历模板": 50,
+          "个人简历": 118,
+          "求职简历": 33,
+          "简历下载": 7
+        },
+        "looks_like_index": true
+      },
+      {
+        "url": "https://www.yjbys.com/jianli/fanwen/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://www.yjbys.com/jianli/fanwen/",
+        "len": 1113,
+        "charset": "gb18030",
+        "login_hint": [],
+        "content_hits": {},
+        "looks_like_index": false
+      },
+      {
+        "url": "https://www.yjbys.com/jianli/geren/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://www.yjbys.com/jianli/geren/",
+        "len": 1113,
+        "charset": "gb18030",
+        "login_hint": [],
+        "content_hits": {},
+        "looks_like_index": false
+      }
+    ],
+    "robots_status": 200,
+    "robots_disallow": [
+      "/dldoc/",
+      "/usr/"
+    ],
+    "robots_blocks_all": false,
+    "robots_raw_len": 49
+  },
+  {
+    "group": "sample",
+    "name": "第一范文网",
+    "host": "www.diyifanwen.com",
+    "paths": [
+      {
+        "url": "https://www.diyifanwen.com/jianli/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://www.diyifanwen.com/jianli/",
+        "len": 8487,
+        "charset": "gb18030",
+        "login_hint": [],
+        "content_hits": {
+          "简历范文": 6,
+          "简历模板": 8,
+          "个人简历": 21,
+          "求职简历": 4
+        },
+        "looks_like_index": true
+      },
+      {
+        "url": "https://www.diyifanwen.com/qiuzhi/gerenjianli/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://www.diyifanwen.com/qiuzhi/gerenjianli/",
+        "len": 2851,
+        "charset": "gb18030",
+        "login_hint": [],
+        "content_hits": {
+          "个人简历": 1
+        },
+        "looks_like_index": false
+      }
+    ],
+    "robots_status": 200,
+    "robots_disallow": [
+      "/*?*",
+      "/?*"
+    ],
+    "robots_blocks_all": false,
+    "robots_raw_len": 118
+  },
+  {
+    "group": "sample",
+    "name": "瑞文网",
+    "host": "www.ruiwen.com",
+    "paths": [
+      {
+        "url": "https://www.ruiwen.com/jianli/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://www.ruiwen.com/jianli/",
+        "len": 30446,
+        "charset": "gb18030",
+        "login_hint": [],
+        "content_hits": {
+          "简历范文": 10,
+          "简历模板": 15,
+          "个人简历": 35,
+          "求职简历": 18,
+          "工程师简历": 16,
+          "简历下载": 2
+        },
+        "looks_like_index": true
+      },
+      {
+        "url": "https://www.ruiwen.com/gerenjianli/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://www.ruiwen.com/gerenjianli/",
+        "len": 17268,
+        "charset": "gb18030",
+        "login_hint": [],
+        "content_hits": {
+          "简历范文": 3,
+          "个人简历": 32
+        },
+        "looks_like_index": true
+      }
+    ],
+    "robots_status": 200,
+    "robots_disallow": [
+      "/dldoc/",
+      "/usr/"
+    ],
+    "robots_blocks_all": false,
+    "robots_raw_len": 49
+  },
+  {
+    "group": "sample",
+    "name": "学习啦",
+    "host": "www.xuexila.com",
+    "paths": [
+      {
+        "url": "https://www.xuexila.com/qiuzhi/jianli/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://www.xuexila.com/qiuzhi/jianli/",
+        "len": 552,
+        "charset": "utf-8",
+        "login_hint": [],
+        "content_hits": {},
+        "looks_like_index": false
+      },
+      {
+        "url": "https://www.xuexila.com/jianli/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://www.xuexila.com/jianli/",
+        "len": 552,
+        "charset": "utf-8",
+        "login_hint": [],
+        "content_hits": {},
+        "looks_like_index": false
+      }
+    ],
+    "robots_status": 404
+  },
+  {
+    "group": "sample",
+    "name": "五百丁",
+    "host": "www.500d.me",
+    "paths": [
+      {
+        "url": "https://www.500d.me/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://www.500d.me/",
+        "len": 416156,
+        "charset": "utf-8",
+        "login_hint": [
+          "登录",
+          "login"
+        ],
+        "content_hits": {
+          "简历模板": 6,
+          "个人简历": 2,
+          "求职简历": 1,
+          "工程师简历": 1
+        },
+        "looks_like_index": true
+      },
+      {
+        "url": "https://www.500d.me/moban/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://www.500d.me/moban/",
+        "len": 22954,
+        "charset": "utf-8",
+        "login_hint": [
+          "登录",
+          "login",
+          "captcha"
+        ],
+        "content_hits": {
+          "简历模板": 1,
+          "求职简历": 1
+        },
+        "looks_like_index": false
+      },
+      {
+        "url": "https://www.500d.me/jianli/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://www.500d.me/jianli/",
+        "len": 22954,
+        "charset": "utf-8",
+        "login_hint": [
+          "登录",
+          "login",
+          "captcha"
+        ],
+        "content_hits": {
+          "简历模板": 1,
+          "求职简历": 1
+        },
+        "looks_like_index": false
+      },
+      {
+        "url": "https://www.500d.me/article/list/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://www.500d.me/",
+        "len": 416156,
+        "charset": "utf-8",
+        "login_hint": [
+          "登录",
+          "login"
+        ],
+        "content_hits": {
+          "简历模板": 6,
+          "个人简历": 2,
+          "求职简历": 1,
+          "工程师简历": 1
+        },
+        "looks_like_index": true
+      }
+    ],
+    "robots_status": 200,
+    "robots_disallow": [
+      "/i/",
+      "/qq/",
+      "/buy/",
+      "/cart/",
+      "/share/",
+      "/qzone/",
+      "/invite/",
+      "/member/",
+      "/i.jhtml",
+      "/payment/",
+      "/designer/",
+      "/free/down/",
+      "/cart.jhtml",
+      "/login.jhtml*"
+    ],
+    "robots_blocks_all": false,
+    "robots_raw_len": 719
+  },
+  {
+    "group": "sample",
+    "name": "乔布简历",
+    "host": "cv.qiaobutang.com",
+    "paths": [
+      {
+        "url": "https://cv.qiaobutang.com/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://cv.qiaobutang.com/",
+        "len": 12398,
+        "charset": "utf-8",
+        "login_hint": [
+          "登录",
+          "login"
+        ],
+        "content_hits": {
+          "简历模板": 7,
+          "个人简历": 2,
+          "求职简历": 3
+        },
+        "looks_like_index": true
+      },
+      {
+        "url": "https://cv.qiaobutang.com/sample/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://cv.qiaobutang.com/sample/",
+        "len": 11803,
+        "charset": "utf-8",
+        "login_hint": [
+          "登录",
+          "login"
+        ],
+        "content_hits": {
+          "简历模板": 5,
+          "个人简历": 2,
+          "求职简历": 2
+        },
+        "looks_like_index": true
+      }
+    ],
+    "robots_status": 404
+  },
+  {
+    "group": "sample",
+    "name": "简历本",
+    "host": "www.jianliben.com",
+    "paths": [
+      {
+        "url": "https://www.jianliben.com/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://www.jianliben.com/",
+        "len": 21539,
+        "charset": "utf-8",
+        "login_hint": [
+          "登录",
+          "login",
+          "passport"
+        ],
+        "content_hits": {
+          "简历范文": 2,
+          "简历模板": 25,
+          "个人简历": 2,
+          "简历下载": 1
+        },
+        "looks_like_index": true
+      },
+      {
+        "url": "https://www.jianliben.com/fanwen/",
+        "path_disallowed": false,
+        "status": 404,
+        "final_url": "https://www.jianliben.com/fanwen/",
+        "len": 1276,
+        "charset": "utf-8",
+        "login_hint": [],
+        "content_hits": {},
+        "looks_like_index": false
+      }
+    ],
+    "robots_status": 200,
+    "robots_disallow": [
+      "/account/",
+      "/resume/",
+      "/common/",
+      "/payment/",
+      "/admin/"
+    ],
+    "robots_blocks_all": false,
+    "robots_raw_len": 110
+  },
+  {
+    "group": "sample",
+    "name": "猎聘简历模板",
+    "host": "lpt.liepin.com",
+    "paths": [
+      {
+        "url": "https://lpt.liepin.com/",
+        "path_disallowed": false,
+        "status": 200,
+        "final_url": "https://lpt.liepin.com/",
+        "len": 4069,
+        "charset": "utf-8",
+        "login_hint": [],
+        "content_hits": {},
+        "looks_like_index": false
+      }
+    ],
+    "robots_status": 200,
+    "robots_disallow": [],
+    "robots_blocks_all": false,
+    "robots_raw_len": 4069
+  },
+  {
+    "group": "sample",
+    "name": "智联简历",
+    "host": "jianli.zhaopin.com",
+    "paths": [
+      {
+        "url": "https://jianli.zhaopin.com/",
+        "path_disallowed": false,
+        "status": 403,
+        "final_url": "https://jianli.zhaopin.com/",
+        "len": 564,
+        "charset": "utf-8",
+        "login_hint": [],
+        "content_hits": {},
+        "looks_like_index": false
+      }
+    ],
+    "robots_status": 403
+  },
+  {
+    "group": "sample",
+    "name": "51job简历",
+    "host": "jianli.51job.com",
+    "paths": [
+      {
+        "url": "https://jianli.51job.com/",
+        "path_disallowed": false,
+        "status": 405,
+        "final_url": "https://jianli.51job.com/",
+        "len": 2569,
+        "charset": "utf-8",
+        "login_hint": [],
+        "content_hits": {},
+        "looks_like_index": false
+      }
+    ],
+    "robots_status": 200,
+    "robots_disallow": [],
+    "robots_blocks_all": false,
+    "robots_raw_len": 92975
+  },
+  {
+    "group": "discovery",
+    "name": "HuggingFace",
+    "url": "https://huggingface.co/api/datasets?search=resume&limit=1",
+    "status": 200,
+    "len": 1015,
+    "final_url": "https://huggingface.co/api/datasets?search=resume&limit=1"
+  },
+  {
+    "group": "discovery",
+    "name": "HF datasets-server",
+    "url": "https://datasets-server.huggingface.co/valid",
+    "status": 404,
+    "len": 9,
+    "final_url": "https://datasets-server.huggingface.co/valid"
+  },
+  {
+    "group": "discovery",
+    "name": "GitHub API",
+    "url": "https://api.github.com/rate_limit",
+    "status": 200,
+    "len": 427,
+    "final_url": "https://api.github.com/rate_limit"
+  },
+  {
+    "group": "discovery",
+    "name": "GitHub raw",
+    "url": "https://raw.githubusercontent.com/geekcompany/ResumeSample/master/README.md",
+    "status": 200,
+    "len": 529,
+    "final_url": "https://raw.githubusercontent.com/geekcompany/ResumeSample/master/README.md"
+  },
+  {
+    "group": "discovery",
+    "name": "GitHub Pages 示例",
+    "url": "https://resume.github.io/",
+    "status": 200,
+    "len": 1376,
+    "final_url": "https://resume.github.io/"
+  }
+]
