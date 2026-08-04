@@ -74,6 +74,18 @@ export function Badge({ children, tone = 'slate' }: { children: ReactNode; tone?
   return <span className={`chip border ${map[tone] || map.slate}`}>{children}</span>
 }
 
+/** 进度条：轨道 + 填充。零依赖，min 保证极小值仍有一丝可见宽度 */
+export function Meter({ value, tone = 'bg-grad-accent', track = 'bg-white/80', h = 'h-1.5', min = 3 }: {
+  value: number; tone?: string; track?: string; h?: string; min?: number
+}) {
+  return (
+    <div className={`${h} rounded-full ${track} overflow-hidden`}>
+      <div className={`h-full rounded-full ${tone}`}
+        style={{ width: `${Math.max(min, Math.round(Math.min(1, Math.max(0, value)) * 100))}%` }} />
+    </div>
+  )
+}
+
 export function EmptyState({ text, hint }: { text: string; hint?: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-slate-400 gap-2">

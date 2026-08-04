@@ -1,23 +1,26 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { Upload, Loader2, ShieldCheck, ExternalLink } from 'lucide-react'
-import { IUsersThree, IDatabase, ITarget, IShieldCheck } from '../components/icons'
+import {
+  IUsersThree, IDatabase, ITarget, IShieldCheck, IUser, IStack, ITrendUp, ILightbulb,
+} from '../components/icons'
 import {
   api, errMsg, JobListItem, TalentCorpus, TalentProfile, SupplyDemand,
   TeamItem, TeamGap, AliasItem,
 } from '../api'
-import { Card, PageHeader, Badge, Spinner, EmptyState, ErrorState } from '../components/ui'
+import { Card, Badge, Spinner, EmptyState, ErrorState, Meter } from '../components/ui'
+import { Kpi } from '../components/Kpi'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
 
 type Tab = 'team' | 'supply' | 'corpus' | 'alias'
 
-const TABS: { key: Tab; label: string }[] = [
-  { key: 'team', label: '团队能力盘点' },
-  { key: 'supply', label: '供需缺口对照' },
-  { key: 'corpus', label: '简历语料台账' },
-  { key: 'alias', label: '学到的技能表述' },
-]
+const TABS = [
+  { key: 'team', label: '团队能力盘点', icon: IUsersThree },
+  { key: 'supply', label: '供需缺口对照', icon: ITrendUp },
+  { key: 'corpus', label: '简历语料台账', icon: IDatabase },
+  { key: 'alias', label: '学到的技能表述', icon: ILightbulb },
+] as const
 
 const SRC_LABEL: Record<string, string> = {
   dataset: '公开数据集', web: '公开个人简历', sample: '公开范文', upload: '团队上传',
@@ -42,18 +45,48 @@ export default function Talent() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="人才与团队盘点"
-        subtitle={`${corpus.total_profiles} 份脱敏人才画像 · 共抽取 ${corpus.total_skills_extracted} 项技能 · 简历原文与身份信息不入库`}
-        icon={<IUsersThree className="w-7 h-7" />}
-      />
+      {/* Hero：纯 CSS 渐变光晕，public/ 无人才主题配图。
+          用裸 div.glass 而非 Card（同 Dashboard），避免多叠一层层叠上下文 */}
+      <div className="relative overflow-hidden rounded-2xl glass">
+        <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-br from-violet-50/70 via-transparent to-sky-50/60" />
+        <div aria-hidden className="absolute -top-20 -right-12 w-64 h-64 rounded-full blur-3xl opacity-25 bg-grad-violet" />
+        <div aria-hidden className="absolute -bottom-24 -left-16 w-56 h-56 rounded-full blur-3xl opacity-20 bg-grad-accent" />
 
-      <div className="flex flex-wrap items-center gap-1.5">
+        <div className="relative z-10 px-6 py-7 sm:px-8 sm:py-9">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow shrink-0">
+              <IUsersThree className="w-6 h-6 text-white" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-3xl font-extrabold text-slate-900">人才与团队盘点</h1>
+              <p className="text-slate-500 mt-1 max-w-2xl">
+                脱敏人才画像驱动的团队能力盘点 · 供需缺口对照 · 学到的技能表述
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/70 border border-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm">
+              <b className="text-sm font-extrabold text-slate-900 tabular-nums">{corpus.total_profiles}</b>份脱敏人才画像
+            </span>
+            <span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/70 border border-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm">
+              <b className="text-sm font-extrabold text-slate-900 tabular-nums">{corpus.total_skills_extracted}</b>项已抽取技能
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50/80 border border-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-700">
+              <IShieldCheck className="w-3.5 h-3.5" />简历原文与身份信息不入库
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 未选中项不用 btn-ghost：它自带 border-slate-200，在导轨内会形成双重描边 */}
+      <div className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-white/60 border border-white/80 backdrop-blur-xl shadow-card sm:inline-flex">
         {TABS.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
-              tab === t.key ? 'bg-grad-accent text-white shadow-glow' : 'btn-ghost'}`}>
-            {t.label}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
+              tab === t.key ? 'bg-grad-accent text-white shadow-glow'
+                : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>
+            <t.icon className="w-4 h-4" />{t.label}
           </button>
         ))}
       </div>
@@ -103,15 +136,15 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
 
   return (
     <div className="space-y-4">
-      <Card>
+      <Card className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-end gap-3">
           <div className="flex-1 min-w-0">
-            <label className="text-xs text-slate-500 mb-1 block">团队</label>
+            <div className="label mb-1.5">团队</div>
             <Select value={String(teamId ?? '')} onChange={v => setTeamId(Number(v))}
               options={teams.map(t => ({ value: String(t.id), label: `${t.name}（${t.size} 人）` }))} />
           </div>
           <div className="flex-1 min-w-0">
-            <label className="text-xs text-slate-500 mb-1 block">目标岗位</label>
+            <div className="label mb-1.5">目标岗位</div>
             <Select value={String(jobId ?? '')} onChange={v => setJobId(Number(v))}
               options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
           </div>
@@ -135,56 +168,102 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
       {!loading && !gap && <EmptyState text="暂无盘点结果" hint="请选择团队与目标岗位" />}
       {!loading && gap && (
         <>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <KPI label="团队人数" value={`${gap.team.size}`} unit="人" />
-            <KPI label="必备能力覆盖" value={`${gap.required_covered}/${gap.required_total}`}
-              unit={`${(gap.coverage_rate * 100).toFixed(0)}%`} />
-            <KPI label="加权覆盖率" value={`${(gap.weighted_coverage * 100).toFixed(1)}`} unit="%" />
-            <KPI label="加分能力覆盖" value={`${gap.bonus_covered}/${gap.bonus_total}`} unit="" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <Kpi delay={0} label="团队人数" value={gap.team.size} unit="人" sub={gap.team.name}
+              icon={<IUsersThree className="w-5 h-5 text-white" />} tone="bg-grad-accent" />
+            <Kpi delay={0.05} label="必备能力覆盖" value={`${gap.required_covered}/${gap.required_total}`}
+              sub={`覆盖率 ${(gap.coverage_rate * 100).toFixed(0)}%`}
+              icon={<ITarget className="w-5 h-5 text-white" />} tone="bg-grad-violet" />
+            <Kpi delay={0.1} label="加权覆盖率" value={gap.weighted_coverage * 100} unit="%" decimals={1}
+              sub="按岗位能力权重加权" ring={gap.weighted_coverage} />
+            <Kpi delay={0.15} label="加分能力覆盖" value={`${gap.bonus_covered}/${gap.bonus_total}`} sub="加分项"
+              icon={<IStack className="w-5 h-5 text-white" />} tone="bg-cyan-500/80" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card>
-              <h3 className="font-semibold text-slate-800 mb-3">
-                还缺谁 · 团队没人具备的必备能力
-                {gap.missing.length > 0 &&
-                  <span className="ml-2 text-xs font-normal text-slate-400">共 {gap.missing.length} 项，按权重降序</span>}
-              </h3>
+            <Card className="p-5" delay={0.05}>
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <h3 className="font-semibold text-slate-800 flex items-center gap-2 min-w-0">
+                  <span className="w-6 h-6 rounded-lg bg-rose-50 border border-rose-100 grid place-items-center shrink-0">
+                    <ITarget className="w-3.5 h-3.5 text-rose-500" />
+                  </span>
+                  <span className="shrink-0">还缺谁</span>
+                  <span className="text-xs font-normal text-slate-400 truncate">团队没人具备的必备能力</span>
+                </h3>
+                {/* shrink-0 + nowrap：1024px 两栏时卡片最窄，否则标题会断成「还缺 / 谁」、徽章文字也会折行 */}
+                {gap.missing.length > 0 && (
+                  <span className="shrink-0 whitespace-nowrap">
+                    <Badge tone="rose">{gap.missing.length} 项 · 按权重降序</Badge>
+                  </span>
+                )}
+              </div>
               {gap.missing.length === 0
                 ? <EmptyState text="该岗位的必备能力已全部覆盖" />
-                : <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
+                : <div className="space-y-2 max-h-[420px] overflow-y-auto -mr-2 pr-2">
                     {gap.missing.map(m => (
-                      <div key={m.skill} className="flex items-center justify-between gap-2
-                                                    px-3 py-2 rounded-lg bg-rose-50/70 border border-rose-100">
-                        <span className="text-sm text-slate-800 truncate">{m.skill}</span>
-                        <Badge tone="rose">权重 {m.weight.toFixed(2)}</Badge>
+                      <div key={m.skill} className="rounded-xl bg-sky-50/70 border border-slate-200/70 px-3.5 py-2.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-sm font-medium text-slate-800 truncate" title={m.skill}>{m.skill}</span>
+                          <span className="text-xs font-semibold text-rose-600 tabular-nums shrink-0">
+                            {m.weight.toFixed(2)}
+                          </span>
+                        </div>
+                        {/* rose 不再铺满整行底色，只作为权重的语义编码留在数字与条上 */}
+                        <div className="mt-1.5">
+                          <Meter value={m.weight} tone="bg-gradient-to-r from-rose-400 to-amber-400" min={4} />
+                        </div>
                       </div>
                     ))}
                   </div>}
             </Card>
 
-            <Card>
-              <h3 className="font-semibold text-slate-800 mb-3">谁能补 · 成员对必备能力的贡献</h3>
-              <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
-                {gap.contributions.map(c => (
-                  <div key={c.member_id} className="px-3 py-2 rounded-lg border border-slate-100 bg-white/60">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-medium text-slate-800 truncate">
-                        {c.display_name}
-                        <span className="ml-2 text-xs text-slate-400 font-normal">{c.talent_code}</span>
-                      </span>
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <Badge tone="indigo">覆盖 {c.covers_required}</Badge>
-                        {c.uniquely_covers > 0 && <Badge tone="amber">独有 {c.uniquely_covers}</Badge>}
-                      </div>
-                    </div>
-                    <div className="mt-1 text-xs text-slate-500 truncate">
-                      {c.role_label || '—'} · 技能 {c.skill_count} 项
-                      {c.unique_skills.length > 0 && <> · 仅他会：{c.unique_skills.slice(0, 3).join('、')}</>}
-                    </div>
-                  </div>
-                ))}
+            <Card className="p-5" delay={0.1}>
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <h3 className="font-semibold text-slate-800 flex items-center gap-2 min-w-0">
+                  <span className="w-6 h-6 rounded-lg bg-indigo-50 border border-indigo-100 grid place-items-center shrink-0">
+                    <IUser className="w-3.5 h-3.5 text-indigo-500" />
+                  </span>
+                  <span className="shrink-0">谁能补</span>
+                  <span className="text-xs font-normal text-slate-400 truncate">成员对必备能力的贡献</span>
+                </h3>
               </div>
+              {gap.contributions.length === 0
+                ? <EmptyState text="团队暂无成员" hint="上传成员简历后自动生成贡献分析" />
+                : <div className="space-y-2 max-h-[420px] overflow-y-auto -mr-2 pr-2">
+                    {gap.contributions.map(c => {
+                      const pct = gap.required_total ? c.covers_required / gap.required_total : 0
+                      return (
+                        <div key={c.member_id} className="rounded-xl bg-sky-50/70 border border-slate-200/70 px-3.5 py-2.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="flex items-center gap-2 min-w-0">
+                              <span className="w-7 h-7 rounded-lg bg-grad-violet grid place-items-center shrink-0
+                                               text-[11px] font-bold text-white">
+                                {c.display_name.slice(0, 1)}
+                              </span>
+                              <span className="text-sm font-medium text-slate-800 truncate">
+                                {c.display_name}
+                                <span className="ml-1.5 font-mono text-[11px] font-normal text-slate-400">{c.talent_code}</span>
+                              </span>
+                            </span>
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <Badge tone="indigo">覆盖 {c.covers_required}</Badge>
+                              {c.uniquely_covers > 0 && <Badge tone="amber">独有 {c.uniquely_covers}</Badge>}
+                            </div>
+                          </div>
+                          <div className="mt-2 flex items-center gap-2">
+                            <div className="flex-1"><Meter value={pct} /></div>
+                            <span className="w-10 shrink-0 text-right text-[11px] text-slate-500 tabular-nums">
+                              {Math.round(pct * 100)}%
+                            </span>
+                          </div>
+                          <div className="mt-1.5 text-xs text-slate-500 truncate">
+                            {c.role_label || '—'} · 技能 {c.skill_count} 项
+                            {c.unique_skills.length > 0 && <> · 仅他会：{c.unique_skills.slice(0, 3).join('、')}</>}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>}
             </Card>
           </div>
         </>
@@ -226,21 +305,35 @@ function SupplyPanel({ jobs }: { jobs: JobListItem[] }) {
 
   return (
     <div className="space-y-4">
-      <Card>
-        <label className="text-xs text-slate-500 mb-1 block">目标岗位</label>
-        <Select value={String(jobId ?? '')} onChange={v => setJobId(Number(v))}
-          options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
+      <Card className="p-5">
+        <div className="flex flex-col sm:flex-row sm:items-end gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="label mb-1.5">目标岗位</div>
+            <Select value={String(jobId ?? '')} onChange={v => setJobId(Number(v))}
+              options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
+          </div>
+          {data && (
+            <div className="text-xs text-slate-500 sm:pb-2.5">
+              对照 <b className="text-slate-700 tabular-nums">{data.corpus_size}</b> 份脱敏画像
+            </div>
+          )}
+        </div>
       </Card>
       {loading && <Spinner label="计算供需缺口…" />}
       {!loading && data && (
         <>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <KPI label="语料人数" value={`${data.corpus_size}`} unit="人" />
-            <KPI label="对口人才" value={`${data.aligned_talents}`} unit="人" />
-            <KPI label="必备能力被覆盖" value={`${data.required_covered}/${data.required_total}`} unit="" />
-            <KPI label="覆盖率" value={`${(data.coverage_rate * 100).toFixed(1)}`} unit="%" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <Kpi delay={0} label="语料人数" value={data.corpus_size} unit="人" sub="脱敏人才画像总量"
+              icon={<IDatabase className="w-5 h-5 text-white" />} tone="bg-grad-accent" />
+            <Kpi delay={0.05} label="对口人才" value={data.aligned_talents} unit="人" sub="映射到该岗位"
+              icon={<IUser className="w-5 h-5 text-white" />} tone="bg-grad-violet" />
+            <Kpi delay={0.1} label="必备能力被覆盖" value={`${data.required_covered}/${data.required_total}`}
+              sub="语料中至少 1 人具备"
+              icon={<ITarget className="w-5 h-5 text-white" />} tone="bg-cyan-500/80" />
+            <Kpi delay={0.15} label="覆盖率" value={data.coverage_rate * 100} unit="%" decimals={1}
+              sub="人才供给对岗位需求" ring={data.coverage_rate} />
           </div>
-          <Card>
+          <Card className="p-5" delay={0.05}>
             <h3 className="font-semibold text-slate-800 mb-1">需求权重 vs 人才供给率（缺口最大的前 12 项）</h3>
             <p className="text-xs text-slate-500 mb-3">{data.note}</p>
             <ReactECharts option={option} style={{ height: 420 }} notMerge />
@@ -263,17 +356,20 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
 
   return (
     <div className="space-y-4">
-      <Card>
-        <div className="flex items-start gap-2 text-sm text-emerald-900 bg-emerald-50/70
-                        border border-emerald-100 rounded-xl px-3 py-2">
-          <IShieldCheck className="w-5 h-5 shrink-0 text-emerald-600" />
-          <span>{corpus.privacy_notice}</span>
+      {/* 内层横幅不再自带描边：套在 glass 卡里会形成双重边框 */}
+      <Card className="p-4">
+        <div className="flex items-start gap-2.5 text-sm text-emerald-900">
+          <span className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 grid place-items-center shrink-0">
+            <IShieldCheck className="w-4 h-4 text-emerald-600" />
+          </span>
+          <span className="leading-relaxed pt-1.5">{corpus.privacy_notice}</span>
         </div>
       </Card>
 
-      <Card>
+      <Card className="p-5" delay={0.05}>
         <h3 className="font-semibold text-slate-800 mb-3">采集批次与许可证</h3>
-        <div className="overflow-x-auto -mx-2 px-2">
+        {/* 负边距要与卡片 p-5 一致，否则横向滚动条与内容左边缘对不齐 */}
+        <div className="overflow-x-auto -mx-5 px-5">
           <table className="w-full text-sm min-w-[720px]">
             <thead>
               <tr className="text-left text-xs text-slate-500 border-b border-slate-100">
@@ -313,7 +409,7 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
         </div>
       </Card>
 
-      <Card>
+      <Card className="p-5" delay={0.1}>
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
           <h3 className="font-semibold text-slate-800 flex-1">脱敏人才画像</h3>
           <div className="w-full sm:w-56">
@@ -326,7 +422,8 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
           {profiles.map(p => (
-            <div key={p.id} className="rounded-xl border border-slate-100 bg-white/60 p-3">
+            <div key={p.id} className="rounded-xl bg-sky-50/70 border border-slate-200/70 p-3.5
+                                       hover:bg-sky-100/60 transition">
               <div className="flex items-center justify-between gap-2">
                 <span className="font-mono text-sm font-semibold text-slate-800">{p.code}</span>
                 <div className="flex gap-1.5 shrink-0">
@@ -340,7 +437,8 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
               <div className="mt-2 text-xs text-slate-600">技能 {p.skill_count} 项</div>
               <div className="mt-1 flex flex-wrap gap-1">
                 {p.skills.slice(0, 8).map(s => (
-                  <span key={s} className="px-1.5 py-0.5 rounded bg-slate-100 text-[11px] text-slate-600">{s}</span>
+                  <span key={s} className="px-1.5 py-0.5 rounded bg-white/80 border border-slate-200/70
+                                           text-[11px] text-slate-600">{s}</span>
                 ))}
               </div>
               {p.source_url && (
@@ -371,7 +469,7 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
 
   return (
     <div className="space-y-4">
-      <Card>
+      <Card className="p-6">
         <h3 className="font-semibold text-slate-800 mb-2">简历里学到了什么</h3>
         {/* 限宽：这段是正文不是表格，通栏会拉出一行几十字的长行，很难读 */}
         <p className="max-w-3xl text-sm text-slate-600 leading-relaxed">
@@ -427,8 +525,8 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
       </Card>
 
       {loading ? <Spinner /> : (
-        <Card>
-          <div className="mb-3 rounded-lg bg-slate-50 border border-slate-100 px-3 py-2
+        <Card className="p-5" delay={0.05}>
+          <div className="mb-3 rounded-xl bg-sky-50/70 border border-slate-200/70 px-3 py-2
                           text-xs text-slate-500 leading-relaxed">
             左 = 简历里出现的写法　→　右 = 图谱中<b className="text-slate-700">已存在</b>的节点名。
             节点名的大小写以图谱为准（如 <code className="bg-white px-1 rounded border border-slate-200">JDK → jdk</code>），
@@ -436,7 +534,7 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
             {items.map(a => (
-              <div key={a.alias} className="px-3 py-2 rounded-lg border border-slate-100 bg-white/60">
+              <div key={a.alias} className="rounded-xl bg-sky-50/70 border border-slate-200/70 px-3.5 py-2.5">
                 <div className="text-sm text-slate-800 truncate">
                   <span className="font-medium">{a.alias}</span>
                   {a.canonical && <span className="text-slate-400"> → </span>}
@@ -452,17 +550,5 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
         </Card>
       )}
     </div>
-  )
-}
-
-function KPI({ label, value, unit }: { label: string; value: string; unit: string }) {
-  return (
-    <Card>
-      <div className="text-xs text-slate-500">{label}</div>
-      <div className="mt-1 flex items-baseline gap-1">
-        <span className="text-2xl font-semibold text-slate-800 tabular-nums">{value}</span>
-        {unit && <span className="text-sm text-slate-500">{unit}</span>}
-      </div>
-    </Card>
   )
 }

@@ -5,22 +5,8 @@ import { ArrowRight, Undo2 } from 'lucide-react'
 import { IBriefcase, IStack, IDatabase, ICopy, IShieldCheck, ITrendUp } from '../components/icons'
 import { api, Stats, JobListItem, PipelineStats, CATEGORY_COLORS } from '../api'
 import { Card, ConfidencePill, Badge, PageSkeleton, ErrorState } from '../components/ui'
-import { useCountUp, useReveal } from '../hooks/gsapFx'
-
-function Kpi({ icon, label, value, sub, tone, delay }: any) {
-  const numRef = useCountUp<HTMLDivElement>(typeof value === 'number' ? value : 0)
-  return (
-    <Card delay={delay} hover className="p-5 relative overflow-hidden"
-      decor="/kpi-texture.webp" decorClass="opacity-70">
-      <div className="flex items-center justify-between">
-        <div className="label">{label}</div>
-        <div className={`w-9 h-9 rounded-lg grid place-items-center ${tone}`}>{icon}</div>
-      </div>
-      <div ref={numRef} className="mt-3 text-3xl font-extrabold text-slate-900 tabular-nums">{value}</div>
-      {sub && <div className="text-xs text-slate-500 mt-1">{sub}</div>}
-    </Card>
-  )
-}
+import { Kpi } from '../components/Kpi'
+import { useReveal } from '../hooks/gsapFx'
 
 export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null)
