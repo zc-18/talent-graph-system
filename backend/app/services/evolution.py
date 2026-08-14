@@ -67,11 +67,21 @@ def compute_changes(old_caps: list[dict], new_caps: list[dict],
                 "confidence": 0.6,
                 "data_source": {"note": note, "window_jd_count": window_jd_count},
             })
-        elif not absent and name in new_all \
+        elif can_judge_absence and not absent and name in new_all \
                 and new_all[name].get("status", "active") != "active" \
                 and name not in new_map:
             # 仍出现在最新 JD 里，但交叉验证支持减弱被降为候选。
             # 这类变更既不是新增也不是淘汰，若不在这里记账就会三个分支都进不去、被静默丢弃。
+            #
+            # `can_judge_absence` 这道闸和 delete 分支共用，理由也一样：交互式演化只贴
+            # 1-3 条 JD 时，调用方会把**每一条**旧能力当作 history 先验注入聚合，它们
+            # 只拿得到 1 个来源、必然过不了「≥2 来源」闸门 → 必然落进这个分支。结果是
+            # 一次点击就给整个岗位刷出几十条「支持减弱」，而窗口薄本来就说明不了任何事。
+            # 实测线上误点两次，Java 被刷出 40 条这样的记录（v3/v4 各 20 条），演化记录
+            # 总数 621→661、演化页首屏全是「确认能力项→候选能力项」——而 apply_evolution
+            # 并不消费这类变更，库里 20 行原封未动。日志说降级、库里没降级，方向与 2026-07
+            # 那次事故相反，但同样是「日志与事实背离」。
+            # 窗口不足以判「消失」，就同样不足以判「支持减弱」——缺证据不等于反证。
             n = new_all[name]
             changes.append({
                 "change_type": "modify", "skill_name": name, "importance": c.get("importance"),
@@ -151,9 +161,22 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
     # 里 MIN_JDS_FOR_DELETE 想表达的「缺证据不等于反证」，只是当初没落到写库这一侧。
     delete_names = {ch["skill_name"] for ch in changes
                     if ch.get("change_type") == "delete"}
+    # 「支持减弱→候选」同样以日志为准落库。此前 compute_changes 会记这类变更，而这里
+    # 只消费 delete，于是日志说降级、库里纹丝不动——和上面那段描述的事故同一个病
+    # （日志与事实背离），只是方向相反。两边都按日志走，才谈得上"可溯源"。
+    demote = {ch["skill_name"]: (ch.get("new_value") or {})
+              for ch in changes
+              if ch.get("change_type") == "modify"
+              and (ch.get("new_value") or {}).get("status") == "candidate"}
     for name, js in existing_map.items():
         if name in delete_names and js.status == "active":
             js.status = "deprecated"
+            js.last_seen = datetime.utcnow()
+        elif name in demote and js.status == "active":
+            js.status = "candidate"
+            nv = demote[name]
+            if nv.get("confidence") is not None:
+                js.confidence = nv["confidence"]
             js.last_seen = datetime.utcnow()
 
     # 新增/更新项

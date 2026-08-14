@@ -1,0 +1,1002 @@
+[
+  {
+    "id": 743,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Python",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.6,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 744,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Nginx",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.32,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 745,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Elasticsearch检索",
+    "importance": "bonus",
+    "old_value": {
+      "confidence": 0.2967,
+      "importance": "bonus"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "bonus"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 746,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Git",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.3996,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 747,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "C++",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.5668,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 748,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "TensorFlow",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.3996,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 749,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "ActiveMQ",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.2967,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 750,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Docker",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4903,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.394,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 2 个来源提及（置信度 0.39），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 2,
+      "support_ratio": 0.0526
+    },
+    "confidence": 0.394,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 751,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "RabbitMQ",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.285,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 752,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "数据挖掘",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 753,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Spark",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 754,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Kubernetes",
+    "importance": "bonus",
+    "old_value": {
+      "confidence": 0.5584,
+      "importance": "bonus"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.394,
+      "importance": "bonus"
+    },
+    "reason": "最新窗口内仅 2 个来源提及（置信度 0.39），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 2,
+      "support_ratio": 0.0526
+    },
+    "confidence": 0.394,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 755,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Hive",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 756,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "AIGC",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.5057,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 757,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "多智能体",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4959,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 758,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Elasticsearch",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4903,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 759,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "LangChain",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 760,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "Flink",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 761,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "操作系统",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 762,
+    "job_id": 2,
+    "version": 3,
+    "change_type": "modify",
+    "skill_name": "PyTorch",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T02:54:13"
+  },
+  {
+    "id": 763,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Python",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.6,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:09"
+  },
+  {
+    "id": 764,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Nginx",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.32,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:09"
+  },
+  {
+    "id": 765,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Elasticsearch检索",
+    "importance": "bonus",
+    "old_value": {
+      "confidence": 0.2967,
+      "importance": "bonus"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "bonus"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:09"
+  },
+  {
+    "id": 766,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Git",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.3996,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:09"
+  },
+  {
+    "id": 767,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "C++",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.5668,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:09"
+  },
+  {
+    "id": 768,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "TensorFlow",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.3996,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:09"
+  },
+  {
+    "id": 769,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "ActiveMQ",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.2967,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:09"
+  },
+  {
+    "id": 770,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Docker",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4903,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.394,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 2 个来源提及（置信度 0.39），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 2,
+      "support_ratio": 0.0526
+    },
+    "confidence": 0.394,
+    "created_at": "2026-07-30T03:15:09"
+  },
+  {
+    "id": 771,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "RabbitMQ",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.285,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 772,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "数据挖掘",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 773,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Spark",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 774,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Kubernetes",
+    "importance": "bonus",
+    "old_value": {
+      "confidence": 0.5584,
+      "importance": "bonus"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.394,
+      "importance": "bonus"
+    },
+    "reason": "最新窗口内仅 2 个来源提及（置信度 0.39），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 2,
+      "support_ratio": 0.0526
+    },
+    "confidence": 0.394,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 775,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Hive",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 776,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "AIGC",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.5057,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 777,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "多智能体",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4959,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 778,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Elasticsearch",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4903,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 779,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "LangChain",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 780,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "Flink",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 781,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "操作系统",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  },
+  {
+    "id": 782,
+    "job_id": 2,
+    "version": 4,
+    "change_type": "modify",
+    "skill_name": "PyTorch",
+    "importance": "required",
+    "old_value": {
+      "confidence": 0.4861,
+      "importance": "required"
+    },
+    "new_value": {
+      "status": "candidate",
+      "confidence": 0.2904,
+      "importance": "required"
+    },
+    "reason": "最新窗口内仅 1 个来源提及（置信度 0.29），未通过交叉验证阈值，降级为候选能力项（保留观察，未淘汰）",
+    "data_source": {
+      "note": "支持减弱，降级为候选",
+      "source_count": 1,
+      "support_ratio": 0.0263
+    },
+    "confidence": 0.2904,
+    "created_at": "2026-07-30T03:15:10"
+  }
+]

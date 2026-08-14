@@ -6,6 +6,7 @@ from ..db import get_db
 from .. import models
 from ..schemas import DiscoverRequest, DefineRequest
 from ..services import discovery, graph_service
+from ..guards import is_read_only, READ_ONLY_MESSAGE
 
 router = APIRouter(prefix="/api/discovery", tags=["discovery"])
 
@@ -61,12 +62,16 @@ def discover(payload: DiscoverRequest, db: Session = Depends(get_db)):
     cand = discovery.discover_candidates(payload.keyword)
     definition = discovery.define_new_job(payload.keyword, cand["evidence"])
     definition["emergence_score"] = max(definition.get("emergence_score", 0), cand["emergence_score"])
-    saved, conflict = _save_if_absent(db, definition) if payload.save else (None, None)
+    # 只读模式下强制 dry-run：检索与定义生成照跑（这才是要演示的东西），但不落库。
+    want_save = payload.save and not is_read_only()
+    saved, conflict = _save_if_absent(db, definition) if want_save else (None, None)
     return {"candidate": {"keyword": cand["keyword"], "emergence_score": cand["emergence_score"],
                           "evidence_count": cand["evidence_count"],
                           "independent_sources": cand.get("independent_sources", 0),
                           "evidence": cand["evidence"][:6]},
-            "definition": definition, "saved": saved, "conflict": conflict}
+            "definition": definition, "saved": saved, "conflict": conflict,
+            **({"dry_run": True, "notice": READ_ONLY_MESSAGE}
+               if payload.save and is_read_only() else {})}
 
 
 @router.post("/define")
@@ -76,5 +81,8 @@ def define(payload: DefineRequest, db: Session = Depends(get_db)):
     if not evidence:
         evidence = discovery.discover_candidates(payload.keyword)["evidence"]
     definition = discovery.define_new_job(payload.keyword, evidence)
-    saved, conflict = _save_if_absent(db, definition) if payload.save else (None, None)
-    return {"definition": definition, "saved": saved, "conflict": conflict}
+    want_save = payload.save and not is_read_only()
+    saved, conflict = _save_if_absent(db, definition) if want_save else (None, None)
+    return {"definition": definition, "saved": saved, "conflict": conflict,
+            **({"dry_run": True, "notice": READ_ONLY_MESSAGE}
+               if payload.save and is_read_only() else {})}

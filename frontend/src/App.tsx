@@ -7,6 +7,7 @@ import {
 import { IGauge, ITreeStructure, ISparkle, IGitBranch, IBriefcase, ITarget, IUsersThree } from './components/icons'
 import ChatBot from './components/ChatBot'
 import { ToastProvider } from './components/Toast'
+import { ReadOnlyProvider } from './hooks/useReadOnly'
 import { Spinner } from './components/ui'
 
 // 路由级代码分割：各页面（含 ECharts 等重依赖）按需加载，减小首包
@@ -143,7 +144,7 @@ export default function App() {
   const [collapsed, setCollapsed] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   return (
-    <ToastProvider>
+    <ReadOnlyProvider><ToastProvider>
       <div className="flex min-h-screen">
         <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
         <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
@@ -175,6 +176,6 @@ export default function App() {
         </div>
         <ChatBot />
       </div>
-    </ToastProvider>
+    </ToastProvider></ReadOnlyProvider>
   )
 }

@@ -6,6 +6,7 @@ import { api, errMsg } from '../api'
 import { Card, Badge, ConfidencePill } from '../components/ui'
 import { useToast } from '../components/Toast'
 import { useFloat, useReveal } from '../hooks/gsapFx'
+import { useReadOnly } from '../hooks/useReadOnly'
 
 export default function Discovery() {
   const [seeds, setSeeds] = useState<string[]>([])
@@ -13,6 +14,7 @@ export default function Discovery() {
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [res, setRes] = useState<any>(null)
+  const readOnly = useReadOnly()
   const nav = useNavigate()
   const toast = useToast()
   const floatRef = useFloat<HTMLImageElement>({ y: 12, duration: 3.4, deps: [res, loading] })
@@ -129,9 +131,12 @@ export default function Discovery() {
                     <Badge tone="cyan">新兴度 {Math.round((def.emergence_score || 0) * 100)}%</Badge>
                   </div>
                 </div>
-                <button onClick={() => run(def.job_title, true)} disabled={saving} className="btn-primary shrink-0 w-full sm:w-auto justify-center whitespace-nowrap">
-                  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <IFloppyDisk className="w-4 h-4" />} 保存到图谱
-                </button>
+                {/* 只读演示站不落库（后端同样会强制 dry-run），按钮点了也只是白跑一次检索 */}
+                {!readOnly && (
+                  <button onClick={() => run(def.job_title, true)} disabled={saving} className="btn-primary shrink-0 w-full sm:w-auto justify-center whitespace-nowrap">
+                    {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <IFloppyDisk className="w-4 h-4" />} 保存到图谱
+                  </button>
+                )}
               </div>
               <p className="text-sm text-slate-600 mt-3 leading-relaxed">{def.summary}</p>
 

@@ -4,10 +4,28 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from .. import models
 from ..db import get_db
+from ..guards import is_read_only
 from ..schemas import MatchRequest
 from ..services import resume as resume_svc, matching, graph_service
 
 router = APIRouter(prefix="/api/match", tags=["match"])
+
+
+def _persist(db: Session, row):
+    """只读演示站不落这类分析留痕。
+
+    这三个接口不碰知识图谱，所以不该进 `require_write` 那道硬闸——简历解析和人岗匹配
+    正是要给评委演示的功能。但它们每次请求都会写一行 `Resume`/`MatchResult`，而公网
+    演示站没有任何频率限制，等于把生产库的行数交给访客决定。查过全仓：没有任何展示
+    接口读这两张表（人才盘点走的是 `ResumeBatch`），留痕纯属自用，只读模式下直接不写。
+
+    返回 row.id 或 None——前端不消费 resume_id/match_id，返回 None 不影响任何页面。
+    """
+    if is_read_only():
+        return None
+    db.add(row)
+    db.commit()
+    return row.id
 
 
 @router.post("/resume/upload")
@@ -26,9 +44,7 @@ async def upload_resume(file: UploadFile = File(...), db: Session = Depends(get_
                         extracted=resume_svc.redact_for_storage(parsed),
                         skills=parsed.get("skills", []),
                         years_experience=parsed.get("years_experience", 0))
-    db.add(row)
-    db.commit()
-    return {"resume_id": row.id, "filename": file.filename, "extracted": parsed,
+    return {"resume_id": _persist(db, row), "filename": file.filename, "extracted": parsed,
             "skill_count": len(parsed.get("skills", [])),
             "privacy_notice": "原始简历与姓名等个人信息仅用于本次解析，不在服务端留存"}
 
@@ -45,9 +61,8 @@ def parse_resume_text(payload: dict, db: Session = Depends(get_db)):
                         extracted=resume_svc.redact_for_storage(parsed),
                         skills=parsed.get("skills", []),
                         years_experience=parsed.get("years_experience", 0))
-    db.add(row)
-    db.commit()
-    return {"resume_id": row.id, "extracted": parsed, "skill_count": len(parsed.get("skills", [])),
+    return {"resume_id": _persist(db, row), "extracted": parsed,
+            "skill_count": len(parsed.get("skills", [])),
             "privacy_notice": "原始简历与姓名等个人信息仅用于本次解析，不在服务端留存"}
 
 
@@ -121,9 +136,7 @@ def analyze(payload: MatchRequest, db: Session = Depends(get_db)):
         dimension_scores=result["dimension_scores"], matched_skills=result["matched_skills"],
         missing_required=result["missing_required"], missing_bonus=result["missing_bonus"],
         suggestions=suggestions, learning_path=learning_path)
-    db.add(rec)
-    db.commit()
 
     return {"job": {"id": job.id, "name": job.name, "category": job.category},
             "result": result, "learning_path": learning_path, "suggestions": suggestions,
-            "match_id": rec.id}
+            "match_id": _persist(db, rec)}

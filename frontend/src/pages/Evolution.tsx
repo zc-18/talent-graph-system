@@ -131,7 +131,11 @@ export default function Evolution() {
     try {
       const r = await api.evolve(jobId, jds.filter(j => j.trim()), true)
       setResult(r)
-      toast('success', `演化完成：新增 ${r.evolution.added} · 删除 ${r.evolution.deleted} · 修改 ${r.evolution.modified}`)
+      // 只读演示站下后端只推演不落库（dry_run），措辞必须跟着变——否则页面说"演化完成"
+      // 而历史记录里什么都没多出来，等于当着评委的面自相矛盾。
+      toast('success', r.dry_run
+        ? `推演完成（演示站只读，未写入图谱）：新增 ${r.evolution.added} · 删除 ${r.evolution.deleted} · 修改 ${r.evolution.modified}`
+        : `演化完成：新增 ${r.evolution.added} · 删除 ${r.evolution.deleted} · 修改 ${r.evolution.modified}`)
       api.changes(jobId).then(setHistory).catch(() => {})
     } catch (e) {
       // 失败保留已输入的 JD，便于修正后重试

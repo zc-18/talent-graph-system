@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from .. import models
 from ..db import get_db
+from ..guards import require_write
 from ..services import resume as resume_svc, talent as talent_svc
 
 router = APIRouter(prefix="/api/talent", tags=["talent"])
@@ -117,7 +118,7 @@ def aliases(status: str | None = None, limit: int = 200, db: Session = Depends(g
     } for a in rows]}
 
 
-@router.post("/teams/{team_id}/members/upload")
+@router.post("/teams/{team_id}/members/upload", dependencies=[Depends(require_write)])
 async def upload_member_resume(team_id: int, file: UploadFile = File(...),
                                display_name: str = Form("成员"),
                                role_label: str = Form(""),

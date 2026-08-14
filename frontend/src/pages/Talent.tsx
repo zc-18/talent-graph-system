@@ -12,6 +12,7 @@ import { Card, Badge, Spinner, EmptyState, ErrorState, Meter } from '../componen
 import { Kpi } from '../components/Kpi'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
+import { useReadOnly } from '../hooks/useReadOnly'
 
 type Tab = 'team' | 'supply' | 'corpus' | 'alias'
 
@@ -109,6 +110,7 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
+  const readOnly = useReadOnly()
 
   useEffect(() => {
     api.teams().then(d => { setTeams(d.items); if (d.items[0]) setTeamId(d.items[0].id) })
@@ -148,19 +150,23 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
             <Select value={String(jobId ?? '')} onChange={v => setJobId(Number(v))}
               options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
           </div>
-          <div className="shrink-0 w-full sm:w-auto">
-            <input ref={fileRef} type="file" accept=".pdf,.docx,.doc,.txt" className="hidden"
-              onChange={e => e.target.files?.[0] && onFile(e.target.files[0])} />
-            <button onClick={() => fileRef.current?.click()} disabled={uploading || !teamId}
-              className="btn-primary w-full sm:w-auto whitespace-nowrap">
-              {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-              加入成员简历
-            </button>
-          </div>
+          {!readOnly && (
+            <div className="shrink-0 w-full sm:w-auto">
+              <input ref={fileRef} type="file" accept=".pdf,.docx,.doc,.txt" className="hidden"
+                onChange={e => e.target.files?.[0] && onFile(e.target.files[0])} />
+              <button onClick={() => fileRef.current?.click()} disabled={uploading || !teamId}
+                className="btn-primary w-full sm:w-auto whitespace-nowrap">
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                加入成员简历
+              </button>
+            </div>
+          )}
         </div>
         <p className="mt-3 text-xs text-slate-500 flex items-start gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-600" />
-          上传的简历只在内存中解析，服务端仅留存脱敏后的技能要素，姓名与联系方式不入库。
+          {readOnly
+            ? '演示站为只读模式，成员简历入库已关闭；下方盘点结果基于已入库的脱敏技能要素计算。简历解析仅在内存中进行，姓名与联系方式从不入库。'
+            : '上传的简历只在内存中解析，服务端仅留存脱敏后的技能要素，姓名与联系方式不入库。'}
         </p>
       </Card>
 

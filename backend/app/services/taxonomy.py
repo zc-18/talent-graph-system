@@ -9,7 +9,11 @@ import os
 import re
 from pathlib import Path
 
-# 技术栈分类
+# 岗位所属技术栈领域（赛题点名的新一代信息技术方向）。
+# 注意：这是**岗位**的领域清单——`/api/graph/categories` 用它做全景图筛选项，
+# extraction/discovery 用它校验大模型返回的岗位分类。技能分类另有自己的取值
+# （见下方 SKILL_CATEGORY，多出「编程语言」「数据库与存储」两类），两者不是同一个集合，
+# 别为了"看起来统一"把技能分类塞进来——那会让全景图筛选出现选不中任何岗位的选项。
 CATEGORIES = ["人工智能", "大数据", "智能系统", "物联网", "云计算与工程", "数据工程"]
 
 # 同义词 -> 规范名
@@ -84,9 +88,13 @@ _BD = ["Hadoop", "Spark", "Flink", "Hive", "HBase", "Kafka", "数据仓库", "ET
 _IOT = ["物联网", "MQTT", "CoAP", "嵌入式开发", "实时操作系统", "边缘计算", "传感器技术",
         "5G通信", "LoRa通信", "Zigbee"]
 _SYS = ["机器人技术", "ROS", "自动驾驶", "SLAM", "具身智能", "数字孪生", "控制系统", "PLC", "Neo4j"]
+# 「云计算与工程」原本是个杂物筐：编程语言、数据库、后端框架全塞在里面，于是岗位详情页
+# 上 Java / Python / MySQL 都挂着「云计算与工程」的分类徽章——技能分类是页面上逐条可见的
+# 信息，错得这么显眼会直接折损图谱的可信度。按技能本身的性质拆成三类。
+_LANG = ["Java", "Python", "Go", "C++", "JavaScript", "Scala", "Rust"]
+_DATA_STORE = ["SQL", "MySQL", "Redis", "MongoDB", "Elasticsearch"]
 _CLOUD = ["Docker", "Kubernetes", "微服务", "CI/CD", "DevOps", "Linux", "Git", "云原生",
-          "云平台", "Java", "Python", "Go", "C++", "JavaScript", "Scala", "Rust", "SQL",
-          "MySQL", "Redis", "MongoDB", "Spring", "分布式系统", "高并发", "消息队列"]
+          "云平台", "Spring", "分布式系统", "高并发", "消息队列", "操作系统"]
 for s in _AI:
     SKILL_CATEGORY[s] = "人工智能"
 for s in _BD:
@@ -95,6 +103,10 @@ for s in _IOT:
     SKILL_CATEGORY[s] = "物联网"
 for s in _SYS:
     SKILL_CATEGORY[s] = "智能系统"
+for s in _LANG:
+    SKILL_CATEGORY[s] = "编程语言"
+for s in _DATA_STORE:
+    SKILL_CATEGORY[s] = "数据库与存储"
 for s in _CLOUD:
     SKILL_CATEGORY[s] = "云计算与工程"
 

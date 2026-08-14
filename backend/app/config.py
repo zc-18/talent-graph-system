@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     app_port: int = 8200
     cors_origins: str = "*"
 
+    # 演示站只读开关（见 app/guards.py）。默认 False 以免本地/离线跑数据脚本被误挡；
+    # 公网部署的 .env 必须显式 READ_ONLY=1。
+    read_only: bool = False
+
     @property
     def database_url(self) -> str:
         return (

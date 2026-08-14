@@ -124,6 +124,7 @@ export interface AliasItem {
 }
 
 export const api = {
+  health: () => http.get<{ status: string; read_only?: boolean }>('/health').then(r => r.data),
   stats: () => http.get<Stats>('/graph/stats').then(r => r.data),
   categories: () => http.get<{ categories: string[]; levels: string[] }>('/graph/categories').then(r => r.data),
   panorama: (category?: string, level?: string, minConf = 0) =>
@@ -179,7 +180,10 @@ export const api = {
   },
 }
 
+// 岗位领域 + 技能分类共用一张色表。后两项（编程语言 / 数据库与存储）只出现在技能侧，
+// 岗位不会用到——技能分类与岗位领域是两个集合，见后端 taxonomy.CATEGORIES 的说明。
 export const CATEGORY_COLORS: Record<string, string> = {
   人工智能: '#6366F1', 大数据: '#22D3EE', 物联网: '#34D399',
   智能系统: '#F59E0B', 云计算与工程: '#A855F7', 数据工程: '#F472B6', 其他: '#64748B',
+  编程语言: '#0EA5E9', 数据库与存储: '#14B8A6',
 }

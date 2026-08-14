@@ -1,0 +1,669 @@
+[
+  {
+    "job": "Java开发工程师",
+    "skill": "JavaScript",
+    "job_skill_id": 1493,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: JavaScript",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: JavaScript",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "云平台",
+    "job_skill_id": 1492,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "bonus",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 云平台",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 云平台",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "MySQL",
+    "job_skill_id": 1478,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: MySQL",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: MySQL",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "分布式系统",
+    "job_skill_id": 1488,
+    "before": {
+      "source_count": 2,
+      "confidence": 0.494,
+      "status": "active",
+      "weight": 0.1526,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 分布式系统",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 分布式系统",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "Linux",
+    "job_skill_id": 1480,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Linux",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Linux",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "SQL",
+    "job_skill_id": 1482,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: SQL",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: SQL",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "微服务",
+    "job_skill_id": 1481,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 微服务",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 微服务",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "Git",
+    "job_skill_id": 1495,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3996,
+      "status": "active",
+      "weight": 0.1526,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-28T13:41:05"
+    },
+    "evidence_before": []
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "DevOps",
+    "job_skill_id": 1500,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "bonus",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: DevOps",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: DevOps",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "Java",
+    "job_skill_id": 133,
+    "before": {
+      "source_count": 2,
+      "confidence": 0.494,
+      "status": "active",
+      "weight": 0.1526,
+      "importance": "required",
+      "factors": {
+        "support": 0.9,
+        "external": 0.0,
+        "authority": 0.6999999999999997,
+        "diversity": 0.6666666666666666,
+        "freshness": 2.1579186437577742e-05
+      },
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": 4,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "Java",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 27,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "Java",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 47,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "Java",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 66,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "Java",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 71,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "Java",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 75,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "Java",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Java",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Java",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "CI/CD",
+    "job_skill_id": 1497,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: CI/CD",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: CI/CD",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "云原生",
+    "job_skill_id": 1490,
+    "before": {
+      "source_count": 2,
+      "confidence": 0.494,
+      "status": "active",
+      "weight": 0.1526,
+      "importance": "bonus",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 云原生",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 云原生",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "TensorFlow",
+    "job_skill_id": 1506,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3996,
+      "status": "active",
+      "weight": 0.1526,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-28T13:41:05"
+    },
+    "evidence_before": []
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "Spring",
+    "job_skill_id": 1487,
+    "before": {
+      "source_count": 2,
+      "confidence": 0.494,
+      "status": "active",
+      "weight": 0.1526,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Spring",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Spring",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "Redis",
+    "job_skill_id": 1479,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Redis",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Redis",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "Kafka",
+    "job_skill_id": 1483,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Kafka",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Kafka",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "MongoDB",
+    "job_skill_id": 1496,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: MongoDB",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: MongoDB",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "大语言模型",
+    "job_skill_id": 1491,
+    "before": {
+      "source_count": 2,
+      "confidence": 0.494,
+      "status": "active",
+      "weight": 0.1526,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 大语言模型",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: 大语言模型",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "Java开发工程师",
+    "skill": "Go",
+    "job_skill_id": 1485,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3904,
+      "status": "active",
+      "weight": 0.1263,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-30T03:15:09"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Go",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": null,
+        "source_type": "web",
+        "source_url": "",
+        "snippet": "外部检索确认: Go",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "AI产品经理",
+    "skill": "云平台",
+    "job_skill_id": 5674,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.3845,
+      "status": "active",
+      "weight": 0.1095,
+      "importance": "required",
+      "factors": {
+        "support": 0.27586206896551724,
+        "external": 0.0,
+        "authority": 1.0,
+        "diversity": 1.0,
+        "freshness": 0.921152902061138
+      },
+      "last_seen": "2026-07-28T13:41:36"
+    },
+    "evidence_before": [
+      {
+        "raw_jd_id": 850,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "开放平台搭建",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 1100,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "低代码平台",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 1102,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "腾讯云认证",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 1103,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "数字营销核心链路认知",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 1104,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "产品方案设计",
+        "weight": 1.0
+      },
+      {
+        "raw_jd_id": 1105,
+        "source_type": "jd",
+        "source_url": "",
+        "snippet": "数据中心GPU产品",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "job": "AI产品经理",
+    "skill": "分布式系统",
+    "job_skill_id": 5897,
+    "before": {
+      "source_count": 1,
+      "confidence": 0.44,
+      "status": "active",
+      "weight": 0.1095,
+      "importance": "required",
+      "factors": null,
+      "last_seen": "2026-07-28T13:41:36"
+    },
+    "evidence_before": []
+  }
+]

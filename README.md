@@ -30,7 +30,7 @@
 
 | JD 解析 F1 | 简历提取 F1 | 人岗匹配准确率 | 测试覆盖率 | 测试 JD |
 |:---:|:---:|:---:|:---:|:---:|
-| **98.25%** | **96.49%** | **100%** | **63%** | **对抗基准 379 + 真实语料 806** |
+| **98.25%** | **96.49%** | **100%** | **73%** | **对抗基准 379 + 真实语料 2570** |
 
 ---
 
@@ -48,7 +48,7 @@ talent-graph-system/
 ├── backend/
 │   ├── app/                FastAPI 应用（services 分层 + routers）
 │   ├── data/               数据生成 / pipeline / 评测脚本
-│   ├── tests/              单元测试（72 用例，覆盖率 63%）
+│   ├── tests/              单元测试（146 用例，覆盖率 73%）
 │   └── requirements.txt
 ├── frontend/               React + Vite 前端
 ├── deploy/                 Dockerfile / docker-compose / systemd
@@ -61,6 +61,9 @@ talent-graph-system/
 # 后端
 cd backend
 uv sync
+# 数据脚本一律写入 DB_NAME 指向的库，缺省是最初的演示库 talent_graph。
+# 生产图谱是 talent_graph_v3，构建/演化前务必先指定，否则会静默写错库：
+$env:DB_NAME='talent_graph_v3'                # PowerShell（bash: export DB_NAME=talent_graph_v3）
 uv run python data/run_pipeline.py --from-db  # 用真实 RawJD 构建图谱（生产路径；--reset 为合成基准评测路径）
 uv run python data/seed_relations.py
 uv run uvicorn app.main:app --port 8200

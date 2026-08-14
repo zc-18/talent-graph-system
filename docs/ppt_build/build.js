@@ -100,7 +100,7 @@ steps.forEach(([t, d, c], i) => {
   s.addText(d, { x: x + 0.05, y: 3.2, w: 1.75, h: 0.5, align: 'center', fontFace: F, fontSize: 10, color: MUTED })
   if (i < 5) s.addText('▶', { x: x + 1.78, y: 2.0, w: 0.3, h: 1.9, align: 'center', valign: 'middle', fontFace: F, fontSize: 12, color: FAINT })
 })
-const kpis = [['32', '岗位（新兴6）'], ['3952', '技能（含3816技能点）'], ['2570', '真实岗位JD'], ['7861', '溯源证据'], ['0.5513', '岗位置信度均值']]
+const kpis = [['32', '岗位（新兴6）'], ['3952', '技能（含3816技能点）'], ['2570', '真实岗位JD'], ['7999', '溯源证据'], ['0.5613', '岗位置信度均值']]
 kpis.forEach(([v, l], i) => {
   const x = 0.9 + i * 2.45
   s.addText(v, { x, y: 4.5, w: 2.2, h: 0.7, align: 'center', fontFace: F, fontSize: 32, bold: true, color: INDIGO })
@@ -310,7 +310,7 @@ s.addText('9/13 条有效 JD 提及（支持率 0.69）· 2 个平台（多样�
 s.addText('C = 0.35×0.69 + 0.20×0.67 + 0.15×0.88 + 0.20×1.0 + 0.10×0 ≈ 0.71', {
   x: 0.85, y: 5.12, w: 11.6, h: 0.6, align: 'center', valign: 'middle', fontFace: 'Consolas', fontSize: 16, bold: true, color: '0F172A',
   fill: { type: 'solid', color: 'E0F2FE' }, line: { type: 'none' } })
-s.addText('岗位整体置信度 = 粗粒度 active 能力项的权重加权平均；全库岗位均值 0.5513 —— 比上一版低，因为 6 个原本靠联网检索打分（最高 1.000）的新兴岗位已改由真实 JD 语料重建、纳入同一条交叉验证链，公式一个参数未改（3257 项单来源细粒度技能点降级为 candidate，保留可查但不进图谱主视图）', {
+s.addText('岗位整体置信度 = 粗粒度 active 能力项的权重加权平均；全库岗位均值 0.5613 —— 比上一版低，因为 6 个原本靠联网检索打分（最高 1.000）的新兴岗位已改由真实 JD 语料重建、纳入同一条交叉验证链，公式一个参数未改（3258 项单来源细粒度技能点降级为 candidate，保留可查但不进图谱主视图）', {
   x: 0.55, y: 6.2, w: 12.2, h: 0.6, align: 'center', valign: 'middle', fontFace: F, fontSize: 12, bold: true, color: INDIGO,
   fill: { type: 'solid', color: 'E0E9FF' }, line: { type: 'none' } })
 footer(s, 10)
@@ -330,7 +330,7 @@ metrics.forEach(([v, t, d, c], i) => {
   s.addText(d, { x, y: 3.5, w: 3.85, h: 0.4, align: 'center', fontFace: F, fontSize: 11.5, color: MUTED })
   s.addText('要求 ≥ 90% ✓', { x, y: 3.78, w: 3.85, h: 0.3, align: 'center', fontFace: F, fontSize: 11, bold: true, color: EMERALD })
 })
-const extra = [['8 / 8', '抄袭检出'], ['17 / 17', '通胀检出'], ['71%', '单元测试覆盖率'], ['109', '测试用例全通过']]
+const extra = [['8 / 8', '抄袭检出'], ['17 / 17', '通胀检出'], ['73%', '单元测试覆盖率'], ['146', '测试用例全通过']]
 extra.forEach(([v, l], i) => {
   const x = 0.6 + i * 3.1
   card(s, x, 4.35, 2.9, 1.5)

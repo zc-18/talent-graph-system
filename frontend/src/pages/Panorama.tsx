@@ -47,6 +47,9 @@ export default function Panorama() {
       智能系统: ['#FCD34D', '#F59E0B'],
       云计算与工程: ['#D8B4FE', '#A855F7'],
       数据工程: ['#F9A8D4', '#EC4899'],
+      // 技能侧独有的两类（岗位不会用到）：拆自原先什么都往里塞的「云计算与工程」
+      编程语言: ['#7DD3FC', '#0EA5E9'],
+      数据库与存储: ['#5EEAD4', '#14B8A6'],
       其他: ['#CBD5E1', '#94A3B8'],
     }
     const mixWhite = (hex: string, t: number) => {
@@ -87,11 +90,15 @@ export default function Panorama() {
           position: isJob ? 'bottom' : 'right',
           distance: isJob ? 8 : 6,
           color: isJob ? '#0F172A' : '#7C8BA3',
-          fontSize: isJob ? (isNarrow ? 10 : 12) : 10,
+          fontSize: isJob ? (isNarrow ? 10 : 11.5) : 10,
           fontWeight: isJob ? 700 : 500,
           width: isNarrow ? 96 : undefined,
           overflow: isNarrow ? 'truncate' : undefined,
-          backgroundColor: isJob ? 'rgba(255,255,255,0.85)' : 'transparent',
+          // 岗位标签给白底 + 淡描边：力导向下标签难免有贴近的时候，描边让上下两层
+          // 各自成块，即使贴住也还能一眼分开是两个岗位。
+          backgroundColor: isJob ? 'rgba(255,255,255,0.92)' : 'transparent',
+          borderColor: isJob ? 'rgba(148,163,184,0.35)' : 'transparent',
+          borderWidth: isJob ? 1 : 0,
           padding: isJob ? [3, 7] : 0, borderRadius: 6,
         },
         _raw: n,
@@ -118,11 +125,19 @@ export default function Panorama() {
       },
       series: [{
         type: 'graph', layout: 'force', roam: true, draggable: true,
+        // repulsion 给数组：ECharts 按节点 value 在区间内插值，岗位节点（value=30，
+        // 高于绝大多数技能点的 degree）因此获得最大斥力。此前用单值 560，少边的岗位
+        // （数字孪生、自动驾驶等语料偏薄的岗位）会被 gravity 拽到画布中心叠在一起，
+        // 名字长的标签糊成一团——hideOverlap 只能把它们藏掉，藏掉又等于信息丢失，
+        // 所以要从布局上把节点先分开。
         force: isNarrow
-          ? { repulsion: 300, edgeLength: [70, 150], gravity: 0.16, friction: 0.18 }
-          : { repulsion: 560, edgeLength: [120, 260], gravity: 0.10, friction: 0.18 },
+          ? { repulsion: [160, 420], edgeLength: [70, 150], gravity: 0.16, friction: 0.18 }
+          : { repulsion: [320, 1000], edgeLength: [140, 300], gravity: 0.092, friction: 0.16 },
         categories: [{ name: '岗位' }, { name: '技能点' }],
-        labelLayout: { hideOverlap: true },
+        // hideOverlap 单用不够：力导向布局下岗位标签仍会两两压住（岗位标签带白底
+        // 色块，压在一起时下层的名字直接读不出来）。moveOverlap 先把冲突的标签沿 Y
+        // 轴错开，实在错不开的再交给 hideOverlap 隐藏——优先保住"能读"，其次才是"都显示"。
+        labelLayout: { hideOverlap: true, moveOverlap: 'shiftY' },
         // 平滑状态切换 + 仅节点触发柔和聚焦，杜绝鼠标划过连线时的"屏闪"
         stateAnimation: { duration: 280, easing: 'cubicOut' },
         emphasis: { focus: 'adjacency',

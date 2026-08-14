@@ -6,6 +6,7 @@ from .. import models
 from ..db import get_db
 from ..schemas import EvolveRequest
 from ..services import extraction, hallucination, evolution, graph_service, leveling
+from ..guards import is_read_only, READ_ONLY_MESSAGE
 from .. import clients
 
 router = APIRouter(prefix="/api/evolution", tags=["evolution"])
@@ -117,6 +118,17 @@ def update_job(payload: EvolveRequest, db: Session = Depends(get_db)):
 
     agg = hallucination.aggregate_capabilities(agg_input, web_evidence_skills=web_skills)
     changes = evolution.compute_changes(old_caps, agg["capabilities"])
+    if is_read_only():
+        # 只读模式：推演照跑、结果照返回，只是不落库。演示效果与写入版一致，
+        # 但演示站的图谱不会被访客点击改动（两次线上事故均由此而来）。
+        return {"ok": True, "job_id": job.id, "dry_run": True,
+                "evolution": {"version": job.version, "changes_applied": 0,
+                              "added": sum(1 for c in changes if c["change_type"] == "add"),
+                              "deleted": sum(1 for c in changes if c["change_type"] == "delete"),
+                              "modified": sum(1 for c in changes if c["change_type"] == "modify")},
+                "changes": changes, "stats": agg["stats"],
+                "job": graph_service.job_to_dict(db, job),
+                "notice": READ_ONLY_MESSAGE}
     result = evolution.apply_evolution(db, job, agg["capabilities"], changes)
     return {"ok": True, "job_id": job.id, "evolution": result, "changes": changes,
             "stats": agg["stats"], "job": graph_service.job_to_dict(db, job)}

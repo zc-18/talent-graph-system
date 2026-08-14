@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_, func
 from .. import models
 from ..db import get_db
+from ..guards import require_write
 from ..schemas import JobUpsert, ManualSkillEdit
 from ..services import graph_service
 from ..services.taxonomy import normalize_skill, skill_category, skill_type
@@ -122,7 +123,7 @@ def job_authority(job_id: int, db: Session = Depends(get_db)):
     } for r in rows]}
 
 
-@router.post("")
+@router.post("", dependencies=[Depends(require_write)])
 def create_or_update_job(payload: JobUpsert, db: Session = Depends(get_db)):
     """人工创建/优化岗位定义。"""
     caps = []
@@ -149,7 +150,7 @@ def create_or_update_job(payload: JobUpsert, db: Session = Depends(get_db)):
     return {"ok": True, "job": graph_service.job_to_dict(db, job)}
 
 
-@router.post("/manual-edit")
+@router.post("/manual-edit", dependencies=[Depends(require_write)])
 def manual_edit_skill(payload: ManualSkillEdit, db: Session = Depends(get_db)):
     """对单个能力项进行人工增删改，并记录为变更（支持人工优化）。"""
     job = db.query(models.Job).get(payload.job_id)
@@ -191,7 +192,7 @@ def manual_edit_skill(payload: ManualSkillEdit, db: Session = Depends(get_db)):
     return {"ok": True, "job": graph_service.job_to_dict(db, job)}
 
 
-@router.delete("/{job_id}")
+@router.delete("/{job_id}", dependencies=[Depends(require_write)])
 def delete_job(job_id: int, db: Session = Depends(get_db)):
     job = db.query(models.Job).get(job_id)
     if not job:

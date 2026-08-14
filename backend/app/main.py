@@ -47,7 +47,9 @@ def _startup():
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "service": "talent-graph", "version": "1.0.0"}
+    # read_only 供前端隐藏写操作入口（按钮藏了、闸门也还在，两层各自独立生效）
+    return {"status": "ok", "service": "talent-graph", "version": "1.0.0",
+            "read_only": bool(settings.read_only)}
 
 
 # ---------------- 静态前端（SPA）----------------

@@ -10,6 +10,7 @@ import ChangeDiff from '../components/ChangeDiff'
 import { useToast } from '../components/Toast'
 import ConfirmDialog from '../components/ConfirmDialog'
 import { useReveal } from '../hooks/gsapFx'
+import { useReadOnly } from '../hooks/useReadOnly'
 
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
 const SKILL_LEVEL: Record<string, string> = { familiar: '了解', proficient: '熟练', expert: '精通' }
@@ -84,6 +85,9 @@ function DeprecatedChips({ items }: { items: TSkill[] }) {
 }
 
 function SkillRow({ s, fineChildren = [], fineCandidates = [], fineDeprecated = [], onEdit, onRemove }: any) {
+  // 只读演示站不渲染增删改入口：这两个按钮正是两次线上图谱事故的入口（访客点击）。
+  // 服务端 guards.require_write 才是真闸门，这里只是别让人点到注定 403 的按钮。
+  const readOnly = useReadOnly()
   return (
     <div className="rounded-xl bg-sky-50/70 hover:bg-sky-100/80 px-3.5 py-2.5 transition group">
       {/* 首行：技能名 + 分类/级别；操作按钮固定右侧。徽章不换行，窄屏截断而非竖排 */}
@@ -92,12 +96,14 @@ function SkillRow({ s, fineChildren = [], fineCandidates = [], fineDeprecated = 
         <span className="chip border bg-slate-100 text-slate-600 border-slate-200 whitespace-nowrap truncate min-w-0">{s.category}</span>
         <span className="text-[11px] text-slate-400 shrink-0 hidden sm:inline">{SKILL_LEVEL[s.level_required] || ''}</span>
         <span className="flex-1" />
-        <button onClick={() => onEdit(s)} aria-label={`编辑技能 ${s.name}`}
-          className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-accent transition p-2 -m-1 shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-accent/40 outline-none">
-          <Pencil className="w-3.5 h-3.5" /></button>
-        <button onClick={() => onRemove(s)} aria-label={`删除技能 ${s.name}`}
-          className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-rose-400 transition p-2 -m-1 shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-rose-300 outline-none">
-          <Trash2 className="w-3.5 h-3.5" /></button>
+        {!readOnly && <>
+          <button onClick={() => onEdit(s)} aria-label={`编辑技能 ${s.name}`}
+            className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-accent transition p-2 -m-1 shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-accent/40 outline-none">
+            <Pencil className="w-3.5 h-3.5" /></button>
+          <button onClick={() => onRemove(s)} aria-label={`删除技能 ${s.name}`}
+            className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-rose-400 transition p-2 -m-1 shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-rose-300 outline-none">
+            <Trash2 className="w-3.5 h-3.5" /></button>
+        </>}
       </div>
       {/* 次行：权重条 + 来源数/置信度 */}
       <div className="mt-1.5 flex items-center gap-2.5">
@@ -222,6 +228,7 @@ export default function JobDetail() {
   const [saving, setSaving] = useState(false)
   const [authority, setAuthority] = useState<AuthorityItem[]>([])
   const toast = useToast()
+  const readOnly = useReadOnly()
   const revealRef = useReveal('[data-reveal]', { scroll: true, stagger: 0.05, deps: [job, tab] })
 
   const reload = () => { setLoadError(false); api.job(jobId).then(setJob).catch(() => setLoadError(true)) }
@@ -330,8 +337,10 @@ export default function JobDetail() {
               <Icon className="w-4 h-4" /> {label}
             </button>
           ))}
-        <button onClick={() => setEditor({ action: 'add', skill_name: '', importance: 'required', weight: 0.6, level_required: 'familiar' })}
-          className="btn-ghost w-full sm:w-auto sm:ml-auto justify-center whitespace-nowrap"><Plus className="w-4 h-4" /> 人工新增能力项</button>
+        {!readOnly && (
+          <button onClick={() => setEditor({ action: 'add', skill_name: '', importance: 'required', weight: 0.6, level_required: 'familiar' })}
+            className="btn-ghost w-full sm:w-auto sm:ml-auto justify-center whitespace-nowrap"><Plus className="w-4 h-4" /> 人工新增能力项</button>
+        )}
       </div>
 
       {tab === 'profile' && (

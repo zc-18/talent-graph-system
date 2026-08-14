@@ -166,3 +166,59 @@ def test_apply_evolution_recomputes_evidence_count(db):
     db.commit()
     evolution.apply_evolution(db, job, [_cap("Java"), _cap("大语言模型")], changes=[])
     assert job.evidence_count == 6      # 两条 active × source_count 3
+
+
+# ---------------------------------------------------------------------------
+# 2026-07-30 事故（与上面两例方向相反）：日志说降级、库里没降级
+# ---------------------------------------------------------------------------
+# 07-29 的修复让 apply_evolution 只按日志淘汰，堵住了"库里被静默改、日志空白"。
+# 但 compute_changes 还会无条件产出「支持减弱→候选」的 modify，而 apply_evolution
+# 根本不消费它，于是变成反过来的背离：日志记了 40 条降级，job_skill 20 行原封未动。
+# 线上演化页因此首屏全是「确认能力项→候选能力项」，演化记录总数 621→661 与交付
+# 文档对不上，而图谱其实没变。两个方向都要锁住。
+
+def test_thin_window_emits_no_candidate_demotion():
+    """窗口薄（交互式演化不传 window 信息）→ 一条「支持减弱」都不许记。
+
+    回归 2026-07-30：线上误点两次，Java 各刷出 20 条 modify。根因是调用方把每条旧
+    能力当 history 先验注入，它们必然只有 1 个来源、必然过不了 ≥2 闸门、必然落进
+    这个分支——窗口薄本来就说明不了任何事。
+    """
+    old = [{"name": "Python", "importance": "required", "weight": 0.8, "confidence": 0.6,
+            "source_count": 17}]
+    # 旧能力靠 history 先验回到 new_caps，但只有 1 个来源、没过闸 → status 非 active
+    new = [{"name": "Python", "importance": "required", "weight": 0.8, "confidence": 0.29,
+            "source_count": 1, "status": "candidate"}]
+    assert evolution.compute_changes(old, new) == []
+
+
+def test_thick_window_still_reports_candidate_demotion():
+    """窗口够厚（≥20 条 JD 且给了窗口技能集）→ 支持减弱要照记，不能一并堵死。"""
+    old = [{"name": "Python", "importance": "required", "weight": 0.8, "confidence": 0.6,
+            "source_count": 17}]
+    new = [{"name": "Python", "importance": "required", "weight": 0.8, "confidence": 0.29,
+            "source_count": 1, "status": "candidate"}]
+    changes = evolution.compute_changes(old, new, window_skill_names={"Python"},
+                                        window_jd_count=25)
+    assert [c["change_type"] for c in changes] == ["modify"]
+    assert changes[0]["new_value"]["status"] == "candidate"
+
+
+def test_apply_evolution_applies_logged_candidate_demotion(db):
+    """日志判了「降级为候选」，库里就要真降级——否则又是一次日志与事实背离。"""
+    job = _job_with_skills(db, ["Java", "Python"])
+    changes = [{"change_type": "modify", "skill_name": "Python", "importance": "required",
+                "old_value": {"confidence": 0.6},
+                "new_value": {"confidence": 0.29, "status": "candidate"},
+                "reason": "支持减弱"}]
+    evolution.apply_evolution(db, job, [_cap("Java")], changes=changes)
+
+    assert _active_names(db, job) == {"Java"}
+    py = db.query(models.JobSkill).join(
+        models.Skill, models.Skill.id == models.JobSkill.skill_id).filter(
+        models.Skill.name == "Python").first()
+    assert py.status == "candidate"
+    assert round(py.confidence, 4) == 0.29
+    # 降级不是淘汰：一行都不该变成 deprecated
+    assert db.query(models.JobSkill).filter(
+        models.JobSkill.status == "deprecated").count() == 0
