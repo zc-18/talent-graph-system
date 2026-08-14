@@ -1,0 +1,20 @@
+# 行尾统一：仓库内与工作区一律 LF。
+#
+# 起因：docs/_source/*.md 与 docs/ppt_build/build.js 长期在 LF / CRLF 之间反复横跳，
+# 2026-08 这一轮改动原始 diff 是 +806/-584 行，忽略空白后真实改动只有 +289/-67——
+# 约七成是纯行尾噪声，评审看到的是「文档被整体重写」。本文件加入的同一个提交里做了
+# 一次 `git add --renormalize .`，此后 diff 只反映真实改动。
+* text=auto eol=lf
+
+# 二进制交付件与资源：绝不能做行尾转换，转了会直接损坏文件。
+*.docx  binary
+*.pptx  binary
+*.xlsx  binary
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
