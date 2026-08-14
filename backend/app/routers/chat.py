@@ -6,9 +6,11 @@ from __future__ import annotations
 import json
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from .. import models, clients
 from ..db import get_db
+from ..services import graph_service
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
@@ -18,7 +20,7 @@ SYSTEM = """你是「智岗小助手」，智岗图谱(TalentGraph AI)平台的A
 1. 解答平台功能与使用方法；
 2. 提供新一代信息技术（人工智能/大数据/智能系统/物联网）领域的岗位认知、技能要求与职业规划/学习路径建议；
 3. 基于"已收录岗位"上下文回答岗位相关问题。
-要求：用中文，简洁友好、条理清晰，适当用要点；不确定或平台没有的信息不要编造，可引导用户去对应功能页查看。回答控制在 250 字内。"""
+要求：用中文，简洁友好、条理清晰，适当用要点；涉及数量的问题一律以上下文【平台规模·权威数字】为准，不要自己数名单、也不要估算；不确定或平台没有的信息不要编造，可引导用户去对应功能页查看。回答控制在 250 字内。"""
 
 
 def _context(db: Session) -> str:
@@ -26,8 +28,21 @@ def _context(db: Session) -> str:
     by_cat: dict[str, list[str]] = {}
     for j in jobs:
         by_cat.setdefault(j.category or "其他", []).append(j.name)
-    lines = [f"- {c}：{', '.join(sorted(set(names)))}" for c, names in by_cat.items()]
-    return "【当前平台已收录岗位（按技术栈）】\n" + "\n".join(lines)
+    lines = [f"- {c}（{len(set(names))} 个）：{', '.join(sorted(set(names)))}"
+             for c, names in sorted(by_cat.items(), key=lambda kv: -len(kv[1]))]
+    # 规模数字直接喂给模型，不让它自己数上面那份岗位名单——实测它数不准（库里 32 个，
+    # 回答"34"），而"平台一共多少个岗位"恰恰是评审最可能随口一问、也最容易当场被
+    # 首页 KPI 打脸的问题。复用驾驶舱同一个 stats_overview，口径按构造与首页一致。
+    s = graph_service.stats_overview(db)
+    changes = db.query(func.count(models.CapabilityChange.id)).scalar() or 0
+    return (
+        "【平台规模·权威数字。回答任何数量问题时直接引用本节，不要自行统计下面的名单】\n"
+        f"岗位 {s['total_jobs']} 个（其中新兴岗位 {s['new_jobs']} 个）、"
+        f"技能 {s['total_skills']} 项、真实招聘 JD {s['total_jds']} 条"
+        f"（查重标记 {s['duplicate_jds']} 条）、演化变更记录 {changes} 条、"
+        f"全库岗位置信度均值 {s['avg_confidence']}。\n\n"
+        "【当前平台已收录岗位（按技术栈）】\n" + "\n".join(lines)
+    )
 
 
 @router.post("")
