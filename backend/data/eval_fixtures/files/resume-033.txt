@@ -1,0 +1,20 @@
+Skill Set: Hadoop, Map Reduce, HDFS, Hive, Sqoop, java. Duration: 2016 to 2017. Role: Hadoop Developer Rplus offers an quick, simple and powerful cloud based Solution, Demand Sense to accurately predict demand for your product in all your markets which Combines Enterprise and External Data to predict demand more accurately through Uses Social Conversation and Sentiments to derive demand and Identifies significant drivers of sale out of hordes of factors that Selects the best suited model out of multiple forecasting models for each product. Responsibilities: â¢ Involved in deploying the product for customers, gathering requirements and algorithm optimization at backend of the product. â¢ Load and transform Large Datasets of structured semi structured. â¢ Responsible to manage data coming from different sources and application â¢ Supported Map Reduce Programs those are running on the cluster â¢ Involved in creating Hive tables, loading with data and writing hive queries which will run internally in map reduce way.Education Details 
+
+Hadoop Developer 
+
+Hadoop Developer - Braindatawire
+Skill Details 
+APACHE HADOOP HDFS- Exprience - 49 months
+APACHE HADOOP SQOOP- Exprience - 49 months
+Hadoop- Exprience - 49 months
+HADOOP- Exprience - 49 months
+HADOOP DISTRIBUTED FILE SYSTEM- Exprience - 49 monthsCompany Details 
+company - Braindatawire
+description - Technical Skills:
+â¢   Programming: Core Java, Map Reduce, Scala
+â¢   Hadoop Tools: HDFS, Spark, Map Reduce, Sqoop, Hive, Hbase
+â¢   Database: MySQL, Oracle
+â¢   Scripting: Shell Scripting
+â¢   IDE: Eclipse
+â¢   Operating Systems: Linux (CentOS), Windows
+â¢   Source Control: Git (Github)

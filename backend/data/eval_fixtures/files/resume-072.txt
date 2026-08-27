@@ -1,0 +1,88 @@
+TechnicalProficiencies DB: Oracle 11g Domains: Investment Banking, Advertising, Insurance. Programming Skills: SQL, PLSQL BI Tools: Informatica 9.1 OS: Windows, Unix Professional Development Trainings â¢ Concepts in Data Warehousing, Business Intelligence, ETL. â¢ BI Tools -Informatica 9X Education Details 
+ BCA  Nanded, Maharashtra Nanded University
+ETL Developer 
+
+ETL Developer - Sun Trust Bank NY
+Skill Details 
+ETL- Exprience - 39 months
+EXTRACT, TRANSFORM, AND LOAD- Exprience - 39 months
+INFORMATICA- Exprience - 39 months
+ORACLE- Exprience - 39 months
+UNIX- Exprience - 39 monthsCompany Details 
+company - Sun Trust Bank NY
+description - Sun Trust Bank, NY JAN 2018 to present
+Client: Sun Trust Bank NY
+Environment: Informatica Power Center 9.1, Oracle 11g, unix.
+
+Role: ETL Developer
+
+Project Profile:
+Sun Trust Bank is a US based multinational financial services holding company, headquarters in NY that operates the Bank in New York and other financial services investments. The company is organized as a stock corporation with four divisions: investment banking, private banking, Retail banking and a shared services group that provides
+Financial services and support to the other divisions.
+The objective of the first module was to create a DR system for the bank with a central point of communication and storage for Listed, Cash securities, Loans, Bonds, Notes, Equities, Rates, Commodities, and
+FX asset classes.
+Contribution / Highlights:
+
+â¢ Liaising closely with Project Manager, Business Analysts, Product Architects, and Requirements Modelers (CFOC) to define Technical requirements and create project documentation.
+â¢ Development using Infa 9.1, 11g/Oracle, UNIX.
+â¢ Use Informatica PowerCenter for extraction, transformation and loading (ETL) of data in the Database.
+â¢ Created and configured Sessions in Informatica workflow Manager for loading data into Data base tables from various heterogeneous database sources like Flat Files, Oracle etc.
+â¢ Unit testing and system integration testing of the developed mappings.
+â¢ Providing production Support of the deployed code.
+â¢ Providing solutions to the business for the Production issues.
+â¢ Had one to One interaction with the client throughout the project and in daily meetings.
+
+Project #2
+company - Marshall Multimedia
+description - JUN 2016 to DEC 2017
+
+Client: Marshall Multimedia
+Environment: Informatica Power Center 9.1, Oracle 11g, unix.
+
+Role: ETL Developer
+
+Project Profile:
+Marshall Multimedia is a US based multimedia advertisement services based organization which has
+head courter in New York. EGC interface systems are advert management, Customer Management, Billing and
+Provisioning Systems for Consumer& Enterprise Customers.
+The main aim of the project was to create an enterprise data warehouse which would suffice the need of reports belonging to the following categories: Financial reports, management reports and
+rejection reports. The professional reports were created by Cognos and ETL work was performed by
+Informatica. This project is to load the advert details and magazine details coming in Relational tables into data warehouse and calculate the compensation and incentive amount monthly twice as per business
+rules.
+
+Contribution / Highlights:
+â¢ Developed mappings using different sources by using Informatica transformations.
+â¢ Created and configured Sessions in Informatica workflow Manager for loading data into Data Mart tables from various heterogeneous database sources like Flat Files, Oracle etc.
+
+2
+â¢ Unit testing and system integration testing of the developed mappings.
+â¢ Providing solutions to the business for the Production issues.
+
+Project #3
+company - Assurant healthcare/Insurance Miami USA
+description - Assurant, USA                                                                                                    NOV 2015 to MAY 2016
+
+Project: ACT BI - State Datamart
+Client: Assurant healthcare/Insurance Miami USA
+Environment: Informatica Power Center 9.1, Oracle 11g, unix.
+
+Role: ETL Developer
+
+Project Profile:
+Assurant, Inc. is a holding company with businesses that provide a diverse set of specialty, niche-market insurance
+products in the property, casualty, life and health insurance sectors. The company's four operating segments are Assurant
+Employee Benefits, Assurant Health, Assurant Solutions and Assurant Specialty Property.
+The project aim at building State Datamart for enterprise solution. I am part of team which is responsible for ETL
+Design & development along with testing.
+
+Contribution / Highlights:
+â¢   Performed small enhancement
+â¢   Daily load monitoring
+â¢   Attend to Informatica job failures by analyzing the root cause, resolving the failure using standard
+documented process.
+â¢   Experience in writing SQL statements.
+â¢   Strong Problem Analysis & Resolution skills and ability to work in Multi Platform Environments
+â¢   Scheduled the Informatica jobs using Informatica scheduler
+â¢   Extensively used ETL methodology for developing and supporting data extraction, transformations and loading process, in a corporate-wide-ETL Solution using Informatica.
+â¢   Involved in creating the Unit cases and uploaded in to Quality Center for Unit Testing and UTR
+â¢   Ensure that daily support tasks are done in accordance with the defined SLA.

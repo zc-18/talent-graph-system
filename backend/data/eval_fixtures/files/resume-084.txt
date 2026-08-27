@@ -1,0 +1,54 @@
+Technical Summary â¢ Knowledge of Informatica Power Center (ver. 9.1 and 10) ETL Tool: Mapping designing, usage of multiple transformations. Integration of various data source like SQL Server tables, Flat Files, etc. into target data warehouse. â¢ SQL/PLSQL working knowledge on Microsoft SQL server 2010. â¢ Unix Work Description: shell scripting, error debugging. â¢ Job scheduling using Autosys, Incident management and Change Requests through Service Now, JIRA, Agile Central â¢ Basic knowledge of Intellimatch (Reconciliation tool) Education Details 
+January 2010 to January 2014 BTech CSE Sangli, Maharashtra Walchand College of Engineering
+October 2009 H.S.C  Sangli, Maharashtra Willingdon College
+August 2007 S.S.C Achievements Sangli, Maharashtra Martin's English School
+ETL Developer 
+
+IT Analyst
+Skill Details 
+ETL- Exprience - 48 months
+EXTRACT, TRANSFORM, AND LOAD- Exprience - 48 months
+INFORMATICA- Exprience - 48 months
+MS SQL SERVER- Exprience - 48 months
+RECONCILIATION- Exprience - 48 months
+Jira- Exprience - 36 monthsCompany Details 
+company - Tata Consultancy Services
+description - Project Details
+Client/Project: Barclays UK London/HEXAD
+Environment: Informatica (Power Center), SQL Server, UNIX, Autosys, Intellimatch.
+
+Project Description:
+The objective is to implement a strategic technical solution to support the governance and monitoring of break standards - including enhancements to audit capabilities. As a part of this program, the required remediation of source system data feeds involves consolidation of data into standardized feeds.
+
+These remediated data feeds will be consumed by ETL layer. The reconciliation tool is
+designed to source data from an ETL layer. The data from the Front and Back office systems,
+together with static data must therefore be delivered to ETL. Here it will be pre-processed and delivered to reconciliation tool before the reconciliation process can be performed.
+
+Role and Responsibilities:
+â¢ Responsible for analyzing, designing and developing ETL strategies and processes,
+writing ETL specifications
+â¢ Requirement gathering
+â¢ Making functional documents and low level documents
+â¢ Developing and debugging the Informatica mappings to resolve bugs, and identify the causes of failures
+â¢ User interaction to identify the issues with the data loaded through the application
+â¢ Developed mappings using different transformations
+company - Tata Consultancy Services
+description - Project Details
+Client/Project: Barclays UK London/HEXAD
+Environment: Informatica (Power Center), SQL Server, UNIX, Autosys, Intellimatch.
+
+Project Description:
+The objective is to implement a strategic technical solution to support the governance and monitoring of break standards - including enhancements to audit capabilities. As a part of this program, the required remediation of source system data feeds involves consolidation of data into standardized feeds.
+
+These remediated data feeds will be consumed by ETL layer. The reconciliation tool is
+designed to source data from an ETL layer. The data from the Front and Back office systems,
+together with static data must therefore be delivered to ETL. Here it will be pre-processed and delivered to reconciliation tool before the reconciliation process can be performed.
+
+Role and Responsibilities:
+â¢ Responsible for analyzing, designing and developing ETL strategies and processes,
+writing ETL specifications
+â¢ Requirement gathering
+â¢ Making functional documents and low level documents
+â¢ Developing and debugging the Informatica mappings to resolve bugs, and identify the causes of failures
+â¢ User interaction to identify the issues with the data loaded through the application
+â¢ Developed mappings using different transformations

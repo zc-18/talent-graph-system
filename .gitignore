@@ -14,6 +14,10 @@ venv/
 .coverage
 htmlcov/
 backend/data/parsed_cache.json
+backend/artifacts/
+backend/*.db
+backend/.test-tmp*/
+backend/.codex-test-tmp*/
 
 # ===== Node / 前端 =====
 node_modules/

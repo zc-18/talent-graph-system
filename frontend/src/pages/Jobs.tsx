@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Sparkles, PlusCircle } from 'lucide-react'
+import { GitBranch, Network, Search, Sparkles, PlusCircle, Target } from 'lucide-react'
 import { IBriefcase } from '../components/icons'
 import { api, JobListItem, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, EmptyState, ErrorState } from '../components/ui'
@@ -14,6 +14,9 @@ export default function Jobs() {
   const [cat, setCat] = useState('全部')
   const [q, setQ] = useState('')
   const [onlyNew, setOnlyNew] = useState(false)
+  const [track, setTrack] = useState('全部')
+  const [seniority, setSeniority] = useState('全部')
+  const [recruitmentType, setRecruitmentType] = useState('全部')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const nav = useNavigate()
@@ -25,10 +28,13 @@ export default function Jobs() {
     if (cat !== '全部') params.category = cat
     if (q) params.q = q
     if (onlyNew) params.is_new = true
+    if (track !== '全部') params.track = track
+    if (seniority !== '全部') params.seniority = seniority
+    if (recruitmentType !== '全部') params.recruitment_type = recruitmentType
     api.jobs(params).then(d => { setItems(d.items); setLoading(false) })
       .catch(() => { setError(true); setLoading(false) })
   }
-  useEffect(load, [cat, onlyNew])
+  useEffect(load, [cat, onlyNew, track, seniority, recruitmentType])
 
   return (
     <div className="space-y-5">
@@ -49,6 +55,16 @@ export default function Jobs() {
             placeholder="搜索岗位名称…" className="bg-transparent text-sm outline-none flex-1 text-slate-800 placeholder:text-slate-400" />
         </div>
         <Select value={cat} onChange={setCat} options={cats} className="w-44" />
+        <Select value={track} onChange={setTrack} className="w-36" label="岗位轨道" options={[
+          { value: '全部', label: '全部轨道' }, { value: 'software', label: '软件' }, { value: 'hardware', label: '硬件' },
+          { value: 'algorithm', label: '算法' }, { value: 'data', label: '数据' }, { value: 'ops', label: '运维' }, { value: 'product', label: '产品' },
+        ]} />
+        <Select value={seniority} onChange={setSeniority} className="w-32" label="岗位级别" options={[
+          { value: '全部', label: '全部级别' }, { value: 'junior', label: '初级' }, { value: 'middle', label: '中级' }, { value: 'senior', label: '高级' },
+        ]} />
+        <Select value={recruitmentType} onChange={setRecruitmentType} className="w-32" label="招聘类型" options={[
+          { value: '全部', label: '校招/社招' }, { value: 'campus', label: '校招' }, { value: 'social', label: '社招' }, { value: 'mixed', label: '混合' },
+        ]} />
         <button onClick={() => setOnlyNew(v => !v)}
           className={onlyNew ? 'btn-primary' : 'btn-ghost'}>
           <Sparkles className="w-4 h-4" /> 仅新兴岗位
@@ -73,6 +89,9 @@ export default function Jobs() {
                   {j.is_new && <Badge tone="amber">新兴</Badge>}
                 </div>
                 <p className="text-xs text-slate-500 mt-2 line-clamp-2 min-h-[32px]">{j.summary}</p>
+                {j.core_capabilities && j.core_capabilities.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-3">{j.core_capabilities.slice(0, 10).map(capability => <Badge key={capability} tone="slate">{capability}</Badge>)}</div>
+                )}
                 <div className="flex items-center justify-between mt-3">
                   <div className="flex gap-1.5">
                     <Badge tone="indigo">{j.category}</Badge>
@@ -81,12 +100,17 @@ export default function Jobs() {
                   <ConfidencePill value={j.confidence} />
                 </div>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-200/70 text-[11px] text-slate-400">
-                  <span>{j.required_count} 项必备技能</span>
+                  <span>{j.required_count} 个核心必备能力簇</span>
                   {/* evidence_count 是 active 能力项的 source_count 之和，即「多少条 JD 支撑了
                       这个岗位的能力集」，不是证据表的行数。原来写「证据 N」与详情页
                       「留存证据 M 条」口径打架，两处统一成 JD 支撑。 */}
                   <span title="该岗位能力集累计获得的真实 JD 支撑数">JD 支撑 {j.evidence_count} · v{j.version}</span>
                 </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-200/70">
+                <button onClick={() => nav('/match', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><Target className="w-3.5 h-3.5" /> 匹配</button>
+                <button onClick={() => nav('/panorama', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><Network className="w-3.5 h-3.5" /> 图谱</button>
+                <button onClick={() => nav('/evolution', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><GitBranch className="w-3.5 h-3.5" /> 演化</button>
               </div>
             </Card>
           ))}

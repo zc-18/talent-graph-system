@@ -1,0 +1,32 @@
+Technical Skills (Trained / Project Acquired Skills) â¢ Languages Known: C, C++, J2EE, Spring, Hibernate. â¢ Testing: Functional Testing, Manual Testing. â¢ Operating Systems: Windows & Linux. â¢ Packages: MS-office. â¢ Databases: My SQL & PostgreSQL.Education Details 
+January 2013 to January 2017 B.E Computer Science and Engineering  RTMNU University - Jhulelal Institute of Technology
+January 2011 to January 2013 HSC  Nagpur, Maharashtra Maharashtra State Board - Dayanand Arya Kanya Junior College
+January 2010 to January 2011 SSC  Nagpur, Maharashtra Maharashtra State Board
+Java Developer 
+
+Java Developer - Inouvelle Ventures Private Limited
+Skill Details 
+J2EE- Exprience - 17 months
+C++- Exprience - 6 months
+DATABASES- Exprience - 6 months
+FUNCTIONAL TESTING- Exprience - 6 months
+LINUX- Exprience - 6 monthsCompany Details 
+company - Inouvelle Ventures Private Limited
+description - Nagpur.
+1.   Project name: Stock Management System		December 2017 - Till Date
+Language of implementation: Angular (Frontend), JAVA - J2EE, spring, Hibernate Framework (Backend)
+& PostgresSql Database.
+Role: Java Developer
+Operating system: Windows XP/07/08
+Description: Stock management System is Specially Developing for the Medicinal Market. This software is developing to keep the track of medicines, ailments, surgical Equipments, & also to keep the track of Wholesalers, Retailers, Employees, & Customers of the Company. Stock management system is the practice of ordering, storing, tracking, and controlling
+inventory. Debtor invoicing software helps small businesses and freelancers keep track of company assets   .. Stock
+management may also be called stock control, inventory management or inventory control.
+company - Inouvelle Ventures Private Limited
+description - Project Profile
+company - Inouvelle Ventures Private Limited
+description - Language of implementation: Angular (Frontend), JAVA - J2EE, spring, Hibernate Framework (Backend)
+& PostgresSql Database.
+Role: Java Developer, Manual Testing.
+Operating system: Windows XP/07/08
+Description: This Project is done for the Oldest Printing Press in Nagpur. The proposed web based Printing Press
+Management System designed according to user and system requirement to fulfil the existing problems. This system offers the products and services that enhance organization growth, efficiency, and profitability.

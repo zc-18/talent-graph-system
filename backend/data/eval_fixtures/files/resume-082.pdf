@@ -1,0 +1,204 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 4846 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(Skills * Programming Languages: Python \(pandas, numpy, scipy, scikit-learn, matplotlib\), Sql,) Tj
+T*
+(Java, JavaScript/JQuery. * Machine learning: Regression, SVM, NaA ve Bayes, KNN, Random) Tj
+T*
+(Forest, Decision Trees, Boosting techniques, Cluster Analysis, Word Embedding, Sentiment) Tj
+T*
+(Analysis, Natural Language processing, Dimensionality reduction, Topic Modelling \(LDA, NMF\),) Tj
+T*
+(PCA & Neural Nets. * Database Visualizations: Mysql, SqlServer, Cassandra, Hbase,) Tj
+T*
+(ElasticSearch D3.js, DC.js, Plotly, kibana, matplotlib, ggplot, Tableau. * Others: Regular) Tj
+T*
+(Expression, HTML, CSS, Angular 6, Logstash, Kafka, Python Flask, Git, Docker, computer vision) Tj
+T*
+(- Open CV and understanding of Deep learning.Education Details) Tj
+T*
+() Tj
+T*
+(Data Science Assurance Associate) Tj
+T*
+() Tj
+T*
+(Data Science Assurance Associate - Ernst & Young LLP) Tj
+T*
+(Skill Details) Tj
+T*
+(JAVASCRIPT- Exprience - 24 months) Tj
+T*
+(jQuery- Exprience - 24 months) Tj
+T*
+(Python- Exprience - 24 monthsCompany Details) Tj
+T*
+(company - Ernst & Young LLP) Tj
+T*
+(description - Fraud Investigations and Dispute Services   Assurance) Tj
+T*
+(TECHNOLOGY ASSISTED REVIEW) Tj
+T*
+(TAR \(Technology Assisted Review\) assists in accelerating the review process and run analytics) Tj
+T*
+(and generate reports.) Tj
+T*
+(* Core member of a team helped in developing automated review platform tool from scratch for) Tj
+T*
+(assisting E discovery domain, this tool implements predictive coding and topic modelling by) Tj
+T*
+(automating reviews, resulting in reduced labor costs and time spent during the lawyers review.) Tj
+T*
+(* Understand the end to end flow of the solution, doing research and development for) Tj
+T*
+(classification models, predictive analysis and mining of the information present in text data.) Tj
+T*
+(Worked on analyzing the outputs and precision monitoring for the entire tool.) Tj
+T*
+(* TAR assists in predictive coding, topic modelling from the evidence by following EY) Tj
+T*
+(standards. Developed the classifier models in order to identify "red flags" and fraud-related) Tj
+T*
+(issues.) Tj
+T*
+() Tj
+T*
+(Tools & Technologies: Python, scikit-learn, tfidf, word2vec, doc2vec, cosine similarity, NaA) Tj
+T*
+(ve Bayes, LDA, NMF for topic modelling, Vader and text blob for sentiment analysis. Matplot) Tj
+T*
+(lib, Tableau dashboard for reporting.) Tj
+T*
+() Tj
+T*
+(MULTIPLE DATA SCIENCE AND ANALYTIC PROJECTS \(USA CLIENTS\)) Tj
+T*
+(TEXT ANALYTICS - MOTOR VEHICLE CUSTOMER REVIEW DATA * Received customer feedback survey data) Tj
+T*
+(for past one year. Performed sentiment \(Positive, Negative & Neutral\) and time series analysis) Tj
+T*
+(on customer comments across all 4 categories.) Tj
+T*
+(* Created heat map of terms by survey category based on frequency of words * Extracted) Tj
+T*
+(Positive and Negative words across all the Survey categories and plotted Word cloud.) Tj
+T*
+(* Created customized tableau dashboards for effective reporting and visualizations.) Tj
+T*
+(CHATBOT * Developed a user friendly chatbot for one of our Products which handle simple) Tj
+T*
+(questions about hours of operation, reservation options and so on.) Tj
+T*
+(* This chat bot serves entire product related questions. Giving overview of tool via QA) Tj
+T*
+(platform and also give recommendation responses so that user question to build chain of) Tj
+T*
+(relevant answer.) Tj
+T*
+(* This too has intelligence to build the pipeline of questions as per user requirement and) Tj
+T*
+(asks the relevant /recommended questions.) Tj
+T*
+() Tj
+T*
+(Tools & Technologies: Python, Natural language processing, NLTK, spacy, topic modelling,) Tj
+T*
+(Sentiment analysis, Word Embedding, scikit-learn, JavaScript/JQuery, SqlServer) Tj
+T*
+() Tj
+T*
+(INFORMATION GOVERNANCE) Tj
+T*
+(Organizations to make informed decisions about all of the information they store. The) Tj
+T*
+(integrated Information Governance portfolio synthesizes intelligence across unstructured data) Tj
+T*
+(sources and facilitates action to ensure organizations are best positioned to counter) Tj
+T*
+(information risk.) Tj
+T*
+(* Scan data from multiple sources of formats and parse different file formats, extract Meta) Tj
+T*
+(data information, push results for indexing elastic search and created customized, interactive) Tj
+T*
+(dashboards using kibana.) Tj
+T*
+(* Preforming ROT Analysis on the data which give information of data which helps identify) Tj
+T*
+(content that is either Redundant, Outdated, or Trivial.) Tj
+T*
+(* Preforming full-text search analysis on elastic search with predefined methods which can tag) Tj
+T*
+(as \(PII\) personally identifiable information \(social security numbers, addresses, names, etc.\)) Tj
+T*
+(which frequently targeted during cyber-attacks.) Tj
+T*
+(Tools & Technologies: Python, Flask, Elastic Search, Kibana) Tj
+T*
+() Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 577 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(FRAUD ANALYTIC PLATFORM) Tj
+T*
+(Fraud Analytics and investigative platform to review all red flag cases.) Tj
+T*
+(a FAP is a Fraud Analytics and investigative platform with inbuilt case manager and suite of) Tj
+T*
+(Analytics for various ERP systems.) Tj
+T*
+(* It can be used by clients to interrogate their Accounting systems for identifying the) Tj
+T*
+(anomalies which can be indicators of fraud by running advanced analytics) Tj
+T*
+(Tools & Technologies: HTML, JavaScript, SqlServer, JQuery, CSS, Bootstrap, Node.js, D3.js,) Tj
+T*
+(DC.js) Tj
+T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000253 00000 n 
+0000005151 00000 n 
+0000005277 00000 n 
+0000005905 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+5975
+%%EOF

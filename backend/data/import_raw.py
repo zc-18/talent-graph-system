@@ -19,6 +19,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from app.db import SessionLocal, init_db  # noqa: E402
 from app import models  # noqa: E402
+from app.services.employer_resolution import get_or_create_employer  # noqa: E402
+from app.services.job_resolution import resolve_job_query  # noqa: E402
 from data.collect.base import mask_pii  # noqa: E402
 
 TIER_AUTHORITY = {"official": 1.0, "gov": 1.0, "dataset": 0.7, "aggregator": 0.8}
@@ -142,9 +144,13 @@ def import_batch(batch: str, tier: str, filter_it: bool = False) -> None:
                         off_domain += 1
                         continue
                     dedup = hashlib.md5(text.encode("utf-8")).hexdigest()
+                    title = (r.get("job_title") or "")[:120]
+                    company = (r.get("company") or "")[:120]
+                    resolution = resolve_job_query(title)
+                    employer = get_or_create_employer(db, company)
                     jd = models.RawJD(
-                        job_title=(r.get("job_title") or "")[:120],
-                        company=(r.get("company") or "")[:120],
+                        job_title=title,
+                        company=company,
                         location=(r.get("location") or "")[:60],
                         source=platform, source_url=url[:500],
                         raw_text=text,
@@ -159,6 +165,10 @@ def import_batch(batch: str, tier: str, filter_it: bool = False) -> None:
                         raw_file_path=str(fp),
                         inferred_level=infer_level(r.get("job_title") or "",
                                                    r.get("experience_req") or ""),
+                        track=resolution.track,
+                        industry=resolution.industry,
+                        recruitment_type=resolution.recruitment_type,
+                        employer_id=employer.id if employer else None,
                         cluster_hint=qmap.get(((r.get("extra") or {}).get("query")) or "", None),
                         source_authority=authority,
                     )

@@ -1,0 +1,53 @@
+TECHNICAL SKILLS Programming Languages: Java (Servlet, JSP, Spring Boot). Web Technology: HTML5, CSS3, Bootstrap, JavaScript, JQuery, Ajax, AngularJs. Database: MySQL. IDE and Tool: Eclipse, spring tool Suit, Net beans, Sublime Text, Atom. Operating System: Windows XP, 7, 8, 10. ACHIEVEMENT â¢ Java Developer Certificate from Unanth Technical Institute. â¢ Java Certificate from solo Learn. â¢ Command line crash Course certificate from Udemy. JOB DETAILS Education Details 
+January 2018 M.C.A  Pune, Maharashtra Pune University
+January 2015 B.C.A  Amravati, Maharashtra Amravati University
+January 2012 H.S.C  Amravati, Maharashtra Amravati University
+January 2010 S.S.C  Amravati, Maharashtra Amravati University
+Java developer 
+
+Full Stack Java Developer
+Skill Details 
+Css- Exprience - Less than 1 year months
+Ajax- Exprience - Less than 1 year months
+Servlet- Exprience - Less than 1 year months
+Html5- Exprience - Less than 1 year months
+Spring- Exprience - Less than 1 year months
+Java- Exprience - Less than 1 year months
+Jquery- Exprience - Less than 1 year months
+Jsp- Exprience - Less than 1 year months
+Javascript- Exprience - Less than 1 year months
+Bootstrap- Exprience - Less than 1 year months
+Spring Boot- Exprience - Less than 1 year monthsCompany Details 
+company - Salcluster technologies
+description - Worked as java developer. Developed 3 projects using java servlet jsp ajax and web technologies.
+company - Salcluster Technologies LLP.
+description - Technology: Core Java, Servlet and JSP, HTML5, CSS3, Bootstrap, Javascript, Jquery
+Ajax and Bootstrap.
+
+PROJECT DETAILS
+#1 Title: GST And Sales Billing Softwares
+â¢ Status: Completed
+â¢ Duration: 1.5 Months.
+â¢ Abstract: This is a Web application made by using Java (Servlet and JSP), JavaScript, Jquery, Ajax, and MySQL on back end. It is a client's website which is used for Billing. It includes GST Billing, Generate and print invoice. It has five master pages and four common pages. Masters include customer master, item master, uom master, setup master, reason master and common pages like sales order, payments, sales return and invoice.
+
+#2 Title: Dinman News website
+â¢ Status: Completed
+â¢ Duration: 1 Months.
+â¢ Abstract: This is a Website project by using Java (Servlet and JSP), JavaScript, Jquery, Ajax, and MySQL on back end. It is a clients website. It is used for displaying online video and text news.
+
+#2 Title: Agri Management Website
+â¢ Status: Completed
+â¢ Duration: 1.5 Months.
+â¢ Abstract: This is a Website project by using Java (Servlet and JSP), JavaScript, Jquery, Ajax, and MySQL on back end. It is used for purchasing and selling vegetables all over india.
+company - OmegaSoft Technologies pvt.ltd
+description - Company Name: OmegaSoft Technologies pvt.ltd. An  ISO certified Company.
+Duration: 5 months.
+Technology: Java Spring Hibernate, AngularJs, Ajax, KendoUI and BootStrap.
+Architecture: MVC Architecture and Service based Programming.
+Project Module: Login Registration and Role Assignment, Payments.
+
+INTERNSHIP PROJECT DETAILS
+#1 Title: Employment Times
+â¢ Status: Completed
+â¢ Duration: 4 Months.
+â¢ Abstract: This is a Website project using Java, Spring, Hibernate. Angular Js, Ajax and MySQL on back end. It is a client's website which is used for posting of newspapers all over India. It has 12 Modules. In which it has Admin Panel, E-paper Posting, Subscriptions, and many more. It is a very light weight website built by using MVC Architecture and Service based Architecture. We can also post advertisements on website and share the news on Facebook or any other social media directly. It has Payment module and users are able to make payments online through debit or credit card or E-Wallet.

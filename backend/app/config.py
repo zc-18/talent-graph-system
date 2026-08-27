@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     db_user: str = "root"
     db_password: str = ""
     db_name: str = "talent_graph"
+    database_url_override: str | None = None
 
     # DeepSeek
     deepseek_api_key: str = ""
@@ -31,6 +32,7 @@ class Settings(BaseSettings):
     embed_dim: int = 512
 
     app_port: int = 8200
+    app_env: str = "development"
     cors_origins: str = "*"
 
     # 演示站只读开关（见 app/guards.py）。默认 False 以免本地/离线跑数据脚本被误挡；
@@ -39,6 +41,8 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
+        if self.database_url_override:
+            return self.database_url_override
         return (
             f"mysql+pymysql://{self.db_user}:{self.db_password}"
             f"@{self.db_host}:{self.db_port}/{self.db_name}?charset=utf8mb4"

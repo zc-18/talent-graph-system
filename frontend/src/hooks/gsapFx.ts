@@ -40,9 +40,11 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
 ) {
   const ref = useRef<T>(null)
   useGSAP(() => {
+    const container = ref.current
+    if (!container) return
     const mm = gsap.matchMedia()
     mm.add(MOTION_OK, () => {
-      const els = gsap.utils.toArray<HTMLElement>(selector)
+      const els = gsap.utils.toArray<HTMLElement>(selector, container)
       if (!els.length) return
       if (scroll) {
         els.forEach(el => gsap.from(el, {
@@ -53,7 +55,7 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
         gsap.from(els, { opacity: 0, y, duration: 0.55, ease: 'power2.out', stagger })
       }
     })
-  }, { scope: ref, dependencies: deps, revertOnUpdate: true })
+  }, { dependencies: deps, revertOnUpdate: true })
   return ref
 }
 
@@ -100,7 +102,7 @@ export function useMouseParallax<T extends HTMLElement = HTMLDivElement>(
         container.removeEventListener('mouseleave', onLeave)
       }
     })
-  }, { scope: ref })
+  })
   return ref
 }
 
@@ -117,6 +119,6 @@ export function useGrowLine<T extends HTMLElement = HTMLDivElement>(lineSelector
         scrollTrigger: { trigger: ref.current, start: 'top 85%', end: 'bottom 60%', scrub: 0.4 },
       })
     })
-  }, { scope: ref })
+  })
   return ref
 }

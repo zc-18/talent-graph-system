@@ -7,14 +7,19 @@ import json
 import os
 import sys
 from datetime import datetime
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.db import SessionLocal  # noqa: E402
 from app import models  # noqa: E402
 from app.services import graph_service  # noqa: E402
+from data.release_gate import evaluate_release  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.abspath(os.path.join(HERE, "..", "..", "docs", "测试数据"))
+RELEASE_ARTIFACTS = Path(os.environ.get(
+    "RELEASE_ARTIFACTS", os.path.join(HERE, "..", "artifacts", "release", "latest")
+)).resolve()
 os.makedirs(OUT, exist_ok=True)
 
 
@@ -109,28 +114,46 @@ def export_new_job(db):
     dump(f"新岗位_{job.name}_图谱与数据源.json", out)
 
 
-def export_report(db):
-    def load(n):
-        p = os.path.join(HERE, n)
-        return json.load(open(p, encoding="utf-8"))["summary"] if os.path.exists(p) else {}
+def load_release_metrics() -> tuple[dict, dict[str, dict]]:
+    repo_root = Path(__file__).resolve().parents[2]
+    acceptance = evaluate_release(RELEASE_ARTIFACTS, repo_root)
+    if not acceptance["passed"]:
+        failed = ", ".join(item["key"] for item in acceptance["failed_checks"])
+        raise RuntimeError(f"release evidence is not accepted; refusing legacy export: {failed}")
+    manifest = json.loads((RELEASE_ARTIFACTS / "release_manifest.json").read_text(encoding="utf-8"))
+    names = ("eval_jd_result.json", "eval_resume_result.json", "eval_match_result.json")
+    summaries = {
+        name: json.loads((RELEASE_ARTIFACTS / name).read_text(encoding="utf-8"))["summary"]
+        for name in names
+    }
+    return manifest, summaries
+
+
+def export_report(db, manifest: dict, summaries: dict[str, dict]):
+    jd = summaries["eval_jd_result.json"]
+    resume = summaries["eval_resume_result.json"]
+    match = summaries["eval_match_result.json"]
     stats = graph_service.stats_overview(db)
     report = {
         "测试时间": datetime.now().strftime("%Y-%m-%d"),
+        "发布评测轮次": manifest["run_id"],
+        "证据目录": str(RELEASE_ARTIFACTS),
         "数据集规模": {"岗位JD总数": stats["total_jds"], "岗位簇数": stats["total_jobs"],
                    "技能点数": stats["total_skills"], "抄袭重复检出": stats["duplicate_jds"]},
         "核心指标": {
-            "JD解析准确率(F1)": load("eval_jd_result.json").get("f1"),
-            "JD解析精确率": load("eval_jd_result.json").get("precision"),
-            "JD解析召回率": load("eval_jd_result.json").get("recall"),
-            "简历提取准确率(F1)": load("eval_resume_result.json").get("f1"),
-            "简历提取召回率": load("eval_resume_result.json").get("recall"),
-            "人岗匹配分类准确率": load("eval_match_result.json").get("classification_acc"),
-            "人岗匹配F1": load("eval_match_result.json").get("match_f1"),
+            "JD解析准确率(F1)": jd.get("f1"),
+            "JD解析精确率": jd.get("precision"),
+            "JD解析召回率": jd.get("recall"),
+            "简历提取准确率(F1)": resume.get("f1"),
+            "简历提取召回率": resume.get("recall"),
+            "人岗匹配分类准确率": match.get("classification_acc"),
+            "人岗匹配Macro-F1": match.get("macro_f1"),
         },
         "达标判定": {
-            "JD解析≥90%": (load("eval_jd_result.json").get("f1") or 0) >= 0.9,
-            "简历提取≥90%": (load("eval_resume_result.json").get("f1") or 0) >= 0.9,
-            "人岗匹配≥90%": (load("eval_match_result.json").get("classification_acc") or 0) >= 0.9,
+            "JD解析≥90%": (jd.get("f1") or 0) >= 0.9,
+            "简历提取≥90%": (resume.get("f1") or 0) >= 0.9,
+            "人岗匹配Accuracy≥90%": (match.get("classification_acc") or 0) >= 0.9,
+            "人岗匹配Macro-F1≥90%": (match.get("macro_f1") or 0) >= 0.9,
         },
     }
     dump("综合测试报告.json", report)
@@ -138,11 +161,12 @@ def export_report(db):
 
 
 def main():
+    manifest, summaries = load_release_metrics()
     db = SessionLocal()
     try:
         export_existing_job(db)
         export_new_job(db)
-        export_report(db)
+        export_report(db, manifest, summaries)
     finally:
         db.close()
     print("\n导出目录:", OUT)

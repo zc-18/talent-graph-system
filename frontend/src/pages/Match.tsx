@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ReactECharts from 'echarts-for-react'
 import {
-  Upload, FileText, Loader2, CheckCircle2, XCircle, Sparkles,
+  Upload, FileText, Loader2, CheckCircle2, XCircle, Sparkles, History, Plus, X,
 } from 'lucide-react'
 import { ITarget, IPath, ILightbulb, IUpload, IUser, IShieldCheck } from '../components/icons'
 import { api, errMsg, JobListItem } from '../api'
@@ -10,19 +11,25 @@ import { Card, Badge, Spinner, ErrorState } from '../components/ui'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
 import { useFloat, useGrowLine, useReveal } from '../hooks/gsapFx'
+import { useAuth } from '../auth'
 
 export default function Match() {
   const loc = useLocation() as any
   const [jobs, setJobs] = useState<JobListItem[]>([])
   const [jobId, setJobId] = useState<number | null>(loc.state?.jobId ?? null)
   const [mode, setMode] = useState<'upload' | 'text'>('upload')
+  const [targetMode, setTargetMode] = useState<'library' | 'text'>('library')
+  const [targetJobText, setTargetJobText] = useState('')
   const [resumeText, setResumeText] = useState('')
   const [extracted, setExtracted] = useState<any>(null)
+  const [confirmedSkills, setConfirmedSkills] = useState<string[]>([])
+  const [newSkill, setNewSkill] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [jobsError, setJobsError] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
+  const auth = useAuth()
   const floatRef = useFloat<HTMLImageElement>({ y: 10, duration: 3.2, deps: [result, loading] })
   const pathRef = useGrowLine('.path-line')
   const stepsRef = useReveal('[data-reveal]', { scroll: true, deps: [result] })
@@ -35,25 +42,33 @@ export default function Match() {
   useEffect(() => { loadJobs() }, [])
 
   const onFile = async (f: File) => {
+    const suffix = f.name.toLowerCase().slice(f.name.lastIndexOf('.'))
+    if (suffix === '.doc') { toast('error', '旧版 .doc 二进制文件不支持，请转为 DOCX 后重试'); return }
+    if (!['.pdf', '.docx', '.txt'].includes(suffix)) { toast('error', '仅支持 PDF、DOCX 和 TXT 简历'); return }
+    if (f.size > 8 * 1024 * 1024) { toast('error', '文件超过 8 MB 限制'); return }
     setLoading(true); setExtracted(null); setResult(null)
     try {
       const r = await api.uploadResume(f)
       setExtracted(r.extracted)
+      setConfirmedSkills(r.extracted?.skills || [])
       toast('success', `简历解析成功，提取 ${r.extracted?.skills?.length ?? 0} 项技能`)
     } catch (e: any) { toast('error', errMsg(e, '简历解析失败，请确认文件为 PDF/Word 格式')) }
     finally { setLoading(false) }
   }
 
   // 无任何简历输入（未上传解析成功、也没有粘贴文本）时禁止诊断
-  const hasInput = mode === 'text' ? !!resumeText.trim() : (!!extracted || !!resumeText.trim())
+  const hasInput = mode === 'text' ? !!resumeText.trim() : confirmedSkills.length > 0
+  const hasTarget = targetMode === 'library' ? !!jobId : targetJobText.trim().length >= 5
 
   const analyze = async () => {
-    if (!jobId || !hasInput) return
+    if (!hasTarget || !hasInput) return
     setLoading(true); setResult(null)
     try {
-      const body: any = { job_id: jobId, generate_suggestions: true }
+      const body: any = { generate_suggestions: true, save: auth.isAuthenticated }
+      if (targetMode === 'library') body.job_id = jobId
+      else body.target_job_text = targetJobText.trim()
       if (mode === 'text' && resumeText) body.resume_text = resumeText
-      else if (extracted) { body.skills = extracted.skills; body.skill_levels = extracted.skill_levels }
+      else if (extracted) { body.skills = confirmedSkills; body.skill_levels = extracted.skill_levels }
       else if (resumeText) body.resume_text = resumeText
       const r = await api.analyze(body)
       setResult(r)
@@ -62,6 +77,7 @@ export default function Match() {
   }
 
   const res = result?.result
+  const topGaps = res ? (res.top_gaps || res.missing_required || []).slice(0, 10) : []
   const radar = res && {
     radar: {
       indicator: Object.keys(res.dimension_scores).map(k => ({ name: k, max: 100 })),
@@ -106,10 +122,11 @@ export default function Match() {
         <Card className="p-5 space-y-4">
           <div>
             <div className="label mb-1.5">目标岗位</div>
-            {jobsError ? <ErrorState text="岗位列表加载失败" onRetry={loadJobs} /> : (
+            <div className="grid grid-cols-2 gap-1.5 mb-2"><button onClick={() => setTargetMode('library')} className={targetMode === 'library' ? 'btn-primary !py-2' : 'btn-ghost !py-2'}>岗位库</button><button onClick={() => setTargetMode('text')} className={targetMode === 'text' ? 'btn-primary !py-2' : 'btn-ghost !py-2'}>库外文本</button></div>
+            {targetMode === 'library' ? (jobsError ? <ErrorState text="岗位列表加载失败" onRetry={loadJobs} /> : (
               <Select value={jobId ?? ''} onChange={v => setJobId(Number(v))} label="选择目标岗位"
                 options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
-            )}
+            )) : <textarea value={targetJobText} onChange={e => setTargetJobText(e.target.value)} rows={4} className="input resize-none" placeholder="输入库外目标岗位的职责和能力要求，本次将生成私有临时画像" />}
           </div>
 
           <div className="flex gap-1.5">
@@ -125,10 +142,10 @@ export default function Match() {
             <button type="button" onClick={() => fileRef.current?.click()}
               aria-label="上传 PDF 或 Word 简历文件"
               className="w-full border-2 border-dashed border-sky-200 rounded-2xl p-8 text-center cursor-pointer hover:border-accent/50 transition bg-sky-50/40 outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:border-accent/50">
-              <input ref={fileRef} type="file" accept=".pdf,.docx,.doc,.txt" className="hidden" tabIndex={-1}
+              <input ref={fileRef} type="file" accept=".pdf,.docx,.txt" className="hidden" tabIndex={-1}
                 onChange={e => e.target.files?.[0] && onFile(e.target.files[0])} />
               <IUpload className="w-8 h-8 mx-auto text-slate-400" />
-              <p className="text-sm text-slate-600 mt-2">点击上传 PDF / Word 简历</p>
+              <p className="text-sm text-slate-600 mt-2">点击上传 PDF / DOCX / TXT 简历</p>
               <p className="text-[11px] text-slate-400 mt-1">提取准确率 ≥ 90%</p>
             </button>
           ) : (
@@ -141,13 +158,13 @@ export default function Match() {
               <div className="flex items-center gap-2 text-sm text-slate-700 mb-2">
                 <IUser className="w-4 h-4 text-accent" /> {extracted.candidate_name || '候选人'} · {extracted.years_experience}年经验
               </div>
-              <div className="flex flex-wrap gap-1.5">
-                {extracted.skills.map((s: string) => <Badge key={s} tone="slate">{s}</Badge>)}
-              </div>
+              <div className="text-[11px] text-slate-500 mb-2">请确认提取技能，点击 × 可移除误识别项</div>
+              <div className="flex flex-wrap gap-1.5">{confirmedSkills.map(s => <span key={s} className="chip border bg-white border-slate-200 text-slate-700">{s}<button onClick={() => setConfirmedSkills(list => list.filter(item => item !== s))} aria-label={`移除 ${s}`}><X className="w-3 h-3" /></button></span>)}</div>
+              <div className="flex gap-2 mt-2"><input value={newSkill} onChange={e => setNewSkill(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); if (newSkill.trim() && !confirmedSkills.includes(newSkill.trim())) setConfirmedSkills(list => [...list, newSkill.trim()]); setNewSkill('') } }} className="input !py-1.5" placeholder="补充技能" /><button onClick={() => { if (newSkill.trim() && !confirmedSkills.includes(newSkill.trim())) setConfirmedSkills(list => [...list, newSkill.trim()]); setNewSkill('') }} className="btn-ghost !p-2" aria-label="添加技能"><Plus className="w-4 h-4" /></button></div>
             </div>
           )}
 
-          <button onClick={analyze} disabled={loading || !jobId || !hasInput} className="btn-primary w-full"
+          <button onClick={analyze} disabled={loading || !hasTarget || !hasInput} className="btn-primary w-full"
             title={hasInput ? undefined : '请先上传简历或粘贴文本'}>
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ITarget className="w-4 h-4" />} 开始匹配诊断
           </button>
@@ -218,13 +235,13 @@ export default function Match() {
                     </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 label mb-2"><XCircle className="w-4 h-4 text-rose-600" /> 能力缺口 ({res.missing_required.length})</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {res.missing_required.map((m: any) => (
-                        <span key={m.name} className="chip border bg-rose-50 border-rose-200 text-rose-700">{m.name}</span>
-                      ))}
-                      {res.missing_required.length === 0 && <span className="text-xs text-emerald-600">必备技能已全覆盖 🎉</span>}
-                    </div>
+                     <div className="flex items-center gap-2 label mb-2"><XCircle className="w-4 h-4 text-rose-600" /> Top 关键能力缺口 ({topGaps.length})</div>
+                     <div className="flex flex-wrap gap-1.5">
+                       {topGaps.map((m: any) => (
+                         <span key={m.name || m.skill} className="chip border bg-rose-50 border-rose-200 text-rose-700">{m.name || m.skill}</span>
+                       ))}
+                       {topGaps.length === 0 && <span className="text-xs text-emerald-600">核心必备能力已全覆盖</span>}
+                     </div>
                   </div>
                 </div>
               </Card>
@@ -250,6 +267,7 @@ export default function Match() {
                   </div>
                 </Card>
               )}
+              {auth.isAuthenticated && <div className="flex justify-end"><Link to="/history" className="btn-ghost"><History className="w-4 h-4" /> 查看已保存的匹配历史</Link></div>}
 
               {result.suggestions?.overall_advice && (
                 <Card className="p-5">

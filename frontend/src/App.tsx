@@ -1,14 +1,17 @@
-import { lazy, Suspense, useState } from 'react'
-import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { Routes, Route, NavLink, useLocation, Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  ChevronLeft, ChevronRight, Menu, X,
+  BriefcaseBusiness, CalendarClock, ChevronLeft, ChevronRight, LogIn, LogOut, Menu,
+  MessageSquareText, ShieldCheck, UserRound, X,
 } from 'lucide-react'
 import { IGauge, ITreeStructure, ISparkle, IGitBranch, IBriefcase, ITarget, IUsersThree } from './components/icons'
 import ChatBot from './components/ChatBot'
 import { ToastProvider } from './components/Toast'
 import { ReadOnlyProvider } from './hooks/useReadOnly'
 import { Spinner } from './components/ui'
+import { AuthProvider, RequireAuth, useAuth } from './auth'
+import type { AppRole } from './api'
 
 // 路由级代码分割：各页面（含 ECharts 等重依赖）按需加载，减小首包
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -19,8 +22,14 @@ const Discovery = lazy(() => import('./pages/Discovery'))
 const Evolution = lazy(() => import('./pages/Evolution'))
 const Match = lazy(() => import('./pages/Match'))
 const Talent = lazy(() => import('./pages/Talent'))
+const Login = lazy(() => import('./pages/Login'))
+const HistoryPage = lazy(() => import('./pages/History'))
+const Feedback = lazy(() => import('./pages/Feedback'))
+const HRWorkspace = lazy(() => import('./pages/HRWorkspace'))
+const Admin = lazy(() => import('./pages/Admin'))
 
-const NAV = [
+type NavItem = { to: string; label: string; icon: any; end?: boolean; roles?: AppRole[] }
+const NAV: NavItem[] = [
   { to: '/', label: '数据驾驶舱', icon: IGauge, end: true },
   { to: '/panorama', label: '全景能力图谱', icon: ITreeStructure },
   { to: '/discovery', label: '新岗位发现', icon: ISparkle },
@@ -28,6 +37,10 @@ const NAV = [
   { to: '/jobs', label: '岗位库管理', icon: IBriefcase },
   { to: '/match', label: '人岗匹配诊断', icon: ITarget },
   { to: '/talent', label: '人才与团队盘点', icon: IUsersThree },
+  { to: '/history', label: '我的匹配历史', icon: CalendarClock, roles: ['user', 'hr', 'admin'] },
+  { to: '/feedback', label: '反馈与更新', icon: MessageSquareText, roles: ['user', 'hr', 'admin'] },
+  { to: '/hr', label: 'HR 招聘工作台', icon: BriefcaseBusiness, roles: ['hr', 'admin'] },
+  { to: '/admin', label: '系统管理', icon: ShieldCheck, roles: ['admin'] },
 ]
 
 // 导航项样式（桌面收起态 collapsed 时居中、无文字）
@@ -61,10 +74,33 @@ function InfoCard() {
   )
 }
 
+function AccountArea({ collapsed = false, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
+  const { user, logout } = useAuth()
+  if (!user) return (
+    <Link to="/login" onClick={onNavigate} title={collapsed ? '登录' : undefined}
+      className={`mt-3 btn-ghost ${collapsed ? '!p-2.5 justify-center' : 'w-full justify-center'}`}>
+      <LogIn className="w-4 h-4" />{!collapsed && '登录 / 注册'}
+    </Link>
+  )
+  const roleLabel = user.role === 'admin' ? '管理员' : user.role === 'hr' ? 'HR' : '个人用户'
+  return (
+    <div className={`mt-3 border-t border-slate-200 pt-3 ${collapsed ? 'flex justify-center' : ''}`}>
+      {!collapsed && <div className="flex items-center gap-2 px-2 mb-2 min-w-0"><div className="w-8 h-8 rounded-lg bg-slate-900 text-white grid place-items-center shrink-0"><UserRound className="w-4 h-4" /></div><div className="min-w-0"><div className="text-xs font-semibold text-slate-800 truncate">{user.username}</div><div className="text-[10px] text-slate-400">{roleLabel}{user.organization_name ? ` · ${user.organization_name}` : ''}</div></div></div>}
+      <button onClick={() => { void logout(); onNavigate?.() }} title="退出登录" className={`btn-ghost text-slate-500 ${collapsed ? '!p-2.5' : 'w-full justify-center'}`}><LogOut className="w-4 h-4" />{!collapsed && '退出登录'}</button>
+    </div>
+  )
+}
+
+function useVisibleNav() {
+  const { user } = useAuth()
+  return NAV.filter(item => !item.roles || (!!user && item.roles.includes(user.role)))
+}
+
 // 桌面端侧栏（≥lg 显示，可收起）
 function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
+  const nav = useVisibleNav()
   return (
-    <aside className={`${collapsed ? 'w-[78px]' : 'w-64'} hidden lg:flex shrink-0 h-screen sticky top-0 z-30 flex-col px-3 py-6 border-r border-slate-200/70 bg-white/55 backdrop-blur-xl transition-[width] duration-300 ease-in-out relative`}>
+    <aside className={`${collapsed ? 'w-[78px]' : 'w-64'} hidden lg:flex shrink-0 h-screen sticky top-0 z-30 flex-col px-3 py-6 overflow-y-auto overflow-x-hidden border-r border-slate-200/70 bg-white/55 backdrop-blur-xl transition-[width] duration-300 ease-in-out relative`}>
       {/* 浮于侧栏右边缘的收起/展开按钮 */}
       <button onClick={onToggle} title={collapsed ? '展开侧栏' : '收起侧栏'}
         className="absolute -right-3 top-8 z-40 w-6 h-6 rounded-full bg-white border border-slate-200 shadow-md grid place-items-center text-slate-400 hover:text-accent hover:border-accent/50 hover:scale-110 transition">
@@ -74,7 +110,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
       <Brand collapsed={collapsed} />
 
       <nav className="flex flex-col gap-1">
-        {NAV.map(n => (
+        {nav.map(n => (
           <NavLink key={n.to} to={n.to} end={n.end} title={collapsed ? n.label : undefined} className={navClass(collapsed)}>
             <n.icon className="w-[18px] h-[18px] shrink-0" />
             {!collapsed && <span className="whitespace-nowrap">{n.label}</span>}
@@ -83,12 +119,14 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
       </nav>
 
       {!collapsed && <InfoCard />}
+      <AccountArea collapsed={collapsed} />
     </aside>
   )
 }
 
 // 移动端顶部栏（<lg 显示）
 function MobileTopBar({ onOpen }: { onOpen: () => void }) {
+  const { user } = useAuth()
   return (
     <header className="lg:hidden sticky top-0 z-40 flex items-center gap-3 h-14 px-4 bg-white/70 backdrop-blur-xl border-b border-slate-200/70">
       <button onClick={onOpen} aria-label="打开菜单"
@@ -102,12 +140,17 @@ function MobileTopBar({ onOpen }: { onOpen: () => void }) {
         <div className="font-extrabold text-[15px] gradient-text">智岗图谱</div>
         <div className="text-[10px] text-slate-500 tracking-wide -mt-0.5">TalentGraph AI</div>
       </div>
+      <Link to={user ? (user.role === 'admin' ? '/admin' : user.role === 'hr' ? '/hr' : '/history') : '/login'}
+        aria-label={user ? '打开我的工作台' : '登录'} className="ml-auto w-9 h-9 grid place-items-center rounded-lg text-slate-600 hover:bg-white/80">
+        {user ? <UserRound className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+      </Link>
     </header>
   )
 }
 
 // 移动端抽屉式侧栏（<lg）
 function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const nav = useVisibleNav()
   return (
     <AnimatePresence>
       {open && (
@@ -115,7 +158,7 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
           <motion.div className="lg:hidden fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
           <motion.aside
-            className="lg:hidden fixed inset-y-0 left-0 z-50 w-64 flex flex-col px-3 py-6 bg-white/90 backdrop-blur-xl border-r border-slate-200/70 shadow-2xl"
+            className="lg:hidden fixed inset-y-0 left-0 z-50 w-64 flex flex-col px-3 py-6 overflow-y-auto overflow-x-hidden bg-white/90 backdrop-blur-xl border-r border-slate-200/70 shadow-2xl"
             initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
             transition={{ type: 'tween', duration: 0.28, ease: 'easeInOut' }}>
             <button onClick={onClose} aria-label="关闭菜单"
@@ -124,7 +167,7 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
             </button>
             <Brand />
             <nav className="flex flex-col gap-1">
-              {NAV.map(n => (
+              {nav.map(n => (
                 <NavLink key={n.to} to={n.to} end={n.end} onClick={onClose} className={navClass(false)}>
                   <n.icon className="w-[18px] h-[18px] shrink-0" />
                   <span className="whitespace-nowrap">{n.label}</span>
@@ -132,6 +175,7 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
               ))}
             </nav>
             <InfoCard />
+            <AccountArea onNavigate={onClose} />
           </motion.aside>
         </>
       )}
@@ -139,12 +183,14 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
   )
 }
 
-export default function App() {
+function AppContent() {
   const loc = useLocation()
   const [collapsed, setCollapsed] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 })
+  }, [loc.pathname])
   return (
-    <ReadOnlyProvider><ToastProvider>
       <div className="flex min-h-screen">
         <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
         <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
@@ -167,6 +213,12 @@ export default function App() {
                       <Route path="/jobs/:id" element={<JobDetail />} />
                       <Route path="/match" element={<Match />} />
                       <Route path="/talent" element={<Talent />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Login register />} />
+                      <Route path="/history" element={<RequireAuth><HistoryPage /></RequireAuth>} />
+                      <Route path="/feedback" element={<RequireAuth><Feedback /></RequireAuth>} />
+                      <Route path="/hr" element={<RequireAuth roles={['hr', 'admin']}><HRWorkspace /></RequireAuth>} />
+                      <Route path="/admin" element={<RequireAuth roles={['admin']}><Admin /></RequireAuth>} />
                     </Routes>
                   </Suspense>
                 </motion.div>
@@ -174,8 +226,11 @@ export default function App() {
             </div>
           </main>
         </div>
-        <ChatBot />
+        {!['/login', '/register'].includes(loc.pathname) && <ChatBot />}
       </div>
-    </ToastProvider></ReadOnlyProvider>
   )
+}
+
+export default function App() {
+  return <ReadOnlyProvider><ToastProvider><AuthProvider><AppContent /></AuthProvider></ToastProvider></ReadOnlyProvider>
 }

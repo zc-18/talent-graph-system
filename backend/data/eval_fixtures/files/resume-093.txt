@@ -1,0 +1,21 @@
+Software Proficiency: â¢ Languages: Basics of C, SQL, PL/SQL,JAVA,JAVAEE,Javascript,HTML,CSS,jquery,mysql,Spring ,Hibernate. â¢ Software Tools: Xillinx, Modelsim, Matlab, Multisim. â¢ Operating Systems: Windows XP, Vista, 07, 08, Ubuntu. Project Profile: B.E. Project FPGA Implementation of Team Size: 4. Role: Programmer. AES Algorithm AES is Advanced Encryption Standard which is used in cryptography by which we can protect our data. It encrypted by a Secret Key. T.E. project Sorting Robot. Team Size: 3. Role: Mechanism designer. The TCS 230 sensor sorts the RGB color balls according to their color. Diploma Project RFID Based Student Team Size: 4. Role: Interface. Attendance System Using GSM. In this student show RFID card of his own and then message send via GSM to their parent that his ward is present.Education Details 
+May 2016 B.E. Savitribai Phule Pune, Maharashtra Pune University
+March 2010 S.S.C   Maharashtra Board
+DevOps Engineer 
+
+
+Skill Details 
+C- Exprience - 6 months
+C++- Exprience - 6 months
+Sql- Exprience - 6 months
+Pl/Sql- Exprience - 6 months
+Core Java- Exprience - 6 months
+Javascript- Exprience - Less than 1 year months
+HTML- Exprience - Less than 1 year months
+CSS- Exprience - Less than 1 year months
+Jquery- Exprience - Less than 1 year months
+JavaEE- Exprience - Less than 1 year months
+Mysql- Exprience - Less than 1 year months
+Python- Exprience - 6 monthsCompany Details 
+company - Parkar Consulting and Labs
+description - I'm working on the DevOps team in Parkar Consulting and Labs. I have hands on the AWS as well as Python

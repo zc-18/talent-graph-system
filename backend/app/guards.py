@@ -19,6 +19,9 @@ from __future__ import annotations
 from fastapi import HTTPException
 
 from .config import settings
+from .auth import Actor
+from .permissions import require_hr
+from fastapi import Depends
 
 READ_ONLY_MESSAGE = (
     "演示站当前为只读模式：为保证评审期间图谱数据可复现，"
@@ -37,3 +40,10 @@ def require_write() -> None:
     """
     if is_read_only():
         raise HTTPException(status_code=403, detail=READ_ONLY_MESSAGE)
+
+
+def require_org_append(actor: Actor = Depends(require_hr)) -> Actor:
+    """Allow an authenticated HR to append organization-private data in READ_ONLY mode."""
+    if actor.organization_id is None:
+        raise HTTPException(status_code=403, detail="HR 未加入有效组织")
+    return actor

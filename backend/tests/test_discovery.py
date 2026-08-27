@@ -12,8 +12,10 @@ def test_define_five_elements_and_evidence_crosscheck():
         "bonus_skills": [{"name": "向量数据库"}, {"name": "LangChain"}],  # 重复应剔除
         "typical_scenarios": ["智能客服", "AI助手"],
     }
-    evidence = [{"title": "t1", "content": "LangChain 与提示工程是 Agent 核心能力", "url": "http://a"},
-                {"title": "t2", "content": "向量数据库 用于检索", "url": "http://b"}]
+    evidence = [{"title": "t1", "content": "LangChain 与提示工程是 Agent 核心能力", "url": "http://a",
+                 "company": "甲科技有限公司", "provider": "官网"},
+                {"title": "t2", "content": "LangChain、提示工程、向量数据库用于检索", "url": "http://b",
+                 "company": "乙智能有限公司", "provider": "公共平台"}]
     out = discovery._postprocess_definition(data, "AI智能体开发工程师", evidence)
 
     # 岗位定义五要素齐全
@@ -46,3 +48,66 @@ def test_define_empty_skills_filtered():
     out = discovery._postprocess_definition(
         {"required_skills": [{"name": ""}, {"name": "   "}], "bonus_skills": []}, "kw", [])
     assert out["capabilities"] == []
+
+
+def test_mature_java_veto_happens_before_network(monkeypatch):
+    monkeypatch.setattr(discovery.clients, "multi_source_search",
+                        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("不得联网")))
+    out = discovery.discover_candidates("初级 Java 开发工程师")
+    assert out["verdict"] == "ESTABLISHED"
+    assert out["existing_job"] == "Java开发工程师"
+    assert out["emergence_score"] == 0.0
+
+
+def test_ambiguous_test_role_requires_track_before_network(monkeypatch):
+    monkeypatch.setattr(discovery.clients, "multi_source_search",
+                        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("不得联网")))
+    out = discovery.discover_candidates("测试工程师")
+    assert out["verdict"] == "AMBIGUOUS"
+    assert out["resolution"]["requires_disambiguation"] is True
+    assert len(out["resolution"]["candidates"]) >= 4
+
+
+def test_emergence_uses_employers_history_and_authority_not_result_volume():
+    evidence = [
+        {"kind": "policy", "company": "甲机器人有限公司", "provider": "政府",
+         "region": "上海", "industry": "manufacturing"},
+        {"company": "乙智能有限公司", "provider": "招聘平台", "region": "深圳",
+         "industry": "internet"},
+    ]
+    out = discovery.score_emergence(
+        "具身智能机器人应用技术员", evidence, history={"2018": 0, "2024": 0, "2026": 8})
+    assert out["verdict"] == "EMERGING"
+    assert out["employer_count"] == 2
+    assert out["signals"]["historical_novelty"] == 1.0
+
+
+def test_missing_history_does_not_fabricate_novelty():
+    out = discovery.score_emergence(
+        "具身智能机器人应用技术员",
+        [{"kind": "policy", "company": "甲公司"}, {"company": "乙公司"}])
+    assert out["signals"]["history_available"] is False
+    assert out["signals"]["historical_novelty"] == 0.0
+
+
+def test_skill_confidence_is_computed_from_each_skills_supporting_employers():
+    data = {"required_skills": [{"name": "LangChain"}, {"name": "模型微调"}],
+            "bonus_skills": []}
+    evidence = [
+        {"title": "a", "content": "LangChain", "company": "甲公司", "provider": "p1"},
+        {"title": "b", "content": "LangChain", "company": "乙公司", "provider": "p2"},
+        {"title": "c", "content": "模型微调", "company": "甲公司", "provider": "p1"},
+    ]
+    caps = discovery._postprocess_definition(data, "具身智能应用工程师", evidence)["capabilities"]
+    langchain = next(c for c in caps if c["name"] == "LangChain")
+    tuning = next(c for c in caps if c["name"] == "模型微调")
+    assert langchain["employer_count"] == 2 and langchain["status"] == "active"
+    assert tuning["employer_count"] == 1 and tuning["status"] == "candidate"
+    assert langchain["factors"] != tuning["factors"]
+
+
+def test_skill_evidence_matching_uses_persisted_jd_text_not_claimed_counts():
+    assert discovery._evidence_supports_skill(
+        {"title": "后端岗位", "content": "负责 Spring 服务开发"}, "Spring")
+    assert not discovery._evidence_supports_skill(
+        {"title": "后端岗位", "content": "负责 Java 服务开发"}, "Selenium")

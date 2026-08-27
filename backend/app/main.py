@@ -2,13 +2,15 @@
 from __future__ import annotations
 import os
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from .config import settings
-from .db import init_db
-from .routers import jobs, graph, discovery, evolution, match, chat, talent
+from .db import engine, init_db
+from .routers import (admin, auth, chat, discovery, evolution, feedback, graph, hr,
+                      jobs, match, me, talent)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("talent-graph")
@@ -22,7 +24,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"] if settings.cors_origins == "*" else settings.cors_origins.split(","),
-    allow_credentials=True,
+    allow_credentials=settings.cors_origins != "*",
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -34,22 +36,40 @@ app.include_router(evolution.router)
 app.include_router(match.router)
 app.include_router(talent.router)
 app.include_router(chat.router)
+app.include_router(auth.router)
+app.include_router(me.router)
+app.include_router(hr.router)
+app.include_router(feedback.router)
+app.include_router(admin.router)
 
 
 @app.on_event("startup")
 def _startup():
-    try:
-        init_db()
-        logger.info("数据库初始化完成")
-    except Exception as e:  # noqa: BLE001
-        logger.error("数据库初始化失败: %s", e)
+    if settings.app_env.casefold() == "production":
+        if not settings.read_only:
+            raise RuntimeError("生产环境必须显式设置 READ_ONLY=1")
+        if settings.cors_origins.strip() == "*":
+            raise RuntimeError("生产环境必须显式配置 CORS_ORIGINS")
+        # Production schema changes belong to the reviewed migration workflow.
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+        logger.info("生产数据库连通性检查完成；未执行 runtime create_all")
+        return
+    init_db()
+    logger.info("本地/测试数据库初始化完成")
 
 
 @app.get("/api/health")
 def health():
     # read_only 供前端隐藏写操作入口（按钮藏了、闸门也还在，两层各自独立生效）
+    try:
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+    except Exception as exc:  # noqa: BLE001
+        logger.error("数据库健康检查失败: %s", exc)
+        raise HTTPException(503, "database unavailable") from None
     return {"status": "ok", "service": "talent-graph", "version": "1.0.0",
-            "read_only": bool(settings.read_only)}
+            "read_only": bool(settings.read_only), "database": "ok"}
 
 
 # ---------------- 静态前端（SPA）----------------
@@ -73,4 +93,3 @@ else:
     def root():
         return {"name": "多源异构数据驱动岗位和能力图谱系统 API", "docs": "/docs",
                 "health": "/api/health"}
-

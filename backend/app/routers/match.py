@@ -1,67 +1,78 @@
 """简历解析、人岗匹配与差距分析路由。"""
 from __future__ import annotations
+from datetime import datetime
+from time import perf_counter
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from .. import models
 from ..db import get_db
-from ..guards import is_read_only
-from ..schemas import MatchRequest
-from ..services import resume as resume_svc, matching, graph_service
+from ..schemas import MatchRequest, ResumeTextRequest
+from ..services import resume as resume_svc, extraction, matching, role_contract
+from ..services.job_resolution import resolve_job_query
+from ..services.taxonomy import normalize_skill, skill_category
+from ..auth import Actor, add_audit, add_usage, optional_actor
 
 router = APIRouter(prefix="/api/match", tags=["match"])
 
 
-def _persist(db: Session, row):
-    """只读演示站不落这类分析留痕。
+MAX_RESUME_BYTES = 8 * 1024 * 1024
 
-    这三个接口不碰知识图谱，所以不该进 `require_write` 那道硬闸——简历解析和人岗匹配
-    正是要给评委演示的功能。但它们每次请求都会写一行 `Resume`/`MatchResult`，而公网
-    演示站没有任何频率限制，等于把生产库的行数交给访客决定。查过全仓：没有任何展示
-    接口读这两张表（人才盘点走的是 `ResumeBatch`），留痕纯属自用，只读模式下直接不写。
 
-    返回 row.id 或 None——前端不消费 resume_id/match_id，返回 None 不影响任何页面。
-    """
-    if is_read_only():
+def _file_error(exc: resume_svc.ResumeFileError):
+    raise HTTPException(exc.status_code, {"code": exc.code, "message": exc.message})
+
+
+def _private_profile(db: Session, actor: Actor, parsed: dict,
+                      *, authorized: bool = True) -> models.ResumeProfile | None:
+    # Organization-owned resumes must enter through the HR batch endpoint, which
+    # records authorization and retention. Generic matching only persists self-owned data.
+    if actor.user is None or actor.role != "user":
         return None
+    row = models.ResumeProfile(
+        owner_user_id=actor.user_id,
+        organization_id=None,
+        code=f"P{actor.user_id}-{int(datetime.utcnow().timestamp() * 1000)}",
+        source_type="upload", skills=parsed.get("skills", []) or [],
+        skill_levels=parsed.get("skill_levels", {}) or {},
+        years_experience=parsed.get("years_experience", 0) or 0,
+        education=(parsed.get("education") or "")[:64], authorized=authorized)
     db.add(row)
-    db.commit()
-    return row.id
+    db.flush()
+    return row
 
 
 @router.post("/resume/upload")
-async def upload_resume(file: UploadFile = File(...), db: Session = Depends(get_db)):
+async def upload_resume(file: UploadFile = File(...), actor: Actor = Depends(optional_actor),
+                        db: Session = Depends(get_db)):
     """上传简历(PDF/Word/txt)→解析→抽取技能要素。"""
     content = await file.read()
-    if len(content) > 8 * 1024 * 1024:
-        raise HTTPException(400, "文件过大(>8MB)")
-    text = resume_svc.extract_text(file.filename, content)
-    if not text.strip():
-        raise HTTPException(422, "无法从文件中提取文本，请检查文件格式")
+    if len(content) > MAX_RESUME_BYTES:
+        raise HTTPException(413, {"code": "FILE_TOO_LARGE", "message": "文件过大(>8MB)"})
+    try:
+        text = resume_svc.extract_text(file.filename, content)
+    except resume_svc.ResumeFileError as exc:
+        _file_error(exc)
     parsed = resume_svc.parse_resume(text)
-    # 合规·隐私最小化：原始简历全文与姓名仅内存解析、即时返回本人，不落库；
-    # 服务端仅留存脱敏后的技能要素用于分析。
-    row = models.Resume(filename="(已脱敏)", candidate_name="", raw_text=None,
-                        extracted=resume_svc.redact_for_storage(parsed),
-                        skills=parsed.get("skills", []),
-                        years_experience=parsed.get("years_experience", 0))
-    return {"resume_id": _persist(db, row), "filename": file.filename, "extracted": parsed,
+    profile = _private_profile(db, actor, parsed)
+    if profile:
+        add_audit(db, actor, "resume_profile.create", "resume_profile", profile.id)
+        db.commit()
+    return {"resume_id": profile.id if profile else None, "filename": file.filename, "extracted": parsed,
             "skill_count": len(parsed.get("skills", [])),
             "privacy_notice": "原始简历与姓名等个人信息仅用于本次解析，不在服务端留存"}
 
 
 @router.post("/resume/text")
-def parse_resume_text(payload: dict, db: Session = Depends(get_db)):
+def parse_resume_text(payload: ResumeTextRequest, actor: Actor = Depends(optional_actor),
+                       db: Session = Depends(get_db)):
     """直接提交简历文本解析。"""
-    text = payload.get("text", "")
-    if not text.strip():
-        raise HTTPException(400, "文本为空")
+    text = payload.text
     parsed = resume_svc.parse_resume(text)
-    # 合规·隐私最小化：不持久化原始简历与姓名，仅留存脱敏技能要素
-    row = models.Resume(filename="text-input", candidate_name="", raw_text=None,
-                        extracted=resume_svc.redact_for_storage(parsed),
-                        skills=parsed.get("skills", []),
-                        years_experience=parsed.get("years_experience", 0))
-    return {"resume_id": _persist(db, row), "extracted": parsed,
+    profile = _private_profile(db, actor, parsed)
+    if profile:
+        add_audit(db, actor, "resume_profile.create", "resume_profile", profile.id)
+        db.commit()
+    return {"resume_id": profile.id if profile else None, "extracted": parsed,
             "skill_count": len(parsed.get("skills", [])),
             "privacy_notice": "原始简历与姓名等个人信息仅用于本次解析，不在服务端留存"}
 
@@ -105,19 +116,68 @@ def _skill_relations(db: Session, names: list[str]) -> dict:
     return rels
 
 
+def _transient_contract(text: str) -> tuple[dict, dict]:
+    parsed = extraction.parse_jd(text)
+    title = parsed.get("job_title") or parsed.get("title") or text[:80]
+    resolution = resolve_job_query(title)
+    capabilities = []
+    for importance, key in (("required", "required_skills"), ("bonus", "bonus_skills")):
+        for item in parsed.get(key, []) or []:
+            item = {"name": item} if isinstance(item, str) else item
+            name = normalize_skill(item.get("name") or "")
+            if not name:
+                continue
+            capabilities.append({"name": name, "importance": importance,
+                                 "weight": float(item.get("weight") or
+                                                 (0.75 if importance == "required" else 0.35)),
+                                 "level_required": item.get("level") or "familiar",
+                                 "confidence": float(item.get("confidence") or 0.65),
+                                 "source_count": 1, "employer_count": 1,
+                                 "category": item.get("category") or skill_category(name),
+                                 "status": "active"})
+    contract = role_contract.build_role_contract(
+        capabilities, job_id=None, job_name=resolution.canonical_title,
+        seniority=resolution.seniority, recruitment_type=resolution.recruitment_type,
+        track=resolution.track, industry=resolution.industry, version=0, min_employers=1)
+    return contract, {"id": None, "name": resolution.canonical_title,
+                      "category": parsed.get("category") or "临时岗位",
+                      "transient": True}
+
+
 @router.post("/analyze")
-def analyze(payload: MatchRequest, db: Session = Depends(get_db)):
+def analyze(payload: MatchRequest, actor: Actor = Depends(optional_actor),
+            db: Session = Depends(get_db)):
     """人岗匹配诊断与差距分析。输入技能或简历文本，对比目标岗位图谱。"""
-    job = db.query(models.Job).get(payload.job_id)
-    if not job:
+    job = db.query(models.Job).get(payload.job_id) if payload.job_id is not None else None
+    if payload.job_id is not None and not job:
         raise HTTPException(404, "岗位不存在")
+    if payload.save and actor.user is not None and not (
+            actor.role == "user" or
+            (actor.role == "hr" and actor.organization_id is not None)):
+        raise HTTPException(403, "当前账号没有可归属的匹配历史空间")
+    if payload.save and actor.role == "hr":
+        raise HTTPException(422, {
+            "code": "HR_BATCH_REQUIRED",
+            "message": "企业候选简历必须通过招聘批次提交授权声明和保留期限",
+        })
 
     skills, levels = payload.skills, payload.skill_levels
     if payload.resume_text and not skills:
         parsed = resume_svc.parse_resume(payload.resume_text)
         skills, levels = parsed["skills"], parsed["skill_levels"]
 
-    caps = _job_caps(db, payload.job_id)
+    started = perf_counter()
+    if job:
+        contract = role_contract.build_contract_from_job(
+            db, job, seniority=payload.seniority or job.level or "unspecified",
+            recruitment_type=payload.recruitment_type or job.recruitment_type or "mixed",
+            track=payload.track or job.track or "software",
+            industry=payload.industry or job.industry or "general")
+        job_response = {"id": job.id, "name": job.name, "category": job.category,
+                        "transient": False}
+    else:
+        contract, job_response = _transient_contract(payload.target_job_text or "")
+    caps = role_contract.matching_capabilities(contract)
     result = matching.match(caps, skills, levels, use_semantic=True)
 
     # 学习路径
@@ -128,15 +188,31 @@ def analyze(payload: MatchRequest, db: Session = Depends(get_db)):
     suggestions = {}
     if payload.generate_suggestions:
         suggestions = matching.generate_suggestions(
-            job.name, result["missing_required"], result["missing_bonus"],
+            job_response["name"], result["missing_required"], result["missing_bonus"],
             result["summary"]["required_matched"], result["overall_score"])
 
-    rec = models.MatchResult(
-        resume_id=None, job_id=job.id, overall_score=result["overall_score"],
-        dimension_scores=result["dimension_scores"], matched_skills=result["matched_skills"],
-        missing_required=result["missing_required"], missing_bonus=result["missing_bonus"],
-        suggestions=suggestions, learning_path=learning_path)
+    rec = None
+    if payload.save and actor.user is not None:
+        version_row = (db.query(models.JobVersion).filter(
+            models.JobVersion.job_id == job.id,
+            models.JobVersion.version == (job.version or 1)).first()) if job else None
+        profile = _private_profile(db, actor, {"skills": skills, "skill_levels": levels,
+                                               "years_experience": 0, "education": ""})
+        rec = models.MatchRun(
+            owner_user_id=actor.user_id if actor.role == "user" else None,
+            organization_id=actor.organization_id if actor.role == "hr" else None,
+            resume_profile_id=profile.id if profile else None,
+            job_id=job.id if job else None, job_version_id=version_row.id if version_row else None,
+            job_version=(job.version or 1) if job else None, status="completed",
+            contract_snapshot=contract,
+            result_snapshot={**result, "suggestions": suggestions}, learning_path=learning_path)
+        db.add(rec)
+        db.flush()
+        add_audit(db, actor, "match.save", "match_run", rec.id,
+                  summary={"status": "completed", "version": (job.version or 1) if job else 0})
+    add_usage(db, actor, "match", int((perf_counter() - started) * 1000), True)
+    db.commit()
 
-    return {"job": {"id": job.id, "name": job.name, "category": job.category},
+    return {"job": job_response,
             "result": result, "learning_path": learning_path, "suggestions": suggestions,
-            "match_id": _persist(db, rec)}
+            "contract": contract, "match_id": rec.id if rec else None}

@@ -35,6 +35,13 @@ def test_factors_from_jd():
     assert 0 <= C.compute(f) <= 1
 
 
+def test_unknown_employer_gets_no_diversity_credit():
+    factors = C.factors_from_jd(0.8, set(), 0.9, 0.7, False)
+    assert factors["diversity"] == 0.0
+    web = C.factors_from_web(True, set(), 99)
+    assert web["diversity"] == 0.0
+
+
 def test_factors_from_web_authority_doc_beats_plain_web():
     plain = C.factors_from_web(in_evidence=True, providers={"tavily"}, ev_count=4)
     with_doc = C.factors_from_web(in_evidence=True, providers={"tavily"}, ev_count=4,

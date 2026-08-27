@@ -7,6 +7,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from .. import models
 from .hallucination import job_confidence
+from .taxonomy import normalize_skill
 
 WEIGHT_DELTA = 0.2   # 权重变化阈值
 
@@ -128,7 +129,7 @@ def _imp(x):
 
 
 def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
-                    changes: list[dict]) -> dict:
+                    changes: list[dict], *, commit: bool = True) -> dict:
     """应用演化：更新 JobSkill、写入变更记录、版本号 +1。"""
     from .graph_service import upsert_skill, write_evidence
     new_version = (job.version or 1) + 1
@@ -193,6 +194,7 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
             js.confidence = c.get("confidence", js.confidence)
             js.source_count = c.get("source_count", js.source_count)
             js.level_required = c.get("level_required", js.level_required)
+            js.factors = c.get("factors", js.factors) or {}
             js.status = "active"
             js.last_seen = datetime.utcnow()
         else:
@@ -200,6 +202,7 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
                 job_id=job.id, skill_id=sk.id, importance=c["importance"],
                 weight=c.get("weight", 0.5), level_required=c.get("level_required", "familiar"),
                 confidence=c.get("confidence", 0.0), source_count=c.get("source_count", 0),
+                factors=c.get("factors") or {},
                 status="active", first_seen=datetime.utcnow(), last_seen=datetime.utcnow())
             db.add(js)
             db.flush()
@@ -224,8 +227,243 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
     # 此前只有建图时算一次，演化改了能力集却不重算，岗位列表的数字越跑越旧。
     job.evidence_count = sum(c.get("source_count", 0) for c in active_new)
     job.updated_at = datetime.utcnow()
-    db.commit()
+    if commit:
+        db.commit()
     return {"version": new_version, "changes_applied": len(changes),
             "added": sum(1 for c in changes if c["change_type"] == "add"),
             "deleted": sum(1 for c in changes if c["change_type"] == "delete"),
             "modified": sum(1 for c in changes if c["change_type"] == "modify")}
+
+
+def snapshot_job_version(db: Session, job: models.Job, *, created_by: int | None = None
+                         ) -> models.JobVersion:
+    """Persist a complete, immutable capability snapshot for the current Job.version."""
+    existing = db.query(models.JobVersion).filter(
+        models.JobVersion.job_id == job.id,
+        models.JobVersion.version == (job.version or 1)).first()
+    if existing:
+        return existing
+    from . import role_contract
+    version = models.JobVersion(
+        job_id=job.id, version=job.version or 1, status="published",
+        effective_at=job.updated_at or datetime.utcnow(),
+        evidence_window={"dimensions": {
+            "job_name": job.name,
+            "seniority": job.level or "unspecified",
+            "recruitment_type": job.recruitment_type or "mixed",
+            "track": job.track or "software",
+            "industry": job.industry or "general",
+        }},
+        summary=job.summary, responsibilities=job.core_responsibilities or [],
+        typical_scenarios=job.typical_scenarios or [], contract_snapshot=None,
+        created_by=created_by)
+    db.add(version)
+    db.flush()
+    rows = db.query(models.JobSkill).filter(models.JobSkill.job_id == job.id).all()
+    for row in rows:
+        evidence_refs = [{"evidence_id": ev.id, "raw_jd_id": ev.raw_jd_id,
+                          "url": ev.source_url} for ev in db.query(models.Evidence).filter(
+                              models.Evidence.job_skill_id == row.id).limit(12).all()]
+        skill = db.query(models.Skill).get(row.skill_id)
+        parent = db.query(models.Skill).get(skill.parent_id) if skill and skill.parent_id else None
+        db.add(models.JobVersionSkill(
+            job_version_id=version.id, skill_id=row.skill_id,
+            capability_cluster=(parent.name if parent else (skill.name if skill else None)),
+            importance=row.importance, status=row.status, weight=row.weight,
+            confidence=row.confidence, level_required=row.level_required,
+            factors=row.factors or {}, evidence_refs=evidence_refs))
+    db.flush()
+    version.contract_snapshot = role_contract.build_contract_from_version(db, job, version)
+    return version
+
+
+def current_capabilities(db: Session, job: models.Job) -> list[dict]:
+    """Return the complete current active capability set in proposal input shape."""
+    rows = (db.query(models.JobSkill, models.Skill)
+            .join(models.Skill, models.Skill.id == models.JobSkill.skill_id)
+            .filter(models.JobSkill.job_id == job.id,
+                    models.JobSkill.status == "active").all())
+    parent_ids = {skill.parent_id for _, skill in rows if skill.parent_id}
+    parents = dict(db.query(models.Skill.id, models.Skill.name).filter(
+        models.Skill.id.in_(parent_ids)).all()) if parent_ids else {}
+    return [{
+        "name": skill.name,
+        "category": skill.category,
+        "skill_type": skill.skill_type,
+        "parent": parents.get(skill.parent_id),
+        "capability_cluster": parents.get(skill.parent_id) or skill.name,
+        "importance": row.importance,
+        "status": "active",
+        "weight": float(row.weight or 0),
+        "confidence": float(row.confidence or 0),
+        "level_required": row.level_required or "familiar",
+        "factors": row.factors or {},
+        "source_count": int(row.source_count or 0),
+        "evidence": [{
+            "raw_jd_id": ev.raw_jd_id,
+            "source_type": ev.source_type,
+            "source": ev.source_name,
+            "source_url": ev.source_url,
+            "snippet": ev.snippet,
+            "weight": ev.weight,
+        } for ev in db.query(models.Evidence).filter(
+            models.Evidence.job_skill_id == row.id).order_by(
+            models.Evidence.id).limit(12).all()],
+    } for row, skill in rows]
+
+
+def apply_review_level_overrides(current: list[dict], parsed_jds: list[dict]) \
+        -> tuple[list[dict], list[dict]]:
+    """Propose explicit level upgrades for existing, already-validated skills only.
+
+    A manually supplied JD has no independent-employer identity, so it must never
+    introduce a new active capability. It may, however, produce a review-only
+    level upgrade for a capability whose historical evidence is already active.
+    """
+    rank = {"familiar": 0, "proficient": 1, "expert": 2}
+    requested: dict[str, str] = {}
+    for parsed in parsed_jds:
+        for key in ("required_skills", "bonus_skills", "fine_skills"):
+            for value in parsed.get(key, []):
+                name = normalize_skill(str(value.get("name") or ""))
+                level = value.get("level") or "familiar"
+                if not name or level not in rank:
+                    continue
+                if rank[level] > rank.get(requested.get(name, "familiar"), 0):
+                    requested[name] = level
+
+    proposed, changes = [], []
+    for value in current:
+        capability = dict(value)
+        name = normalize_skill(str(capability.get("name") or ""))
+        old_level = capability.get("level_required") or "familiar"
+        new_level = requested.get(name)
+        if new_level and rank[new_level] > rank.get(old_level, 0):
+            capability["level_required"] = new_level
+            changes.append({
+                "change_type": "modify", "skill_name": name,
+                "importance": capability.get("importance"),
+                "old_value": {"level_required": old_level},
+                "new_value": {"level_required": new_level},
+                "reason": ("手工提供的最新 JD 明确提高该既有能力的熟练度要求；"
+                           "仅生成待人工审核提案，不计作独立雇主交叉验证"),
+                "confidence": float(capability.get("confidence") or 0),
+                "data_source": {
+                    "source": "manual_jd_preview",
+                    "jd_count": len(parsed_jds),
+                    "employer_validated": False,
+                    "manual_review_required": True,
+                },
+            })
+        proposed.append(capability)
+    return proposed, changes
+
+
+def normalize_proposed_capabilities(snapshot: dict) -> list[dict]:
+    """Normalize a full proposed snapshot; omitted current skills mean deletion."""
+    raw = snapshot.get("capabilities") or []
+    if not isinstance(raw, list) or not raw:
+        raise ValueError("proposed_snapshot.capabilities 至少需要一项能力")
+    normalized: list[dict] = []
+    seen: set[str] = set()
+    for value in raw:
+        cap = {"name": value} if isinstance(value, str) else dict(value or {})
+        name = normalize_skill(str(cap.get("name") or ""))
+        if not name or name in seen or cap.get("status", "active") != "active":
+            continue
+        seen.add(name)
+        importance = cap.get("importance", "required")
+        if importance not in {"required", "bonus"}:
+            raise ValueError(f"{name} 的 importance 必须是 required/bonus")
+        parent = cap.get("parent") or cap.get("parent_name") or cap.get("capability_cluster")
+        normalized.append({
+            **cap,
+            "name": name,
+            "parent": parent if parent and parent != name else None,
+            "capability_cluster": parent or name,
+            "importance": importance,
+            "status": "active",
+            "weight": float(cap.get("weight", 0.5)),
+            "confidence": float(cap.get("confidence", 0.0)),
+            "level_required": cap.get("level_required") or "familiar",
+            "factors": cap.get("factors") or {},
+            "source_count": int(cap.get("source_count") or cap.get("employer_count") or 0),
+            "evidence": cap.get("evidence") or [],
+        })
+    if not normalized:
+        raise ValueError("proposed_snapshot 中没有有效 active 能力")
+    return sorted(normalized, key=lambda item: item["name"])
+
+
+def _snapshot_map(capabilities: list[dict]) -> dict[str, dict]:
+    return {cap["name"]: {
+        "importance": cap.get("importance") or "required",
+        "status": "active",
+        "weight": round(float(cap.get("weight") or 0), 6),
+        "confidence": round(float(cap.get("confidence") or 0), 6),
+        "level_required": cap.get("level_required") or "familiar",
+        "factors": cap.get("factors") or {},
+        "capability_cluster": cap.get("capability_cluster") or cap.get("parent") or cap["name"],
+    } for cap in capabilities if cap.get("status", "active") == "active"}
+
+
+def compute_snapshot_diff(before: list[dict], after: list[dict]) -> list[dict]:
+    """Create a lossless change log for every governed JobVersionSkill field."""
+    old_map, new_map = _snapshot_map(before), _snapshot_map(after)
+    changes = []
+    for name in sorted(set(old_map) | set(new_map)):
+        old_value, new_value = old_map.get(name), new_map.get(name)
+        if old_value == new_value:
+            continue
+        if old_value is None:
+            change_type, reason = "add", "拟发布快照新增能力项"
+        elif new_value is None:
+            change_type, reason = "delete", "拟发布快照移除能力项"
+        else:
+            change_type, reason = "modify", "拟发布快照修改能力字段"
+        current = new_value or old_value or {}
+        changes.append({
+            "change_type": change_type,
+            "skill_name": name,
+            "importance": current.get("importance"),
+            "old_value": old_value,
+            "new_value": new_value,
+            "reason": reason,
+            "confidence": float(current.get("confidence") or 0),
+            "data_source": {"source": "evolution_run_snapshot"},
+        })
+    return changes
+
+
+def version_capabilities(db: Session, version: models.JobVersion) -> list[dict]:
+    """Rebuild the governed active snapshot from immutable JobVersionSkill rows."""
+    rows = (db.query(models.JobVersionSkill, models.Skill)
+            .join(models.Skill, models.Skill.id == models.JobVersionSkill.skill_id)
+            .filter(models.JobVersionSkill.job_version_id == version.id,
+                    models.JobVersionSkill.status == "active").all())
+    return [{
+        "name": skill.name,
+        "importance": row.importance,
+        "status": row.status,
+        "weight": row.weight,
+        "confidence": row.confidence,
+        "level_required": row.level_required,
+        "factors": row.factors or {},
+        "capability_cluster": row.capability_cluster or skill.name,
+    } for row, skill in rows]
+
+
+def assert_snapshot_reconciled(*, before: list[dict], proposed: list[dict],
+                               after: list[dict], changes: list[dict]) -> None:
+    """Fail publication unless proposal, snapshots, and append-only log are identical."""
+    if _snapshot_map(proposed) != _snapshot_map(after):
+        raise RuntimeError("发布后 JobVersionSkill 快照与 proposal 不一致")
+    expected = compute_snapshot_diff(before, after)
+    signature = lambda rows: [{
+        "change_type": row.get("change_type"),
+        "skill_name": row.get("skill_name"),
+        "old_value": row.get("old_value"),
+        "new_value": row.get("new_value"),
+    } for row in rows]
+    if signature(expected) != signature(changes):
+        raise RuntimeError("JobVersion 快照 diff 与 CapabilityChange 日志不一致")

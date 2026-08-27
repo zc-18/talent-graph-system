@@ -1,0 +1,24 @@
+{
+  "jd_count": 100,
+  "resume_count": 120,
+  "match_pair_count": 120,
+  "hr_batch_count": 5,
+  "resume_source": "https://huggingface.co/datasets/brackozi/Resume",
+  "resume_license": "MIT",
+  "evidence_class": "engineering_regression_not_release_human_truth",
+  "truth_policy": "source labels and deterministic rules; not dual-human-annotated",
+  "jd_stratification_dimensions": [
+    "domain",
+    "job",
+    "track",
+    "industry",
+    "seniority",
+    "recruitment_type"
+  ],
+  "matching_input_policy": "resume skills parsed from files; fixture truth skills are not injected",
+  "jd_human_annotated_count": 0,
+  "resume_original_file_count": 0,
+  "resume_human_annotated_count": 0,
+  "match_human_annotated_count": 0,
+  "hr_human_labeled_candidate_count": 0
+}

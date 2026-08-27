@@ -102,15 +102,18 @@ def team_gap(db: Session, team_id: int, job_id: int) -> dict:
         return {}
     members = db.query(models.TeamMember).filter(
         models.TeamMember.team_id == team_id).all()
-    tp_by_id = {}
-    if members:
-        for p in db.query(models.TalentProfile).filter(
-                models.TalentProfile.id.in_([m.talent_id for m in members])).all():
-            tp_by_id[p.id] = p
+    talent_ids = [m.talent_id for m in members if m.talent_id is not None]
+    resume_ids = [m.resume_profile_id for m in members if m.resume_profile_id is not None]
+    tp_by_id = {p.id: p for p in db.query(models.TalentProfile).filter(
+        models.TalentProfile.id.in_(talent_ids)).all()} if talent_ids else {}
+    rp_by_id = {p.id: p for p in db.query(models.ResumeProfile).filter(
+        models.ResumeProfile.id.in_(resume_ids)).all()} if resume_ids else {}
+    profile_by_member = {m.id: (tp_by_id.get(m.talent_id) if m.talent_id is not None
+                                else rp_by_id.get(m.resume_profile_id)) for m in members}
 
     member_skills: dict[int, set[str]] = {}
     for m in members:
-        p = tp_by_id.get(m.talent_id)
+        p = profile_by_member.get(m.id)
         member_skills[m.id] = {resolve_skill(s) for s in (p.skills or [])} if p else set()
 
     caps = _active_caps(db, job_id)
@@ -123,8 +126,8 @@ def team_gap(db: Session, team_id: int, job_id: int) -> dict:
         rec = {"skill": c["name"], "category": c["category"],
                "weight": round(c["weight"], 4), "confidence": round(c["confidence"], 4),
                "holders": [{"member_id": m.id, "display_name": m.display_name,
-                            "talent_code": tp_by_id.get(m.talent_id).code
-                            if tp_by_id.get(m.talent_id) else None} for m in who]}
+                            "talent_code": profile_by_member.get(m.id).code
+                            if profile_by_member.get(m.id) else None} for m in who]}
         (covered if who else missing).append(rec)
 
     bonus_covered = sum(1 for c in bonus
@@ -137,12 +140,13 @@ def team_gap(db: Session, team_id: int, job_id: int) -> dict:
                 if any(h["member_id"] == m.id for h in c["holders"])}
         unique = {c["skill"] for c in covered
                   if len(c["holders"]) == 1 and c["holders"][0]["member_id"] == m.id}
-        p = tp_by_id.get(m.talent_id)
+        p = profile_by_member.get(m.id)
         contributions.append({
             "member_id": m.id, "display_name": m.display_name,
             "role_label": m.role_label,
             "talent_code": p.code if p else None,
             "talent_id": m.talent_id,
+            "resume_profile_id": m.resume_profile_id,
             "skill_count": len(member_skills.get(m.id, set())),
             "covers_required": len(mine),
             "uniquely_covers": len(unique),

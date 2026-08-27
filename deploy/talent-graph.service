@@ -5,10 +5,14 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/opt/talent-graph/backend
+EnvironmentFile=/etc/talent-graph/talent-graph.env
 Environment=STATIC_DIR=/opt/talent-graph/backend/static
+Environment=APP_ENV=production
+Environment=READ_ONLY=1
 ExecStart=/opt/talent-graph/backend/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8200 --workers 1
 Restart=on-failure
 RestartSec=5
+NoNewPrivileges=true
 # 保护小内存服务器：上限 420MB，超出则重启
 MemoryMax=420M
 MemoryHigh=360M

@@ -11,7 +11,7 @@
 
 因子口径（写入文档的同一份定义）：
 - 支持率 support     = 提及该技能的独立 JD 数 / 该岗位有效（非重复）JD 总数
-- 来源多样性 diversity = 独立平台数 / 5（封顶 1.0；多平台交叉印证优于单平台）
+- 来源多样性 diversity = 独立雇主实体数 / DIVERSITY_CAP（当前为 3，封顶 1.0；渠道仅作质量因子展示）
 - 时效性 freshness   = 各来源新鲜度均值（cleaning.freshness_weight，半衰期 180 天）
 - 来源权威度 authority = 各来源权威度均值（企业官网/政府平台 1.0，公开数据集 0.7，网络检索 0.6）
 - 外部验证 external   = 有 Tavily/Serper 检索或权威文件（人社部/头部报告）佐证则 1，否则 0
@@ -48,8 +48,7 @@ SOURCE_AUTHORITY: dict[str, float] = {
     "web": 0.6,           # 网络检索证据
 }
 
-DIVERSITY_CAP = 3  # 独立平台数达到 3 即视为充分多样（2026-07 真实语料校准：合规采集渠道为
-                   # 官网+政府+数据集三类，5 平台封顶使多样性因子结构性偏低；校准后冻结）
+DIVERSITY_CAP = 3  # 独立雇主实体达到 3 即视为充分多样；平台只是传播渠道，不能重复计独立来源。
 
 
 def _clip01(x: float) -> float:
@@ -69,8 +68,12 @@ def factors_from_jd(
     avg_authority: float,
     has_web: bool,
 ) -> dict[str, float]:
-    """既有岗位路径（多 JD 交叉验证）的因子。platforms 为空集时多样性退化为按来源数=1。"""
-    n_platforms = max(1, len(platforms)) if platforms else 1
+    """既有岗位路径的因子。
+
+    ``platforms`` 是为兼容既有调用保留的参数名，传入值必须是去重后的雇主实体键；
+    为空集时多样性为 0；未知雇主不能获得独立来源分。
+    """
+    n_platforms = len(platforms or ())
     return {
         "support": _clip01(support_ratio),
         "diversity": _clip01(n_platforms / DIVERSITY_CAP),
@@ -90,13 +93,16 @@ def factors_from_web(
     """新岗位发现路径（网络证据为主）的因子。
 
     - 支持率：技能名是否出现在证据文本中（出现=1，未出现=0.35，与旧 base 行为对齐）
-    - 多样性：独立检索提供方数（tavily/serper/news...）/ 3 封顶
+    - 多样性：独立雇主实体数 / DIVERSITY_CAP 封顶；检索渠道和证据条数不计作雇主
     - 权威度：有部委/报告级文件佐证 1.0，仅网络检索 0.6
     """
-    n_prov = max(1, len(providers)) if providers else 1
+    # Discovery passes independent employer entity keys here. An empty set is
+    # genuinely no source diversity, not a synthetic first source.
+    n_prov = len(providers or ())
+    _ = ev_count  # retained for call compatibility; never used as employer diversity
     return {
         "support": 1.0 if in_evidence else 0.35,
-        "diversity": _clip01(max(n_prov / 3.0, min(1.0, ev_count / 6.0))),
+        "diversity": _clip01(n_prov / DIVERSITY_CAP),
         "freshness": _clip01(avg_freshness),
         "authority": 1.0 if has_authority_doc else SOURCE_AUTHORITY["web"],
         "external": 1.0 if (in_evidence or has_authority_doc) else 0.0,

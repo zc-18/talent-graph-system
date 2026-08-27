@@ -1,0 +1,347 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 9 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 3595 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(Skills a R a Python a SAP HANA a Tableau a SAP HANA SQL a SAP HANA PAL a MS SQL a SAP Lumira a) Tj
+T*
+(C# a Linear Programming a Data Modelling a Advance Analytics a SCM Analytics a Retail) Tj
+T*
+(Analytics aSocial Media Analytics a NLP Education Details) Tj
+T*
+(January 2017 to January 2018 PGDM Business Analytics  Great Lakes Institute of Management &) Tj
+T*
+(Illinois Institute of Technology) Tj
+T*
+(January 2013 Bachelor of Engineering Electronics and Communication Bengaluru, Karnataka New) Tj
+T*
+(Horizon College of Engineering, Bangalore Visvesvaraya Technological University) Tj
+T*
+(Data Science Consultant) Tj
+T*
+() Tj
+T*
+(Consultant - Deloitte USI) Tj
+T*
+(Skill Details) Tj
+T*
+(LINEAR PROGRAMMING- Exprience - 6 months) Tj
+T*
+(RETAIL- Exprience - 6 months) Tj
+T*
+(RETAIL MARKETING- Exprience - 6 months) Tj
+T*
+(SCM- Exprience - 6 months) Tj
+T*
+(SQL- Exprience - Less than 1 year months) Tj
+T*
+(Deep Learning- Exprience - Less than 1 year months) Tj
+T*
+(Machine learning- Exprience - Less than 1 year months) Tj
+T*
+(Python- Exprience - Less than 1 year months) Tj
+T*
+(R- Exprience - Less than 1 year monthsCompany Details) Tj
+T*
+(company - Deloitte USI) Tj
+T*
+(description - The project involved analysing historic deals and coming with insights to) Tj
+T*
+(optimize future deals.) Tj
+T*
+(Role: Was given raw data, carried out end to end analysis and presented insights to client.) Tj
+T*
+(Key Responsibilities:) Tj
+T*
+(a Extract data from client systems across geographies.) Tj
+T*
+(a Understand and build reports in tableau. Infer meaningful insights to optimize prices and) Tj
+T*
+(find out process blockades.) Tj
+T*
+(Technical Environment: R, Tableau.) Tj
+T*
+() Tj
+T*
+(Industry: Cross Industry) Tj
+T*
+(Service Area: Cross Industry - Products) Tj
+T*
+(Project Name: Handwriting recognition) Tj
+T*
+(Consultant: 3 months.) Tj
+T*
+(The project involved taking handwritten images and converting them to digital text images by) Tj
+T*
+(object detection and sentence creation.) Tj
+T*
+(Role: I was developing sentence correction functionality.) Tj
+T*
+(Key Responsibilities:) Tj
+T*
+(a Gather data large enough to capture all English words) Tj
+T*
+(a Train LSTM models on words.) Tj
+T*
+(Technical Environment: Python.) Tj
+T*
+() Tj
+T*
+(Industry: Finance) Tj
+T*
+(Service Area: Financial Services - BI development Project Name: SWIFT) Tj
+T*
+(Consultant: 8 months.) Tj
+T*
+(The project was to develop an analytics infrastructure on top of SAP S/4, it would user to) Tj
+T*
+(view) Tj
+T*
+(financial reports to respective departments. Reporting also included forecasting expenses.) Tj
+T*
+(Role: I was leading the offshore team.) Tj
+T*
+(Key Responsibilities:) Tj
+T*
+(a Design & Develop data models for reporting.) Tj
+T*
+(a Develop ETL for data flow) Tj
+T*
+(a Validate various reports.) Tj
+T*
+(Technical Environment: SAP HANA, Tableau, SAP AO.) Tj
+T*
+() Tj
+T*
+(Industry: Healthcare Analytics) Tj
+T*
+(Service Area: Life Sciences - Product development Project Name: Clinical Healthcare System) Tj
+T*
+(Consultant: 2 months.) Tj
+T*
+(The project was to develop an analytics infrastructure on top of Argus, it would allow users) Tj
+T*
+(to query faster and provide advance analytics capabilities.) Tj
+T*
+(Role: I was involved from design to deploy phase, performed a lot of data restructuring and) Tj
+T*
+(built) Tj
+T*
+(models for insights.) Tj
+T*
+(Key Responsibilities:) Tj
+T*
+(a Design & Develop data models for reporting.) Tj
+T*
+(a Develop and deploy analytical models.) Tj
+T*
+(a Validate various reports.) Tj
+T*
+(Technical Environment: Data Modelling, SAP HANA, Tableau, NLP.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 9 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 4083 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+() Tj
+T*
+(Industry: FMCG) Tj
+T*
+(Service Area: Trade & Promotion) Tj
+T*
+(Project Name: Consumption Based Planning for Flowers Foods Consultant; 8 months.) Tj
+T*
+(The project involved setting up of CRM and CBP modules.) Tj
+T*
+(Role: I was involved in key data decomposition activities and setting up the base for future) Tj
+T*
+(year) Tj
+T*
+(forecast. Over the course of the project I developed various models and carried out key) Tj
+T*
+(performance improvements.) Tj
+T*
+(Key Responsibilities:) Tj
+T*
+(a Design & Develop HANA models for decomposition.) Tj
+T*
+(a Develop data flow for forecast.) Tj
+T*
+(a Developed various views for reporting of Customer/Sales/Funds.) Tj
+T*
+(a Validate various reports in BOBJ.) Tj
+T*
+(Technical Environment: Data Modelling, SAP HANA, BOBJ, Time Series Forecasting.) Tj
+T*
+() Tj
+T*
+(Internal Initiative Industry: FMCG) Tj
+T*
+(Customer Segmentation and RFM analysis Consultant; 3 months.) Tj
+T*
+(The initiative involved setting up of HANA-Python interface and advance analytics on Python.) Tj
+T*
+(Over the course I had successfully segmented data into five core segments using K-means and) Tj
+T*
+(carried out RFM analysis in Python. Also developed algorithm to categorize any new customer) Tj
+T*
+(under the defined buckets.) Tj
+T*
+(Technical Environment: Anaconda3, Python3.6, HANA SPS12) Tj
+T*
+() Tj
+T*
+(Industry: Telecom Invoice state detection Consultant; 1 months.) Tj
+T*
+(The initiative was to reduce the manual effort in verifying closed and open invoices manually,) Tj
+T*
+(it) Tj
+T*
+(involved development to a decision tree to classify open/closed invoices. This enabled effort) Tj
+T*
+(reduction by 60%.) Tj
+T*
+(Technical Environment: R, SAP PAL, SAP HANA SPS12) Tj
+T*
+() Tj
+T*
+(Accenture Experience) Tj
+T*
+(Industry: Analytics - Cross Industry) Tj
+T*
+(In Process Analytics for SAP Senior Developer; 19 months.) Tj
+T*
+(Accenture Solutions Pvt. Ltd., India) Tj
+T*
+(The project involved development of SAP analytics tool - In Process Analytics \(IPA\) . My role) Tj
+T*
+(was to develop database objects and data models to provide operational insights to clients.) Tj
+T*
+(Role: I have developed various Finance related KPIs and spearheaded various deployments.) Tj
+T*
+(Introduced SAP Predictive analytics to reduce development time and reuse functionalities for) Tj
+T*
+(KPIs and prepared production planning reports.) Tj
+T*
+(Key Responsibilities:) Tj
+T*
+(a Involved in information gather phase.) Tj
+T*
+(a Designed and implemented SAP HANA data modelling using Attribute View, Analytic View, and) Tj
+T*
+(Calculation View.) Tj
+T*
+(a Developed various KPI's individually using complex SQL scripts in Calculation views.) Tj
+T*
+(a Created procedures in HANA Database.) Tj
+T*
+(a Took ownership and developed Dashboard functionality.) Tj
+T*
+(a Involved in building data processing algorithms to be executed in R server for cluster) Tj
+T*
+(analysis.) Tj
+T*
+(Technical Environment: R, SAP HANA, T-SQL.) Tj
+T*
+(Industry: Cross Industry) Tj
+T*
+(Accenture Testing Accelerator for SAP Database Developer; 21 months.) Tj
+T*
+(Accenture Solutions Pvt. Ltd., India) Tj
+T*
+(Role: I have taken care of all development activities for the ATAS tool and have also) Tj
+T*
+(completed) Tj
+T*
+(various deployments of the product.) Tj
+T*
+(Apart from these activities I was also actively involved in maintenance of the database) Tj
+T*
+(servers) Tj
+T*
+(\(Production & Quality\)) Tj
+T*
+(Key Responsibilities:) Tj
+T*
+(a Analyzing business requirements, understanding the scope, getting requirements clarified) Tj
+T*
+(interacting with business and further transform all requirements to generate attribute) Tj
+T*
+(mapping documents and reviewing mapping specification documentation) Tj
+T*
+(a Create / Update database objects like tables, views, stored procedures, function, and) Tj
+T*
+(packages) Tj
+T*
+(a Monitored SQL Server Error Logs and Application Logs through SQL Server Agent) Tj
+T*
+(a Prepared Data Flow Diagrams, Entity Relationship Diagrams using UML) Tj
+T*
+(a Responsible for Designing, developing and Normalization of database tables) Tj
+T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 9 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 324 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(a Experience in performance tuning using SQL profiler.) Tj
+T*
+(a Involved in QA, UAT, knowledge transfer and support activities) Tj
+T*
+(Technical Environment: SQL Server 2008/2014, Visual Studio 2010, Windows Server, Performance) Tj
+T*
+(Monitor, SQL Server Profiler, C#, PL-SQL, T-SQL.) Tj
+T*
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000259 00000 n 
+0000003906 00000 n 
+0000004032 00000 n 
+0000008167 00000 n 
+0000008293 00000 n 
+0000008668 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+8738
+%%EOF

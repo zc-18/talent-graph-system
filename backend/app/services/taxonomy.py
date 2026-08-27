@@ -47,6 +47,10 @@ SYNONYMS: dict[str, str] = {
     "hive": "Hive", "hbase": "HBase", "kafka": "Kafka", "数据仓库": "数据仓库",
     "data warehouse": "数据仓库", "数仓": "数据仓库", "etl": "ETL", "数据湖": "数据湖",
     "data lake": "数据湖", "doris": "Doris", "clickhouse": "ClickHouse",
+    "extract, transform, and load": "ETL", "extract transform and load": "ETL",
+    "sqoop": "Sqoop", "apache hadoop sqoop": "Sqoop", "hdfs": "HDFS",
+    "apache hadoop hdfs": "HDFS", "mapreduce": "MapReduce",
+    "apache hadoop mapreduce": "MapReduce", "informatica": "Informatica",
     "数据挖掘": "数据挖掘", "data mining": "数据挖掘", "实时计算": "实时计算",
     "流计算": "实时计算", "stream processing": "实时计算", "数据治理": "数据治理",
     "presto": "Presto", "trino": "Presto", "数据建模": "数据建模",
@@ -63,11 +67,16 @@ SYNONYMS: dict[str, str] = {
     # 云计算 / 工程
     "docker": "Docker", "kubernetes": "Kubernetes", "k8s": "Kubernetes",
     "微服务": "微服务", "microservice": "微服务", "ci/cd": "CI/CD", "devops": "DevOps",
-    "linux": "Linux", "git": "Git", "云原生": "云原生", "cloud native": "云原生",
+    "linux": "Linux", "linux操作系统": "Linux", "linux os": "Linux", "git": "Git",
+    "云原生": "云原生", "cloud native": "云原生",
     "aws": "云平台", "阿里云": "云平台", "腾讯云": "云平台", "华为云": "云平台",
     "java": "Java", "python": "Python", "go": "Go", "golang": "Go", "c++": "C++",
     "javascript": "JavaScript", "js": "JavaScript", "scala": "Scala", "rust": "Rust",
     "sql": "SQL", "mysql": "MySQL", "redis": "Redis", "mongodb": "MongoDB",
+    "oracle": "Oracle", "database": "数据库", "databases": "数据库",
+    "sql server": "SQL Server", "ms sql server": "SQL Server", "pl/sql": "PL/SQL",
+    "django": "Django", "flask": "Flask", "rest": "REST", "restful": "REST",
+    "jquery": "jQuery", "j2ee": "Java EE", "core java": "Java", "unix": "Unix",
     "spring": "Spring", "springboot": "Spring", "spring boot": "Spring",
     "分布式": "分布式系统", "distributed system": "分布式系统", "高并发": "高并发",
     "message queue": "消息队列", "消息中间件": "消息队列",
@@ -84,7 +93,8 @@ _AI = ["机器学习", "深度学习", "自然语言处理", "计算机视觉", 
        "HuggingFace", "强化学习", "推荐系统", "多模态", "扩散模型", "AIGC", "模型部署",
        "推理加速", "模型量化", "知识图谱", "特征工程"]
 _BD = ["Hadoop", "Spark", "Flink", "Hive", "HBase", "Kafka", "数据仓库", "ETL", "数据湖",
-       "Doris", "ClickHouse", "数据挖掘", "实时计算", "数据治理", "Presto", "数据建模"]
+       "Doris", "ClickHouse", "数据挖掘", "实时计算", "数据治理", "Presto", "数据建模",
+       "Sqoop", "HDFS", "MapReduce", "Informatica"]
 _IOT = ["物联网", "MQTT", "CoAP", "嵌入式开发", "实时操作系统", "边缘计算", "传感器技术",
         "5G通信", "LoRa通信", "Zigbee"]
 _SYS = ["机器人技术", "ROS", "自动驾驶", "SLAM", "具身智能", "数字孪生", "控制系统", "PLC", "Neo4j"]
@@ -92,9 +102,11 @@ _SYS = ["机器人技术", "ROS", "自动驾驶", "SLAM", "具身智能", "数�
 # 上 Java / Python / MySQL 都挂着「云计算与工程」的分类徽章——技能分类是页面上逐条可见的
 # 信息，错得这么显眼会直接折损图谱的可信度。按技能本身的性质拆成三类。
 _LANG = ["Java", "Python", "Go", "C++", "JavaScript", "Scala", "Rust"]
-_DATA_STORE = ["SQL", "MySQL", "Redis", "MongoDB", "Elasticsearch"]
+_DATA_STORE = ["SQL", "MySQL", "Redis", "MongoDB", "Elasticsearch", "Oracle", "数据库",
+               "SQL Server", "PL/SQL"]
 _CLOUD = ["Docker", "Kubernetes", "微服务", "CI/CD", "DevOps", "Linux", "Git", "云原生",
-          "云平台", "Spring", "分布式系统", "高并发", "消息队列", "操作系统"]
+          "云平台", "Spring", "分布式系统", "高并发", "消息队列", "操作系统", "Django",
+          "Flask", "REST", "jQuery", "Java EE", "Unix"]
 for s in _AI:
     SKILL_CATEGORY[s] = "人工智能"
 for s in _BD:
@@ -382,3 +394,69 @@ def parent_of(fine_name: str, llm_parent: str | None = None, category: str | Non
     return None
 
 
+# ---------- 三层能力分类：岗位领域 -> 能力簇 -> 技能点 ----------
+# 能力簇是应用层的同粒度投影，不替代 Skill.parent_id，也不删除细技能证据。
+CAPABILITY_CLUSTERS = (
+    "编程与工程基础", "后端框架与服务", "数据与存储", "中间件与分布式",
+    "软件测试设计", "测试自动化", "质量与交付", "云原生与运维",
+    "算法与模型", "智能体应用工程", "数据工程", "嵌入式与硬件",
+    "网络与系统", "产品与协作",
+)
+
+_CLUSTER_TERMS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("软件测试设计", ("测试设计", "功能测试", "系统测试", "接口测试", "性能测试",
+                    "安全测试", "测试用例", "缺陷管理", "质量保证")),
+    ("测试自动化", ("selenium", "pytest", "junit", "testng", "cypress", "playwright",
+                   "postman", "自动化测试", "接口自动化", "测试开发")),
+    ("嵌入式与硬件", ("电磁兼容", "电路", "芯片", "单片机", "嵌入式", "rtos",
+                    "示波器", "射频", "传感器", "驱动开发", "autosar")),
+    ("智能体应用工程", ("智能体", "agent", "langchain", "llamaindex", "langgraph", "rag",
+                     "检索增强", "提示工程", "function calling", "mcp协议", "向量数据库")),
+    ("算法与模型", ("机器学习", "深度学习", "大语言模型", "pytorch", "tensorflow", "算法",
+                 "模型微调", "模型训练", "强化学习", "自然语言处理", "计算机视觉", "多模态")),
+    ("数据工程", ("spark", "flink", "hadoop", "hive", "etl", "数据仓库", "数据湖",
+                "实时计算", "数据治理", "数据建模", "kafka")),
+    ("数据与存储", ("sql", "mysql", "postgres", "oracle", "redis", "mongodb", "数据库",
+                 "缓存", "elasticsearch", "clickhouse", "doris")),
+    ("中间件与分布式", ("消息队列", "rocketmq", "rabbitmq", "分布式", "高并发", "微服务",
+                    "netty", "grpc", "服务治理")),
+    ("后端框架与服务", ("spring", "spring boot", "django", "flask", "fastapi", "mybatis",
+                    "hibernate", "后端", "api设计", "restful")),
+    ("云原生与运维", ("docker", "kubernetes", "k8s", "云原生", "devops", "sre", "linux",
+                  "ci/cd", "jenkins", "gitlab ci", "prometheus", "grafana", "terraform")),
+    ("质量与交付", ("git", "代码审查", "持续集成", "持续交付", "质量", "可观测", "监控")),
+    ("网络与系统", ("tcp/ip", "http", "网络", "操作系统", "并发编程", "计算机基础")),
+    ("编程与工程基础", ("java", "python", "golang", "go", "c++", "javascript", "scala",
+                     "rust", "数据结构", "设计模式", "面向对象", "编程")),
+    ("产品与协作", ("产品", "项目管理", "沟通", "团队协作", "需求分析", "问题解决")),
+)
+
+
+def capability_cluster(skill_name: str, parent_name: str | None = None) -> str:
+    """Map a skill point/coarse parent to one application-level capability cluster."""
+    canonical = normalize_skill(parent_name or skill_name)
+    haystack = f"{canonical} {skill_name}".casefold()
+    for cluster, terms in _CLUSTER_TERMS:
+        if any(term.casefold() in haystack for term in terms):
+            return cluster
+    category = skill_category(canonical)
+    return {
+        "编程语言": "编程与工程基础",
+        "数据库与存储": "数据与存储",
+        "人工智能": "算法与模型",
+        "大数据": "数据工程",
+        "物联网": "嵌入式与硬件",
+        "智能系统": "嵌入式与硬件",
+        "云计算与工程": "云原生与运维",
+    }.get(category, "产品与协作" if skill_type(canonical) == "soft" else "编程与工程基础")
+
+
+def taxonomy_path(skill_name: str, job_domain: str | None = None,
+                  parent_name: str | None = None) -> dict[str, str]:
+    """Return the stable three-level path consumed by graph/application views."""
+    canonical = normalize_skill(skill_name)
+    return {
+        "domain": job_domain or skill_category(parent_name or canonical),
+        "cluster": capability_cluster(canonical, parent_name),
+        "skill": canonical,
+    }

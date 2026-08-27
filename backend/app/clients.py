@@ -13,12 +13,16 @@ from openai import OpenAI
 from .config import settings
 
 # ---------------- DeepSeek 大模型 ----------------
-_llm = OpenAI(api_key=settings.deepseek_api_key, base_url=settings.deepseek_base_url, timeout=120)
+_llm = (OpenAI(api_key=settings.deepseek_api_key,
+               base_url=settings.deepseek_base_url, timeout=120)
+        if settings.deepseek_api_key else None)
 
 
 def chat(messages: list[dict], temperature: float = 0.2, json_mode: bool = False,
          max_tokens: int = 2048, retries: int = 2) -> str:
     """调用 DeepSeek 对话补全。json_mode=True 时强制返回 JSON。"""
+    if _llm is None:
+        return ""
     kwargs: dict[str, Any] = dict(model=settings.deepseek_model, messages=messages,
                                   temperature=temperature, max_tokens=max_tokens)
     if json_mode:
@@ -42,6 +46,8 @@ def chat_json(messages: list[dict], temperature: float = 0.1, max_tokens: int = 
 
 def chat_stream(messages: list[dict], temperature: float = 0.5, max_tokens: int = 1024):
     """流式对话补全，逐 token yield 文本增量（用于 AI 助手打字机效果）。"""
+    if _llm is None:
+        raise RuntimeError("未配置 DeepSeek API 密钥")
     stream = _llm.chat.completions.create(
         model=settings.deepseek_model, messages=messages,
         temperature=temperature, max_tokens=max_tokens, stream=True)

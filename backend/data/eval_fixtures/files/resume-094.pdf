@@ -1,0 +1,220 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 4899 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(SKILL SET a Talend Big Data a Informatica Power center a Microsoft SQL Server a SQL Platform) Tj
+T*
+(6.2.1 Management Studio Workbench a AWS Services a Talend Administration Console a Microsoft) Tj
+T*
+(Visual a Redshift \(TAC\) Studio a Athena a Data Warehouse Concept - Star a SQL a S3 Schema,) Tj
+T*
+(Facts, Dimensions a Data Modeling - a Data Integration Microsoft Access Education Details) Tj
+T*
+(January 2012 to January 2016 BE  Mumbai, Maharashtra University of Mumbai) Tj
+T*
+(January 2012 CBSE Technology Kochi, Kerala St. Francis) Tj
+T*
+(Talend ETL Developer) Tj
+T*
+() Tj
+T*
+(Talend ETL Developer - Tata Consultancy Services) Tj
+T*
+(Skill Details) Tj
+T*
+(DATA WAREHOUSE- Exprience - 23 months) Tj
+T*
+(DATABASE- Exprience - 20 months) Tj
+T*
+(INTEGRATION- Exprience - 20 months) Tj
+T*
+(INTEGRATOR- Exprience - 20 months) Tj
+T*
+(MS SQL SERVER- Exprience - 20 monthsCompany Details) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+(description - Prepared ETL mapping Documents for every mapping and Data Migration document for) Tj
+T*
+(smooth transfer of project from development to testing environment and then to production) Tj
+T*
+(environment. Performed Unit testing and System testing to) Tj
+T*
+(validate data loads in the target. Troubleshoot long running jobs and fixed the issues.) Tj
+T*
+(a Expertise in creating mappings in TALEND using Big Data supporting components such as) Tj
+T*
+(tJDBCConfiguration, tJDBCInput,) Tj
+T*
+(tHDFSConfiguration, tS3configuration, tCacheOut, tCacheIn, tSqlRow and standard components) Tj
+T*
+(like tFileInputDelimited,) Tj
+T*
+(tFileOutputDelimited, tMap, tJoin, tReplicate, tParallelize, tConvertType, tAggregate,) Tj
+T*
+(tSortRow, tFlowMeter, tLogCatcher,) Tj
+T*
+(tRowGenerator, tJava, tJavarow, tAggregateRow, tFilter etc.) Tj
+T*
+(a Used ETL methodologies and best practices to create Talend ETL jobs. Followed and enhanced) Tj
+T*
+(programming and naming) Tj
+T*
+(standards. Developed jobs, components and Joblets in Talend. Used tRunJob component to run) Tj
+T*
+(child job from a parent job and to pass parameters from parent to child job.) Tj
+T*
+(a Created and deployed physical objects including custom tables, custom views, stored) Tj
+T*
+(procedures, and indexes to SQL server for Staging and Data-Warehouse environment. Involved in) Tj
+T*
+(writing SQL Queries and used Joins to access data from MySQL.) Tj
+T*
+(a Created and managed Source to Target mapping documents for all Facts and Dimension tables.) Tj
+T*
+(Broad design, development and testing experience with Talend Integration Suite and knowledge) Tj
+T*
+(in Performance Tuning of mappings.) Tj
+T*
+(a Extensively used tMap component which does lookup & Joiner Functions. Experienced in writing) Tj
+T*
+(expressions within tmap as per the business need. Handled insert and update Strategy using) Tj
+T*
+(tSQLRow.) Tj
+T*
+(a Created Implicit, local and global Context variables in the job to run Talend jobs against) Tj
+T*
+(different environments.) Tj
+T*
+(a Worked on Talend Administration Console \(TAC\) for scheduling jobs and adding users.) Tj
+T*
+(Experienced in Building a Talend job outside of a Talend studio as well as on TAC server.) Tj
+T*
+(a Developed mappings to load Fact and Dimension tables, SCD Type 1 and SCD Type 2 dimensions) Tj
+T*
+(and Incremental loading and unit tested the mappings.) Tj
+T*
+(a Developed Framework Integrated Job which schedules multiple jobs at a time and updates the) Tj
+T*
+(last successful run time,) Tj
+T*
+(success status, sending mail for failed jobs, maintaining the counts in SQL Database. Used) Tj
+T*
+(tParalleize component and multi) Tj
+T*
+(thread execution option to run subjobs in parallel which increases the performance of a job.) Tj
+T*
+(a Created Talend jobs to copy the files from one server to another and utilized Talend FTP) Tj
+T*
+(components. Implemented FTP) Tj
+T*
+(operations using Talend Studio to transfer files in between network folders as well as to FTP) Tj
+T*
+(server using components like tFileList, tS3Put, tFTPut, tFileExist, tFTPConnection etc.) Tj
+T*
+(a Extracted data from flat files/ databases applied business logic to load them in the staging) Tj
+T*
+(database as well as flat files.) Tj
+T*
+(a Successfully Loaded Data into different targets from various source systems like SQL) Tj
+T*
+(Database, DB2, Flatfiles, XML files etc into the Staging table and then to the target) Tj
+T*
+(database.) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+(description - Experience in development and design of ETL \(Extract, Transform and Loading) Tj
+T*
+(data\) methodology for supporting data) Tj
+T*
+(transformations and processing, in a corporate wide ETL Solution using TALEND Big Data) Tj
+T*
+(Platform.) Tj
+T*
+(a   Excellent working experience in Agile methodologies.) Tj
+T*
+(a   Proficiency in gathering and understanding the client requirements and translate business) Tj
+T*
+(needs into technical) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1081 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(requirements.) Tj
+T*
+(a   Design and develop end-to-end ETL process from various source systems to Staging area,) Tj
+T*
+(from staging to Data Warehouse,) Tj
+T*
+(soliciting and documenting business, functional and data requirements, context/variable) Tj
+T*
+(diagrams, use cases and ETL) Tj
+T*
+(related diagrams.) Tj
+T*
+(a   Excellent oral/written communication with ability to effectively work with onsite and) Tj
+T*
+(remote teams.) Tj
+T*
+(a   A good team player with excellent problem solving ability and time management skills) Tj
+T*
+(having profound insight to determine) Tj
+T*
+(priorities, schedule work and meet critical deadlines.) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+(description - Prepared ETL mapping Documents for every mapping and Data Migration document for) Tj
+T*
+(smooth transfer of project from development to testing environment and then to production) Tj
+T*
+(environment. Performed Unit testing and System testing to) Tj
+T*
+(validate data loads in the target. Troubleshoot long running jobs and fixed the issues.) Tj
+T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000253 00000 n 
+0000005204 00000 n 
+0000005330 00000 n 
+0000006463 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+6533
+%%EOF

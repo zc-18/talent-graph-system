@@ -82,10 +82,12 @@ def aggregate_from_corpus(db, job_name: str) -> dict[str, dict]:
             "bonus_skills": p.get("bonus_skills", []),
             "fine_skills": p.get("fine_skills", []),
             "lag_days": r.lag_days, "is_duplicate": r.is_duplicate,
-            "raw_jd_id": r.id, "source": r.source,
+            "raw_jd_id": r.id, "source": r.source, "company": r.company,
         })
         source_meta[r.id] = {"platform": getattr(r, "platform", None) or r.source,
-                             "authority": getattr(r, "source_authority", None) or 0.6}
+                             "authority": getattr(r, "source_authority", None) or 0.6,
+                             "employer_id": getattr(r, "employer_id", None),
+                             "company": r.company}
 
     print(f"  语料：{len(items)} 条 JD 聚到「{job_name}」，命中解析缓存 {hit} 条"
           f"{f'，缺失 {miss} 条（本次跳过，不掏 LLM）' if miss else ''}")

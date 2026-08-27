@@ -14,6 +14,7 @@ from .. import models
 from . import cleaning, extraction, hallucination, graph_service
 from .ingest import title_key
 from .evolution import compute_changes
+from .job_resolution import resolve_job_query
 
 MIN_JDS_PER_BUCKET = 3     # 每档至少 3 条有效 JD 才建画像
 MIN_BUCKETS = 2            # 至少 2 档才有对比意义
@@ -55,17 +56,38 @@ def bucket_rows(rows: list) -> dict[str, list]:
     return valid
 
 
+def bucket_slices(rows: list) -> dict[tuple[str, str, str, str], list]:
+    """Bucket by level + recruitment + track + industry for RoleContract slices."""
+    buckets: dict[tuple[str, str, str, str], list] = defaultdict(list)
+    for row in rows:
+        level = getattr(row, "inferred_level", None)
+        if level not in LEVELS or not (getattr(row, "raw_text", "") or "").strip():
+            continue
+        resolved = resolve_job_query(getattr(row, "job_title", "") or "")
+        recruitment_type = getattr(row, "recruitment_type", None) or resolved.recruitment_type
+        track = getattr(row, "track", None) or resolved.track
+        industry = getattr(row, "industry", None) or resolved.industry
+        buckets[(level, recruitment_type or "unspecified", track or "unspecified",
+                 industry or "general")].append(row)
+    valid = {key: items for key, items in buckets.items()
+             if len(items) >= MIN_JDS_PER_BUCKET}
+    if len({key[0] for key in valid}) < MIN_BUCKETS:
+        return {}
+    return valid
+
+
 def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
                          cache_path: str | None = None) -> dict[str, dict]:
     """构建岗位分级能力画像并落库 JobLevelSkill。
 
-    返回 {level: {"jd_count": n, "capabilities": [...]}}；分桶规则不满足时返回 {}。
+    返回 {"level|recruitment|track|industry": {slice metadata, capabilities}}；
+    分桶规则不满足时返回 {}。
     """
     parse_fn = parse_fn or extraction.parse_jd
     cache_path = cache_path or str(_DEFAULT_CACHE)
     if rows is None:
         rows = collect_job_rows(db, job)
-    buckets = bucket_rows(rows)
+    buckets = bucket_slices(rows)
     if not buckets:
         return {}
 
@@ -73,8 +95,13 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
     cache_dirty = False
     out: dict[str, dict] = {}
 
-    for level, level_rows in buckets.items():
+    for slice_key, level_rows in buckets.items():
+        level, recruitment_type, track, industry = slice_key
         agg_input, source_meta = [], {}
+        employer_ids = {getattr(r, "employer_id", None) for r in level_rows
+                        if getattr(r, "employer_id", None)}
+        employer_parents = dict(db.query(models.Employer.id, models.Employer.parent_id).filter(
+            models.Employer.id.in_(employer_ids)).all()) if employer_ids else {}
         for r in level_rows:
             h = cleaning.exact_hash(r.raw_text or "")
             p = cache.get(h)
@@ -88,10 +115,14 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
                 "fine_skills": p.get("fine_skills", []),
                 "lag_days": r.lag_days or 0, "is_duplicate": False,
                 "raw_jd_id": r.id, "source": r.source,
+                "company": r.company,
             })
             source_meta[r.id] = {
                 "platform": getattr(r, "platform", None) or r.source,
                 "authority": getattr(r, "source_authority", None) or 0.6,
+                "employer_id": getattr(r, "employer_id", None),
+                "employer_parent_id": employer_parents.get(getattr(r, "employer_id", None)),
+                "company": r.company,
             }
 
         agg = hallucination.aggregate_capabilities(agg_input, source_meta=source_meta)
@@ -117,18 +148,25 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
         # 落库：先清该 job+level 旧行
         db.query(models.JobLevelSkill).filter(
             models.JobLevelSkill.job_id == job.id,
-            models.JobLevelSkill.level == level).delete()
+            models.JobLevelSkill.level == level,
+            models.JobLevelSkill.recruitment_type == recruitment_type,
+            models.JobLevelSkill.track == track,
+            models.JobLevelSkill.industry == industry).delete()
         for c in caps:
             sk = graph_service.upsert_skill(db, c["name"], c.get("category"),
                                             c.get("skill_type"))
             db.add(models.JobLevelSkill(
                 job_id=job.id, level=level, skill_id=sk.id,
+                recruitment_type=recruitment_type, track=track, industry=industry,
                 importance=c["importance"], weight=c.get("weight", 0.5),
                 level_required=c.get("level_required", "familiar"),
                 confidence=c.get("confidence", 0.0), factors=c.get("factors"),
                 source_count=c.get("source_count", 0), jd_count=len(level_rows)))
         db.commit()
-        out[level] = {"jd_count": len(level_rows), "capabilities": caps}
+        out["|".join(slice_key)] = {
+            "level": level, "recruitment_type": recruitment_type,
+            "track": track, "industry": industry,
+            "jd_count": len(level_rows), "capabilities": caps}
 
     # 与岗位能力集取交集后，可能只剩一档还有能力项（实测生成式AI系统测试员只剩
     # 中级 1 项）。分级画像的价值在于跨级对比，单档无从对比，出一张只有一行的

@@ -1,0 +1,712 @@
+[
+  {
+    "id": "hr-batch-1",
+    "target_job": "数据科学工程师",
+    "domain": "Data Science",
+    "job": "数据科学工程师",
+    "track": "data",
+    "industry": "general",
+    "seniority": "unspecified",
+    "recruitment_type": "unspecified",
+    "contract_capabilities": [
+      "Python",
+      "机器学习",
+      "TensorFlow",
+      "SQL",
+      "数据挖掘"
+    ],
+    "candidates": [
+      {
+        "resume_id": "real-resume-008",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-015",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-022",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-029",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-050",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-057",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-064",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-070",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-004",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-005",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-006",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-011",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-013",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-018",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-019",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-020",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-025",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-027",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-032",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-033",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-034",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-039",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-041",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-046",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      }
+    ],
+    "truth_independent": false,
+    "annotation_source": "deterministic_category_and_skill_overlap_rules",
+    "human_annotation_status": "not_performed"
+  },
+  {
+    "id": "hr-batch-2",
+    "target_job": "Python开发工程师",
+    "domain": "Python Developer",
+    "job": "Python开发工程师",
+    "track": "software",
+    "industry": "general",
+    "seniority": "unspecified",
+    "recruitment_type": "unspecified",
+    "contract_capabilities": [
+      "Python",
+      "MySQL",
+      "JavaScript",
+      "Linux",
+      "Git"
+    ],
+    "candidates": [
+      {
+        "resume_id": "real-resume-014",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-021",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-028",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-042",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-049",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-056",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-069",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-075",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-004",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-005",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-011",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-016",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-018",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-019",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-025",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-027",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-032",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-033",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-034",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-037",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-039",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-041",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-046",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-047",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      }
+    ],
+    "truth_independent": false,
+    "annotation_source": "deterministic_category_and_skill_overlap_rules",
+    "human_annotation_status": "not_performed"
+  },
+  {
+    "id": "hr-batch-3",
+    "target_job": "Java开发工程师",
+    "domain": "Java Developer",
+    "job": "Java开发工程师",
+    "track": "software",
+    "industry": "general",
+    "seniority": "unspecified",
+    "recruitment_type": "unspecified",
+    "contract_capabilities": [
+      "Java",
+      "Spring",
+      "MySQL",
+      "JavaScript",
+      "Git"
+    ],
+    "candidates": [
+      {
+        "resume_id": "real-resume-048",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-095",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-013",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-020",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-027",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-034",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-041",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-068",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-002",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-004",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-005",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-007",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-008",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-011",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-012",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-015",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-016",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-018",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-019",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-022",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-023",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-025",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-026",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-029",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      }
+    ],
+    "truth_independent": false,
+    "annotation_source": "deterministic_category_and_skill_overlap_rules",
+    "human_annotation_status": "not_performed"
+  },
+  {
+    "id": "hr-batch-4",
+    "target_job": "DevOps工程师",
+    "domain": "DevOps Engineer",
+    "job": "DevOps工程师",
+    "track": "ops",
+    "industry": "general",
+    "seniority": "unspecified",
+    "recruitment_type": "unspecified",
+    "contract_capabilities": [
+      "Python",
+      "SQL",
+      "Linux",
+      "Git",
+      "Docker"
+    ],
+    "candidates": [
+      {
+        "resume_id": "real-resume-003",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-010",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-017",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-024",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-031",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-038",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-045",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-052",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-004",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-005",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-011",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-013",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-018",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-019",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-020",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-025",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-027",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-032",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-033",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-034",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-039",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-041",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-046",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-047",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      }
+    ],
+    "truth_independent": false,
+    "annotation_source": "deterministic_category_and_skill_overlap_rules",
+    "human_annotation_status": "not_performed"
+  },
+  {
+    "id": "hr-batch-5",
+    "target_job": "大数据开发工程师",
+    "domain": "Hadoop",
+    "job": "大数据开发工程师",
+    "track": "data",
+    "industry": "general",
+    "seniority": "unspecified",
+    "recruitment_type": "unspecified",
+    "contract_capabilities": [
+      "Hadoop",
+      "Hive",
+      "Python",
+      "SQL",
+      "Kafka"
+    ],
+    "candidates": [
+      {
+        "resume_id": "real-resume-012",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-026",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-040",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-054",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-067",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-079",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-005",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-019",
+        "relevance": 2,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-004",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-006",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-011",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-013",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-018",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-020",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-025",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-027",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-032",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-034",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-039",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-041",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-046",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-048",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-053",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      },
+      {
+        "resume_id": "real-resume-055",
+        "relevance": 0,
+        "annotation_source": "deterministic_category_and_skill_overlap_rules"
+      }
+    ],
+    "truth_independent": false,
+    "annotation_source": "deterministic_category_and_skill_overlap_rules",
+    "human_annotation_status": "not_performed"
+  }
+]

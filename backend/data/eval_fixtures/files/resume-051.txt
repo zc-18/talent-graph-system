@@ -1,0 +1,59 @@
+SKILLSET Oracle DBA, MySQL, MARIADB, PostgreSQL Database Administration ITSKILLS SQL Oracle 10g, 11g, MYSQL, MariaDB, postgreSQL Windows, Linux Putty Education Details 
+January 2018 MCS  Pune, Maharashtra Pune University
+Database administrator 
+
+Database administrator  - Infiniteworx Omnichannel Pvt. Ltd
+Skill Details 
+DATABASE- Exprience - 17 months
+MYSQL- Exprience - 17 months
+ORACLE- Exprience - 17 months
+SQL- Exprience - 17 months
+DATABASE ADMINISTRATION- Exprience - 6 monthsCompany Details 
+company - Infiniteworx Omnichannel Pvt. Ltd
+description - Pune Sept 2017 to Present
+
+RESPONSIBILITIES:
+â¢ Creating tablespaces and planning the location of data, monitoring the tablespaces growth periodically.
+â¢ All replication setup
+â¢ Moved database Schema changes to stage.
+â¢ Dba support query resolution.
+â¢ Creating user and giving specific privileges
+â¢ Database management.
+â¢ Database recovery, moving data files to different locations.
+â¢ Planning the backup policies and Backup/ Recovery of databases based on the criticality.
+â¢ IMPORT/EXPORT.
+â¢ Degine schemas
+
+Key Result Areas:
+
+â¢ Providing 24 /7 support to resolve database performance issues, Job failures, Sessions & diagnose root causes
+â¢ Installation, configuring and updating Oracle server software and related Oracle products. Installation, configuraing and updating Mysql, Sql server, MariaDB, MongoDB
+â¢ Supported multiple databases and administered Oracle Databases of Large DB Sizes for production, development & test setups.
+
+â¢ Maintaining table spaces & data files, Control files, Online Redo log files
+
+â¢ Creating Users, granting Roles & Privileges to users and managing tablespaces for different users by granting quota on Default & Temporary tablespaces.
+
+â¢ Taking Oracle RMAN Backups (Scheduling for day wise backup)
+
+â¢ Implementing the incremental, cumulative and full RMAN backup for each database to have space management and effective recovery.
+â¢ Logical Backup Using Export & Import/datapump Export of important tables at regular intervals.
+
+â¢ Regular checking of trace, alert log file, all ORA errors
+
+â¢ Working on incidents like User creation/deletion incidents, backup failed incidents.
+â¢ Checking Listener Status, connectivity Troubleshooting and fixing database listener issues.
+â¢ Look for any new alert / error log entries / errors, error details in Trace files generated. Executing DDL & DML scripts as per customer requirements
+
+â¢ Mentoring, coaching and appraising team members with active involvement in the recruitment process
+
+â¢ Contributing in Project Documentation and generating daily reports
+
+â¢ Ensuring compliance to quality norms and taking steps for any non-conformance Spearheading complete project activities ensuring timely completion of project
+â¢ Implementing security policies on different database systems with granting and revoking privileges to the users
+
+â¢ Following change management processes and participated in related meetings
+
+â¢ Verifying all Instances/DB are running, Tablespaces are online, Monitor Backround processes and status.
+company - InnovativeTechnologies
+description - Clients: BANKING DOMAIN

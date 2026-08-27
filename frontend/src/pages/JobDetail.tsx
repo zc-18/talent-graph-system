@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
-  ArrowLeft, FileText, History, Plus, Trash2, Pencil, ExternalLink, Landmark, Sparkles, ChevronRight,
+  ArrowLeft, FileText, GitBranch, History, Network, ExternalLink, Landmark, Sparkles, ChevronRight,
 } from 'lucide-react'
 import { ITarget, IStack, IShieldCheck, IBriefcase } from '../components/icons'
-import { api, errMsg, JobDetail as TJob, Skill as TSkill, AuthorityItem, CATEGORY_COLORS } from '../api'
+import { api, errMsg, JobDetail as TJob, Skill as TSkill, AuthorityItem, CATEGORY_COLORS, RoleContract } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, ErrorState } from '../components/ui'
 import ChangeDiff from '../components/ChangeDiff'
 import { useToast } from '../components/Toast'
-import ConfirmDialog from '../components/ConfirmDialog'
 import { useReveal } from '../hooks/gsapFx'
-import { useReadOnly } from '../hooks/useReadOnly'
+import { useAuth } from '../auth'
 
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
 const SKILL_LEVEL: Record<string, string> = { familiar: '了解', proficient: '熟练', expert: '精通' }
@@ -84,10 +83,7 @@ function DeprecatedChips({ items }: { items: TSkill[] }) {
   )
 }
 
-function SkillRow({ s, fineChildren = [], fineCandidates = [], fineDeprecated = [], onEdit, onRemove }: any) {
-  // 只读演示站不渲染增删改入口：这两个按钮正是两次线上图谱事故的入口（访客点击）。
-  // 服务端 guards.require_write 才是真闸门，这里只是别让人点到注定 403 的按钮。
-  const readOnly = useReadOnly()
+function SkillRow({ s, fineChildren = [], fineCandidates = [], fineDeprecated = [] }: any) {
   return (
     <div className="rounded-xl bg-sky-50/70 hover:bg-sky-100/80 px-3.5 py-2.5 transition group">
       {/* 首行：技能名 + 分类/级别；操作按钮固定右侧。徽章不换行，窄屏截断而非竖排 */}
@@ -96,14 +92,6 @@ function SkillRow({ s, fineChildren = [], fineCandidates = [], fineDeprecated = 
         <span className="chip border bg-slate-100 text-slate-600 border-slate-200 whitespace-nowrap truncate min-w-0">{s.category}</span>
         <span className="text-[11px] text-slate-400 shrink-0 hidden sm:inline">{SKILL_LEVEL[s.level_required] || ''}</span>
         <span className="flex-1" />
-        {!readOnly && <>
-          <button onClick={() => onEdit(s)} aria-label={`编辑技能 ${s.name}`}
-            className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-accent transition p-2 -m-1 shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-accent/40 outline-none">
-            <Pencil className="w-3.5 h-3.5" /></button>
-          <button onClick={() => onRemove(s)} aria-label={`删除技能 ${s.name}`}
-            className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-slate-500 hover:text-rose-400 transition p-2 -m-1 shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-rose-300 outline-none">
-            <Trash2 className="w-3.5 h-3.5" /></button>
-        </>}
       </div>
       {/* 次行：权重条 + 来源数/置信度 */}
       <div className="mt-1.5 flex items-center gap-2.5">
@@ -222,13 +210,11 @@ export default function JobDetail() {
   const [tab, setTab] = useState<'profile' | 'evidence' | 'history'>('profile')
   const [evidence, setEvidence] = useState<any>(null)
   const [history, setHistory] = useState<any>(null)
-  const [editor, setEditor] = useState<any>(null)
-  const [removing, setRemoving] = useState<any>(null)
   const [loadError, setLoadError] = useState(false)
-  const [saving, setSaving] = useState(false)
   const [authority, setAuthority] = useState<AuthorityItem[]>([])
+  const [contract, setContract] = useState<RoleContract | null>(null)
   const toast = useToast()
-  const readOnly = useReadOnly()
+  const auth = useAuth()
   const revealRef = useReveal('[data-reveal]', { scroll: true, stagger: 0.05, deps: [job, tab] })
 
   const reload = () => { setLoadError(false); api.job(jobId).then(setJob).catch(() => setLoadError(true)) }
@@ -236,6 +222,7 @@ export default function JobDetail() {
   useEffect(() => {
     setAuthority([])
     api.jobAuthority(jobId).then(d => setAuthority(d.items || [])).catch(() => {})
+    api.jobContract(jobId).then(setContract).catch(() => setContract(null))
   }, [jobId])
   useEffect(() => {
     if (tab === 'evidence' && !evidence) api.jobEvidence(jobId).then(setEvidence).catch(e => toast('error', errMsg(e, '证据加载失败')))
@@ -281,18 +268,6 @@ export default function JobDetail() {
   const eraCounts = (job.source_summary || {} as any).era_counts as Record<string, number> | undefined
   const earliestJd = (job.source_summary || {} as any).earliest_jd as string | undefined
 
-  const saveEdit = async (action: string, payload: any) => {
-    setSaving(true)
-    try {
-      await api.manualEdit({ job_id: jobId, action, ...payload })
-      toast('success', action === 'remove' ? '能力项已删除' : action === 'add' ? '能力项已新增' : '能力项已更新')
-      setEditor(null); setEvidence(null); setHistory(null); reload()
-    } catch (e) {
-      // 失败保留编辑器内容，便于修正后重试
-      toast('error', errMsg(e, '保存失败，请重试'))
-    } finally { setSaving(false) }
-  }
-
   return (
     <div ref={revealRef} className="space-y-5">
       <button onClick={() => nav(-1)} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
@@ -321,9 +296,11 @@ export default function JobDetail() {
             <div className="text-xs text-slate-500 mb-1">岗位定义置信度</div>
             <div className="text-3xl font-extrabold gradient-text">{Math.round(job.confidence * 100)}%</div>
             <div className="text-[11px] text-slate-400 mt-1">{job.evidence_count} 条证据支撑</div>
-            <button onClick={() => nav('/match', { state: { jobId } })} className="btn-primary mt-3 w-full sm:w-auto justify-center">
-              <ITarget className="w-4 h-4" /> 匹配此岗位
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 mt-3">
+              <button onClick={() => nav('/match', { state: { jobId } })} className="btn-primary justify-center"><ITarget className="w-4 h-4" /> 匹配</button>
+              <button onClick={() => nav('/panorama', { state: { jobId } })} className="btn-ghost justify-center"><Network className="w-4 h-4" /> 图谱定位</button>
+              <button onClick={() => nav('/evolution', { state: { jobId } })} className="btn-ghost justify-center"><GitBranch className="w-4 h-4" /> 演化</button>
+            </div>
           </div>
         </div>
       </Card>
@@ -337,25 +314,43 @@ export default function JobDetail() {
               <Icon className="w-4 h-4" /> {label}
             </button>
           ))}
-        {!readOnly && (
-          <button onClick={() => setEditor({ action: 'add', skill_name: '', importance: 'required', weight: 0.6, level_required: 'familiar' })}
-            className="btn-ghost w-full sm:w-auto sm:ml-auto justify-center whitespace-nowrap"><Plus className="w-4 h-4" /> 人工新增能力项</button>
+        {auth.can('admin') && (
+          <button onClick={() => nav('/evolution', { state: { jobId } })}
+            className="btn-ghost w-full sm:w-auto sm:ml-auto justify-center whitespace-nowrap">
+            <GitBranch className="w-4 h-4" /> 进入演化工作流
+          </button>
         )}
       </div>
 
       {tab === 'profile' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2 space-y-5">
+            {contract && (
+              <Card className="p-5">
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div><div className="label">岗位核心契约</div><div className="text-xs text-slate-500 mt-1">{contract.track || '通用'} 轨道 · {LEVEL_LABEL[contract.seniority] || contract.seniority || '级别未指定'} · {contract.recruitment_type === 'campus' ? '校招' : contract.recruitment_type === 'social' ? '社招' : '校社招混合'}</div></div>
+                  <Badge tone={contract.status === 'evidence_insufficient' ? 'amber' : 'emerald'}>{contract.status === 'evidence_insufficient' ? '证据待补' : `v${contract.version} 当前版本`}</Badge>
+                </div>
+                <div className="space-y-2">{contract.clusters.map(cluster => (
+                  <details key={`${cluster.importance}-${cluster.name}`} className="group rounded-xl border border-slate-200 bg-white/65 px-3.5 py-3">
+                    <summary className="list-none cursor-pointer flex items-center gap-3"><span className={`w-2 h-2 rounded-full ${cluster.importance === 'required' ? 'bg-indigo-500' : 'bg-amber-400'}`} /><span className="font-semibold text-sm text-slate-800 flex-1">{cluster.name}</span><Badge tone={cluster.importance === 'required' ? 'indigo' : 'amber'}>{cluster.importance === 'required' ? '必备' : '加分'}</Badge><ConfidencePill value={cluster.confidence} /><ChevronRight className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-90" /></summary>
+                    <div className="mt-3 pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">{cluster.skills.map((skill, index) => {
+                      const name = typeof skill === 'string' ? skill : skill.name
+                      return <Badge key={`${name}-${index}`} tone="slate">{name}</Badge>
+                    })}{cluster.employer_count != null && <span className="w-full text-[11px] text-slate-400 mt-1">{cluster.employer_count} 个独立雇主支持 · 覆盖率 {Math.round((cluster.support_ratio || 0) * 100)}%</span>}</div>
+                  </details>
+                ))}</div>
+              </Card>
+            )}
             <Card className="p-5">
-              <div className="label mb-3 flex items-center gap-2"><ITarget className="w-4 h-4 text-accent" /> 必备技能 ({coarseRequired.length})</div>
-              <div className="space-y-2">
+              <details open={!contract}>
+              <summary className="list-none cursor-pointer label flex items-center gap-2"><ITarget className="w-4 h-4 text-accent" /> 完整技能与证据 · 必备 ({coarseRequired.length}) <ChevronRight className="w-4 h-4 ml-auto" /></summary>
+              <div className="space-y-2 mt-3">
                 {coarseRequired.map(s => (
                   <div key={s.skill_id} data-reveal>
                   <SkillRow s={s} fineChildren={fineByParent.get(s.name) || []}
                     fineCandidates={candByParent.get(s.name) || []}
-                    fineDeprecated={depByParent.get(s.name) || []}
-                    onEdit={(sk: any) => setEditor({ action: 'update', skill_name: sk.name, importance: sk.importance, weight: sk.weight, level_required: sk.level_required })}
-                    onRemove={(sk: any) => setRemoving(sk)} />
+                    fineDeprecated={depByParent.get(s.name) || []} />
                   </div>
                 ))}
               </div>
@@ -371,17 +366,19 @@ export default function JobDetail() {
                   <DeprecatedChips items={orphanDep} />
                 </div>
               )}
+              </details>
             </Card>
             {coarseBonus.length > 0 && (
               <Card className="p-5">
-                <div className="label mb-3">加分技能 ({coarseBonus.length})</div>
-                <div className="flex flex-wrap gap-2">
+                <details open={!contract}><summary className="list-none cursor-pointer label flex items-center gap-2">完整技能与证据 · 加分 ({coarseBonus.length}) <ChevronRight className="w-4 h-4 ml-auto" /></summary>
+                <div className="flex flex-wrap gap-2 mt-3">
                   {coarseBonus.map(s => (
                     <span key={s.skill_id} className="chip border bg-white/70 border-slate-200 text-slate-600">
                       {s.name} <span className="text-slate-400">·{Math.round(s.confidence * 100)}%</span>
                     </span>
                   ))}
                 </div>
+                </details>
               </Card>
             )}
           </div>
@@ -539,59 +536,6 @@ export default function JobDetail() {
         </Card>
       )}
 
-      {editor && (
-        <div className="fixed inset-0 z-50 grid place-items-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={() => setEditor(null)}>
-          <div className="glass p-6 w-[420px] max-w-full max-h-[90vh] overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="text-lg font-bold text-slate-900 mb-4">{editor.action === 'add' ? '新增能力项' : '编辑能力项'}</div>
-            <div className="space-y-3">
-              <div>
-                <div className="label mb-1">技能名称</div>
-                <input className="input" value={editor.skill_name}
-                  onChange={e => setEditor({ ...editor, skill_name: e.target.value })} placeholder="如：检索增强生成" />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <div className="label mb-1">重要度</div>
-                  <select className="input" value={editor.importance}
-                    onChange={e => setEditor({ ...editor, importance: e.target.value })}>
-                    <option value="required" className="bg-white">必备</option>
-                    <option value="bonus" className="bg-white">加分</option>
-                  </select>
-                </div>
-                <div>
-                  <div className="label mb-1">掌握级别</div>
-                  <select className="input" value={editor.level_required}
-                    onChange={e => setEditor({ ...editor, level_required: e.target.value })}>
-                    <option value="familiar" className="bg-white">了解</option>
-                    <option value="proficient" className="bg-white">熟练</option>
-                    <option value="expert" className="bg-white">精通</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <div className="label mb-1">权重 {Math.round(editor.weight * 100)}%</div>
-                <input type="range" min={0.1} max={1} step={0.05} value={editor.weight}
-                  onChange={e => setEditor({ ...editor, weight: parseFloat(e.target.value) })}
-                  className="w-full accent-accent" />
-              </div>
-            </div>
-            <div className="flex gap-2 mt-5">
-              <button className="btn-ghost flex-1" onClick={() => setEditor(null)}>取消</button>
-              <button className="btn-primary flex-1" disabled={!editor.skill_name || saving}
-                onClick={() => saveEdit(editor.action, {
-                  skill_name: editor.skill_name, importance: editor.importance,
-                  weight: editor.weight, level_required: editor.level_required })}>
-                {saving ? '保存中…' : '保存'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <ConfirmDialog open={!!removing} title={`删除能力项「${removing?.name ?? ''}」？`}
-        description="删除后将记录到演化历史，可通过人工新增恢复。"
-        onConfirm={() => { const sk = removing; setRemoving(null); saveEdit('remove', { skill_name: sk.name }) }}
-        onCancel={() => setRemoving(null)} />
     </div>
   )
 }

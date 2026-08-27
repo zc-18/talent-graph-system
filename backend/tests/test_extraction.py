@@ -27,6 +27,17 @@ def test_rule_based_parse():
     out = extraction.parse_jd_rule_based("熟悉 Spark 与 Hadoop，了解 Kafka")
     names = {s["name"] for s in out["required_skills"]}
     assert {"Spark", "Hadoop", "Kafka"}.issubset(names)
+    levels = {s["name"]: s["level"] for s in out["required_skills"]}
+    assert levels["Spark"] == "proficient"
+    assert levels["Hadoop"] == "proficient"
+    assert levels["Kafka"] == "familiar"
+
+
+def test_rule_based_parse_canonical_and_case_insensitive():
+    out = extraction.parse_jd_rule_based(
+        "熟悉深度学习与机器学习，使用 Python 和 PYTORCH 完成训练")
+    names = {s["name"] for s in out["required_skills"]}
+    assert {"深度学习", "机器学习", "Python", "PyTorch"}.issubset(names)
 
 
 def test_safe_json_variants():

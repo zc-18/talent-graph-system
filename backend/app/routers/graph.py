@@ -13,6 +13,7 @@ router = APIRouter(prefix="/api/graph", tags=["graph"])
 
 @router.get("/panorama")
 def panorama(category: str | None = None, level: str | None = None,
+             mode: str = "capability",
              min_confidence: float = 0.0,
              max_skills: int = graph_service.DEFAULT_MAX_SKILLS,
              db: Session = Depends(get_db)):
@@ -21,8 +22,22 @@ def panorama(category: str | None = None, level: str | None = None,
     max_skills：技能节点上限（默认 400，当前语料不触发）。触发截断时
     stats.truncated=True 且 stats.skills_total 给出截断前总数。
     """
-    return graph_service.panoramic_graph(db, category, level, min_confidence,
-                                         max_skills=max_skills)
+    normalized_mode = {"岗位": "job", "能力簇": "capability", "技能点": "skill"}.get(mode, mode)
+    if normalized_mode not in {"job", "capability", "skill"}:
+        from fastapi import HTTPException
+        raise HTTPException(422, "mode 必须是 job/capability/skill")
+    data = graph_service.panoramic_graph(
+        db, category, level, min_confidence,
+        granularity=("all" if normalized_mode == "skill"
+                     else ("cluster" if normalized_mode == "capability" else "coarse")),
+        max_skills=max_skills)
+    if normalized_mode == "job":
+        data["nodes"] = [node for node in data["nodes"] if node.get("type") == "job"]
+        data["edges"] = []
+        data["stats"]["skills"] = 0
+        data["stats"]["relations"] = 0
+    data["stats"]["mode"] = normalized_mode
+    return data
 
 
 @router.get("/stats")
@@ -45,6 +60,10 @@ def pipeline_stats(db: Session = Depends(get_db)):
         models.RawJD.is_duplicate == False).scalar() or 0  # noqa: E712
     validated_caps = db.query(func.count(models.JobSkill.id)).filter(
         models.JobSkill.status == "active").scalar() or 0
+    candidate_caps = db.query(func.count(models.JobSkill.id)).filter(
+        models.JobSkill.status == "candidate").scalar() or 0
+    deprecated_caps = db.query(func.count(models.JobSkill.id)).filter(
+        models.JobSkill.status == "deprecated").scalar() or 0
     total_caps = db.query(func.count(models.JobSkill.id)).scalar() or 0
     jobs = db.query(func.count(models.Job.id)).scalar() or 0
     skills = db.query(func.count(models.Skill.id)).scalar() or 0
@@ -57,6 +76,21 @@ def pipeline_stats(db: Session = Depends(get_db)):
             func.max(models.RawJD.collected_at)
         ).group_by(models.RawJD.platform).order_by(func.count(models.RawJD.id).desc()).all()
     ]
+
+    employer_rows = db.query(
+        models.RawJD.employer_id, models.Employer.name, func.count(models.RawJD.id)) \
+        .join(models.Employer, models.Employer.id == models.RawJD.employer_id) \
+        .filter(models.RawJD.is_duplicate == False) \
+        .group_by(models.RawJD.employer_id, models.Employer.name) \
+        .order_by(func.count(models.RawJD.id).desc()).all()  # noqa: E712
+    identified_employer_jds = sum(row[2] for row in employer_rows)
+    unknown_employer_jds = max(0, after_dedup - identified_employer_jds)
+    top_employer_jds = employer_rows[0][2] if employer_rows else 0
+
+    def distribution(column) -> dict:
+        return {value or "unspecified": count for value, count in db.query(
+            column, func.count(models.RawJD.id)).filter(
+                models.RawJD.is_duplicate == False).group_by(column).all()}  # noqa: E712
 
     batches = [
         {"batch_key": b.batch_key, "platform": b.platform, "tier": b.tier,
@@ -82,7 +116,35 @@ def pipeline_stats(db: Session = Depends(get_db)):
             "jobs": jobs,
             "skills": skills,
         },
+        "capability_relations": {
+            "active": validated_caps,
+            "candidate": candidate_caps,
+            "deprecated": deprecated_caps,
+        },
+        "units": {
+            "funnel.collected": "jd",
+            "funnel.after_dedup": "jd",
+            "funnel.parsed": "jd",
+            "capability_relations": "job_skill_relation",
+            "funnel.jobs": "job",
+            "funnel.skills": "skill_node",
+        },
+        "employers": {
+            "unique": len(employer_rows),
+            "identified_jds": identified_employer_jds,
+            "unknown_jds": unknown_employer_jds,
+            "concentration": round(top_employer_jds / max(1, identified_employer_jds), 4),
+            "top": [{"employer_id": employer_id, "name": name, "jd_count": count}
+                    for employer_id, name, count in employer_rows[:10]],
+        },
+        "distributions": {
+            "track": distribution(models.RawJD.track),
+            "industry": distribution(models.RawJD.industry),
+            "seniority": distribution(models.RawJD.inferred_level),
+            "recruitment_type": distribution(models.RawJD.recruitment_type),
+        },
         "platforms": platforms,
+        "channels": platforms,
         "batches": batches,
         "loop": {"manual_edits": manual_edits, "evolution_runs": evolution_runs},
     }

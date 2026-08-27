@@ -128,33 +128,44 @@ export default function Dashboard() {
         </div>
         {pipe ? (
           <>
-            <div className="relative">
-              <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-                {[
-                  ['采集', `${pipe.funnel.collected}`, '条原始 JD · 多源采集'],
-                  ['清洗', `${pipe.funnel.after_dedup}`, '条去重后有效 JD'],
-                  ['抽取', `${pipe.funnel.parsed}`, '条完成结构化解析'],
-                  ['验证', `${pipe.funnel.validated_caps}`, `项能力通过交叉验证（滤除 ${pipe.funnel.filtered_caps}）`],
-                  ['图谱', `${pipe.funnel.jobs} / ${pipe.funnel.skills}`, '岗位 / 技能点入图'],
-                  ['应用', `${pipe.loop.evolution_runs}`, '轮演化 · 匹配诊断'],
-                ].map(([t, v, s], i) => (
-                  <div key={t as string} data-reveal className="relative rounded-xl bg-sky-50/70 border border-slate-200/70 p-3.5">
-                    <div className="text-[11px] text-accent font-bold mb-1">0{i + 1} · {t}</div>
-                    <div className="text-xl font-extrabold text-slate-900 tabular-nums">{v}</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">{s}</div>
-                    {i < 5 && <ArrowRight className="hidden md:block absolute top-1/2 -right-[13px] -translate-y-1/2 w-3.5 h-3.5 text-slate-300 z-10" />}
-                  </div>
-                ))}
-              </div>
-              {/* 人工反馈回流：从「应用」弯回「验证/图谱」的虚线指示 */}
-              <div className="hidden md:flex items-center justify-end gap-2 mt-2 pr-2">
-                <svg width="260" height="18" className="text-amber-400" aria-hidden>
-                  <path d="M255 2 C 200 22, 60 22, 5 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 3" />
-                  <path d="M11 2 L4 6 L12 10" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                </svg>
-                <span className="text-[11px] text-amber-600">人工反馈回流 {pipe.loop.manual_edits} 次（专家修订驱动图谱再验证）</span>
-              </div>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+              <section aria-labelledby="jd-flow-title">
+                <div id="jd-flow-title" className="text-xs font-bold text-slate-700 mb-2">JD 数据流 <span className="font-normal text-slate-400">· 计量单位：条 JD</span></div>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    ['采集', pipe.funnel.collected, '原始 JD'],
+                    ['去重后', pipe.funnel.after_dedup, '有效 JD'],
+                    ['解析', pipe.funnel.parsed, '结构化 JD'],
+                  ].map(([label, value, unit], index) => (
+                    <div key={label as string} className="relative rounded-xl border border-sky-100 bg-sky-50/70 p-3">
+                      <div className="text-[11px] font-semibold text-sky-700">{label}</div>
+                      <div className="text-xl font-extrabold text-slate-900 tabular-nums mt-1">{value as number}</div>
+                      <div className="text-[10px] text-slate-400">{unit}</div>
+                      {index < 2 && <ArrowRight className="absolute top-1/2 -right-[9px] -translate-y-1/2 w-3 h-3 text-sky-300 z-10" />}
+                    </div>
+                  ))}
+                </div>
+              </section>
+              <section aria-labelledby="relation-flow-title">
+                <div id="relation-flow-title" className="text-xs font-bold text-slate-700 mb-2">岗位能力关系 <span className="font-normal text-slate-400">· 计量单位：项关系</span></div>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    ['active', pipe.capability_relations?.active ?? pipe.funnel.validated_caps, '已验证', 'text-emerald-700 bg-emerald-50 border-emerald-100'],
+                    ['candidate', pipe.capability_relations?.candidate ?? pipe.employer_validation?.candidate_capabilities ?? 0, '待验证', 'text-amber-700 bg-amber-50 border-amber-100'],
+                    ['deprecated', pipe.capability_relations?.deprecated ?? 0, '已淘汰', 'text-slate-600 bg-slate-50 border-slate-200'],
+                  ].map(([state, value, label, cls]) => (
+                    <div key={state as string} className={`rounded-xl border p-3 ${cls}`} title={`${state} 岗位能力关系`}>
+                      <div className="text-[11px] font-semibold">{label}</div>
+                      <div className="text-xl font-extrabold tabular-nums mt-1">{value as number}</div>
+                      <div className="text-[10px] opacity-70">{state}</div>
+                    </div>
+                  ))}
+                </div>
+              </section>
             </div>
+            {!pipe.capability_relations && (
+              <div className="mt-3 rounded-lg bg-amber-50 border border-amber-100 px-3 py-2 text-[11px] text-amber-700">当前数据服务未返回 candidate / deprecated 独立计数，页面不使用旧的“滤除数”拆分推测。</div>
+            )}
 
             <div className="mt-5 pt-4 border-t border-slate-100">
               <div className="text-sm font-semibold text-slate-700 mb-3">数据源采集台账</div>

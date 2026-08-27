@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "review_status": "engineering_baseline_requires_named_expert_signoff",
+  "annotation_policy": "two_independent_domain_reviewers_plus_conflict_arbitration",
+  "profiles": [
+    {
+      "id": "java-campus-junior", "canonical_title": "Java开发工程师", "track": "software",
+      "industry": "general", "seniority": "junior", "recruitment_type": "campus",
+      "required_clusters": ["编程与工程基础", "后端框架与服务", "数据与存储", "网络与系统", "质量与交付", "产品与协作"],
+      "bonus_clusters": ["云原生与运维", "中间件与分布式"],
+      "prohibited": ["电磁兼容", "电路设计", "射频"],
+      "responsibilities": ["实现并测试 Java 服务端功能", "参与代码评审和接口联调"],
+      "scenarios": ["互联网业务服务端", "企业应用后端"]
+    },
+    {
+      "id": "java-social-middle", "canonical_title": "Java开发工程师", "track": "software",
+      "industry": "internet", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["编程与工程基础", "后端框架与服务", "数据与存储", "中间件与分布式", "网络与系统", "质量与交付", "云原生与运维"],
+      "bonus_clusters": ["软件测试设计", "产品与协作"],
+      "prohibited": ["电磁兼容", "模拟电路", "焊接"],
+      "responsibilities": ["独立交付 Java 微服务", "处理数据库和分布式系统问题"],
+      "scenarios": ["高并发交易", "微服务平台"]
+    },
+    {
+      "id": "java-social-senior", "canonical_title": "Java开发工程师", "track": "software",
+      "industry": "internet", "seniority": "senior", "recruitment_type": "social",
+      "required_clusters": ["编程与工程基础", "后端框架与服务", "数据与存储", "中间件与分布式", "网络与系统", "质量与交付", "云原生与运维", "产品与协作"],
+      "bonus_clusters": ["智能体应用工程", "数据工程"],
+      "prohibited": ["电磁兼容", "数字电路", "示波器"],
+      "responsibilities": ["设计高可用 Java 服务架构", "主导性能治理与技术评审"],
+      "scenarios": ["核心交易系统", "企业级技术平台"]
+    },
+    {
+      "id": "backend-social-middle", "canonical_title": "后端开发工程师", "track": "software",
+      "industry": "general", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["编程与工程基础", "后端框架与服务", "数据与存储", "中间件与分布式", "网络与系统", "质量与交付"],
+      "bonus_clusters": ["云原生与运维", "数据工程"],
+      "prohibited": ["电磁兼容", "射频", "模拟电路"],
+      "responsibilities": ["开发稳定可维护的服务端接口", "保障数据一致性和服务质量"],
+      "scenarios": ["Web 服务端", "开放 API 平台"]
+    },
+    {
+      "id": "software-test-campus-junior", "canonical_title": "软件测试工程师", "track": "software",
+      "industry": "general", "seniority": "junior", "recruitment_type": "campus",
+      "required_clusters": ["软件测试设计", "测试自动化", "质量与交付", "网络与系统", "编程与工程基础", "产品与协作"],
+      "bonus_clusters": ["数据与存储", "云原生与运维"],
+      "prohibited": ["电磁兼容", "电路设计", "芯片验证", "射频"],
+      "responsibilities": ["设计并执行功能和接口测试", "提交可复现的缺陷报告"],
+      "scenarios": ["Web 应用测试", "移动应用测试"]
+    },
+    {
+      "id": "software-test-social-middle", "canonical_title": "软件测试工程师", "track": "software",
+      "industry": "internet", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["软件测试设计", "测试自动化", "质量与交付", "网络与系统", "编程与工程基础", "数据与存储", "产品与协作"],
+      "bonus_clusters": ["云原生与运维", "中间件与分布式"],
+      "prohibited": ["电磁兼容", "焊接", "模拟电路", "射频"],
+      "responsibilities": ["制定系统级测试策略", "建设接口和回归自动化"],
+      "scenarios": ["互联网平台质量保障", "持续交付流水线"]
+    },
+    {
+      "id": "automation-test-social-middle", "canonical_title": "自动化测试工程师", "track": "software",
+      "industry": "general", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["测试自动化", "软件测试设计", "编程与工程基础", "质量与交付", "网络与系统", "数据与存储"],
+      "bonus_clusters": ["云原生与运维", "中间件与分布式", "产品与协作"],
+      "prohibited": ["电磁兼容", "射频", "示波器"],
+      "responsibilities": ["开发稳定的自动化测试框架", "维护回归和接口测试集"],
+      "scenarios": ["CI 自动回归", "接口质量平台"]
+    },
+    {
+      "id": "system-test-software-middle", "canonical_title": "系统测试工程师", "track": "software",
+      "industry": "general", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["软件测试设计", "测试自动化", "网络与系统", "质量与交付", "编程与工程基础", "产品与协作"],
+      "bonus_clusters": ["数据与存储", "云原生与运维"],
+      "prohibited": ["电磁兼容", "模拟电路", "焊接", "射频"],
+      "responsibilities": ["执行端到端系统联调和验收", "定位跨服务缺陷"],
+      "scenarios": ["复杂软件系统联调", "端到端业务验收"]
+    },
+    {
+      "id": "system-test-hardware-middle", "canonical_title": "硬件系统测试工程师", "track": "hardware",
+      "industry": "manufacturing", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["嵌入式与硬件", "网络与系统", "质量与交付", "软件测试设计", "编程与工程基础", "产品与协作"],
+      "bonus_clusters": ["测试自动化", "数据与存储"],
+      "prohibited": ["Selenium", "Cypress", "Web 页面测试", "Postman"],
+      "responsibilities": ["设计硬件可靠性和接口验证方案", "使用仪器定位板级问题"],
+      "scenarios": ["智能硬件验证", "嵌入式系统联调"]
+    },
+    {
+      "id": "cloud-social-middle", "canonical_title": "云计算工程师", "track": "ops",
+      "industry": "general", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["云原生与运维", "网络与系统", "质量与交付", "编程与工程基础", "数据与存储", "中间件与分布式"],
+      "bonus_clusters": ["后端框架与服务", "产品与协作"],
+      "prohibited": ["模拟电路", "焊接", "射频"],
+      "responsibilities": ["建设和维护云原生基础设施", "保障平台可用性和可观测性"],
+      "scenarios": ["Kubernetes 平台", "混合云基础设施"]
+    },
+    {
+      "id": "ai-agent-social-middle", "canonical_title": "AI智能体开发工程师", "track": "algorithm",
+      "industry": "internet", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["智能体应用工程", "算法与模型", "编程与工程基础", "后端框架与服务", "数据与存储", "质量与交付"],
+      "bonus_clusters": ["云原生与运维", "产品与协作", "中间件与分布式"],
+      "prohibited": ["电磁兼容", "模拟电路", "焊接"],
+      "responsibilities": ["实现工具调用和智能体编排", "评估智能体可靠性与安全边界"],
+      "scenarios": ["企业知识助手", "智能客服"]
+    },
+    {
+      "id": "llm-algorithm-social-senior", "canonical_title": "大模型算法工程师", "track": "algorithm",
+      "industry": "general", "seniority": "senior", "recruitment_type": "social",
+      "required_clusters": ["算法与模型", "编程与工程基础", "数据工程", "数据与存储", "质量与交付", "云原生与运维"],
+      "bonus_clusters": ["智能体应用工程", "中间件与分布式", "产品与协作"],
+      "prohibited": ["电磁兼容", "电路设计", "焊接"],
+      "responsibilities": ["训练和评估大语言模型", "优化数据、对齐和推理链路"],
+      "scenarios": ["行业大模型", "基础模型训练"]
+    },
+    {
+      "id": "prompt-social-middle", "canonical_title": "提示词工程师", "track": "algorithm",
+      "industry": "general", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["智能体应用工程", "算法与模型", "质量与交付", "产品与协作", "编程与工程基础", "数据与存储"],
+      "bonus_clusters": ["后端框架与服务", "数据工程"],
+      "prohibited": ["电磁兼容", "模拟电路", "焊接"],
+      "responsibilities": ["设计可评测的提示策略", "维护提示版本和效果基准"],
+      "scenarios": ["内容生成", "知识问答"]
+    },
+    {
+      "id": "genai-test-social-middle", "canonical_title": "生成式人工智能系统测试员", "track": "software",
+      "industry": "general", "seniority": "middle", "recruitment_type": "social",
+      "required_clusters": ["软件测试设计", "测试自动化", "算法与模型", "智能体应用工程", "质量与交付", "编程与工程基础"],
+      "bonus_clusters": ["数据工程", "云原生与运维", "产品与协作"],
+      "prohibited": ["电磁兼容", "电路设计", "焊接"],
+      "responsibilities": ["构建生成内容质量和安全评测集", "执行模型回归与红队测试"],
+      "scenarios": ["大模型上线验收", "生成内容安全评估"]
+    }
+  ]
+}

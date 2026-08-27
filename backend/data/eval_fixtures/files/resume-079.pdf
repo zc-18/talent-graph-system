@@ -1,0 +1,252 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 4637 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(Technical Skill Set: Programming Languages Apache Hadoop, Python, shell scripting, SQL) Tj
+T*
+(Technologies Hive, Pig, Sqoop, Flume, Oozie, Impala, hdfs Tools Dataiku, Unravel, Cloudera,) Tj
+T*
+(Putty, HUE, Cloudera Manager, Eclipse, Resource Manager Initial Learning Program: Tata) Tj
+T*
+(Consultancy Services: June 2015 to August 2015 Description: This is a learning program) Tj
+T*
+(conducted by TCS for the newly joined employees, to accomplish them to learn the working) Tj
+T*
+(standard of the organization. During this period employee are groomed with various technical) Tj
+T*
+(as well as ethical aspects. Education Details) Tj
+T*
+( B.E. Electronics & Communication Indore, Madhya Pradesh Medi-caps Institute of Technology &) Tj
+T*
+(Management) Tj
+T*
+(Hadoop developer) Tj
+T*
+() Tj
+T*
+(hadoop,hive,sqoop,flume,pig,mapreduce,python,impala,spark,scala,sql,unix.) Tj
+T*
+(Skill Details) Tj
+T*
+(APACHE HADOOP SQOOP- Exprience - 31 months) Tj
+T*
+(Hadoop- Exprience - 31 months) Tj
+T*
+(HADOOP- Exprience - 31 months) Tj
+T*
+(Hive- Exprience - 31 months) Tj
+T*
+(SQOOP- Exprience - 31 months) Tj
+T*
+(python- Exprience - Less than 1 year months) Tj
+T*
+(hdfs- Exprience - Less than 1 year months) Tj
+T*
+(unix- Exprience - Less than 1 year months) Tj
+T*
+(impala- Exprience - Less than 1 year months) Tj
+T*
+(pig- Exprience - Less than 1 year months) Tj
+T*
+(unravel- Exprience - Less than 1 year months) Tj
+T*
+(mapreduce- Exprience - Less than 1 year months) Tj
+T*
+(dataiku- Exprience - Less than 1 year monthsCompany Details) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+(description - Project Description) Tj
+T*
+(Data warehouse division has multiple products for injecting, storing, analysing and presenting) Tj
+T*
+(data. The Data Lake program is started to provide multi-talent, secure data hub to store) Tj
+T*
+(application's data on Hadoop platform with strong data governance, lineage, auditing and) Tj
+T*
+(monitoring capabilities. The object of the project is to provide necessary engineering support) Tj
+T*
+(to analytics and application teams so that they can focus on the business logic development.) Tj
+T*
+(In this project, the major task is to set up the Hadoop cluster and govern all the activities) Tj
+T*
+(which are required for the smooth functioning of various Hadoop ecosystems. As the day and day) Tj
+T*
+(data increasing so to provide stability to the ecosystem and smooth working of it, Developing) Tj
+T*
+(and automating the various requirement specific utilities.) Tj
+T*
+() Tj
+T*
+(Responsibility 1. Developed proactive Health Check utility for Data Lake. The utility) Tj
+T*
+(proactively checks the smooth functioning of all Hadoop components on the cluster and sends) Tj
+T*
+(the result to email in HTML format. The utility is being used for daily Health Checks as well) Tj
+T*
+(as after upgrades.) Tj
+T*
+(2. Getting the data in different formats and processing the data in Hadoop ecosystem after) Tj
+T*
+(filtering the data using the appropriate techniques.) Tj
+T*
+(3. Developed data pipeline utility to ingest data from RDBMS database to Hive external tables) Tj
+T*
+(using Sqoop commands. The utility also offers the data quality check like row count) Tj
+T*
+(validation.) Tj
+T*
+(4. Developed and automated various cluster health check, usage, capacity related reports using) Tj
+T*
+(Unix shell scripting.) Tj
+T*
+(5. Optimization of hive queries in order to increase the performance and minimize the Hadoop) Tj
+T*
+(resource utilizations.) Tj
+T*
+(6. Creating flume agents to process the data to Hadoop ecosystem side.) Tj
+T*
+(7. Performed benchmark testing on the Hive Queries and impala queries.) Tj
+T*
+(8. Involved in setting up the cluster and its components like edge node and HA implementation) Tj
+T*
+(of the services: Hive Server2, Impala, and HDFS.) Tj
+T*
+(9. Filtering the required data from available data using different technologies like pig,) Tj
+T*
+(regex Serde etc.) Tj
+T*
+(10. Dataiku benchmark testing on top of impala and hive in compare to Greenplum database.) Tj
+T*
+(11. Moving the data from Greenplum database to Hadoop side with help of Sqoop pipeline,) Tj
+T*
+(process the data to Hadoop side and storing the data into hive tables to do the performance) Tj
+T*
+(testing.) Tj
+T*
+(12. Dealing with the Hadoop ecosystem related issues in order to provide stability to WM) Tj
+T*
+(Hadoop ecosystem.) Tj
+T*
+(13. Rescheduling of job from autosys job hosting to TWS job hosting for better performance.) Tj
+T*
+() Tj
+T*
+(Declaration:) Tj
+T*
+(I hereby declare that the above mentioned information is authentic to the best of my knowledge) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 2158 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(description - Clients: 1. Barclays 2. Union bank of California \(UBC\) 3. Morgan Stanley \(MS\)) Tj
+T*
+() Tj
+T*
+(KEY PROJECTS HANDLED) Tj
+T*
+(Project Name ABSA- Reconciliations, UBC and WMDATALAKE COE) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+(description - Project Description) Tj
+T*
+(Migration of data from RDBMS database to Hive \(Hadoop ecosystem\) . Hadoop platform ability) Tj
+T*
+(with strong data governance, lineage, auditing and monitoring capabilities. The objective of) Tj
+T*
+(this project was to speed up the data processing so that the analysis and decision making) Tj
+T*
+(become easy. Due to RDBMS limitations to process waste amount of data at once and produce the) Tj
+T*
+(results at the earliest, Client wanted to move the data to Hadoop ecosystem so that they can) Tj
+T*
+(over-come from those limitations and focus on business improvement only.) Tj
+T*
+() Tj
+T*
+(Responsibility 1. Optimising the SQL queries for those data which were not required to move) Tj
+T*
+(from RDBMS to any other platform.) Tj
+T*
+(2. Writing the Hive queries and logic to move the data from RDBMS to Hadoop ecosystem.) Tj
+T*
+(3. Writing the hive queries to analyse the required data as per the business requirements.) Tj
+T*
+(4. Optimization of hive queries in order to increase the performance and minimize the Hadoop) Tj
+T*
+(resource utilizations.) Tj
+T*
+(5. Writing the sqoop commands and scripts to move the data from RDBMS to Hadoop side.) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+(description - Project Description) Tj
+T*
+(Create recs and migrating static setup of reconciliations from 8.1 version to 9.1 version of) Tj
+T*
+(the environment Intellimatch.) Tj
+T*
+() Tj
+T*
+(Responsibility 1. Have worked on extracting business requirements, analyzing and implementing) Tj
+T*
+(them in developing Recs 2. Worked on migrating static setup of reconciliations from 8.1) Tj
+T*
+(version to 9.1 version of the environment Intellimatch.) Tj
+T*
+(3. Done the back end work where most of the things were related to writing the sql queries and) Tj
+T*
+(provide the data for the new recs.) Tj
+T*
+() Tj
+T*
+(Project Name   PSO) Tj
+T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000253 00000 n 
+0000004942 00000 n 
+0000005068 00000 n 
+0000007278 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+7348
+%%EOF

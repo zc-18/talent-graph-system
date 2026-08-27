@@ -6,33 +6,69 @@
 from __future__ import annotations
 import io
 import re
+from dataclasses import dataclass
 from .. import clients
 from .taxonomy import normalize_skill, skill_category, skill_type, SYNONYMS
 
 
+@dataclass
+class ResumeFileError(Exception):
+    code: str
+    message: str
+    status_code: int = 422
+
+    def __str__(self) -> str:
+        return self.message
+
+
 def extract_text(filename: str, content: bytes) -> str:
-    """从上传文件提取纯文本。支持 pdf / docx / txt。"""
+    """Extract PDF/DOCX/TXT with stable, machine-readable failure codes."""
     name = (filename or "").lower()
+    if not content:
+        raise ResumeFileError("EMPTY_FILE", "文件为空")
     if name.endswith(".pdf"):
         return _from_pdf(content)
     if name.endswith(".docx"):
         return _from_docx(content)
     if name.endswith(".doc"):
-        # 旧版 .doc 无法直接解析，尝试按文本读取
-        return content.decode("utf-8", errors="ignore")
-    return content.decode("utf-8", errors="ignore")
+        raise ResumeFileError("UNSUPPORTED_DOC", "旧版 .doc 不受支持，请转换为 DOCX", 415)
+    if not name.endswith(".txt"):
+        raise ResumeFileError("UNSUPPORTED_FILE_TYPE", "仅支持 PDF、DOCX、TXT", 415)
+    try:
+        text = content.decode("utf-8-sig")
+    except UnicodeDecodeError as exc:
+        raise ResumeFileError("CORRUPT_FILE", "TXT 不是有效的 UTF-8 文本") from exc
+    if not text.strip():
+        raise ResumeFileError("EMPTY_DOCUMENT", "文档没有可解析文本")
+    return text
 
 
 def _from_pdf(content: bytes) -> str:
+    # Standard-encrypted PDFs carry an /Encrypt entry. Some pdfminer versions
+    # fail earlier with a generic parse error, so detect this stable marker first.
+    if b"/Encrypt" in content:
+        raise ResumeFileError("ENCRYPTED_FILE", "PDF 已加密，无法解析")
     try:
         import pdfplumber
         text = []
+        has_images = False
         with pdfplumber.open(io.BytesIO(content)) as pdf:
             for page in pdf.pages:
                 text.append(page.extract_text() or "")
-        return "\n".join(text)
-    except Exception:  # noqa: BLE001
-        return ""
+                has_images = has_images or bool(page.images)
+        result = "\n".join(text)
+        if not result.strip():
+            code = "SCANNED_PDF" if has_images else "EMPTY_DOCUMENT"
+            message = "扫描版 PDF 需要 OCR" if has_images else "PDF 没有可解析文本"
+            raise ResumeFileError(code, message)
+        return result
+    except ResumeFileError:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        marker = f"{type(exc).__name__} {exc}".lower()
+        if "password" in marker or "encrypt" in marker:
+            raise ResumeFileError("ENCRYPTED_FILE", "PDF 已加密，无法解析") from exc
+        raise ResumeFileError("CORRUPT_FILE", "PDF 文件损坏或格式无效") from exc
 
 
 def _from_docx(content: bytes) -> str:
@@ -43,9 +79,14 @@ def _from_docx(content: bytes) -> str:
         for table in doc.tables:
             for row in table.rows:
                 parts.append(" ".join(c.text for c in row.cells))
-        return "\n".join(parts)
-    except Exception:  # noqa: BLE001
-        return ""
+        result = "\n".join(parts)
+        if not result.strip():
+            raise ResumeFileError("EMPTY_DOCUMENT", "DOCX 没有可解析文本")
+        return result
+    except ResumeFileError:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        raise ResumeFileError("CORRUPT_FILE", "DOCX 文件损坏或格式无效") from exc
 
 
 _RESUME_SYS = """你是简历解析专家。从简历文本中精确抽取候选人信息，只抽取简历中真实出现的内容，不臆造。

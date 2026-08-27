@@ -1,0 +1,190 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 4252 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(Technical Summary a Knowledge of Informatica Power Center \(ver. 9.1 and 10\) ETL Tool: Mapping) Tj
+T*
+(designing, usage of multiple transformations. Integration of various data source like SQL) Tj
+T*
+(Server tables, Flat Files, etc. into target data warehouse. a SQL/PLSQL working knowledge on) Tj
+T*
+(Microsoft SQL server 2010. a Unix Work Description: shell scripting, error debugging. a Job) Tj
+T*
+(scheduling using Autosys, Incident management and Change Requests through Service Now, JIRA,) Tj
+T*
+(Agile Central a Basic knowledge of Intellimatch \(Reconciliation tool\) Education Details) Tj
+T*
+(January 2010 to January 2014 BTech CSE Sangli, Maharashtra Walchand College of Engineering) Tj
+T*
+(October 2009 H.S.C  Sangli, Maharashtra Willingdon College) Tj
+T*
+(August 2007 S.S.C Achievements Sangli, Maharashtra Martin's English School) Tj
+T*
+(ETL Developer) Tj
+T*
+() Tj
+T*
+(IT Analyst) Tj
+T*
+(Skill Details) Tj
+T*
+(ETL- Exprience - 48 months) Tj
+T*
+(EXTRACT, TRANSFORM, AND LOAD- Exprience - 48 months) Tj
+T*
+(INFORMATICA- Exprience - 48 months) Tj
+T*
+(MS SQL SERVER- Exprience - 48 months) Tj
+T*
+(RECONCILIATION- Exprience - 48 months) Tj
+T*
+(Jira- Exprience - 36 monthsCompany Details) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+(description - Project Details) Tj
+T*
+(Client/Project: Barclays UK London/HEXAD) Tj
+T*
+(Environment: Informatica \(Power Center\), SQL Server, UNIX, Autosys, Intellimatch.) Tj
+T*
+() Tj
+T*
+(Project Description:) Tj
+T*
+(The objective is to implement a strategic technical solution to support the governance and) Tj
+T*
+(monitoring of break standards - including enhancements to audit capabilities. As a part of) Tj
+T*
+(this program, the required remediation of source system data feeds involves consolidation of) Tj
+T*
+(data into standardized feeds.) Tj
+T*
+() Tj
+T*
+(These remediated data feeds will be consumed by ETL layer. The reconciliation tool is) Tj
+T*
+(designed to source data from an ETL layer. The data from the Front and Back office systems,) Tj
+T*
+(together with static data must therefore be delivered to ETL. Here it will be pre-processed) Tj
+T*
+(and delivered to reconciliation tool before the reconciliation process can be performed.) Tj
+T*
+() Tj
+T*
+(Role and Responsibilities:) Tj
+T*
+(a Responsible for analyzing, designing and developing ETL strategies and processes,) Tj
+T*
+(writing ETL specifications) Tj
+T*
+(a Requirement gathering) Tj
+T*
+(a Making functional documents and low level documents) Tj
+T*
+(a Developing and debugging the Informatica mappings to resolve bugs, and identify the causes) Tj
+T*
+(of failures) Tj
+T*
+(a User interaction to identify the issues with the data loaded through the application) Tj
+T*
+(a Developed mappings using different transformations) Tj
+T*
+(company - Tata Consultancy Services) Tj
+T*
+(description - Project Details) Tj
+T*
+(Client/Project: Barclays UK London/HEXAD) Tj
+T*
+(Environment: Informatica \(Power Center\), SQL Server, UNIX, Autosys, Intellimatch.) Tj
+T*
+() Tj
+T*
+(Project Description:) Tj
+T*
+(The objective is to implement a strategic technical solution to support the governance and) Tj
+T*
+(monitoring of break standards - including enhancements to audit capabilities. As a part of) Tj
+T*
+(this program, the required remediation of source system data feeds involves consolidation of) Tj
+T*
+(data into standardized feeds.) Tj
+T*
+() Tj
+T*
+(These remediated data feeds will be consumed by ETL layer. The reconciliation tool is) Tj
+T*
+(designed to source data from an ETL layer. The data from the Front and Back office systems,) Tj
+T*
+(together with static data must therefore be delivered to ETL. Here it will be pre-processed) Tj
+T*
+(and delivered to reconciliation tool before the reconciliation process can be performed.) Tj
+T*
+() Tj
+T*
+(Role and Responsibilities:) Tj
+T*
+(a Responsible for analyzing, designing and developing ETL strategies and processes,) Tj
+T*
+(writing ETL specifications) Tj
+T*
+(a Requirement gathering) Tj
+T*
+(a Making functional documents and low level documents) Tj
+T*
+(a Developing and debugging the Informatica mappings to resolve bugs, and identify the causes) Tj
+T*
+(of failures) Tj
+T*
+(a User interaction to identify the issues with the data loaded through the application) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 91 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(a Developed mappings using different transformations) Tj
+T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000253 00000 n 
+0000004557 00000 n 
+0000004683 00000 n 
+0000004824 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+4894
+%%EOF

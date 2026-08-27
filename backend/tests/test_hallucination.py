@@ -7,10 +7,11 @@ def _skill(name, imp="required", level="proficient", cat="人工智能", st="har
             "skill_type": st, "raw": name}
 
 
-def _jd(req, bonus=None, rid=1, dup=False, lag=10):
+def _jd(req, bonus=None, rid=1, dup=False, lag=10, company=None, source="t"):
     return {"required_skills": [_skill(s) for s in req],
             "bonus_skills": [_skill(s, "bonus") for s in (bonus or [])],
-            "lag_days": lag, "is_duplicate": dup, "raw_jd_id": rid, "source": "t"}
+            "lag_days": lag, "is_duplicate": dup, "raw_jd_id": rid,
+            "source": source, "company": company or f"雇主{rid}"}
 
 
 def test_cross_validation_confidence_increases_with_sources():
@@ -36,6 +37,48 @@ def test_confidence_rewards_platform_diversity_and_authority():
     assert rich["factors"]["authority"] == 1.0
 
 
+def test_same_employer_on_multiple_platforms_does_not_cross_validate():
+    jds = [_jd(["机器学习"], rid=1, company="甲科技有限公司", source="官网"),
+           _jd(["机器学习"], rid=2, company="甲科技", source="公共平台"),
+           _jd(["机器学习"], rid=3, company="甲科技", source="招聘平台")]
+    out = H.aggregate_capabilities(jds)
+    skill = next(c for c in out["capabilities"] if c["name"] == "机器学习")
+    assert skill["jd_support_count"] == 3
+    assert skill["employer_count"] == 1
+    assert skill["channel_count"] == 3
+    assert skill["status"] == "candidate"
+
+
+def test_unknown_employer_cannot_satisfy_independent_source_gate():
+    jds = [_jd(["机器学习"], rid=1, company="未知", source="官网"),
+           _jd(["机器学习"], rid=2, company="不详", source="公共平台")]
+    skill = H.aggregate_capabilities(jds)["capabilities"][0]
+    assert skill["employer_count"] == 0
+    assert skill["status"] == "candidate"
+
+
+def test_subsidiaries_of_one_known_group_count_as_one_employer():
+    jds = [_jd(["机器学习"], rid=1, company="甲子公司"),
+           _jd(["机器学习"], rid=2, company="乙子公司")]
+    meta = {
+        1: {"employer_id": 11, "employer_parent_id": 3, "platform": "p1"},
+        2: {"employer_id": 12, "employer_parent_id": 3, "platform": "p2"},
+    }
+    skill = H.aggregate_capabilities(jds, source_meta=meta)["capabilities"][0]
+    assert skill["employer_count"] == 1
+    assert skill["status"] == "candidate"
+
+
+def test_high_risk_capability_requires_three_employers():
+    two = [_jd(["量子控制"], rid=1), _jd(["量子控制"], rid=2)]
+    skill = H.aggregate_capabilities(two, high_risk_skills={"量子控制"})["capabilities"][0]
+    assert skill["validation_threshold"] == 3
+    assert skill["status"] == "candidate"
+    three = two + [_jd(["量子控制"], rid=3)]
+    skill = H.aggregate_capabilities(three, high_risk_skills={"量子控制"})["capabilities"][0]
+    assert skill["status"] == "active"
+
+
 def test_single_source_required_demoted_to_bonus():
     # 只有1条来源声称"required"，缺乏交叉验证 -> 降级为 bonus（防幻觉）
     jds = [_jd(["机器学习"], rid=1), _jd(["机器学习"], rid=2), _jd(["量子计算"], rid=3)]
@@ -49,6 +92,15 @@ def test_duplicates_excluded_from_validation():
     out = H.aggregate_capabilities(jds)
     assert out["stats"]["valid_jds"] == 1
     assert out["stats"]["duplicate_jds"] == 1
+
+
+def test_repeated_persisted_jd_identity_cannot_inflate_support():
+    same_row_twice = [_jd(["机器学习"], rid=1), _jd(["机器学习"], rid=1)]
+    out = H.aggregate_capabilities(same_row_twice)
+    skill = out["capabilities"][0]
+    assert out["stats"]["valid_jds"] == 1
+    assert out["stats"]["duplicate_jds"] == 1
+    assert skill["jd_support_count"] == 1
 
 
 def test_web_evidence_boosts_confidence():

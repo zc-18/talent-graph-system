@@ -134,15 +134,42 @@ def _fine_skills(items: list, importance: str) -> list[dict]:
     return out
 
 
+_RULE_LEVEL_MARKERS = (
+    ("精通", "expert"),
+    ("熟练掌握", "proficient"),
+    ("熟练使用", "proficient"),
+    ("熟悉", "proficient"),
+    ("掌握", "proficient"),
+    ("了解", "familiar"),
+)
+
+
+def _rule_level(text: str, keyword: str) -> str:
+    """Infer an explicitly stated skill level within the current JD clause."""
+    position = text.find(keyword.casefold())
+    if position < 0:
+        return "familiar"
+    clause_start = max(text.rfind(delimiter, 0, position)
+                       for delimiter in ("。", "；", ";", "！", "？", "\n")) + 1
+    prefix = text[clause_start:position]
+    matches = [(prefix.rfind(marker), level) for marker, level in _RULE_LEVEL_MARKERS]
+    matches = [match for match in matches if match[0] >= 0]
+    return max(matches, default=(-1, "familiar"), key=lambda match: match[0])[1]
+
+
 def parse_jd_rule_based(jd_text: str) -> dict:
     """无大模型时的兜底规则解析（关键词匹配），用于降级与离线测试。"""
-    from .taxonomy import SYNONYMS
-    text = (jd_text or "").lower()
-    found = []
-    for kw, norm in SYNONYMS.items():
-        if kw in text and norm not in [f["name"] for f in found]:
+    from .taxonomy import SYNONYMS, SKILL_CATEGORY
+    text = (jd_text or "").casefold()
+    found, seen = [], set()
+    # Canonical Chinese names are not duplicated in SYNONYMS. Scan both
+    # namespaces so explicit canonical terms and aliases share the same fallback.
+    terms = list(SYNONYMS.items()) + [(name, name) for name in SKILL_CATEGORY]
+    for kw, norm in terms:
+        if kw.casefold() in text and norm not in seen:
+            seen.add(norm)
             found.append({"name": norm, "raw": kw, "importance": "required",
-                          "level": "familiar", "category": skill_category(norm),
+                          "level": _rule_level(text, kw), "category": skill_category(norm),
                           "skill_type": skill_type(norm)})
     return {
         "job_title": "", "category": "人工智能", "level": "middle",

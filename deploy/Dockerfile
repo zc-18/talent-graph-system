@@ -14,7 +14,6 @@ ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
 COPY backend/requirements.txt ./
 RUN pip install --only-binary=:all: -r requirements.txt || pip install -r requirements.txt
 COPY backend/app ./app
-COPY backend/.env ./.env
 # 前端构建产物作为静态资源由后端托管
 COPY --from=frontend /fe/dist ./static
 EXPOSE 8200

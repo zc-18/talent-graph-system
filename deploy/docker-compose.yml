@@ -8,8 +8,12 @@ services:
     restart: unless-stopped
     ports:
       - "8200:8200"
+    env_file:
+      - /etc/talent-graph/talent-graph.env
     environment:
       - STATIC_DIR=/app/static
+      - APP_ENV=production
+      - READ_ONLY=1
     # 控制资源，保护小内存服务器
     deploy:
       resources:

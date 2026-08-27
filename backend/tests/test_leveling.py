@@ -4,9 +4,14 @@ from app.services.evolution import compute_changes
 
 
 class FakeRow:
-    def __init__(self, level, text="有效JD文本" * 5):
+    def __init__(self, level, text="有效JD文本" * 5, recruitment_type=None,
+                 track=None, industry=None, title="Java开发工程师"):
         self.inferred_level = level
         self.raw_text = text
+        self.recruitment_type = recruitment_type
+        self.track = track
+        self.industry = industry
+        self.job_title = title
 
 
 # ---------- 分桶规则 ----------
@@ -35,6 +40,17 @@ def test_bucket_rule_ignores_invalid_rows():
 def test_bucket_rule_all_empty():
     assert leveling.bucket_rows([]) == {}
     assert leveling.bucket_rows([FakeRow("middle")] * 10) == {}  # 单档不成立
+
+
+def test_bucket_slices_separate_campus_social_and_track():
+    rows = ([FakeRow("junior", recruitment_type="campus", track="software")] * 3
+            + [FakeRow("middle", recruitment_type="social", track="software")] * 4
+            + [FakeRow("middle", recruitment_type="social", track="hardware",
+                       title="硬件系统测试工程师")] * 3)
+    slices = leveling.bucket_slices(rows)
+    assert ("junior", "campus", "software", "general") in slices
+    assert ("middle", "social", "software", "general") in slices
+    assert ("middle", "social", "hardware", "general") in slices
 
 
 # ---------- 晋升语义改写 ----------

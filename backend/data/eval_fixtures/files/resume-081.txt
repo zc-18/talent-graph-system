@@ -1,0 +1,18 @@
+Training attended: 1. Successfully completed ESD program conducted by Zensar Technologies, Pune in 2017. 2. Successfully completed Employability training conducted by Barclays, Global Talent Track, and NASSCOM foundation in 2015. Achievements: 1. Treasurer in IEEE student branch at JSCOE, Pune for 2017-18. 2. Worked as team leader in collegeâs various technical and cultural events from 2016 - 2017. 3. Project idea got selected for final prototyping round in KPIT-Sparkle 2018, Pune. 4. Participated in Avishkar 2017 conducted by Savitribai Phule Pune University. 5. Project idea submitted in Accenture Innovation 2018, Pune. 6. Brought sponsorship of Rs. 15,000 from Platinum Auto (formerly Royal Enfield) in 2017, Pune. 7. Secured 1 st Rank for college level competition of Poster presentation on Smart ambulance in 2017, Pune. 8. Organized IEEE workshop on âExcellence in English and Public Speakingâ in 2017, Pune Workshops attended: 1. Successfully completed 4 daysâ workshop on âMedical IOTâ conducted by IEEE standardâs association at VIP in 2017, Pune. 2. Successfully completed 2 daysâ workshop on âIntroduction to Arduinoâ at SCOE in 2016, Pune. 3. Successfully completed 3 daysâ workshop on âRobotics for Juniorsâ conducted by Computer Society of India at SKNCOE in 2016, Pune. 4. Participated in various inter-college technical competitions at SCOE, PICT, and AISSMS, Pune. Education Details 
+June 2018 Bachelor of Engineering Computer Pune, Maharashtra Savitribai Phule Pune University
+June 2014 HSC   Maharashtra State Board
+June 2012 SSC   Maharashtra State Board
+Python Developer 
+
+Python Developer - Atos Syntel
+Skill Details 
+PYTHON- Exprience - 15 months
+DATABASE- Exprience - 7 months
+MYSQL- Exprience - 7 months
+DJANGO- Exprience - 6 months
+HTML5- Exprience - 6 months
+REST API- Exprience - 6 monthsCompany Details 
+company - Atos Syntel
+description - Working as a developer in the field of computer vision for a US based client in banking domain.
+1. Design and development of computer vision based algorithms for image preprocessing using OpenCV, PIL, and Numpy.
+2. Unit testing and debugging the code and maintaining the versions using Git.

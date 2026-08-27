@@ -1,0 +1,28 @@
+Education Details 
+May 2013 to May 2017 B.E   UIT-RGPV
+Data Scientist 
+
+Data Scientist - Matelabs
+Skill Details 
+Python- Exprience - Less than 1 year months
+Statsmodels- Exprience - 12 months
+AWS- Exprience - Less than 1 year months
+Machine learning- Exprience - Less than 1 year months
+Sklearn- Exprience - Less than 1 year months
+Scipy- Exprience - Less than 1 year months
+Keras- Exprience - Less than 1 year monthsCompany Details 
+company - Matelabs
+description - ML Platform for business professionals, dummies and enthusiasts.
+60/A Koramangala 5th block,
+Achievements/Tasks behind sukh sagar, Bengaluru,
+India                               Developed and deployed auto preprocessing steps of machine learning mainly missing value
+treatment, outlier detection, encoding, scaling, feature selection and dimensionality reduction.
+Deployed automated classification and regression model.
+[链接已脱敏]
+b4600b146                           Reasearch and deployed the time series forecasting model ARIMA, SARIMAX, Holt-winter and
+Prophet.
+Worked on meta-feature extracting problem.
+[链接已脱敏]
+Implemented a state of the art research paper on outlier detection for mixed attributes.
+company - Matelabs
+description - 

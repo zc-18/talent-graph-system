@@ -106,7 +106,8 @@ def main():
                                   # 跑过演化的岗位反而比新建的岗位更粗。
                                   "fine_skills": p.get("fine_skills", []),
                                   "lag_days": 0, "is_duplicate": False,
-                                  "raw_jd_id": row.id, "source": row.platform})
+                                  "raw_jd_id": row.id, "source": row.platform,
+                                  "company": row.company})
             for c in old_caps:  # 旧能力作为先验来源之一（与路由一致）
                 agg_input.append({
                     "required_skills": [{"name": c["name"], "importance": "required",
@@ -122,7 +123,9 @@ def main():
             agg = hallucination.aggregate_capabilities(
                 agg_input,
                 source_meta={r.id: {"platform": r.platform,
-                                    "authority": r.source_authority or 1.0}
+                                    "authority": r.source_authority or 1.0,
+                                    "employer_id": getattr(r, "employer_id", None),
+                                    "company": r.company}
                              for r in rows})
             # 同名去重（粗粒度优先），避免 fine/coarse 同名导致 job_skill 唯一键冲突
             seen_names, deduped = set(), []

@@ -1,0 +1,8 @@
+{
+  "scanned_pdf": "files/diagnostic-scanned.pdf",
+  "legacy_doc": "files/diagnostic-legacy.doc",
+  "encrypted": "files/diagnostic-encrypted.pdf",
+  "empty": "files/diagnostic-empty.txt",
+  "corrupt": "files/diagnostic-corrupt.pdf",
+  "oversized": "generated-in-memory-by-evaluator"
+}

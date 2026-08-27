@@ -37,7 +37,12 @@ def match(job_caps: list[dict], resume_skills: list[str], resume_levels: dict | 
     # 语义匹配准备：对未精确命中的岗位技能，用向量找最近的简历技能
     sem_map: dict[str, tuple[str, float]] = {}
     if use_semantic and resume_skills:
-        unmatched = [c["name"] for c in active_caps if c["name"] not in resume_set]
+        unmatched = []
+        for cap in active_caps:
+            candidates = _capability_skill_names(cap)
+            if not any(name in resume_set for name in candidates):
+                unmatched.extend(candidates)
+        unmatched = list(dict.fromkeys(unmatched))
         if unmatched:
             sem_map = _semantic_align(unmatched, resume_skills)
 
@@ -59,13 +64,16 @@ def match(job_caps: list[dict], resume_skills: list[str], resume_levels: dict | 
                 level_hits += 1
             req_score_sum += w * level_factor
             matched_skills.append({"name": name, "importance": "required", "via": via,
+                                   "matched_skill": via,
+                                   "cluster_skills": _nested_skill_names(c),
                                    "match_type": "exact" if sim >= 0.999 else "semantic",
                                    "similarity": round(sim, 3), "weight": w,
                                    "level_ok": have_lvl >= req_lvl})
         else:
             missing_required.append({"name": name, "weight": w, "category": c.get("category", ""),
                                      "level_required": c.get("level_required", "familiar"),
-                                     "confidence": c.get("confidence", 0)})
+                                     "confidence": c.get("confidence", 0),
+                                     "skills": _nested_skill_names(c) or [name]})
 
     bonus_hit = 0
     for c in bonus:
@@ -73,10 +81,13 @@ def match(job_caps: list[dict], resume_skills: list[str], resume_levels: dict | 
         if hit:
             bonus_hit += 1
             matched_skills.append({"name": c["name"], "importance": "bonus", "via": via,
+                                   "matched_skill": via,
+                                   "cluster_skills": _nested_skill_names(c),
                                    "match_type": "exact" if sim >= 0.999 else "semantic",
                                    "similarity": round(sim, 3), "weight": c.get("weight", 0.3)})
         else:
-            missing_bonus.append({"name": c["name"], "category": c.get("category", "")})
+            missing_bonus.append({"name": c["name"], "category": c.get("category", ""),
+                                  "skills": _nested_skill_names(c) or [c["name"]]})
 
     # 多维度评分
     required_coverage = (req_score_sum / req_weight_sum) if req_weight_sum else 1.0
@@ -107,14 +118,29 @@ def match(job_caps: list[dict], resume_skills: list[str], resume_levels: dict | 
     }
 
 
+def _capability_skill_names(cap: dict) -> list[str]:
+    """A governed cluster is satisfied by any one nested skill, once."""
+    names = [cap["name"]]
+    for item in cap.get("skills", []) or []:
+        name = item.get("name") if isinstance(item, dict) else str(item)
+        if name and name not in names:
+            names.append(name)
+    return names
+
+
+def _nested_skill_names(cap: dict) -> list[str]:
+    return _capability_skill_names(cap)[1:]
+
+
 def _resolve_hit(cap: dict, resume_set: set, sem_map: dict):
-    name = cap["name"]
-    if name in resume_set:
-        return True, name, 1.0
-    if name in sem_map:
-        via, sim = sem_map[name]
-        if sim >= SEMANTIC_THRESHOLD:
-            return True, via, sim
+    for name in _capability_skill_names(cap):
+        if name in resume_set:
+            return True, name, 1.0
+    for name in _capability_skill_names(cap):
+        if name in sem_map:
+            via, sim = sem_map[name]
+            if sim >= SEMANTIC_THRESHOLD:
+                return True, via, sim
     return False, None, 0.0
 
 
@@ -155,6 +181,8 @@ def _extra_relevance(resume_set: set, caps: list[dict]) -> float:
     if not resume_set:
         return 0.0
     cap_cats = {c.get("category") for c in caps}
+    cap_cats.update(skill_category(name) for cap in caps
+                    for name in _capability_skill_names(cap))
     rel = sum(1 for s in resume_set if skill_category(s) in cap_cats)
     return min(1.0, rel / max(1, len(resume_set)) * 1.5)
 

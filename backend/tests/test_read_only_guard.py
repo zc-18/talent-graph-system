@@ -80,10 +80,10 @@ def test_job_delete_blocked(client):
     assert client.delete("/api/jobs/1").status_code == 403
 
 
-def test_team_member_upload_blocked(client):
+def test_team_member_upload_requires_authentication(client):
     r = client.post("/api/talent/teams/1/members/upload",
                     files={"file": ("a.txt", b"hello", "text/plain")})
-    assert r.status_code == 403
+    assert r.status_code == 401
 
 
 # ---- 只读模式不该影响读接口与健康检查 --------------------------------------
@@ -101,5 +101,5 @@ def test_read_endpoints_unaffected(client):
 # ---- 关掉开关后写接口恢复（默认本地/离线跑脚本不受影响）---------------------
 
 def test_gate_is_off_by_default(rw_client):
-    # 闸门放行后按正常业务语义走：空库里没有这个岗位 → 404，而不是 403
-    assert rw_client.delete("/api/jobs/999999").status_code == 404
+    # 公共写闸放行不等于绕过认证：匿名调用仍先被身份闸拒绝。
+    assert rw_client.delete("/api/jobs/999999").status_code == 401

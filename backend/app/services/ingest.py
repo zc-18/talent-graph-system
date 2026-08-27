@@ -17,7 +17,15 @@ from statistics import median
 from sqlalchemy.orm import Session
 from .. import models
 from . import cleaning, extraction, hallucination, graph_service
-from .taxonomy import normalize_skill
+from .employer_resolution import get_or_create_employer
+from .job_resolution import (
+    INDUSTRIES,
+    RECRUITMENT_TYPES,
+    SENIORITIES,
+    TRACKS,
+    established_job_titles,
+    resolve_job_query,
+)
 
 # 真实标题装饰剥离：括号编号/城市/紧急标记/级别词（级别词回填给分级画像）
 _TITLE_STRIP = re.compile(
@@ -138,16 +146,31 @@ _INTERNAL_TITLE_MAP = {
 @lru_cache(maxsize=1)
 def canonical_job_names() -> frozenset[str]:
     """全部"可建图"的规范岗位名。不在此集合内的聚类键一律进待映射清单，不建图。"""
-    return frozenset(_cluster_name_map().values()) | frozenset(_INTERNAL_TITLE_MAP.values())
+    return (frozenset(_cluster_name_map().values()) |
+            frozenset(_INTERNAL_TITLE_MAP.values()) |
+            established_job_titles())
 
 
 @lru_cache(maxsize=8192)
-def title_key(title: str, cluster_hint: str | None = None) -> str:
-    """岗位标题归一化为聚类键。真实数据优先用采集时的簇提示（cluster_hint）。"""
+def title_key(title: str, cluster_hint: str | None = None,
+              track: str | None = None, industry: str | None = None) -> str:
+    """岗位标题归一化为聚类键；明确别名优先，检索簇仅作回退。"""
+    # Explicit, governed aliases beat a contradictory collection query.  A
+    # Java title returned by an LLM query is a low-relevance hit, not an LLM JD.
+    resolved = resolve_job_query(title)
+    if resolved.is_established and not resolved.requires_disambiguation:
+        return resolved.canonical_title
     if cluster_hint:
         mapped = _cluster_name_map().get(cluster_hint)
         if mapped:
             return mapped
+    if resolved.requires_disambiguation:
+        if track == "hardware":
+            return "硬件系统测试工程师"
+        if industry in {"automotive", "medical_device", "manufacturing"}:
+            return "行业测试工程师"
+        if track == "software":
+            return "系统测试工程师"
     t = (title or "").strip()
     t_clean = _TITLE_STRIP.sub("", t).strip("-—_ ")
     hit = _INTERNAL_TITLE_MAP.get(t_clean.lower()) or _INTERNAL_TITLE_MAP.get(t.lower())
@@ -159,6 +182,33 @@ def title_key(title: str, cluster_hint: str | None = None) -> str:
         if kw and kw in low:
             return job
     return t_clean or t
+
+
+def _dimension(value: str | None, allowed: tuple[str, ...], fallback: str) -> str:
+    """Accept only governed dimension values from imported records."""
+    normalized = str(value or "").strip().casefold()
+    return normalized if normalized in allowed else fallback
+
+
+def _resolved_dimensions(jd: dict, resolution) -> dict[str, str | None]:
+    """Resolve import metadata without allowing a title/track contradiction."""
+    raw_track = str(jd.get("track") or "").strip().casefold()
+    if resolution.requires_disambiguation:
+        track = raw_track if raw_track in TRACKS else None
+    else:
+        supplied_track = _dimension(raw_track, TRACKS, resolution.track)
+        track = resolution.track if resolution.is_established else supplied_track
+    industry = _dimension(jd.get("industry"), INDUSTRIES, resolution.industry)
+    recruitment = _dimension(
+        jd.get("recruitment_type"), RECRUITMENT_TYPES, resolution.recruitment_type)
+    seniority = _dimension(
+        jd.get("inferred_level"), SENIORITIES, resolution.seniority)
+    return {
+        "track": track,
+        "industry": industry,
+        "recruitment_type": recruitment,
+        "inferred_level": None if seniority == "unspecified" else seniority,
+    }
 
 
 def ingest_one(db: Session, jd: dict, dedup_pool: list[dict]) -> models.RawJD:
@@ -180,12 +230,26 @@ def ingest_one(db: Session, jd: dict, dedup_pool: list[dict]) -> models.RawJD:
             is_dup, dup_of = True, prev["id"]
             break
 
-    row = models.RawJD(
+    resolution = resolve_job_query(jd.get("job_title", ""))
+    dimensions = _resolved_dimensions(jd, resolution)
+    employer = get_or_create_employer(db, jd.get("company"))
+    kwargs = dict(
         job_title=jd.get("job_title", ""), company=jd.get("company", ""),
         location=jd.get("location", ""), source=jd.get("source", ""),
         source_url=jd.get("source_url", ""), raw_text=text, publish_date=pub,
         dedup_hash=h, simhash=str(sh), is_duplicate=is_dup, duplicate_of=dup_of,
         lag_days=lag, quality_score=cleaning.quality_score(text, lag, is_dup))
+    optional = {
+        "track": dimensions["track"],
+        "industry": dimensions["industry"],
+        "recruitment_type": dimensions["recruitment_type"],
+        "employer_id": getattr(employer, "id", None),
+        "inferred_level": dimensions["inferred_level"],
+    }
+    for field, value in optional.items():
+        if hasattr(models.RawJD, field):
+            kwargs[field] = value
+    row = models.RawJD(**kwargs)
     db.add(row)
     db.flush()
     dedup_pool.append({"id": row.id, "hash": h, "simhash": sh})
@@ -211,7 +275,13 @@ def build_graph_from_dataset(db: Session, dataset: list[dict], parse_fn=None,
     # 1) 入库 + 清洗
     for i, jd in enumerate(dataset):
         row = ingest_one(db, jd, dedup_pool)
-        key = title_key(jd.get("job_title", ""))
+        resolution = resolve_job_query(jd.get("job_title", ""))
+        key = title_key(
+            jd.get("job_title", ""), jd.get("cluster_hint"),
+            getattr(row, "track", None), getattr(row, "industry", None))
+        if resolution.requires_disambiguation and not (
+                jd.get("cluster_hint") or jd.get("track") or jd.get("industry")):
+            key = f"其他-待消歧-{resolution.canonical_title}"
         clusters[key].append({"row": row, "jd": jd})
         if progress:
             progress("ingest", i + 1, len(dataset))
@@ -266,6 +336,11 @@ def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dic
     force=False 时对已跑过演化的岗位（rebuild_conflict）拒绝重建并记入 skipped。
     """
     results, skipped = [], []
+    employer_ids = {getattr(item["row"], "employer_id", None)
+                    for items in clusters.values() for item in items
+                    if getattr(item["row"], "employer_id", None)}
+    employer_parents = dict(db.query(models.Employer.id, models.Employer.parent_id).filter(
+        models.Employer.id.in_(employer_ids)).all()) if employer_ids else {}
     for key, items in clusters.items():
         if key.startswith("其他-"):
             continue  # 待映射簇不建图（清单由调用方输出）
@@ -312,16 +387,26 @@ def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dic
                 "fine_skills": pl["parsed"].get("fine_skills", []),
                 "lag_days": pl["row"].lag_days, "is_duplicate": pl["row"].is_duplicate,
                 "raw_jd_id": pl["row"].id, "source": pl["row"].source,
+                "company": pl["row"].company,
             })
             source_meta[pl["row"].id] = {
                 "platform": getattr(pl["row"], "platform", None) or pl["row"].source,
                 "authority": getattr(pl["row"], "source_authority", None) or 0.6,
+                "employer_id": getattr(pl["row"], "employer_id", None),
+                "employer_parent_id": employer_parents.get(
+                    getattr(pl["row"], "employer_id", None)),
+                "company": pl["row"].company,
             }
 
         agg = hallucination.aggregate_capabilities(agg_input, source_meta=source_meta)
         # 岗位元信息取置信度最高的一条解析
         rep = max(parsed_list, key=lambda x: len(x["parsed"].get("core_responsibilities", [])))
         rp = rep["parsed"]
+        slices = _slice_summary(items)
+        recruitment_values = [
+            value for value in slices["recruitment_type_distribution"]
+            if value != "unspecified"]
+        recruitment_type = recruitment_values[0] if len(recruitment_values) == 1 else "mixed"
         job = graph_service.upsert_job(
             db, job_title=key,
             category=_cluster_category_map().get(key) or rp.get("category", "人工智能"),
@@ -333,12 +418,46 @@ def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dic
             # 依据人社部文件单独标注，一律传 False 会把这份策展信息抹掉。
             is_new=None, emergence_score=None,
             summary=rp.get("summary", f"{key}（基于{agg['stats']['valid_jds']}条有效JD交叉验证构建）"),
-            source_summary={"jd_count": len(items), **agg["stats"], **_era_stats(items)},
+            source_summary={"jd_count": len(items), **agg["stats"], **_era_stats(items),
+                            **slices},
+            track=slices["track"], industry=slices["industry"],
+            recruitment_type=recruitment_type,
             with_embedding=False)
         db.commit()
         results.append({"job": key, "job_id": job.id, "stats": agg["stats"],
                         "confidence": job.confidence})
     return results, skipped
+
+
+def _slice_summary(items: list[dict]) -> dict:
+    """Expose the structured dimensions used by the cluster for audit/UI."""
+    fields = ("track", "industry", "recruitment_type", "inferred_level")
+    out = {}
+    for field in fields:
+        values = []
+        for item in items:
+            row = item["row"]
+            value = getattr(row, field, None)
+            if not value:
+                resolution = resolve_job_query(getattr(row, "job_title", "") or "")
+                value = {
+                    "track": resolution.track,
+                    "industry": resolution.industry,
+                    "recruitment_type": resolution.recruitment_type,
+                    "inferred_level": resolution.seniority,
+                }[field]
+            allowed = {
+                "track": TRACKS,
+                "industry": INDUSTRIES,
+                "recruitment_type": RECRUITMENT_TYPES,
+                "inferred_level": SENIORITIES,
+            }[field]
+            fallback = "general" if field == "industry" else "unspecified"
+            values.append(_dimension(value, allowed, fallback))
+        counts = Counter(values)
+        out[f"{field}_distribution"] = dict(counts)
+        out[field] = counts.most_common(1)[0][0] if counts else "unspecified"
+    return out
 
 
 def build_graph_from_rows(db: Session, rows: list[models.RawJD], parse_fn=None,
@@ -377,7 +496,9 @@ def build_graph_from_rows(db: Session, rows: list[models.RawJD], parse_fn=None,
         row.lag_days = cleaning.lag_days(row.publish_date)
         row.quality_score = cleaning.quality_score(text, row.lag_days, is_dup)
         dedup_pool.append({"id": row.id, "hash": h, "simhash": sh})
-        key = title_key(row.job_title or "", getattr(row, "cluster_hint", None))
+        key = title_key(
+            row.job_title or "", getattr(row, "cluster_hint", None),
+            getattr(row, "track", None), getattr(row, "industry", None))
         if key not in _CANONICAL:
             # 未落到任何规范岗位 → 待映射桶（不建图，只留台账）
             # 注意：判据是"是否规范岗位名"，不能用 key == 原标题——标题装饰词被剥离后

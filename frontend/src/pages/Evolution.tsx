@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Loader2, Plus, X, Wand2, ArrowRight, Layers, Clock } from 'lucide-react'
+import { Loader2, Plus, X, Wand2, ArrowRight, Layers, Clock, Target, BriefcaseBusiness } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
 import { IGitBranch } from '../components/icons'
-import { api, errMsg, JobListItem, JobLevels, CapChange } from '../api'
-import { Card, Spinner, ConfidencePill } from '../components/ui'
+import { api, errMsg, JobListItem, JobLevels, CapChange, JobVersion } from '../api'
+import { Card, Spinner, ConfidencePill, Badge, EmptyState } from '../components/ui'
 import ChangeDiff from '../components/ChangeDiff'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
 import { useFloat } from '../hooks/gsapFx'
+import { useAuth } from '../auth'
+import { useReadOnly } from '../hooks/useReadOnly'
 
 const SAMPLE_JD = `招聘高级Java开发工程师
 岗位职责：负责核心交易系统研发，参与AI能力中台建设。
@@ -19,6 +22,17 @@ const SAMPLE_JD = `招聘高级Java开发工程师
 
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级' }
 const LEVEL_ORDER = ['junior', 'middle', 'senior']
+
+function dataSourceLabel(value: any): string {
+  if (!value) return '未记录'
+  if (typeof value === 'string') return value
+  if (typeof value !== 'object') return String(value)
+  return Object.entries(value).map(([key, item]) => {
+    if (key === 'employer_count') return `${item} 个独立雇主`
+    if (key === 'jd_count') return `${item} 条 JD`
+    return `${key}: ${typeof item === 'object' ? JSON.stringify(item) : item}`
+  }).join(' · ') || '未记录'
+}
 
 /** 级别演化视图：初级→中级→高级 阶梯式画像 + 相邻级别差异 */
 function LevelEvolution({ jobId }: { jobId: number }) {
@@ -108,6 +122,9 @@ function LevelEvolution({ jobId }: { jobId: number }) {
 }
 
 export default function Evolution() {
+  const location = useLocation() as any
+  const auth = useAuth()
+  const readOnly = useReadOnly()
   const [jobs, setJobs] = useState<JobListItem[]>([])
   const [jobId, setJobId] = useState<number | null>(null)
   const [mode, setMode] = useState<'time' | 'level'>('time')
@@ -115,28 +132,29 @@ export default function Evolution() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [history, setHistory] = useState<any>(null)
+  const [versions, setVersions] = useState<JobVersion[]>([])
+  const [selectedVersion, setSelectedVersion] = useState<number | null>(null)
   const toast = useToast()
   const floatRef = useFloat<HTMLImageElement>({ y: 9, duration: 3.6, deps: [history, result, loading] })
 
   useEffect(() => {
-    api.jobs({ size: 100, is_new: false })
-      .then(d => { setJobs(d.items); const pref = d.items.find(j => j.name === 'Java开发工程师') || d.items[0]; if (pref) setJobId(pref.id) })
+    api.jobs({ size: 100 })
+      .then(d => { setJobs(d.items); const pref = d.items.find(j => j.id === location.state?.jobId) || d.items.find(j => j.name === 'Java开发工程师') || d.items[0]; if (pref) setJobId(pref.id) })
       .catch(e => toast('error', errMsg(e, '岗位列表加载失败')))
   }, [])
-  useEffect(() => { if (jobId) { api.changes(jobId).then(setHistory).catch(() => setHistory({ items: [] })); setResult(null) } }, [jobId])
+  useEffect(() => { if (jobId) {
+    api.changes(jobId).then(setHistory).catch(() => setHistory({ items: [] }))
+    api.jobVersions(jobId).then(data => { const list = data.items || []; setVersions(list); setSelectedVersion(list[list.length - 1]?.version ?? list[0]?.version ?? null) }).catch(() => { setVersions([]); setSelectedVersion(null) })
+    setResult(null)
+  } }, [jobId])
 
   const run = async () => {
     if (!jobId) return
     setLoading(true)
     try {
-      const r = await api.evolve(jobId, jds.filter(j => j.trim()), true)
+      const r = await api.previewEvolution(jobId, jds.filter(j => j.trim()), true)
       setResult(r)
-      // 只读演示站下后端只推演不落库（dry_run），措辞必须跟着变——否则页面说"演化完成"
-      // 而历史记录里什么都没多出来，等于当着评委的面自相矛盾。
-      toast('success', r.dry_run
-        ? `推演完成（演示站只读，未写入图谱）：新增 ${r.evolution.added} · 删除 ${r.evolution.deleted} · 修改 ${r.evolution.modified}`
-        : `演化完成：新增 ${r.evolution.added} · 删除 ${r.evolution.deleted} · 修改 ${r.evolution.modified}`)
-      api.changes(jobId).then(setHistory).catch(() => {})
+      toast('success', `变化预览完成（未写入图谱）：新增 ${r.evolution.added} · 删除 ${r.evolution.deleted} · 修改 ${r.evolution.modified}`)
     } catch (e) {
       // 失败保留已输入的 JD，便于修正后重试
       toast('error', errMsg(e, '演化失败，请稍后重试'))
@@ -175,11 +193,13 @@ export default function Evolution() {
       {mode === 'level' ? (jobId ? <LevelEvolution jobId={jobId} /> : <Spinner />) : (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <Card className="p-5 space-y-3">
-          <div className="label">选择待演化岗位</div>
+            <div className="label">选择待预览岗位</div>
           <Select value={jobId ?? ''} onChange={v => setJobId(Number(v))} label="选择待演化岗位"
             options={jobs.map(j => ({ value: String(j.id), label: `${j.name}（${j.category}）` }))} />
+          {jobId && <div className="grid grid-cols-2 gap-2"><Link to={`/jobs/${jobId}`} className="btn-ghost text-xs"><BriefcaseBusiness className="w-3.5 h-3.5" /> 岗位画像</Link><Link to="/match" state={{ jobId }} className="btn-ghost text-xs"><Target className="w-3.5 h-3.5" /> 人岗匹配</Link></div>}
+          {auth.can('admin') ? <>
           <div className="flex items-center justify-between">
-            <div className="label">输入最新 JD（可多条）</div>
+            <div className="label">演化变化预览 · 最新 JD</div>
             <button onClick={() => setJds([...jds, ''])} className="text-xs text-accent flex items-center gap-1"><Plus className="w-3 h-3" /> 添加</button>
           </div>
           {jds.map((jd, i) => (
@@ -194,8 +214,36 @@ export default function Evolution() {
             </div>
           ))}
           <button onClick={run} disabled={loading || !jobId} className="btn-primary w-full">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} 识别能力变化并演化
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} 预览能力变化
           </button>
+          <p className="text-[11px] text-amber-600">
+            此处仅生成变化预览，不写入公共图谱；新版本须通过管理员演化任务审核发布。
+            {readOnly ? ' 当前环境为公共图谱只读模式。' : ''}
+          </p>
+          </> : (
+            <div className="pt-2">
+              <div className="label mb-2">完整版本快照</div>
+              {versions.length === 0 ? <EmptyState text="该岗位暂无版本快照" /> : (
+                <>
+                  <div className="flex flex-wrap gap-2">
+                    {versions.map(version => <button key={version.version} onClick={() => setSelectedVersion(version.version)} className={selectedVersion === version.version ? 'btn-primary !py-1.5' : 'btn-ghost !py-1.5'}>v{version.version}</button>)}
+                  </div>
+                  {(() => {
+                    const version = versions.find(item => item.version === selectedVersion)
+                    if (!version) return null
+                    const clusters = version.contract?.clusters || version.clusters || []
+                    return (
+                      <div className="mt-4 rounded-xl bg-sky-50/70 p-4">
+                        <div className="flex items-center justify-between gap-2"><Badge tone="cyan">{version.status}</Badge><span className="text-xs text-slate-400">{version.effective_at ? new Date(version.effective_at).toLocaleDateString() : typeof version.evidence_window === 'string' ? version.evidence_window : ''}</span></div>
+                        <p className="text-sm text-slate-600 mt-3">{version.summary || `岗位 v${version.version} 完整能力快照`}</p>
+                        <div className="flex flex-wrap gap-1.5 mt-3">{clusters.map(cluster => <Badge key={cluster.name} tone={cluster.importance === 'required' ? 'indigo' : 'amber'}>{cluster.name}</Badge>)}</div>
+                      </div>
+                    )
+                  })()}
+                </>
+              )}
+            </div>
+          )}
         </Card>
 
         <Card className="p-5">
@@ -218,6 +266,7 @@ export default function Evolution() {
                       <ChangeDiff change={c} />
                     </div>
                     <p className="text-xs text-slate-500 mt-1">{c.reason}</p>
+                    <p className="text-[11px] text-slate-400 mt-1">数据源 · {dataSourceLabel(c.data_source)}</p>
                   </div>
                 ))}
               </div>
@@ -234,10 +283,14 @@ export default function Evolution() {
               ) : (
                 <div className="space-y-2 max-h-[420px] overflow-auto">
                   {history.items.slice(0, 20).map((c: any, i: number) => (
-                    <div key={i} className="flex items-center gap-2 text-xs flex-wrap" title={c.reason || ''}>
-                      <span className="text-slate-700">{c.skill_name}</span>
-                      <ChangeDiff change={c} compact />
-                      <span className="text-slate-400">v{c.version}</span>
+                    <div key={i} className="rounded-xl bg-sky-50/70 px-3.5 py-2.5">
+                      <div className="flex items-center gap-2 text-xs flex-wrap">
+                        <span className="font-medium text-slate-700">{c.skill_name}</span>
+                        <ChangeDiff change={c} compact />
+                        <span className="text-slate-400">v{c.version}</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-1">{c.reason || '未记录变更原因'}</p>
+                      <p className="text-[11px] text-slate-400 mt-1">数据源 · {dataSourceLabel(c.data_source)}</p>
                     </div>
                   ))}
                   {history.items.length > 20 && (

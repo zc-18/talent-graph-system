@@ -31,10 +31,17 @@ ADD_COLUMNS: dict[str, list[tuple[str, str]]] = {
         ("inferred_level", "VARCHAR(16) NULL"),
         ("cluster_hint", "VARCHAR(64) NULL"),
         ("source_authority", "FLOAT NULL DEFAULT 0.6"),
+        ("track", "VARCHAR(32) NULL"),
+        ("industry", "VARCHAR(32) NULL"),
+        ("recruitment_type", "VARCHAR(16) NULL"),
+        ("employer_id", "INT NULL"),
     ],
     "job": [
         ("emergence_type", "VARCHAR(16) NULL"),
         ("first_seen_date", "DATETIME NULL"),
+        ("track", "VARCHAR(32) NULL"),
+        ("industry", "VARCHAR(32) NULL"),
+        ("recruitment_type", "VARCHAR(16) NULL DEFAULT 'mixed'"),
     ],
     "job_skill": [
         ("factors", "JSON NULL"),
@@ -42,12 +49,59 @@ ADD_COLUMNS: dict[str, list[tuple[str, str]]] = {
     "evidence": [
         ("source_name", "VARCHAR(128) NULL"),
     ],
+    "team": [
+        ("organization_id", "INT NULL"),
+        ("created_by", "INT NULL"),
+        ("target_job_id", "INT NULL"),
+    ],
+    "team_member": [
+        ("resume_profile_id", "INT NULL"),
+    ],
+    "job_version_skill": [
+        ("status", "VARCHAR(16) NOT NULL DEFAULT 'active'"),
+    ],
+    "job_level_skill": [
+        ("recruitment_type", "VARCHAR(16) NOT NULL DEFAULT 'unspecified'"),
+        ("track", "VARCHAR(32) NOT NULL DEFAULT 'unspecified'"),
+        ("industry", "VARCHAR(32) NOT NULL DEFAULT 'general'"),
+    ],
+    "recruitment_batch": [
+        ("contract_snapshot", "JSON NULL"),
+    ],
 }
 
 ADD_INDEXES: list[tuple[str, str, str]] = [  # (table, index_name, column)
     ("raw_jd", "ix_raw_jd_platform", "platform"),
     ("raw_jd", "ix_raw_jd_inferred_level", "inferred_level"),
     ("raw_jd", "ix_raw_jd_crawl_batch_id", "crawl_batch_id"),
+    ("raw_jd", "ix_raw_jd_track", "track"),
+    ("raw_jd", "ix_raw_jd_industry", "industry"),
+    ("raw_jd", "ix_raw_jd_recruitment_type", "recruitment_type"),
+    ("raw_jd", "ix_raw_jd_employer_id", "employer_id"),
+    ("job", "ix_job_track", "track"),
+    ("job", "ix_job_industry", "industry"),
+    ("job", "ix_job_recruitment_type", "recruitment_type"),
+    ("team", "ix_team_organization_id", "organization_id"),
+    ("team", "ix_team_created_by", "created_by"),
+    ("team", "ix_team_target_job_id", "target_job_id"),
+    ("team_member", "ix_team_member_resume_profile_id", "resume_profile_id"),
+    ("job_level_skill", "ix_job_level_skill_recruitment_type", "recruitment_type"),
+    ("job_level_skill", "ix_job_level_skill_track", "track"),
+    ("job_level_skill", "ix_job_level_skill_industry", "industry"),
+]
+
+REPLACE_UNIQUES: list[tuple[str, str, str, tuple[str, ...]]] = [
+    ("job_level_skill", "uq_job_level_skill", "uq_job_level_skill_slice",
+     ("job_id", "level", "recruitment_type", "track", "industry", "skill_id")),
+]
+
+ADD_FOREIGN_KEYS: list[tuple[str, str, str, str, str]] = [
+    # table, constraint, column, referenced table, referenced column
+    ("raw_jd", "fk_raw_jd_employer_id", "employer_id", "employer", "id"),
+    ("team", "fk_team_organization_id", "organization_id", "organization", "id"),
+    ("team", "fk_team_created_by", "created_by", "app_user", "id"),
+    ("team", "fk_team_target_job_id", "target_job_id", "job", "id"),
+    ("team_member", "fk_team_member_resume_profile_id", "resume_profile_id", "resume_profile", "id"),
 ]
 
 
@@ -100,6 +154,14 @@ def index_exists(conn, db_name: str, table: str, index: str) -> bool:
     return row is not None
 
 
+def constraint_exists(conn, db_name: str, table: str, constraint: str) -> bool:
+    row = conn.execute(text(
+        "SELECT 1 FROM information_schema.TABLE_CONSTRAINTS "
+        "WHERE CONSTRAINT_SCHEMA=:d AND TABLE_NAME=:t AND CONSTRAINT_NAME=:c"),
+        {"d": db_name, "t": table, "c": constraint}).fetchone()
+    return row is not None
+
+
 def migrate(db_name: str) -> None:
     ensure_database(db_name)
     engine = db_engine(db_name)
@@ -127,6 +189,26 @@ def migrate(db_name: str) -> None:
             if table_exists(conn, db_name, table) and not index_exists(conn, db_name, table, idx):
                 conn.execute(text(f"CREATE INDEX `{idx}` ON `{table}` (`{col}`)"))
                 print(f"[migrate] index {idx} added")
+        for table, old_name, new_name, cols in REPLACE_UNIQUES:
+            if not table_exists(conn, db_name, table):
+                continue
+            if index_exists(conn, db_name, table, old_name):
+                conn.execute(text(f"ALTER TABLE `{table}` DROP INDEX `{old_name}`"))
+                print(f"[migrate] old unique {old_name} dropped")
+            if not index_exists(conn, db_name, table, new_name):
+                quoted = ", ".join(f"`{col}`" for col in cols)
+                conn.execute(text(
+                    f"ALTER TABLE `{table}` ADD UNIQUE INDEX `{new_name}` ({quoted})"))
+                print(f"[migrate] unique {new_name} added")
+        for table, constraint, col, ref_table, ref_col in ADD_FOREIGN_KEYS:
+            if (table_exists(conn, db_name, table)
+                    and table_exists(conn, db_name, ref_table)
+                    and column_exists(conn, db_name, table, col)
+                    and not constraint_exists(conn, db_name, table, constraint)):
+                conn.execute(text(
+                    f"ALTER TABLE `{table}` ADD CONSTRAINT `{constraint}` "
+                    f"FOREIGN KEY (`{col}`) REFERENCES `{ref_table}` (`{ref_col}`)"))
+                print(f"[migrate] foreign key {constraint} added")
 
     print(f"[migrate] done → {db_name}")
 

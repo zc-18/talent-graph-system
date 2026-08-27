@@ -1,6 +1,5 @@
-"""岗位管理路由：列表、详情、人工优化、手动能力项编辑。"""
+"""岗位管理路由：公开岗位的只读查询与归档。"""
 from __future__ import annotations
-from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, func
@@ -8,27 +7,38 @@ from .. import models
 from ..db import get_db
 from ..guards import require_write
 from ..schemas import JobUpsert, ManualSkillEdit
-from ..services import graph_service
-from ..services.taxonomy import normalize_skill, skill_category, skill_type
+from ..services import graph_service, role_contract
+from ..auth import Actor
+from ..permissions import require_admin
 
 router = APIRouter(prefix="/api/jobs", tags=["jobs"])
 
 
 @router.get("")
 def list_jobs(category: str | None = None, level: str | None = None,
+              track: str | None = None, industry: str | None = None,
+              recruitment_type: str | None = None,
               is_new: bool | None = None, q: str | None = None,
               page: int = 1, size: int = 50, db: Session = Depends(get_db)):
+    page, size = max(1, page), min(100, max(1, size))
     query = db.query(models.Job).filter(models.Job.status == "published")
     if category and category != "全部":
         query = query.filter(models.Job.category == category)
     if level and level != "全部":
         query = query.filter(models.Job.level == level)
+    if track and track != "全部":
+        query = query.filter(models.Job.track == track)
+    if industry and industry != "全部":
+        query = query.filter(models.Job.industry == industry)
+    if recruitment_type and recruitment_type != "全部":
+        query = query.filter(models.Job.recruitment_type == recruitment_type)
     if is_new is not None:
         query = query.filter(models.Job.is_new == is_new)
     if q:
         query = query.filter(or_(models.Job.name.like(f"%{q}%"), models.Job.summary.like(f"%{q}%")))
     total = query.count()
-    jobs = query.order_by(models.Job.is_new.desc(), models.Job.confidence.desc()) \
+    jobs = query.order_by(models.Job.is_new.desc(), models.Job.confidence.desc(),
+                          models.Job.id) \
                 .offset((page - 1) * size).limit(size).all()
     # 必备能力项数一次 GROUP BY 聚合出来（历史实现是每个岗位一条 count()）。
     # 只数**粗粒度**：详情页的「必备技能 (N)」也只列粗粒度项，细粒度技能点作为
@@ -44,6 +54,8 @@ def list_jobs(category: str | None = None, level: str | None = None,
     items = []
     for j in jobs:
         items.append({"id": j.id, "name": j.name, "category": j.category, "level": j.level,
+                      "track": j.track, "industry": j.industry,
+                      "recruitment_type": j.recruitment_type,
                       "is_new": bool(j.is_new), "confidence": j.confidence,
                       "evidence_count": j.evidence_count, "emergence_score": j.emergence_score,
                       "required_count": req_counts.get(j.id, 0), "version": j.version,
@@ -57,6 +69,62 @@ def get_job(job_id: int, db: Session = Depends(get_db)):
     if not job:
         raise HTTPException(404, "岗位不存在")
     return graph_service.job_to_dict(db, job)
+
+
+@router.get("/{job_id}/contract")
+def get_contract(job_id: int, seniority: str | None = None,
+                 recruitment_type: str | None = None, db: Session = Depends(get_db)):
+    job = db.query(models.Job).get(job_id)
+    if not job or job.status != "published":
+        raise HTTPException(404, "岗位不存在")
+    return role_contract.build_contract_from_job(
+        db, job, seniority=seniority or job.level or "unspecified",
+        recruitment_type=recruitment_type or job.recruitment_type or "mixed",
+        track=job.track or "software", industry=job.industry or "general")
+
+
+@router.get("/{job_id}/versions")
+def get_versions(job_id: int, page: int = 1, size: int = 20,
+                 db: Session = Depends(get_db)):
+    job = db.query(models.Job).get(job_id)
+    if not job or job.status != "published":
+        raise HTTPException(404, "岗位不存在")
+    page, size = max(1, page), min(100, max(1, size))
+    q = db.query(models.JobVersion).filter(models.JobVersion.job_id == job_id)
+    total = q.count()
+    rows = q.order_by(models.JobVersion.version.desc()).offset((page - 1) * size).limit(size).all()
+    if not rows and page == 1:
+        contract = role_contract.build_contract_from_job(
+            db, job, seniority=job.level or "unspecified",
+            recruitment_type=job.recruitment_type or "mixed",
+            track=job.track or "software", industry=job.industry or "general")
+        return {"items": [{"id": None, "job_id": job.id, "version": job.version or 1,
+                           "status": "published", "effective_at": None,
+                           "evidence_window": contract.get("evidence_window"),
+                           "summary": job.summary, "created_by": None,
+                           "contract": contract, "skills": [], "synthetic": True}],
+                "total": 1, "page": 1, "size": size}
+    version_ids = [row.id for row in rows]
+    snapshot_rows = (db.query(models.JobVersionSkill, models.Skill)
+                     .join(models.Skill, models.Skill.id == models.JobVersionSkill.skill_id)
+                     .filter(models.JobVersionSkill.job_version_id.in_(version_ids)).all()) if rows else []
+    skills: dict[int, list[dict]] = {}
+    for snap, skill in snapshot_rows:
+        skills.setdefault(snap.job_version_id, []).append({
+            "skill_id": skill.id, "name": skill.name,
+            "capability_cluster": snap.capability_cluster,
+            "importance": snap.importance, "status": snap.status, "weight": snap.weight,
+            "confidence": snap.confidence, "level_required": snap.level_required,
+            "factors": snap.factors or {}, "evidence_refs": snap.evidence_refs or []})
+    return {"items": [{"id": row.id, "job_id": row.job_id, "version": row.version,
+                       "status": row.status,
+                       "effective_at": row.effective_at.isoformat() if row.effective_at else None,
+                       "evidence_window": row.evidence_window or {}, "summary": row.summary,
+                       "created_by": row.created_by,
+                       "contract": row.contract_snapshot or {},
+                       "skills": skills.get(row.id, []), "synthetic": False,
+                       "created_at": row.created_at.isoformat()} for row in rows],
+            "total": total, "page": page, "size": size}
 
 
 @router.get("/{job_id}/evidence")
@@ -124,79 +192,33 @@ def job_authority(job_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("", dependencies=[Depends(require_write)])
-def create_or_update_job(payload: JobUpsert, db: Session = Depends(get_db)):
-    """人工创建/优化岗位定义。"""
-    caps = []
-    for s in payload.required_skills:
-        nm = normalize_skill(s.name)
-        caps.append({"name": nm, "importance": "required", "weight": s.weight,
-                     "level_required": s.level_required, "confidence": s.confidence or 0.9,
-                     "source_count": 1, "category": skill_category(nm),
-                     "skill_type": skill_type(nm), "status": "active", "evidence": []})
-    req_names = {c["name"] for c in caps}
-    for s in payload.bonus_skills:
-        nm = normalize_skill(s.name)
-        if nm in req_names:
-            continue
-        caps.append({"name": nm, "importance": "bonus", "weight": s.weight,
-                     "level_required": s.level_required, "confidence": s.confidence or 0.85,
-                     "source_count": 1, "category": skill_category(nm),
-                     "skill_type": skill_type(nm), "status": "active", "evidence": []})
-    job = graph_service.upsert_job(
-        db, job_title=payload.name, category=payload.category, level=payload.level,
-        responsibilities=payload.core_responsibilities, scenarios=payload.typical_scenarios,
-        capabilities=caps, is_new=payload.is_new, summary=payload.summary,
-        source_summary={"origin": "manual"}, with_embedding=False)
-    return {"ok": True, "job": graph_service.job_to_dict(db, job)}
+def create_or_update_job(payload: JobUpsert, actor: Actor = Depends(require_admin),
+                         db: Session = Depends(get_db)):
+    """Retired: public jobs may only be published through governed workflows."""
+    raise HTTPException(410, {
+        "code": "DIRECT_JOB_WRITE_RETIRED",
+        "message": "公共岗位不能直接创建，请通过新岗位发现候选与管理员审核发布",
+        "workflow": "/api/discovery/runs",
+    })
 
 
 @router.post("/manual-edit", dependencies=[Depends(require_write)])
-def manual_edit_skill(payload: ManualSkillEdit, db: Session = Depends(get_db)):
-    """对单个能力项进行人工增删改，并记录为变更（支持人工优化）。"""
-    job = db.query(models.Job).get(payload.job_id)
-    if not job:
-        raise HTTPException(404, "岗位不存在")
-    nm = normalize_skill(payload.skill_name)
-    sk = graph_service.upsert_skill(db, nm)
-    js = db.query(models.JobSkill).filter(models.JobSkill.job_id == job.id,
-                                          models.JobSkill.skill_id == sk.id).first()
-    change_type, old_value, new_value = payload.action, None, None
-    if payload.action == "remove":
-        if js:
-            old_value = {"importance": js.importance, "weight": js.weight}
-            js.status = "deprecated"
-        change_type = "delete"
-    elif payload.action in ("add", "update"):
-        new_value = {"importance": payload.importance, "weight": payload.weight,
-                     "level_required": payload.level_required}
-        if js:
-            old_value = {"importance": js.importance, "weight": js.weight}
-            js.importance = payload.importance
-            js.weight = payload.weight
-            js.level_required = payload.level_required
-            js.status = "active"
-            change_type = "modify"
-        else:
-            db.add(models.JobSkill(job_id=job.id, skill_id=sk.id, importance=payload.importance,
-                                   weight=payload.weight, level_required=payload.level_required,
-                                   confidence=0.9, source_count=1, status="active",
-                                   first_seen=datetime.utcnow(), last_seen=datetime.utcnow()))
-            change_type = "add"
-    job.version = (job.version or 1) + 1
-    db.add(models.CapabilityChange(job_id=job.id, version=job.version, change_type=change_type,
-                                   skill_name=nm, importance=payload.importance,
-                                   old_value=old_value, new_value=new_value,
-                                   reason=payload.reason, data_source={"origin": "manual"},
-                                   confidence=0.95))
-    db.commit()
-    return {"ok": True, "job": graph_service.job_to_dict(db, job)}
+def manual_edit_skill(payload: ManualSkillEdit, actor: Actor = Depends(require_admin),
+                      db: Session = Depends(get_db)):
+    """Retired: capability edits must be reviewed as versioned evolution runs."""
+    raise HTTPException(410, {
+        "code": "DIRECT_JOB_WRITE_RETIRED",
+        "message": "公共岗位能力不能直接编辑，请通过管理员演化工作流发布新版本",
+        "workflow": "/api/admin/evolution-runs",
+    })
 
 
 @router.delete("/{job_id}", dependencies=[Depends(require_write)])
-def delete_job(job_id: int, db: Session = Depends(get_db)):
-    job = db.query(models.Job).get(job_id)
-    if not job:
-        raise HTTPException(404, "岗位不存在")
-    db.delete(job)
-    db.commit()
-    return {"ok": True}
+def delete_job(job_id: int, actor: Actor = Depends(require_admin),
+               db: Session = Depends(get_db)):
+    """Retired: archival must be proposed and reviewed as a versioned change."""
+    raise HTTPException(410, {
+        "code": "DIRECT_JOB_WRITE_RETIRED",
+        "message": "公共岗位不能直接归档，请通过管理员演化工作流审核",
+        "workflow": "/api/admin/evolution-runs",
+    })

@@ -8,12 +8,12 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from .. import models, clients
-from .taxonomy import skill_category, skill_type
+from .taxonomy import capability_cluster, skill_category, skill_type
 from .hallucination import job_confidence
 
-# 每个能力项最多留存的证据条数。source_count（提及该技能的 JD 数）可达上千，
-# 全存下来是六位数行且对说服力没有边际收益；但只存 6 条时前端「87 来源」只能
-# 展开出 6 张卡，看着像坏了。12 条够填满两列网格。
+# 每个能力项最多留存的证据条数。JD 提及数可达上千，全存下来是六位数行且对
+# 说服力没有边际收益；source_count 现在是独立雇主数，与证据卡数量分别展示。
+# 12 条证据足以覆盖多雇主抽样和两列下钻网格。
 MAX_EVIDENCE_PER_SKILL = 12
 
 
@@ -114,7 +114,10 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
                responsibilities: list, scenarios: list, capabilities: list[dict],
                is_new: bool | None = False, summary: str = "",
                source_summary: dict | None = None,
-               emergence_score: float | None = 0.0, with_embedding: bool = True) -> models.Job:
+               emergence_score: float | None = 0.0, with_embedding: bool = True,
+               track: str | None = None, industry: str | None = None,
+               recruitment_type: str | None = None,
+               commit: bool = True) -> models.Job:
     """根据聚合能力项创建/更新岗位及其能力关系。
 
     is_new / emergence_score 传 None 表示「保留库中现值」。这是给全量语料重建用的：
@@ -130,6 +133,12 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
         db.flush()
     job.category = category
     job.level = level
+    if track is not None:
+        job.track = track
+    if industry is not None:
+        job.industry = industry
+    if recruitment_type is not None:
+        job.recruitment_type = recruitment_type
     if is_new is not None:
         job.is_new = is_new
     job.summary = summary
@@ -185,7 +194,8 @@ def upsert_job(db: Session, *, job_title: str, category: str, level: str,
         db.add(js)
         db.flush()
         write_evidence(db, js.id, c.get("evidence", []))
-    db.commit()
+    if commit:
+        db.commit()
     return job
 
 
@@ -230,6 +240,8 @@ def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) 
     bonus = [s for s in skills if s["importance"] == "bonus"]
     return {
         "id": job.id, "name": job.name, "slug": job.slug, "category": job.category,
+        "track": getattr(job, "track", None), "industry": getattr(job, "industry", None),
+        "recruitment_type": getattr(job, "recruitment_type", None),
         "level": job.level, "is_new": job.is_new, "status": job.status,
         "summary": job.summary, "core_responsibilities": job.core_responsibilities or [],
         "typical_scenarios": job.typical_scenarios or [],
@@ -257,6 +269,7 @@ def panoramic_graph(db: Session, category: str | None = None, level: str | None 
     """构建全景图谱：岗位节点 + 技能点节点 + 关系边。
 
     granularity="coarse"（默认）只展示粗粒度技能节点（parent_id 为空），
+    granularity="cluster" 把粗粒度技能投影成同层级能力簇节点，
     细粒度技能在岗位详情页按父类分组展示，避免全景图节点爆炸。
 
     性能：整图只用 2 条 SQL（岗位 1 条 + job_skill⋈skill 批量 join 1 条），
@@ -295,13 +308,16 @@ def panoramic_graph(db: Session, category: str | None = None, level: str | None 
                 JS.status == "active",
                 JS.confidence >= min_confidence)
     )
-    if granularity == "coarse":
+    if granularity in {"coarse", "cluster"}:
         rows_q = rows_q.filter(SK.parent_id.is_(None))
     # 按 (job_id, skill_id) 排序：复现原「逐岗位查询」的行序——MySQL 对 job_id 等值条件
     # 会走 uq_job_skill(job_id, skill_id) 索引，天然按 skill_id 升序返回，因此节点/边的
     # 输出顺序与优化前逐字节一致。（本查询实际由 skill.parent_id 侧驱动 + filesort，
     # 但结果集只有几百行，排序开销可忽略，无需为此加索引。）
     rows = rows_q.order_by(JS.job_id, JS.skill_id).all()
+
+    if granularity == "cluster":
+        return _panoramic_cluster_graph(jobs, nodes, rows, max_skills)
 
     by_job: dict[int, list] = {}
     for r in rows:
@@ -335,6 +351,44 @@ def panoramic_graph(db: Session, category: str | None = None, level: str | None 
     return {"nodes": nodes, "edges": edges,
             "stats": {"jobs": len(jobs), "skills": len(skill_seen), "relations": len(edges),
                       "skills_total": skills_total, "truncated": truncated,
+                      "max_skills": max_skills}}
+
+
+def _panoramic_cluster_graph(jobs: list, nodes: list[dict], rows: list,
+                             max_skills: int) -> dict:
+    """Aggregate job-skill rows into domain-consistent capability clusters."""
+    grouped: dict[tuple[int, str], list] = {}
+    cluster_jobs: dict[str, set[int]] = {}
+    for row in rows:
+        job_id, _, _, _, _, skill_name, _, _ = row
+        cluster = capability_cluster(skill_name)
+        grouped.setdefault((job_id, cluster), []).append(row)
+        cluster_jobs.setdefault(cluster, set()).add(job_id)
+
+    cluster_nodes = [{
+        "id": f"cluster-{slugify(cluster)}", "name": cluster, "type": "cluster",
+        "category": cluster, "skill_type": "capability_cluster",
+        "degree": len(job_ids), "value": 12 + min(40, len(job_ids) * 5),
+    } for cluster, job_ids in sorted(cluster_jobs.items())]
+    edges = []
+    for (job_id, cluster), items in sorted(grouped.items()):
+        required = any(item[1] == "required" for item in items)
+        weights = [float(item[2] or 0.0) for item in items]
+        total_weight = sum(max(0.01, value) for value in weights)
+        confidence = sum(float(item[3] or 0.0) * max(0.01, weight)
+                         for item, weight in zip(items, weights)) / max(0.01, total_weight)
+        edges.append({
+            "source": f"job-{job_id}", "target": f"cluster-{slugify(cluster)}",
+            "importance": "required" if required else "bonus",
+            "weight": round(max(weights or [0.0]), 3),
+            "confidence": round(confidence, 3),
+            "skill_count": len(items),
+        })
+    nodes.extend(cluster_nodes)
+    return {"nodes": nodes, "edges": edges,
+            "stats": {"jobs": len(jobs), "skills": len(cluster_nodes),
+                      "clusters": len(cluster_nodes), "relations": len(edges),
+                      "skills_total": len(cluster_nodes), "truncated": False,
                       "max_skills": max_skills}}
 
 

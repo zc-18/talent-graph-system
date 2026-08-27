@@ -1,0 +1,405 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 9 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 3458 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(Education Details) Tj
+T*
+( B.Tech   Rayat and Bahra Institute of Engineering and Biotechnology) Tj
+T*
+(Data Science) Tj
+T*
+() Tj
+T*
+(Data Science) Tj
+T*
+(Skill Details) Tj
+T*
+(Numpy- Exprience - Less than 1 year months) Tj
+T*
+(Machine Learning- Exprience - Less than 1 year months) Tj
+T*
+(Tensorflow- Exprience - Less than 1 year months) Tj
+T*
+(Scikit- Exprience - Less than 1 year months) Tj
+T*
+(Python- Exprience - Less than 1 year months) Tj
+T*
+(GCP- Exprience - Less than 1 year months) Tj
+T*
+(Pandas- Exprience - Less than 1 year months) Tj
+T*
+(Neural Network- Exprience - Less than 1 year monthsCompany Details) Tj
+T*
+(company - Wipro) Tj
+T*
+(description - Bhawana Aggarwal) Tj
+T*
+(E-Mail:[]) Tj
+T*
+(Phone: 09876971076) Tj
+T*
+(VVersatile, high-energy professional targeting challenging assignments in Machine) Tj
+T*
+(PROFILE SUMMARY) Tj
+T*
+(aa An IT professional with knowledge and experience of 2 years in Wipro Technologies in) Tj
+T*
+(Machine) Tj
+T*
+(Learning, Deep Learning, Data Science, Python, Software Development.) Tj
+T*
+(aa Skilled in managing end-to-end development and software products / projects from inception,) Tj
+T*
+(requirement) Tj
+T*
+(specs, planning, designing, implementation, configuration and documentation.) Tj
+T*
+(aa Knowledge on Python , Machine Learning, Deep Learning, data Science, Algorithms, Neural) Tj
+T*
+(Network,) Tj
+T*
+(NLP, GCP.) Tj
+T*
+(aa Knowledge on Python Libraries like Numpy, Pandas, Seaborn , Matplotlib, Cufflinks.) Tj
+T*
+(aa Knowledge on different algorithms in Machine learning like KNN, Decision Tree, Bias) Tj
+T*
+(variance Trade off,) Tj
+T*
+(Support vector Machine\(SVM\),Logistic Regression, Neural networks.) Tj
+T*
+(aa Have knowledge on unsupervised, Supervised and reinforcement data.) Tj
+T*
+(aa Programming experience in relational platforms like MySQL,Oracle.) Tj
+T*
+(aa Have knowledge on Some programming language like C++,Java.) Tj
+T*
+(aa Experience in cloud based environment like Google Cloud.) Tj
+T*
+(aa Working on different Operating System like Linux, Ubuntu, Windows.) Tj
+T*
+(aa Good interpersonal and communication skills.) Tj
+T*
+(aa Problem solving skills with the ability to think laterally, and to think with a medium term) Tj
+T*
+(and long term) Tj
+T*
+(perspective) Tj
+T*
+(aa Flexibility and an open attitude to change.) Tj
+T*
+(aa Ability to create, define and own frameworks with a strong emphasis on code reusability.) Tj
+T*
+(TECHNICAL SKILLS) Tj
+T*
+(Programming Languages Python, C) Tj
+T*
+(Libraries Seaborn, Numpy, Pandas, Cufflinks, Matplotlib) Tj
+T*
+(Algorithms) Tj
+T*
+(KNN, Decision Tree, Linear regression, Logistic Regression, Neural Networks, K means) Tj
+T*
+(clustering,) Tj
+T*
+(Tensorflow, SVM) Tj
+T*
+(Databases SQL, Oracle) Tj
+T*
+(Operating Systems Linux, Window) Tj
+T*
+(Development Environments NetBeans, Notebooks, Sublime) Tj
+T*
+(Ticketing tools Service Now, Remedy) Tj
+T*
+(Education) Tj
+T*
+(UG Education:) Tj
+T*
+(B.Tech \(Computer Science\) from Rayat and Bahra Institute of Engineering and Biotechnology) Tj
+T*
+(passed with 78.4%in) Tj
+T*
+(2016.) Tj
+T*
+(Schooling:) Tj
+T*
+(XII in 2012 from Moti Ram Arya Sr. Secondary School\(Passed with 78.4%\)) Tj
+T*
+(X in 2010 from Valley Public School \(Passed with 9.4 CGPA\)) Tj
+T*
+(WORK EXPERINCE) Tj
+T*
+(Title : Wipro Neural Intelligence Platform) Tj
+T*
+(Team Size : 5) Tj
+T*
+(Brief: Wiproas Neural Intelligence Platform harnesses the power of automation and artificial) Tj
+T*
+(intelligence) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 9 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 3894 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(technologiesanatural language processing \(NLP\), cognitive, machine learning, and analytics.) Tj
+T*
+(The platform) Tj
+T*
+(comprises three layers: a data engagement platform that can easily access and manage multiple) Tj
+T*
+(structured and) Tj
+T*
+(unstructured data sources; an aintent assessment and reasoninga engine that includes sentiment) Tj
+T*
+(and predictive) Tj
+T*
+(analytics; and a deep machine learning engine that can sense, act, and learn over time. The) Tj
+T*
+(project entailed) Tj
+T*
+(automating responses to user queries at the earliest. The Monster Bot using the power of Deep) Tj
+T*
+(Machine Learning,) Tj
+T*
+(NLP to handle such queries. User can see the how their queries can be answered quickly like) Tj
+T*
+(allL1 activities can be) Tj
+T*
+(eliminated.) Tj
+T*
+(Entity Extractor -> This involves text extraction and NLP for fetching out important) Tj
+T*
+(information from the text like) Tj
+T*
+(dates, names, places, contact numbers etc. This involves Regex, Bluemix NLU apias and machine) Tj
+T*
+(learning using) Tj
+T*
+(Tensor flow for further learning of new entities.) Tj
+T*
+(Classifier ->This involves the classifications of classes, training of dataset and predicting) Tj
+T*
+(the output using the SKLearn) Tj
+T*
+(classifier \(MNB, SVM, SGD as Classifier\) and SGD for the optimization to map the user queries) Tj
+T*
+(with the best) Tj
+T*
+(suited response and make the system efficient.) Tj
+T*
+(NER: A Deep Learning NER Model is trained to extract the entities from the text. Entities like) Tj
+T*
+(Roles, Skills,) Tj
+T*
+(Organizations can be extracted from raw text. RNN\(LSTM\) Bidirectional model is trained for) Tj
+T*
+(extracting such entities) Tj
+T*
+(using Keras TensorFlow framework.) Tj
+T*
+(OTHER PROJECTS) Tj
+T*
+(Title : Diabetes Detection) Tj
+T*
+(Brief : Developed the software which can detect whether the person is suffering from Diabetes) Tj
+T*
+(or not and got the third) Tj
+T*
+(prize in it.) Tj
+T*
+(TRAINING AND CERTIFICATIONS) Tj
+T*
+(Title: Python Training, Machine Learning, Data Science, Deep Learning) Tj
+T*
+(Organization: Udemy, Coursera \(Machine Learning, Deep Learning\)) Tj
+T*
+(Personal Profile) Tj
+T*
+(Fatheras Name :Mr. Tirlok Aggarwal) Tj
+T*
+(Language Known : English & Hindi) Tj
+T*
+(Marital Status :Single) Tj
+T*
+(Date of Birth\(Gender\):1993-12-20\(YYYY-MM-DD\) \(F\)) Tj
+T*
+(company - Wipro) Tj
+T*
+(description - Developing programs in Python.) Tj
+T*
+(company - Wipro) Tj
+T*
+(description - Title : Wipro Neural Intelligence Platform) Tj
+T*
+(Team Size : 5) Tj
+T*
+(Brief: Wiproas Neural Intelligence Platform harnesses the power of automation and artificial) Tj
+T*
+(intelligence) Tj
+T*
+(technologiesanatural language processing \(NLP\), cognitive, machine learning, and analytics.) Tj
+T*
+(The platform) Tj
+T*
+(comprises three layers: a data engagement platform that can easily access and manage multiple) Tj
+T*
+(structured and) Tj
+T*
+(unstructured data sources; an aintent assessment and reasoninga engine that includes sentiment) Tj
+T*
+(and predictive) Tj
+T*
+(analytics; and a deep machine learning engine that can sense, act, and learn over time. The) Tj
+T*
+(project entailed) Tj
+T*
+(automating responses to user queries at the earliest. The Monster Bot using the power of Deep) Tj
+T*
+(Machine Learning,) Tj
+T*
+(NLP to handle such queries. User can see the how their queries can be answered quickly like) Tj
+T*
+(allL1 activities can be) Tj
+T*
+(eliminated.) Tj
+T*
+(Entity Extractor -> This involves text extraction and NLP for fetching out important) Tj
+T*
+(information from the text like) Tj
+T*
+(dates, names, places, contact numbers etc. This involves Regex, Bluemix NLU apias and machine) Tj
+T*
+(learning using) Tj
+T*
+(Tensor flow for further learning of new entities.) Tj
+T*
+(Classifier ->This involves the classifications of classes, training of dataset and predicting) Tj
+T*
+(the output using the SKLearn) Tj
+T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 9 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2112 >>
+stream
+BT
+/F1 8 Tf
+10 TL
+36 760 Td
+(classifier \(MNB, SVM, SGD as Classifier\) and SGD for the optimization to map the user queries) Tj
+T*
+(with the best) Tj
+T*
+(suited response and make the system efficient.) Tj
+T*
+(NER: A Deep Learning NER Model is trained to extract the entities from the text. Entities like) Tj
+T*
+(Roles, Skills,) Tj
+T*
+(Organizations can be extracted from raw text. RNN\(LSTM\) Bidirectional model is trained for) Tj
+T*
+(extracting such entities) Tj
+T*
+(using Keras TensorFlow framework.) Tj
+T*
+(company - Wipro Technologies) Tj
+T*
+(description - An IT professional with knowledge and experience of 2 years in Wipro) Tj
+T*
+(Technologies in Machine) Tj
+T*
+(Learning, Deep Learning, Data Science, Python, Software Development.) Tj
+T*
+(aa Skilled in managing end-to-end development and software products / projects from inception,) Tj
+T*
+(requirement) Tj
+T*
+(specs, planning, designing, implementation, configuration and documentation.) Tj
+T*
+(aa Knowledge on Python , Machine Learning, Deep Learning, data Science, Algorithms, Neural) Tj
+T*
+(Network,) Tj
+T*
+(NLP, GCP.) Tj
+T*
+(aa Knowledge on Python Libraries like Numpy, Pandas, Seaborn , Matplotlib, Cufflinks.) Tj
+T*
+(aa Knowledge on different algorithms in Machine learning like KNN, Decision Tree, Bias) Tj
+T*
+(variance Trade off,) Tj
+T*
+(Support vector Machine\(SVM\),Logistic Regression, Neural networks.) Tj
+T*
+(aa Have knowledge on unsupervised, Supervised and reinforcement data.) Tj
+T*
+(aa Programming experience in relational platforms like MySQL,Oracle.) Tj
+T*
+(aa Have knowledge on Some programming language like C++,Java.) Tj
+T*
+(aa Experience in cloud based environment like Google Cloud.) Tj
+T*
+(aa Working on different Operating System like Linux, Ubuntu, Windows.) Tj
+T*
+(aa Good interpersonal and communication skills.) Tj
+T*
+(aa Problem solving skills with the ability to think laterally, and to think with a medium term) Tj
+T*
+(and long term) Tj
+T*
+(perspective) Tj
+T*
+(aa Flexibility and an open attitude to change.) Tj
+T*
+(aa Ability to create, define and own frameworks with a strong emphasis on code reusability.) Tj
+T*
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000259 00000 n 
+0000003769 00000 n 
+0000003895 00000 n 
+0000007841 00000 n 
+0000007967 00000 n 
+0000010131 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+10201
+%%EOF

@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Upload, Loader2, ShieldCheck, ExternalLink } from 'lucide-react'
+import { Upload, Loader2, ShieldCheck, ExternalLink, Plus, Trash2, History } from 'lucide-react'
 import {
   IUsersThree, IDatabase, ITarget, IShieldCheck, IUser, IStack, ITrendUp, ILightbulb,
 } from '../components/icons'
 import {
   api, errMsg, JobListItem, TalentCorpus, TalentProfile, SupplyDemand,
   TeamItem, TeamGap, AliasItem,
+  TeamEvent,
 } from '../api'
 import { Card, Badge, Spinner, EmptyState, ErrorState, Meter } from '../components/ui'
 import { Kpi } from '../components/Kpi'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
-import { useReadOnly } from '../hooks/useReadOnly'
+import { useAuth } from '../auth'
 
 type Tab = 'team' | 'supply' | 'corpus' | 'alias'
 
@@ -108,9 +109,13 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
   const [gap, setGap] = useState<TeamGap | null>(null)
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [authorized, setAuthorized] = useState(false)
+  const [newTeamName, setNewTeamName] = useState('')
+  const [teamEvents, setTeamEvents] = useState<TeamEvent[]>([])
   const fileRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
-  const readOnly = useReadOnly()
+  const auth = useAuth()
+  const canManageTeam = auth.can('hr')
 
   useEffect(() => {
     api.teams().then(d => { setTeams(d.items); if (d.items[0]) setTeamId(d.items[0].id) })
@@ -122,16 +127,52 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
     setLoading(true)
     api.teamGap(teamId, jobId).then(setGap).catch(() => setGap(null)).finally(() => setLoading(false))
   }, [teamId, jobId])
+  useEffect(() => {
+    if (!teamId || !canManageTeam) { setTeamEvents([]); return }
+    api.teamHistory(teamId).then(d => setTeamEvents(d.items || [])).catch(() => setTeamEvents([]))
+  }, [teamId, canManageTeam])
+
+  const reloadTeam = async (selectedId = teamId) => {
+    const d = await api.teams()
+    setTeams(d.items)
+    if (selectedId) setTeamId(selectedId)
+    if (selectedId && jobId) {
+      api.teamGap(selectedId, jobId).then(setGap).catch(() => setGap(null))
+      api.teamHistory(selectedId).then(r => setTeamEvents(r.items || [])).catch(() => {})
+    }
+    onChanged()
+  }
+
+  const createTeam = async () => {
+    if (!newTeamName.trim() || !jobId) { toast('error', '请输入团队名称并选择目标岗位'); return }
+    try {
+      const team = await api.createTeam({ name: newTeamName.trim(), target_job_id: jobId })
+      setNewTeamName('')
+      await reloadTeam(team.id)
+      toast('success', `团队“${team.name}”已创建`)
+    } catch (error) { toast('error', errMsg(error, '团队创建失败')) }
+  }
+
+  const removeMember = async (memberId: number, displayName: string) => {
+    if (!teamId || !window.confirm(`确认将“${displayName}”移出团队？`)) return
+    try {
+      const result = await api.removeTeamMember(teamId, memberId)
+      await reloadTeam(teamId)
+      const before = Math.round(Number(result.before?.coverage_rate || 0) * 100)
+      const after = Math.round(Number(result.after?.coverage_rate || 0) * 100)
+      toast('success', `成员已移出，覆盖率 ${before}% → ${after}%`)
+    } catch (error) { toast('error', errMsg(error, '移出成员失败')) }
+  }
 
   const onFile = async (f: File) => {
     if (!teamId) return
+    if (f.name.toLowerCase().endsWith('.doc')) { toast('error', '旧版 .doc 不支持，请转为 DOCX'); return }
     setUploading(true)
     try {
-      const r = await api.uploadTeamResume(teamId, f, '新成员', '', '')
+      const r = await api.uploadTeamResume(teamId, f, '新成员', '', '', authorized, 90)
       toast('success', `已加入团队：${r.code}，提取 ${r.skill_count} 项技能（原文未留存）`)
-      const d = await api.teams(); setTeams(d.items)
-      if (jobId) api.teamGap(teamId, jobId).then(setGap).catch(() => {})
-      onChanged()
+      setAuthorized(false)
+      await reloadTeam(teamId)
     } catch (e: any) { toast('error', errMsg(e, '简历解析失败，请确认为 PDF/Word 格式')) }
     finally { setUploading(false); if (fileRef.current) fileRef.current.value = '' }
   }
@@ -150,11 +191,11 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
             <Select value={String(jobId ?? '')} onChange={v => setJobId(Number(v))}
               options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
           </div>
-          {!readOnly && (
+          {canManageTeam && (
             <div className="shrink-0 w-full sm:w-auto">
-              <input ref={fileRef} type="file" accept=".pdf,.docx,.doc,.txt" className="hidden"
+              <input ref={fileRef} type="file" accept=".pdf,.docx,.txt" className="hidden"
                 onChange={e => e.target.files?.[0] && onFile(e.target.files[0])} />
-              <button onClick={() => fileRef.current?.click()} disabled={uploading || !teamId}
+              <button onClick={() => fileRef.current?.click()} disabled={uploading || !teamId || !authorized}
                 className="btn-primary w-full sm:w-auto whitespace-nowrap">
                 {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 加入成员简历
@@ -162,11 +203,26 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
             </div>
           )}
         </div>
+        {canManageTeam && (
+          <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div className="flex gap-2">
+              <input aria-label="新团队名称" value={newTeamName} onChange={e => setNewTeamName(e.target.value)}
+                className="input" placeholder="新团队名称" maxLength={64} />
+              <button onClick={() => void createTeam()} className="btn-ghost whitespace-nowrap">
+                <Plus className="w-4 h-4" /> 创建团队
+              </button>
+            </div>
+            <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+              <input type="checkbox" checked={authorized} onChange={e => setAuthorized(e.target.checked)} />
+              已获得成员简历处理授权
+            </label>
+          </div>
+        )}
         <p className="mt-3 text-xs text-slate-500 flex items-start gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-600" />
-          {readOnly
-            ? '演示站为只读模式，成员简历入库已关闭；下方盘点结果基于已入库的脱敏技能要素计算。简历解析仅在内存中进行，姓名与联系方式从不入库。'
-            : '上传的简历只在内存中解析，服务端仅留存脱敏后的技能要素，姓名与联系方式不入库。'}
+          {canManageTeam
+            ? '组织私有人才数据可在公共图谱只读模式下追加。简历只在内存中解析，服务端仅留存脱敏技能要素。'
+            : '当前为公共演示视图；登录 HR 组织账号后可导入授权成员并查看加入前后的覆盖变化。'}
         </p>
       </Card>
 
@@ -254,6 +310,10 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
                             <div className="flex items-center gap-1.5 shrink-0">
                               <Badge tone="indigo">覆盖 {c.covers_required}</Badge>
                               {c.uniquely_covers > 0 && <Badge tone="amber">独有 {c.uniquely_covers}</Badge>}
+                              {canManageTeam && <button onClick={() => void removeMember(c.member_id, c.display_name)}
+                                className="icon-btn !w-7 !h-7 text-rose-500" title="移出团队" aria-label={`移出 ${c.display_name}`}>
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>}
                             </div>
                           </div>
                           <div className="mt-2 flex items-center gap-2">
@@ -272,6 +332,30 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
                   </div>}
             </Card>
           </div>
+          {canManageTeam && (
+            <Card className="p-5" delay={0.12}>
+              <h3 className="font-semibold text-slate-800 flex items-center gap-2 mb-3">
+                <History className="w-4 h-4 text-indigo-500" /> 团队变化历史
+              </h3>
+              {teamEvents.length === 0 ? <EmptyState text="暂无团队变更" /> : (
+                <div className="divide-y divide-slate-100">
+                  {teamEvents.slice(0, 10).map(event => {
+                    const labels: Record<string, string> = { created: '创建团队', member_added: '加入成员', member_uploaded: '上传成员', member_removed: '移出成员' }
+                    const before = event.before?.coverage_rate
+                    const after = event.after?.coverage_rate
+                    return <div key={event.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
+                      <div className="min-w-0"><b className="text-slate-700">{labels[event.action] || event.action}</b>
+                        <span className="ml-2 text-slate-500">{event.details?.display_name || event.details?.code || ''}</span></div>
+                      <div className="shrink-0 text-xs text-slate-400">
+                        {before != null && after != null && <span className="mr-3">覆盖率 {Math.round(before * 100)}% → {Math.round(after * 100)}%</span>}
+                        {new Date(event.created_at).toLocaleString('zh-CN')}
+                      </div>
+                    </div>
+                  })}
+                </div>
+              )}
+            </Card>
+          )}
         </>
       )}
     </div>

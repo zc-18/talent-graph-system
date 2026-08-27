@@ -23,6 +23,27 @@ def test_partial_match_identifies_gaps():
     assert res["overall_score"] < 70
 
 
+def test_role_contract_cluster_matches_once_via_any_child_skill():
+    caps = [{**_cap("编程与工程基础"),
+             "skills": [{"name": "Java"}, {"name": "Python"}]}]
+    one = matching.match(caps, ["Java"], use_semantic=False)
+    both = matching.match(caps, ["Java", "Python"], use_semantic=False)
+    assert one["summary"]["required_matched"] == 1
+    assert both["summary"]["required_matched"] == 1
+    assert len(both["matched_skills"]) == 1
+    assert one["matched_skills"][0]["name"] == "编程与工程基础"
+    assert one["matched_skills"][0]["matched_skill"] == "Java"
+    assert one["matched_skills"][0]["cluster_skills"] == ["Java", "Python"]
+
+
+def test_missing_cluster_exposes_child_skill_options():
+    caps = [{**_cap("数据与存储"),
+             "skills": [{"name": "MySQL"}, {"name": "Redis"}]}]
+    result = matching.match(caps, [], use_semantic=False)
+    assert result["missing_required"][0]["name"] == "数据与存储"
+    assert result["missing_required"][0]["skills"] == ["MySQL", "Redis"]
+
+
 def test_level_match_penalty():
     caps = [_cap("机器学习", level="expert")]
     low = matching.match(caps, ["机器学习"], {"机器学习": "familiar"}, use_semantic=False)

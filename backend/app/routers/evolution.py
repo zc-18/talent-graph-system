@@ -8,21 +8,28 @@ from ..schemas import EvolveRequest
 from ..services import extraction, hallucination, evolution, graph_service, leveling
 from ..guards import is_read_only, READ_ONLY_MESSAGE
 from .. import clients
+from ..auth import Actor, optional_actor
 
 router = APIRouter(prefix="/api/evolution", tags=["evolution"])
 
 
 @router.get("/{job_id}/changes")
-def change_history(job_id: int, db: Session = Depends(get_db)):
+def change_history(job_id: int, page: int = 1, size: int = 20,
+                   db: Session = Depends(get_db)):
     """岗位能力变更历史（新增/删除/修改）。"""
-    changes = db.query(models.CapabilityChange).filter(
-        models.CapabilityChange.job_id == job_id).order_by(
-        models.CapabilityChange.created_at.desc()).all()
+    page, size = max(1, page), min(100, max(1, size))
+    query = db.query(models.CapabilityChange).filter(
+        models.CapabilityChange.job_id == job_id)
+    total = query.count()
+    changes = query.order_by(models.CapabilityChange.created_at.desc(),
+                             models.CapabilityChange.id.desc()).offset(
+        (page - 1) * size).limit(size).all()
     return {"job_id": job_id, "items": [{
         "version": c.version, "change_type": c.change_type, "skill_name": c.skill_name,
         "importance": c.importance, "old_value": c.old_value, "new_value": c.new_value,
         "reason": c.reason, "data_source": c.data_source, "confidence": c.confidence,
-        "created_at": c.created_at.isoformat() if c.created_at else None} for c in changes]}
+        "created_at": c.created_at.isoformat() if c.created_at else None} for c in changes],
+            "total": total, "page": page, "size": size}
 
 
 @router.get("/{job_id}/levels")
@@ -62,11 +69,14 @@ def level_diff(job_id: int, frm: str, to: str, db: Session = Depends(get_db)):
 
 
 @router.post("/update")
-def update_job(payload: EvolveRequest, db: Session = Depends(get_db)):
+def update_job(payload: EvolveRequest, actor: Actor = Depends(optional_actor),
+               db: Session = Depends(get_db)):
     """用新 JD 驱动既有岗位能力演化：识别变化→标注增删改→落库。"""
     job = db.query(models.Job).get(payload.job_id)
     if not job:
         raise HTTPException(404, "岗位不存在")
+    if not is_read_only() and actor.role != "admin":
+        raise HTTPException(403, "只有管理员可发布公共岗位演化")
 
     # 旧能力项快照（技能名一次批量取，历史实现逐条 Skill.get 是 N+1）
     old_js = db.query(models.JobSkill).filter(models.JobSkill.job_id == job.id,
@@ -83,8 +93,10 @@ def update_job(payload: EvolveRequest, db: Session = Depends(get_db)):
 
     # 解析新 JD → 聚合
     agg_input = []
+    parsed_new_jds = []
     for i, jd_text in enumerate(payload.new_jds):
         parsed = extraction.parse_jd(jd_text)
+        parsed_new_jds.append(parsed)
         agg_input.append({"required_skills": parsed.get("required_skills", []),
                           "bonus_skills": parsed.get("bonus_skills", []),
                           # 细粒度技能点也参与演化聚合：漏了它，演化只会更新粗粒度大概念，
@@ -118,17 +130,58 @@ def update_job(payload: EvolveRequest, db: Session = Depends(get_db)):
 
     agg = hallucination.aggregate_capabilities(agg_input, web_evidence_skills=web_skills)
     changes = evolution.compute_changes(old_caps, agg["capabilities"])
-    if is_read_only():
-        # 只读模式：推演照跑、结果照返回，只是不落库。演示效果与写入版一致，
-        # 但演示站的图谱不会被访客点击改动（两次线上事故均由此而来）。
-        return {"ok": True, "job_id": job.id, "dry_run": True,
-                "evolution": {"version": job.version, "changes_applied": 0,
-                              "added": sum(1 for c in changes if c["change_type"] == "add"),
-                              "deleted": sum(1 for c in changes if c["change_type"] == "delete"),
-                              "modified": sum(1 for c in changes if c["change_type"] == "modify")},
-                "changes": changes, "stats": agg["stats"],
-                "job": graph_service.job_to_dict(db, job),
-                "notice": READ_ONLY_MESSAGE}
-    result = evolution.apply_evolution(db, job, agg["capabilities"], changes)
-    return {"ok": True, "job_id": job.id, "evolution": result, "changes": changes,
-            "stats": agg["stats"], "job": graph_service.job_to_dict(db, job)}
+    current = evolution.current_capabilities(db, job)
+    proposal_by_name = {item["name"]: item for item in current}
+    aggregated_by_name = {
+        item["name"]: item for item in agg["capabilities"]
+        if item.get("status", "active") == "active"
+    }
+    for change in changes:
+        name = change["skill_name"]
+        new_value = change.get("new_value") or {}
+        if change["change_type"] == "delete" or new_value.get("status") == "candidate":
+            proposal_by_name.pop(name, None)
+        elif name in aggregated_by_name:
+            proposal_by_name[name] = aggregated_by_name[name]
+    level_proposal, level_changes = evolution.apply_review_level_overrides(
+        list(proposal_by_name.values()), parsed_new_jds)
+    proposal_by_name = {item["name"]: item for item in level_proposal}
+    for level_change in level_changes:
+        existing = next((item for item in changes
+                         if item["skill_name"] == level_change["skill_name"]), None)
+        if not existing:
+            changes.append(level_change)
+            continue
+        existing["old_value"] = {
+            **(existing.get("old_value") or {}),
+            **level_change["old_value"],
+        }
+        existing["new_value"] = {
+            **(existing.get("new_value") or {}),
+            **level_change["new_value"],
+        }
+        existing["reason"] = f'{existing.get("reason") or "能力字段变化"}；{level_change["reason"]}'
+        existing["data_source"] = {
+            **(existing.get("data_source") or {}),
+            **level_change["data_source"],
+        }
+    proposed_snapshot = {
+        "job_id": job.id,
+        "from_version": job.version or 1,
+        "version": (job.version or 1) + 1,
+        "capabilities": [proposal_by_name[name] for name in sorted(proposal_by_name)],
+    }
+    # Compatibility endpoint is permanently preview-only. Public publication must pass
+    # through EvolutionRun proposal, append-only review, and reconciled transaction.
+    return {"ok": True, "job_id": job.id, "dry_run": True,
+            "proposal_required": True,
+            "admin_evolution_runs_endpoint": "/api/admin/evolution-runs",
+            "evolution": {"version": job.version, "changes_applied": 0,
+                          "added": sum(1 for c in changes if c["change_type"] == "add"),
+                          "deleted": sum(1 for c in changes if c["change_type"] == "delete"),
+                          "modified": sum(1 for c in changes if c["change_type"] == "modify")},
+            "changes": changes, "stats": agg["stats"],
+            "proposed_snapshot": proposed_snapshot,
+            "job": graph_service.job_to_dict(db, job),
+            "notice": (READ_ONLY_MESSAGE if is_read_only()
+                       else "预览不会修改公共图谱；请在管理员演化任务中提交、审核并发布")}

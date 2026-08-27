@@ -23,6 +23,9 @@ class Job(Base):
     name = Column(String(128), nullable=False, index=True)          # 岗位名称
     slug = Column(String(160), unique=True, index=True)             # 唯一标识
     category = Column(String(64), index=True)                       # 技术栈：人工智能/大数据/智能系统/物联网...
+    track = Column(String(32), nullable=True, index=True)           # software/hardware/algorithm/data/ops/product
+    industry = Column(String(32), nullable=True, index=True)        # internet/automotive/medical_device/...
+    recruitment_type = Column(String(16), default="mixed", index=True)  # campus/social/mixed
     level = Column(String(32), default="middle")                    # 级别：junior/middle/senior/expert
     is_new = Column(Boolean, default=False, index=True)             # 是否为新发现岗位
     status = Column(String(16), default="published")               # draft/published
@@ -140,6 +143,10 @@ class RawJD(Base):
     inferred_level = Column(String(16), index=True)                # 推断级别：junior/middle/senior
     cluster_hint = Column(String(64), index=True)                  # 采集检索词对应的岗位簇（聚类辅助）
     source_authority = Column(Float, default=0.6)                  # 来源权威度：官网/政府1.0 数据集0.7 网络0.6
+    track = Column(String(32), nullable=True, index=True)
+    industry = Column(String(32), nullable=True, index=True)
+    recruitment_type = Column(String(16), nullable=True, index=True)
+    employer_id = Column(Integer, ForeignKey("employer.id"), nullable=True, index=True)
 
     Index("ix_rawjd_title_company", "job_title", "company")
 
@@ -216,10 +223,15 @@ class AuthorityEvidence(Base):
 # ------------------------- 岗位分级能力画像（初/中/高） -------------------------
 class JobLevelSkill(Base):
     __tablename__ = "job_level_skill"
-    __table_args__ = (UniqueConstraint("job_id", "level", "skill_id", name="uq_job_level_skill"),)
+    __table_args__ = (UniqueConstraint(
+        "job_id", "level", "recruitment_type", "track", "industry", "skill_id",
+        name="uq_job_level_skill_slice"),)
     id = Column(Integer, primary_key=True, autoincrement=True)
     job_id = Column(Integer, ForeignKey("job.id"), index=True)
     level = Column(String(16), index=True)                         # junior/middle/senior
+    recruitment_type = Column(String(16), nullable=False, default="unspecified", index=True)
+    track = Column(String(32), nullable=False, default="unspecified", index=True)
+    industry = Column(String(32), nullable=False, default="general", index=True)
     skill_id = Column(Integer, ForeignKey("skill.id"), index=True)
     importance = Column(String(16), default="required")
     weight = Column(Float, default=0.5)
@@ -329,6 +341,9 @@ class Team(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(64), index=True)
     description = Column(Text)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    created_by = Column(Integer, ForeignKey("app_user.id"), nullable=True, index=True)
+    target_job_id = Column(Integer, ForeignKey("job.id"), nullable=True, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     members = relationship("TeamMember", back_populates="team", cascade="all, delete-orphan")
@@ -339,13 +354,28 @@ class TeamMember(Base):
     __table_args__ = (UniqueConstraint("team_id", "talent_id", name="uq_team_member"),)
     id = Column(Integer, primary_key=True, autoincrement=True)
     team_id = Column(Integer, ForeignKey("team.id"), index=True)
-    talent_id = Column(Integer, ForeignKey("talent_profile.id"), index=True)
+    talent_id = Column(Integer, ForeignKey("talent_profile.id"), nullable=True, index=True)
+    resume_profile_id = Column(Integer, ForeignKey("resume_profile.id"), nullable=True, index=True)
     display_name = Column(String(64))                              # 化名（如"成员A"），不存真名
     role_label = Column(String(64))                                # 团队内角色标签
     created_at = Column(DateTime, default=datetime.utcnow)
 
     team = relationship("Team", back_populates="members")
     talent = relationship("TalentProfile")
+
+
+class TeamEvent(Base):
+    __tablename__ = "team_event"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    team_id = Column(Integer, ForeignKey("team.id"), nullable=False, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=False, index=True)
+    actor_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    action = Column(String(32), nullable=False, index=True)
+    member_id = Column(Integer, nullable=True, index=True)
+    details = Column(JSON, nullable=True)
+    before_snapshot = Column(JSON, nullable=True)
+    after_snapshot = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
 
 
 # ------------------------- 从简历学到的技能表述 -------------------------
@@ -364,3 +394,335 @@ class SkillAlias(Base):
     reject_reason = Column(String(128))                            # 拒绝原因（三道护栏哪一道拦的）
     confidence = Column(Float, default=0.0)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ======================= 第四轮整改：身份、版本和业务闭环 =======================
+
+
+class AppUser(Base):
+    __tablename__ = "app_user"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(64), nullable=False, unique=True, index=True)
+    password_hash = Column(String(512), nullable=False)
+    role = Column(String(16), nullable=False, default="user", index=True)
+    status = Column(String(16), nullable=False, default="active", index=True)
+    last_login_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class Organization(Base):
+    __tablename__ = "organization"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(128), nullable=False, unique=True, index=True)
+    status = Column(String(16), nullable=False, default="active", index=True)
+    created_by = Column(Integer, ForeignKey("app_user.id"), nullable=True, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class OrganizationMember(Base):
+    __tablename__ = "organization_member"
+    __table_args__ = (UniqueConstraint("organization_id", "user_id", name="uq_org_member"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    role = Column(String(16), nullable=False, default="hr")
+    status = Column(String(16), nullable=False, default="active", index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class UserSession(Base):
+    __tablename__ = "user_session"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    token_hash = Column(String(64), nullable=False, unique=True, index=True)
+    expires_at = Column(DateTime, nullable=False, index=True)
+    revoked_at = Column(DateTime, nullable=True, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class AuditLog(Base):
+    __tablename__ = "audit_log"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    actor_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    action = Column(String(64), nullable=False, index=True)
+    target_type = Column(String(64), nullable=False, index=True)
+    target_id = Column(String(64), nullable=True, index=True)
+    result = Column(String(16), nullable=False, default="success", index=True)
+    summary = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+
+class UsageEvent(Base):
+    __tablename__ = "usage_event"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("app_user.id"), nullable=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    feature = Column(String(64), nullable=False, index=True)
+    duration_ms = Column(Integer, nullable=False, default=0)
+    success = Column(Boolean, nullable=False, default=True, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+
+class Employer(Base):
+    __tablename__ = "employer"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(128), nullable=False, index=True)
+    normalized_name = Column(String(128), nullable=False, unique=True, index=True)
+    parent_id = Column(Integer, ForeignKey("employer.id"), nullable=True, index=True)
+    status = Column(String(16), nullable=False, default="active", index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class EmployerAlias(Base):
+    __tablename__ = "employer_alias"
+    __table_args__ = (UniqueConstraint("normalized_alias", name="uq_employer_alias_normalized"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    employer_id = Column(Integer, ForeignKey("employer.id"), nullable=False, index=True)
+    alias = Column(String(128), nullable=False, index=True)
+    normalized_alias = Column(String(128), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class JobVersion(Base):
+    __tablename__ = "job_version"
+    __table_args__ = (UniqueConstraint("job_id", "version", name="uq_job_version"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    job_id = Column(Integer, ForeignKey("job.id"), nullable=False, index=True)
+    version = Column(Integer, nullable=False)
+    status = Column(String(16), nullable=False, default="published", index=True)
+    effective_at = Column(DateTime, nullable=True)
+    evidence_window = Column(JSON, nullable=True)
+    summary = Column(Text, nullable=True)
+    responsibilities = Column(JSON, nullable=True)
+    typical_scenarios = Column(JSON, nullable=True)
+    contract_snapshot = Column(JSON, nullable=True)
+    created_by = Column(Integer, ForeignKey("app_user.id"), nullable=True, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class JobVersionSkill(Base):
+    __tablename__ = "job_version_skill"
+    __table_args__ = (UniqueConstraint("job_version_id", "skill_id", name="uq_job_version_skill"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    job_version_id = Column(Integer, ForeignKey("job_version.id"), nullable=False, index=True)
+    skill_id = Column(Integer, ForeignKey("skill.id"), nullable=False, index=True)
+    capability_cluster = Column(String(128), nullable=True, index=True)
+    importance = Column(String(16), nullable=False, default="required")
+    status = Column(String(16), nullable=False, default="active")
+    weight = Column(Float, nullable=False, default=0.5)
+    confidence = Column(Float, nullable=False, default=0.0)
+    level_required = Column(String(32), nullable=False, default="familiar")
+    factors = Column(JSON, nullable=True)
+    evidence_refs = Column(JSON, nullable=True)
+
+
+class EvolutionRun(Base):
+    __tablename__ = "evolution_run"
+    __table_args__ = (UniqueConstraint("organization_id", "idempotency_key", name="uq_evolution_idem"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    job_id = Column(Integer, ForeignKey("job.id"), nullable=False, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    created_by = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    from_version = Column(Integer, nullable=False)
+    proposed_version = Column(Integer, nullable=False)
+    status = Column(String(24), nullable=False, default="pending", index=True)
+    idempotency_key = Column(String(128), nullable=True)
+    input_snapshot = Column(JSON, nullable=True)
+    proposed_snapshot = Column(JSON, nullable=True)
+    diff = Column(JSON, nullable=True)
+    stats = Column(JSON, nullable=True)
+    error = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class EvolutionReview(Base):
+    __tablename__ = "evolution_review"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    evolution_run_id = Column(Integer, ForeignKey("evolution_run.id"), nullable=False, index=True)
+    action = Column(String(16), nullable=False, index=True)
+    comment = Column(Text, nullable=True)
+    reviewer_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class DiscoveryRun(Base):
+    __tablename__ = "discovery_run"
+    __table_args__ = (UniqueConstraint("owner_user_id", "idempotency_key", name="uq_discovery_idem"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    owner_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    query = Column(String(256), nullable=False)
+    conditions = Column(JSON, nullable=True)
+    evidence_snapshot = Column(JSON, nullable=True)
+    signal_snapshot = Column(JSON, nullable=True)
+    conclusion = Column(String(32), nullable=False, index=True)
+    matched_job_id = Column(Integer, ForeignKey("job.id"), nullable=True, index=True)
+    idempotency_key = Column(String(128), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class JobCandidate(Base):
+    __tablename__ = "job_candidate"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    discovery_run_id = Column(Integer, ForeignKey("discovery_run.id"), nullable=True, index=True)
+    owner_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    status = Column(String(24), nullable=False, default="draft", index=True)
+    current_revision = Column(Integer, nullable=False, default=1)
+    published_job_id = Column(Integer, ForeignKey("job.id"), nullable=True, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class JobCandidateRevision(Base):
+    __tablename__ = "job_candidate_revision"
+    __table_args__ = (UniqueConstraint("candidate_id", "revision", name="uq_candidate_revision"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    candidate_id = Column(Integer, ForeignKey("job_candidate.id"), nullable=False, index=True)
+    revision = Column(Integer, nullable=False)
+    definition = Column(JSON, nullable=False)
+    change_note = Column(String(512), nullable=True)
+    created_by = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class CandidateReview(Base):
+    __tablename__ = "candidate_review"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    candidate_id = Column(Integer, ForeignKey("job_candidate.id"), nullable=False, index=True)
+    revision = Column(Integer, nullable=False)
+    action = Column(String(16), nullable=False, index=True)
+    comment = Column(Text, nullable=True)
+    reviewer_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class ResumeProfile(Base):
+    __tablename__ = "resume_profile"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    owner_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    code = Column(String(32), nullable=False, index=True)
+    source_type = Column(String(16), nullable=False, default="upload")
+    skills = Column(JSON, nullable=False)
+    skill_levels = Column(JSON, nullable=True)
+    years_experience = Column(Float, nullable=False, default=0.0)
+    education = Column(String(64), nullable=True)
+    authorized = Column(Boolean, nullable=False, default=False)
+    retention_expires_at = Column(DateTime, nullable=True, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class MatchRun(Base):
+    __tablename__ = "match_run"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    owner_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    resume_profile_id = Column(Integer, ForeignKey("resume_profile.id"), nullable=True, index=True)
+    job_id = Column(Integer, ForeignKey("job.id"), nullable=True, index=True)
+    job_version_id = Column(Integer, ForeignKey("job_version.id"), nullable=True, index=True)
+    job_version = Column(Integer, nullable=True)
+    status = Column(String(16), nullable=False, default="completed", index=True)
+    contract_snapshot = Column(JSON, nullable=True)
+    result_snapshot = Column(JSON, nullable=False)
+    learning_path = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+
+class RecruitmentBatch(Base):
+    __tablename__ = "recruitment_batch"
+    __table_args__ = (UniqueConstraint("organization_id", "idempotency_key", name="uq_recruitment_idem"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=False, index=True)
+    created_by = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    name = Column(String(128), nullable=False)
+    target_job_id = Column(Integer, ForeignKey("job.id"), nullable=False, index=True)
+    target_job_version_id = Column(Integer, ForeignKey("job_version.id"), nullable=True, index=True)
+    target_job_version = Column(Integer, nullable=False)
+    contract_snapshot = Column(JSON, nullable=True)
+    status = Column(String(24), nullable=False, default="created", index=True)
+    total_count = Column(Integer, nullable=False, default=0)
+    processed_count = Column(Integer, nullable=False, default=0)
+    succeeded_count = Column(Integer, nullable=False, default=0)
+    failed_count = Column(Integer, nullable=False, default=0)
+    idempotency_key = Column(String(128), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class BatchCandidate(Base):
+    __tablename__ = "batch_candidate"
+    __table_args__ = (UniqueConstraint("batch_id", "file_hash", name="uq_batch_candidate_file"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    batch_id = Column(Integer, ForeignKey("recruitment_batch.id"), nullable=False, index=True)
+    resume_profile_id = Column(Integer, ForeignKey("resume_profile.id"), nullable=True, index=True)
+    file_hash = Column(String(64), nullable=False)
+    display_code = Column(String(32), nullable=False)
+    parse_status = Column(String(24), nullable=False, default="pending", index=True)
+    error_code = Column(String(32), nullable=True)
+    error_detail = Column(String(256), nullable=True)
+    overall_score = Column(Float, nullable=True, index=True)
+    dimension_scores = Column(JSON, nullable=True)
+    result_snapshot = Column(JSON, nullable=True)
+    rank = Column(Integer, nullable=True)
+    note = Column(String(512), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class CandidateSelection(Base):
+    __tablename__ = "candidate_selection"
+    __table_args__ = (UniqueConstraint("batch_candidate_id", "team_id", name="uq_candidate_selection"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    batch_candidate_id = Column(Integer, ForeignKey("batch_candidate.id"), nullable=False, index=True)
+    team_id = Column(Integer, ForeignKey("team.id"), nullable=False, index=True)
+    selected_by = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    before_coverage = Column(Float, nullable=True)
+    after_coverage = Column(Float, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class FeedbackTicket(Base):
+    __tablename__ = "feedback_ticket"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    owner_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    organization_id = Column(Integer, ForeignKey("organization.id"), nullable=True, index=True)
+    target_type = Column(String(32), nullable=False, index=True)
+    target_id = Column(String(64), nullable=True, index=True)
+    status = Column(String(24), nullable=False, default="submitted", index=True)
+    current_revision = Column(Integer, nullable=False, default=1)
+    applied_record_type = Column(String(64), nullable=True)
+    applied_record_id = Column(String(64), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class FeedbackRevision(Base):
+    __tablename__ = "feedback_revision"
+    __table_args__ = (UniqueConstraint("ticket_id", "revision", name="uq_feedback_revision"),)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ticket_id = Column(Integer, ForeignKey("feedback_ticket.id"), nullable=False, index=True)
+    revision = Column(Integer, nullable=False)
+    category = Column(String(32), nullable=False)
+    content = Column(Text, nullable=False)
+    evidence = Column(JSON, nullable=True)
+    created_by = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class FeedbackEvent(Base):
+    """Append-only feedback workflow event, including reviewer opinions."""
+    __tablename__ = "feedback_event"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ticket_id = Column(Integer, ForeignKey("feedback_ticket.id"), nullable=False, index=True)
+    event_type = Column(String(24), nullable=False, index=True)
+    from_status = Column(String(24), nullable=True)
+    to_status = Column(String(24), nullable=True)
+    revision = Column(Integer, nullable=True)
+    comment = Column(Text, nullable=True)
+    applied_record_type = Column(String(64), nullable=True)
+    applied_record_id = Column(String(64), nullable=True)
+    actor_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)

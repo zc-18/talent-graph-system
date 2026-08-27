@@ -48,9 +48,11 @@ def main():
                       f"或与岗位能力集取交集后不足 {leveling.MIN_BUCKETS} 档有能力项）")
                 continue
             built += 1
-            desc = ", ".join(f"{leveling.LEVEL_LABELS[lv]}({p['jd_count']}条JD/"
-                             f"{len(p['capabilities'])}项能力)"
-                             for lv, p in sorted(profiles.items()))
+            desc = ", ".join(
+                f"{leveling.LEVEL_LABELS[p['level']]}/{p['recruitment_type']}/"
+                f"{p['track']}/{p['industry']}({p['jd_count']}条JD/"
+                f"{len(p['capabilities'])}项能力)"
+                for _, p in sorted(profiles.items()))
             print(f"  + {job.name}: {desc}")
         print(f"[build_levels] 完成：构建 {built} 个岗位分级画像，跳过 {skipped} 个")
     finally:

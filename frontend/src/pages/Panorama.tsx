@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Filter, Maximize2 } from 'lucide-react'
+import { Filter, GitBranch, Maximize2, Target } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
 import { ITreeStructure } from '../components/icons'
 import { api, GraphData, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, Badge, ErrorState } from '../components/ui'
@@ -14,10 +15,13 @@ export default function Panorama() {
   const [cat, setCat] = useState('全部')
   const [level, setLevel] = useState('全部')
   const [minConf, setMinConf] = useState(0)
+  const [mode, setMode] = useState<'job' | 'capability' | 'skill'>('skill')
+  const [recruitmentType, setRecruitmentType] = useState('全部')
   const [sel, setSel] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const chartRef = useRef<any>(null)
+  const location = useLocation() as any
   const parallaxRef = useMouseParallax('.graph-bg-layer', { strength: 18 })
 
   useEffect(() => {
@@ -25,10 +29,14 @@ export default function Panorama() {
   }, [])
   const load = () => {
     setLoading(true); setError(false)
-    api.panorama(cat, level, minConf).then(d => { setData(d); setLoading(false) })
+    api.panorama(cat, level, minConf, mode, undefined, recruitmentType === '全部' ? undefined : recruitmentType).then(d => {
+      setData(d)
+      if (location.state?.jobId) setSel(d.nodes.find((node: any) => String(node.id) === `job-${location.state.jobId}`) || null)
+      setLoading(false)
+    })
       .catch(() => { setError(true); setLoading(false) })
   }
-  useEffect(load, [cat, level, minConf])
+  useEffect(load, [cat, level, minConf, mode, recruitmentType])
 
   const option = useMemo(() => {
     if (!data) return {}
@@ -65,11 +73,12 @@ export default function Panorama() {
     })
     const nodes = data.nodes.map(n => {
       const isJob = n.type === 'job'
+      const isCapability = n.type === 'capability' || n.type === 'cluster'
       const [light, dark] = CAT_GRAD[n.category] || CAT_GRAD['其他']
       return {
         id: n.id, name: n.name,
-        symbolSize: isJob ? Math.max(38, Math.min(58, n.value + 10)) : Math.max(13, Math.min(26, n.value - 1)),
-        category: isJob ? 0 : 1,
+        symbolSize: isJob ? Math.max(38, Math.min(58, n.value + 10)) : isCapability ? Math.max(25, Math.min(40, n.value + 4)) : Math.max(13, Math.min(26, n.value - 1)),
+        category: isJob ? 0 : isCapability ? 1 : 2,
         itemStyle: isJob
           ? {
               // 岗位：扁平硬币 + 通透白描边 + 同色柔光晕
@@ -78,7 +87,10 @@ export default function Panorama() {
               borderWidth: n.is_new ? 2.5 : 2,
               shadowBlur: 26, shadowColor: hex2rgba(dark, 0.33),
             }
-          : {
+          : isCapability ? {
+              color: linearV('#FFFFFF', mixWhite(dark, 0.5)), borderColor: dark, borderWidth: 1.5,
+              shadowBlur: 12, shadowColor: hex2rgba(dark, 0.18),
+            } : {
               // 技能：极简扁平半透明圆点，airy 不喧宾夺主
               color: mixWhite(light, 0.40),
               opacity: 0.92,
@@ -86,7 +98,7 @@ export default function Panorama() {
               shadowBlur: 9, shadowColor: hex2rgba(light, 0.4),
             },
         label: {
-          show: isJob || !isNarrow,
+          show: isJob || isCapability || !isNarrow,
           position: isJob ? 'bottom' : 'right',
           distance: isJob ? 8 : 6,
           color: isJob ? '#0F172A' : '#7C8BA3',
@@ -133,7 +145,7 @@ export default function Panorama() {
         force: isNarrow
           ? { repulsion: [160, 420], edgeLength: [70, 150], gravity: 0.16, friction: 0.18 }
           : { repulsion: [320, 1000], edgeLength: [140, 300], gravity: 0.092, friction: 0.16 },
-        categories: [{ name: '岗位' }, { name: '技能点' }],
+        categories: [{ name: '岗位' }, { name: '能力簇' }, { name: '技能点' }],
         // hideOverlap 单用不够：力导向布局下岗位标签仍会两两压住（岗位标签带白底
         // 色块，压在一起时下层的名字直接读不出来）。moveOverlap 先把冲突的标签沿 Y
         // 轴错开，实在错不开的再交给 hideOverlap 隐藏——优先保住"能读"，其次才是"都显示"。
@@ -165,11 +177,19 @@ export default function Panorama() {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex rounded-xl border border-slate-200 bg-white/80 p-1" aria-label="图谱视图层级">
+            {([['job', '岗位'], ['capability', '能力簇'], ['skill', '技能点']] as const).map(([value, label]) => (
+              <button key={value} onClick={() => setMode(value)} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${mode === value ? 'bg-slate-900 text-white' : 'text-slate-500 hover:bg-slate-100'}`}>{label}</button>
+            ))}
+          </div>
           <Select value={cat} onChange={setCat} options={cats} className="w-40"
             icon={<Filter className="w-4 h-4" />} align="right" />
           <Select value={level} onChange={setLevel}
             options={levels.map(l => ({ value: l, label: l === '全部' ? '全部级别' : l }))}
             className="w-32" align="right" />
+          <Select value={recruitmentType} onChange={setRecruitmentType} className="w-28" align="right" label="招聘类型" options={[
+            { value: '全部', label: '校招/社招' }, { value: 'campus', label: '校招' }, { value: 'social', label: '社招' }, { value: 'mixed', label: '混合' },
+          ]} />
           <div className="rounded-xl bg-white/80 border border-slate-200 px-3.5 py-2.5 flex items-center gap-2 text-sm text-slate-600">
             置信≥{Math.round(minConf * 100)}%
             <input type="range" min={0} max={0.9} step={0.05} value={minConf}
@@ -199,6 +219,7 @@ export default function Panorama() {
             <div className="absolute top-4 left-4 z-20 flex gap-2 text-xs">
               <Badge tone="indigo">岗位 {data.stats.jobs}</Badge>
               <Badge tone="cyan">技能点 {data.stats.skills}</Badge>
+              {data.stats.capabilities != null && <Badge tone="amber">能力簇 {data.stats.capabilities}</Badge>}
               <Badge tone="slate">关系 {data.stats.relations}</Badge>
             </div>
           )}
@@ -232,6 +253,11 @@ function NodePanel({ node }: { node: any }) {
     }
   }, [node.id])
 
+  if (node.type === 'capability' || node.type === 'cluster') {
+    return (
+      <div className="space-y-3"><Badge tone="amber">能力簇</Badge><div className="text-xl font-extrabold text-slate-900">{node.name}</div><div className="text-xs text-slate-500">所属领域：{node.category || '通用'}</div>{node.skills?.length > 0 && <><div className="label mt-3">细分技能点</div><div className="flex flex-wrap gap-1.5">{node.skills.map((skill: any) => <Badge key={typeof skill === 'string' ? skill : skill.name} tone="slate">{typeof skill === 'string' ? skill : skill.name}</Badge>)}</div></>}</div>
+    )
+  }
   if (node.type === 'skill') {
     return (
       <div className="space-y-3">
@@ -267,7 +293,7 @@ function NodePanel({ node }: { node: any }) {
               <Badge key={s.skill_id} tone="indigo">{s.name}</Badge>
             ))}
           </div>
-          <a href={`/jobs/${detail.id}`} className="btn-primary w-full mt-3">查看完整画像</a>
+          <div className="grid grid-cols-1 gap-2 mt-3"><Link to={`/jobs/${detail.id}`} className="btn-primary w-full">查看完整画像</Link><Link to="/match" state={{ jobId: detail.id }} className="btn-ghost w-full"><Target className="w-4 h-4" /> 人岗匹配</Link><Link to="/evolution" state={{ jobId: detail.id }} className="btn-ghost w-full"><GitBranch className="w-4 h-4" /> 查看演化</Link></div>
         </>
       )}
     </div>

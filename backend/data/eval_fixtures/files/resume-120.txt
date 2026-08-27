@@ -1,0 +1,49 @@
+SKILL SET â Talend Big Data â Informatica Power center â Microsoft SQL Server â SQL Platform 6.2.1 Management Studio Workbench â AWS Services â Talend Administration Console â Microsoft Visual â Redshift (TAC) Studio â Athena â Data Warehouse Concept - Star â SQL â S3 Schema, Facts, Dimensions â Data Modeling - â Data Integration Microsoft Access Education Details 
+January 2012 to January 2016 BE  Mumbai, Maharashtra University of Mumbai
+January 2012 CBSE Technology Kochi, Kerala St. Francis
+Talend ETL Developer 
+
+Talend ETL Developer - Tata Consultancy Services
+Skill Details 
+DATA WAREHOUSE- Exprience - 23 months
+DATABASE- Exprience - 20 months
+INTEGRATION- Exprience - 20 months
+INTEGRATOR- Exprience - 20 months
+MS SQL SERVER- Exprience - 20 monthsCompany Details 
+company - Tata Consultancy Services
+description - Prepared ETL mapping Documents for every mapping and Data Migration document for smooth transfer of project from development to testing environment and then to production environment. Performed Unit testing and System testing to
+validate data loads in the target. Troubleshoot long running jobs and fixed the issues.
+â¢ Expertise in creating mappings in TALEND using Big Data supporting components such as tJDBCConfiguration, tJDBCInput,
+tHDFSConfiguration, tS3configuration, tCacheOut, tCacheIn, tSqlRow and standard components like tFileInputDelimited,
+tFileOutputDelimited, tMap, tJoin, tReplicate, tParallelize, tConvertType, tAggregate, tSortRow, tFlowMeter, tLogCatcher,
+tRowGenerator, tJava, tJavarow, tAggregateRow, tFilter etc.
+â¢ Used ETL methodologies and best practices to create Talend ETL jobs. Followed and enhanced programming and naming
+standards. Developed jobs, components and Joblets in Talend. Used tRunJob component to run child job from a parent job and to pass parameters from parent to child job.
+â¢ Created and deployed physical objects including custom tables, custom views, stored procedures, and indexes to SQL server for Staging and Data-Warehouse environment. Involved in writing SQL Queries and used Joins to access data from MySQL.
+â¢ Created and managed Source to Target mapping documents for all Facts and Dimension tables. Broad design, development and testing experience with Talend Integration Suite and knowledge in Performance Tuning of mappings.
+â¢ Extensively used tMap component which does lookup & Joiner Functions. Experienced in writing expressions within tmap as per the business need. Handled insert and update Strategy using tSQLRow.
+â¢ Created Implicit, local and global Context variables in the job to run Talend jobs against different environments.
+â¢ Worked on Talend Administration Console (TAC) for scheduling jobs and adding users. Experienced in Building a Talend job outside of a Talend studio as well as on TAC server.
+â¢ Developed mappings to load Fact and Dimension tables, SCD Type 1 and SCD Type 2 dimensions and Incremental loading and unit tested the mappings.
+â¢ Developed Framework Integrated Job which schedules multiple jobs at a time and updates the last successful run time,
+success status, sending mail for failed jobs, maintaining the counts in SQL Database. Used tParalleize component and multi
+thread execution option to run subjobs in parallel which increases the performance of a job.
+â¢ Created Talend jobs to copy the files from one server to another and utilized Talend FTP components. Implemented FTP
+operations using Talend Studio to transfer files in between network folders as well as to FTP server using components like tFileList, tS3Put, tFTPut, tFileExist, tFTPConnection etc.
+â¢ Extracted data from flat files/ databases applied business logic to load them in the staging database as well as flat files.
+â¢ Successfully Loaded Data into different targets from various source systems like SQL Database, DB2, Flatfiles, XML files etc into the Staging table and then to the target database.
+company - Tata Consultancy Services
+description - Experience in development and design of ETL (Extract, Transform and Loading data) methodology for supporting data
+transformations and processing, in a corporate wide ETL Solution using TALEND Big Data Platform.
+â¢   Excellent working experience in Agile methodologies.
+â¢   Proficiency in gathering and understanding the client requirements and translate business needs into technical
+requirements.
+â¢   Design and develop end-to-end ETL process from various source systems to Staging area, from staging to Data Warehouse,
+soliciting and documenting business, functional and data requirements, context/variable diagrams, use cases and ETL
+related diagrams.
+â¢   Excellent oral/written communication with ability to effectively work with onsite and remote teams.
+â¢   A good team player with excellent problem solving ability and time management skills having profound insight to determine
+priorities, schedule work and meet critical deadlines.
+company - Tata Consultancy Services
+description - Prepared ETL mapping Documents for every mapping and Data Migration document for smooth transfer of project from development to testing environment and then to production environment. Performed Unit testing and System testing to
+validate data loads in the target. Troubleshoot long running jobs and fixed the issues.

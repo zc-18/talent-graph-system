@@ -8,6 +8,7 @@ def test_normalize_synonyms():
     assert taxonomy.normalize_skill("k8s") == "Kubernetes"
     assert taxonomy.normalize_skill("机器学习算法") == "机器学习"
     assert taxonomy.normalize_skill("大模型") == "大语言模型"
+    assert taxonomy.normalize_skill("Linux操作系统") == "Linux"
 
 
 def test_normalize_suffix_stripping():
@@ -62,3 +63,17 @@ def test_parent_of_fallbacks():
     assert parent_of("LoRA微调") == "模型微调"
     assert parent_of("完全未知技能点") is None
     assert parent_of("完全未知技能点", llm_parent="机器学习") == "机器学习"
+
+
+def test_three_level_taxonomy_keeps_same_granularity():
+    java = taxonomy.taxonomy_path("Java", job_domain="云计算与工程")
+    spring = taxonomy.taxonomy_path("Spring", job_domain="云计算与工程")
+    redis = taxonomy.taxonomy_path("Redis", job_domain="云计算与工程")
+    assert java == {"domain": "云计算与工程", "cluster": "编程与工程基础", "skill": "Java"}
+    assert spring["cluster"] == "后端框架与服务"
+    assert redis["cluster"] == "数据与存储"
+
+
+def test_fine_skill_uses_parent_for_capability_cluster():
+    assert taxonomy.capability_cluster("JVM调优", "Java") == "编程与工程基础"
+    assert taxonomy.capability_cluster("Selenium WebDriver") == "测试自动化"
