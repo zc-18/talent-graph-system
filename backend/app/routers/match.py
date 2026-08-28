@@ -10,7 +10,7 @@ from ..schemas import MatchRequest, ResumeTextRequest
 from ..services import resume as resume_svc, extraction, matching, role_contract
 from ..services.job_resolution import resolve_job_query
 from ..services.taxonomy import normalize_skill, skill_category
-from ..auth import Actor, add_audit, add_usage, optional_actor
+from ..auth import Actor, add_audit, add_usage, current_actor
 
 router = APIRouter(prefix="/api/match", tags=["match"])
 
@@ -26,7 +26,7 @@ def _private_profile(db: Session, actor: Actor, parsed: dict,
                       *, authorized: bool = True) -> models.ResumeProfile | None:
     # Organization-owned resumes must enter through the HR batch endpoint, which
     # records authorization and retention. Generic matching only persists self-owned data.
-    if actor.user is None or actor.role != "user":
+    if actor.role != "user":
         return None
     row = models.ResumeProfile(
         owner_user_id=actor.user_id,
@@ -42,7 +42,7 @@ def _private_profile(db: Session, actor: Actor, parsed: dict,
 
 
 @router.post("/resume/upload")
-async def upload_resume(file: UploadFile = File(...), actor: Actor = Depends(optional_actor),
+async def upload_resume(file: UploadFile = File(...), actor: Actor = Depends(current_actor),
                         db: Session = Depends(get_db)):
     """上传简历(PDF/Word/txt)→解析→抽取技能要素。"""
     content = await file.read()
@@ -63,7 +63,7 @@ async def upload_resume(file: UploadFile = File(...), actor: Actor = Depends(opt
 
 
 @router.post("/resume/text")
-def parse_resume_text(payload: ResumeTextRequest, actor: Actor = Depends(optional_actor),
+def parse_resume_text(payload: ResumeTextRequest, actor: Actor = Depends(current_actor),
                        db: Session = Depends(get_db)):
     """直接提交简历文本解析。"""
     text = payload.text
@@ -145,7 +145,7 @@ def _transient_contract(text: str) -> tuple[dict, dict]:
 
 
 @router.post("/analyze")
-def analyze(payload: MatchRequest, actor: Actor = Depends(optional_actor),
+def analyze(payload: MatchRequest, actor: Actor = Depends(current_actor),
             db: Session = Depends(get_db)):
     """人岗匹配诊断与差距分析。输入技能或简历文本，对比目标岗位图谱。"""
     job = db.query(models.Job).get(payload.job_id) if payload.job_id is not None else None

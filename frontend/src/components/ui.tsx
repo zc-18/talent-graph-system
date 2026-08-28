@@ -10,10 +10,10 @@ export function PageHeader({ title, subtitle, icon, action }: {
   return (
     <div className="flex items-start justify-between mb-6">
       <div className="flex items-center gap-3">
-        {icon && <div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow">{icon}</div>}
+        {icon && <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow">{icon}</div>}
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">{title}</h1>
-          {subtitle && <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>}
+          <h1 className="text-2xl font-extrabold tracking-tight text-body-1">{title}</h1>
+          {subtitle && <p className="text-sm text-body-2 mt-0.5">{subtitle}</p>}
         </div>
       </div>
       {action}
@@ -42,8 +42,8 @@ export function Card({ children, className = '', hover = false, delay = 0, decor
 
 export function Spinner({ label = '加载中…' }: { label?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-slate-500 gap-3">
-      <div className="w-9 h-9 rounded-full border-2 border-sky-100 border-t-accent animate-spin" />
+    <div className="flex flex-col items-center justify-center py-20 text-body-2 gap-3">
+      <div className="w-9 h-9 rounded-full border-2 border-accent/15 border-t-accent animate-spin" />
       <span className="text-sm">{label}</span>
     </div>
   )
@@ -51,8 +51,9 @@ export function Spinner({ label = '加载中…' }: { label?: string }) {
 
 export function ConfidencePill({ value, factors }: { value: number; factors?: ConfidenceFactors | null }) {
   const pct = Math.round(value * 100)
-  const color = value >= 0.75 ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
-    : value >= 0.5 ? 'text-sky-700 bg-sky-50 border-sky-200'
+  // 三档刻度去绿：高=品牌蓝、中=中性墨蓝、低=琥珀警示，语义层级不变
+  const color = value >= 0.75 ? 'text-accent bg-accent/10 border-accent/30'
+    : value >= 0.5 ? 'text-body-2 bg-brand-ink/6 border-line-soft/14'
     : 'text-amber-700 bg-amber-50 border-amber-200'
   const pill = (
     <span className={`chip border ${color} ${factors ? 'underline decoration-dotted underline-offset-2' : ''}`}
@@ -64,10 +65,12 @@ export function ConfidencePill({ value, factors }: { value: number; factors?: Co
 
 export function Badge({ children, tone = 'slate' }: { children: ReactNode; tone?: string }) {
   const map: Record<string, string> = {
-    slate: 'bg-slate-100 text-slate-600 border-slate-200',
-    indigo: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    cyan: 'bg-cyan-50 text-cyan-700 border-cyan-200',
-    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    slate: 'bg-gradient-to-br from-surface-muted to-white text-body-2 border-line-soft/12',
+    indigo: 'bg-gradient-to-br from-surface-muted to-white text-brand-ink border-brand-ink/15',
+    cyan: 'bg-gradient-to-br from-brand-accent3 to-white text-accent-deep border-accent/22',
+    // 紫仅供「新兴岗位」这类单点语义徽标使用，勿用作大面积背景
+    violet: 'bg-accent-violet/8 text-accent-violet border-accent-violet/25',
+    emerald: 'bg-accent/8 text-accent-deep border-accent/30',
     amber: 'bg-amber-50 text-amber-700 border-amber-200',
     rose: 'bg-rose-50 text-rose-700 border-rose-200',
   }
@@ -75,7 +78,7 @@ export function Badge({ children, tone = 'slate' }: { children: ReactNode; tone?
 }
 
 /** 进度条：轨道 + 填充。零依赖，min 保证极小值仍有一丝可见宽度 */
-export function Meter({ value, tone = 'bg-grad-accent', track = 'bg-white/80', h = 'h-1.5', min = 3 }: {
+export function Meter({ value, tone = 'bg-grad-fill', track = 'bg-brand-ink/8', h = 'h-1.5', min = 3 }: {
   value: number; tone?: string; track?: string; h?: string; min?: number
 }) {
   return (
@@ -88,12 +91,12 @@ export function Meter({ value, tone = 'bg-grad-accent', track = 'bg-white/80', h
 
 export function EmptyState({ text, hint }: { text: string; hint?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-slate-400 gap-2">
-      <div className="w-12 h-12 rounded-2xl bg-slate-100/80 grid place-items-center">
-        <Inbox className="w-6 h-6 text-slate-300" />
+    <div className="flex flex-col items-center justify-center py-16 text-body-3 gap-2">
+      <div className="w-12 h-12 rounded-2xl bg-brand-ink/6 grid place-items-center">
+        <Inbox className="w-6 h-6 text-body-3" />
       </div>
-      <div className="text-sm font-medium text-slate-500">{text}</div>
-      {hint && <div className="text-xs text-slate-400">{hint}</div>}
+      <div className="text-sm font-medium text-body-2">{text}</div>
+      {hint && <div className="text-xs text-body-3">{hint}</div>}
     </div>
   )
 }
@@ -104,7 +107,7 @@ export function ErrorState({ text = '数据加载失败，请检查网络后重�
       <div className="w-12 h-12 rounded-2xl bg-rose-50 grid place-items-center">
         <WifiOff className="w-6 h-6 text-rose-400" />
       </div>
-      <div className="text-sm text-slate-500">{text}</div>
+      <div className="text-sm text-body-2">{text}</div>
       {onRetry && (
         <button onClick={onRetry} className="btn-ghost text-sm">
           <RotateCcw className="w-4 h-4" /> 重试
@@ -115,7 +118,7 @@ export function ErrorState({ text = '数据加载失败，请检查网络后重�
 }
 
 export function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`animate-pulse rounded-xl bg-slate-200/60 ${className}`} aria-hidden="true" />
+  return <div className={`animate-pulse rounded-xl bg-brand-ink/8 ${className}`} aria-hidden="true" />
 }
 
 // 页面级骨架：KPI 行 + 两块内容区，替代整页 Spinner

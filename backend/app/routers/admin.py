@@ -611,6 +611,7 @@ def feedback_tickets(status: str | None = None, page: int = 1, size: int = 50,
         revision = current_revisions.get((row.id, row.current_revision))
         items.append({
             "id": row.id, "status": row.status,
+            "status_label": feedback_service.STATUS_LABELS.get(row.status, row.status),
             "owner_user_id": row.owner_user_id,
             "owner_username": usernames.get(row.owner_user_id),
             "organization_id": row.organization_id,

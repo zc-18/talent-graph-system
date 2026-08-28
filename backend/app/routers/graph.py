@@ -1,14 +1,56 @@
 """全景图谱与统计路由。"""
 from __future__ import annotations
+from time import monotonic
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 from sqlalchemy import func
 from .. import models
 from ..db import get_db
-from ..services import graph_service
+from ..services import graph_service, role_contract
 from ..services.taxonomy import CATEGORIES
 
 router = APIRouter(prefix="/api/graph", tags=["graph"])
+
+# 证据覆盖率要跑一遍全量岗位的契约投影（分簇 + 雇主计数），比 stats 里其余的
+# COUNT/AVG 重一个量级，而驾驶舱每次进页面都会拉 /graph/stats。所以缓存：
+# TTL 兜住高频刷新，指纹兜住正确性——岗位集合或已验证能力关系一变，立刻重算，
+# 不会在跑完 data/run_pipeline.py 之后还端着旧比例。
+_CONTRACT_RATIO_TTL = 300.0
+_contract_ratio_cache: dict = {"fingerprint": None, "value": None, "expires": 0.0}
+
+
+def _contract_ready_stats(db: Session) -> dict:
+    """已验证证据足以投影出角色契约的岗位占比。
+
+    口径与岗位列表页逐行显示的 `contract_status` 完全一致（同一个
+    `contract_summaries_for_jobs`），所以驾驶舱的数字和列表里数出来的一定对得上；
+    以前前端只能自己翻页拼，翻不全就对不上。
+    """
+    fingerprint = (
+        db.query(func.count(models.Job.id)).filter(
+            models.Job.status == "published").scalar() or 0,
+        db.query(func.count(models.JobSkill.id)).filter(
+            models.JobSkill.status == "active").scalar() or 0,
+    )
+    now = monotonic()
+    if (_contract_ratio_cache["fingerprint"] == fingerprint
+            and _contract_ratio_cache["expires"] > now):
+        return _contract_ratio_cache["value"]
+
+    # embedding 是每行一条向量的 JSON 大字段，契约投影一个字节都用不到。
+    jobs = db.query(models.Job).options(defer(models.Job.embedding)).filter(
+        models.Job.status == "published").all()
+    summaries = role_contract.contract_summaries_for_jobs(db, jobs) if jobs else {}
+    ready = sum(summaries.get(job.id, {}).get("contract_status") not in
+                (None, "evidence_insufficient") for job in jobs)
+    value = {
+        "contract_ready_ratio": round(ready / max(1, len(jobs)), 4),
+        "contract_ready_jobs": ready,
+        "contract_evaluated_jobs": len(jobs),
+    }
+    _contract_ratio_cache.update(
+        fingerprint=fingerprint, value=value, expires=now + _CONTRACT_RATIO_TTL)
+    return value
 
 
 @router.get("/panorama")
@@ -42,7 +84,7 @@ def panorama(category: str | None = None, level: str | None = None,
 
 @router.get("/stats")
 def stats(db: Session = Depends(get_db)):
-    return graph_service.stats_overview(db)
+    return {**graph_service.stats_overview(db), **_contract_ready_stats(db)}
 
 
 @router.get("/categories")

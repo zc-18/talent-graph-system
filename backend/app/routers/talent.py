@@ -12,7 +12,7 @@ from sqlalchemy import func, or_
 from .. import models
 from ..db import get_db
 from ..guards import require_org_append
-from ..auth import Actor, optional_actor, add_audit
+from ..auth import Actor, current_actor, add_audit
 from ..ownership import require_org
 from ..schemas import TeamCreateRequest, TeamMemberRequest
 from ..services import resume as resume_svc, talent as talent_svc
@@ -89,7 +89,7 @@ def supply_demand(job_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/teams")
-def teams(page: int = 1, size: int = 20, actor: Actor = Depends(optional_actor),
+def teams(page: int = 1, size: int = 20, actor: Actor = Depends(current_actor),
           db: Session = Depends(get_db)):
     page, size = _page(page, size)
     q = db.query(models.Team)
@@ -135,12 +135,12 @@ def create_team(payload: TeamCreateRequest, actor: Actor = Depends(require_org_a
 
 
 @router.get("/teams/{team_id}")
-def team_detail(team_id: int, actor: Actor = Depends(optional_actor), db: Session = Depends(get_db)):
+def team_detail(team_id: int, actor: Actor = Depends(current_actor), db: Session = Depends(get_db)):
     team = db.query(models.Team).get(team_id)
     if not team:
         raise HTTPException(404, "团队不存在")
     if team.organization_id is not None:
-        if actor.user is None or (actor.role != "admin" and actor.organization_id != team.organization_id):
+        if actor.role != "admin" and actor.organization_id != team.organization_id:
             raise HTTPException(404, "团队不存在")
     members = db.query(models.TeamMember).filter(
         models.TeamMember.team_id == team_id).order_by(models.TeamMember.id).all()
@@ -254,12 +254,12 @@ def remove_team_member(team_id: int, member_id: int,
 
 
 @router.get("/teams/{team_id}/gap")
-def team_gap(team_id: int, job_id: int, actor: Actor = Depends(optional_actor),
+def team_gap(team_id: int, job_id: int, actor: Actor = Depends(current_actor),
              db: Session = Depends(get_db)):
     """团队对目标岗位的能力缺口：已覆盖 / 谁能补 / 还缺谁。"""
     team = db.query(models.Team).get(team_id)
     if team and team.organization_id is not None:
-        if actor.user is None or (actor.role != "admin" and actor.organization_id != team.organization_id):
+        if actor.role != "admin" and actor.organization_id != team.organization_id:
             raise HTTPException(404, "团队或岗位不存在")
     data = talent_svc.team_gap(db, team_id, job_id)
     if not data:

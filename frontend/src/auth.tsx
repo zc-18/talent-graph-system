@@ -71,12 +71,18 @@ export function useAuth() {
   return value
 }
 
+export function roleHome(role: AppRole): string {
+  if (role === 'admin') return '/admin'
+  if (role === 'hr') return '/hr'
+  return '/history'
+}
+
 export function RequireAuth({ children, roles }: { children: ReactNode; roles?: AppRole[] }) {
   const auth = useAuth()
   const location = useLocation()
   const redirectState = useMemo(() => ({ from: location.pathname }), [location.pathname])
   if (!auth.ready) return <Spinner label="正在恢复会话…" />
   if (!auth.user) return <Navigate to="/login" replace state={redirectState} />
-  if (roles && !roles.includes(auth.user.role)) return <Navigate to="/" replace />
+  if (roles && !roles.includes(auth.user.role)) return <Navigate to={roleHome(auth.user.role)} replace />
   return <>{children}</>
 }

@@ -16,13 +16,14 @@ export function Ring({ value, size = 40, stroke = 5 }: { value: number; size?: n
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0 -rotate-90" aria-hidden>
       <defs>
-        {/* 取 tailwind.config.js 里 bg-grad-accent 的字面值 */}
+        {/* 与 bg-grad-accent 同源：直接引用 index.css 的 token 变量，
+            改 token 时环形进度自动跟随，不会再出现"渐变各处不一致" */}
         <linearGradient id={`rg${uid}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#6366F1" />
-          <stop offset="100%" stopColor="#22D3EE" />
+          <stop offset="0%" stopColor="rgb(var(--brand-ink-soft))" />
+          <stop offset="100%" stopColor="rgb(var(--brand-accent))" />
         </linearGradient>
       </defs>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(2,6,23,0.07)" strokeWidth={stroke} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgb(var(--brand-ink) / 0.09)" strokeWidth={stroke} />
       {/* 扫过用 CSS transition：index.css 的 prefers-reduced-motion 已自动兜底 */}
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={`url(#rg${uid})`} strokeWidth={stroke}
         strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)}
@@ -64,12 +65,12 @@ export function Kpi({ icon, label, value, unit, sub, tone = 'bg-grad-accent',
       <div className="mt-3 flex items-baseline gap-1">
         {/* ref 必须挂在数字 span 上、不能挂 flex 容器：useCountUp 覆写 textContent，
             挂容器会把 unit 一起抹掉 */}
-        <span ref={isNum ? numRef : undefined} className="text-3xl font-extrabold text-slate-900 tabular-nums">
+        <span ref={isNum ? numRef : undefined} className="text-3xl font-extrabold text-body-1 tabular-nums">
           {isNum ? (value as number).toFixed(decimals) : value}
         </span>
-        {unit && <span className="text-sm font-semibold text-slate-400">{unit}</span>}
+        {unit && <span className="text-sm font-semibold text-body-3">{unit}</span>}
       </div>
-      {sub && <div className="text-xs text-slate-500 mt-1 truncate">{sub}</div>}
+      {sub && <div className="text-xs text-body-2 mt-1 truncate">{sub}</div>}
     </Card>
   )
 }

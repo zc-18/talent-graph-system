@@ -5,6 +5,7 @@ import { IBriefcase } from '../components/icons'
 import { api, JobListItem, CATEGORY_COLORS } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, EmptyState, ErrorState } from '../components/ui'
 import Select from '../components/Select'
+import { ConfidenceMeta } from '../components/ConfidenceMeta'
 
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
 
@@ -39,7 +40,7 @@ export default function Jobs() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow">
+        <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-violet grid place-items-center shadow-glow">
           <IBriefcase className="w-6 h-6 text-white" />
         </div>
         <div>
@@ -48,34 +49,36 @@ export default function Jobs() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 items-center">
-        <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/80 border border-slate-200 flex-1 min-w-[220px] focus-within:border-accent/60 focus-within:ring-2 focus-within:ring-accent/15 transition">
-          <Search className="w-4 h-4 text-slate-400" />
+      {/* 窄屏：2 列网格（搜索框独占整行），控件铺满栅格避免定宽挤出横向滚动；
+          sm 起切回原来的定宽 flex 排布。纯断点驱动，不做 JS 宽度判断。 */}
+      <div className="grid grid-cols-2 items-center gap-2 sm:flex sm:flex-wrap">
+        <div className="col-span-2 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/80 border border-slate-200 sm:flex-1 sm:min-w-[220px] focus-within:border-accent/60 focus-within:ring-2 focus-within:ring-accent/15 transition">
+          <Search className="w-4 h-4 shrink-0 text-slate-400" />
           <input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === 'Enter' && load()}
-            placeholder="搜索岗位名称…" className="bg-transparent text-sm outline-none flex-1 text-slate-800 placeholder:text-slate-400" />
+            placeholder="搜索岗位名称…" className="bg-transparent text-sm outline-none flex-1 min-w-0 text-slate-800 placeholder:text-slate-400" />
         </div>
-        <Select value={cat} onChange={setCat} options={cats} className="w-44" />
-        <Select value={track} onChange={setTrack} className="w-36" label="岗位轨道" options={[
+        <Select value={cat} onChange={setCat} options={cats} className="w-full sm:w-44" />
+        <Select value={track} onChange={setTrack} className="w-full sm:w-36" label="岗位轨道" options={[
           { value: '全部', label: '全部轨道' }, { value: 'software', label: '软件' }, { value: 'hardware', label: '硬件' },
           { value: 'algorithm', label: '算法' }, { value: 'data', label: '数据' }, { value: 'ops', label: '运维' }, { value: 'product', label: '产品' },
         ]} />
-        <Select value={seniority} onChange={setSeniority} className="w-32" label="岗位级别" options={[
+        <Select value={seniority} onChange={setSeniority} className="w-full sm:w-32" label="岗位级别" options={[
           { value: '全部', label: '全部级别' }, { value: 'junior', label: '初级' }, { value: 'middle', label: '中级' }, { value: 'senior', label: '高级' },
         ]} />
-        <Select value={recruitmentType} onChange={setRecruitmentType} className="w-32" label="招聘类型" options={[
+        <Select value={recruitmentType} onChange={setRecruitmentType} className="w-full sm:w-32" label="招聘类型" options={[
           { value: '全部', label: '校招/社招' }, { value: 'campus', label: '校招' }, { value: 'social', label: '社招' }, { value: 'mixed', label: '混合' },
         ]} />
         <button onClick={() => setOnlyNew(v => !v)}
-          className={onlyNew ? 'btn-primary' : 'btn-ghost'}>
-          <Sparkles className="w-4 h-4" /> 仅新兴岗位
+          className={`${onlyNew ? 'btn-primary' : 'btn-ghost'} !px-3 whitespace-nowrap`}>
+          <Sparkles className="w-4 h-4 shrink-0" /> 仅新兴岗位
         </button>
-        <button onClick={() => nav('/discovery')} className="btn-ghost">
-          <PlusCircle className="w-4 h-4" /> 发现新岗位
+        <button onClick={() => nav('/discovery')} className="btn-ghost !px-3 whitespace-nowrap">
+          <PlusCircle className="w-4 h-4 shrink-0" /> 发现新岗位
         </button>
       </div>
 
       {loading ? <Spinner /> : error ? <ErrorState text="岗位列表加载失败" onRetry={load} /> : items.length === 0 ? <EmptyState text="未找到匹配的岗位" hint="试试更换分类或关键词" /> : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
           {items.map((j, i) => (
             <Card key={j.id} delay={i * 0.02} hover className="p-5 cursor-pointer group"
               >
@@ -99,12 +102,15 @@ export default function Jobs() {
                   </div>
                   <ConfidencePill value={j.confidence} />
                 </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-200/70 text-[11px] text-slate-400">
-                  <span>{j.required_count} 个核心必备能力簇</span>
+                <div className="mt-2 min-w-0">
+                  <ConfidenceMeta asOf={j.confidence_as_of} delta={j.confidence_delta} compact />
+                </div>
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-t border-slate-200/70 pt-3 text-[11px] text-slate-400">
+                  <span className="flex items-center gap-1.5">{j.required_count} 个岗位契约能力簇{j.contract_status === 'evidence_insufficient' && <Badge tone="amber">证据待补</Badge>}</span>
                   {/* evidence_count 是 active 能力项的 source_count 之和，即「多少条 JD 支撑了
                       这个岗位的能力集」，不是证据表的行数。原来写「证据 N」与详情页
                       「留存证据 M 条」口径打架，两处统一成 JD 支撑。 */}
-                  <span title="该岗位能力集累计获得的真实 JD 支撑数">JD 支撑 {j.evidence_count} · v{j.version}</span>
+                  <span title="该岗位能力集累计获得的真实 JD 支撑数">雇主 {j.employer_count || 0} · JD 支撑 {j.evidence_count} · v{j.version}</span>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-200/70">

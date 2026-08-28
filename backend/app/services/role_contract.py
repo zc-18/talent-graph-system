@@ -258,6 +258,95 @@ def build_contract_from_job(db, job, **overrides) -> dict:
     return contract
 
 
+def contract_summaries_for_jobs(db, jobs: list) -> dict[int, dict]:
+    """Build list-card contract summaries in a bounded number of queries.
+
+    The full contract endpoint may resolve a seniority slice for one role.  A
+    job-library page needs the current graph projection for many roles at once,
+    so this helper batches capabilities and evidence-backed employer units.
+    """
+    from .. import models
+
+    job_ids = {job.id for job in jobs}
+    if not job_ids:
+        return {}
+    relation_rows = (db.query(models.JobSkill, models.Skill)
+                     .join(models.Skill, models.Skill.id == models.JobSkill.skill_id)
+                     .filter(models.JobSkill.job_id.in_(job_ids),
+                             models.JobSkill.status == "active").all())
+    parent_ids = {skill.parent_id for _, skill in relation_rows if skill.parent_id}
+    parent_names = dict(db.query(models.Skill.id, models.Skill.name).filter(
+        models.Skill.id.in_(parent_ids)).all()) if parent_ids else {}
+
+    capabilities: dict[int, list[dict]] = defaultdict(list)
+    relation_ids: dict[int, int] = {}
+    for relation, skill in relation_rows:
+        relation_ids[relation.id] = relation.job_id
+        factors = relation.factors or {}
+        capabilities[relation.job_id].append({
+            "name": skill.name,
+            "parent_name": parent_names.get(skill.parent_id),
+            "category": skill.category,
+            "skill_type": skill.skill_type,
+            "importance": relation.importance,
+            "weight": relation.weight,
+            "level_required": relation.level_required,
+            "confidence": relation.confidence,
+            "factors": factors,
+            "support_ratio": float(factors.get("support", 0.0) or 0.0),
+            "source_count": relation.source_count,
+            "employer_count": relation.source_count,
+            "status": relation.status,
+            "granularity": "fine" if skill.parent_id else "coarse",
+        })
+
+    employer_rows = (db.query(models.Evidence.job_skill_id, models.RawJD.employer_id)
+                     .join(models.RawJD, models.RawJD.id == models.Evidence.raw_jd_id)
+                     .filter(models.Evidence.job_skill_id.in_(relation_ids),
+                             models.Evidence.source_type == "jd",
+                             models.RawJD.is_duplicate == False,  # noqa: E712
+                             models.RawJD.duplicate_of.is_(None),
+                             models.RawJD.employer_id.isnot(None)).all()) if relation_ids else []
+    employer_ids = {employer_id for _, employer_id in employer_rows if employer_id}
+    employers = {row.id: row for row in db.query(models.Employer).filter(
+        models.Employer.id.in_(employer_ids)).all()} if employer_ids else {}
+    parent_employer_ids = {row.parent_id for row in employers.values() if row.parent_id}
+    if parent_employer_ids:
+        employers.update({row.id: row for row in db.query(models.Employer).filter(
+            models.Employer.id.in_(parent_employer_ids)).all()})
+    employer_units: dict[int, set[int]] = defaultdict(set)
+    for relation_id, employer_id in employer_rows:
+        employer = employers.get(employer_id)
+        if not employer or employer.status != "active":
+            continue
+        unit_id = employer.parent_id or employer.id
+        parent = employers.get(unit_id)
+        if parent and parent.status == "active":
+            employer_units[relation_ids[relation_id]].add(unit_id)
+
+    result = {}
+    for job in jobs:
+        source = job.source_summary or {}
+        contract = build_role_contract(
+            capabilities.get(job.id, []),
+            job_id=job.id,
+            job_name=job.name,
+            seniority=job.level or "unspecified",
+            recruitment_type=job.recruitment_type or source.get(
+                "recruitment_type", "unspecified"),
+            track=job.track or source.get("track", "software"),
+            industry=job.industry or source.get("industry", "general"),
+            evidence_window=source.get("evidence_window"),
+            version=job.version or 1,
+        )
+        result[job.id] = {
+            "required_count": len(contract["clusters"]),
+            "contract_status": contract["status"],
+            "employer_count": len(employer_units.get(job.id, set())),
+        }
+    return result
+
+
 def build_contract_from_version(db, job, job_version) -> dict:
     """Build a contract from immutable version rows and their valid evidence."""
     from .. import models

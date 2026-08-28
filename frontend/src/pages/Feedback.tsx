@@ -4,8 +4,7 @@ import { api, errMsg, FeedbackTicket } from '../api'
 import { Badge, Card, EmptyState, ErrorState, Spinner } from '../components/ui'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
-
-const STATUS: Record<string, string> = { submitted: '已提交', triaged: '已分诊', approved: '已批准', rejected: '已驳回', applied: '已应用' }
+import { FEEDBACK_STATUS_LABEL, FEEDBACK_STATUS_TONE } from '../presentation'
 
 export default function Feedback() {
   const [items, setItems] = useState<FeedbackTicket[]>([])
@@ -37,8 +36,8 @@ export default function Feedback() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3"><div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow"><MessageSquareText className="w-5 h-5 text-white" /></div><div><h1 className="text-2xl font-extrabold text-slate-900">反馈与知识更新</h1><p className="text-sm text-slate-500">反馈须经审核才能影响公共岗位知识，全程可跟踪</p></div></div>
-      <div className="grid grid-cols-1 xl:grid-cols-[420px_minmax(0,1fr)] gap-5 items-start">
+      <div className="flex items-center gap-3"><div className="w-11 h-11 shrink-0 rounded-xl bg-grad-violet grid place-items-center shadow-glow"><MessageSquareText className="w-5 h-5 text-white" /></div><div><h1 className="text-2xl font-extrabold text-slate-900">反馈与知识更新</h1><p className="text-sm text-slate-500">反馈须经审核才能影响公共岗位知识，全程可跟踪</p></div></div>
+      <div className="grid grid-cols-1 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[420px_minmax(0,1fr)] gap-4 lg:gap-5 items-start">
         <Card className="p-5">
           <form onSubmit={submit} className="space-y-4">
             <div><div className="label mb-2">反馈类型</div><Select value={type} onChange={setType} options={[{ value: 'job_profile', label: '岗位画像' }, { value: 'skill', label: '能力项' }, { value: 'evidence', label: '证据来源' }, { value: 'match', label: '匹配结果' }, { value: 'team_gap', label: '团队缺口' }]} /></div>
@@ -50,7 +49,7 @@ export default function Feedback() {
         <div>
           <div className="label mb-3">我的反馈进度</div>
           {loading ? <Spinner /> : error ? <ErrorState text="反馈记录加载失败" onRetry={load} /> : items.length === 0 ? <Card className="p-5"><EmptyState text="暂无反馈记录" /></Card> : (
-            <div className="space-y-3">{items.map(item => <div key={item.id} className="rounded-xl border border-slate-200 bg-white/75 p-4"><div className="flex items-start justify-between gap-3"><div><div className="font-semibold text-slate-800">{item.subject || item.category || `反馈 #${item.id}`}</div><div className="text-xs text-slate-400 mt-1">{new Date(item.created_at).toLocaleString()}</div></div><Badge tone={item.status === 'applied' ? 'emerald' : item.status === 'rejected' ? 'rose' : 'cyan'}>{STATUS[item.status] || item.status}</Badge></div>{item.content && <p className="text-sm text-slate-500 mt-3 line-clamp-2">{item.content}</p>}{item.status === 'applied' && <div className="flex items-center gap-1.5 text-xs text-emerald-600 mt-3"><CheckCircle2 className="w-3.5 h-3.5" /> 已关联实际知识变更</div>}</div>)}</div>
+            <div className="space-y-3">{items.map(item => <div key={item.id} className="rounded-xl border border-slate-200 bg-white/75 p-4"><div className="flex flex-wrap items-start justify-between gap-2 sm:flex-nowrap sm:gap-3"><div className="min-w-0"><div className="font-semibold text-slate-800 break-words">{item.subject || item.category || `反馈 #${item.id}`}</div><div className="text-xs text-slate-400 mt-1">{new Date(item.created_at).toLocaleString()}</div></div><Badge tone={FEEDBACK_STATUS_TONE[item.status]}>{FEEDBACK_STATUS_LABEL[item.status] || item.status}</Badge></div>{item.content && <p className="text-sm text-slate-500 mt-3 line-clamp-2">{item.content}</p>}{item.status === 'applied' && <div className="flex items-center gap-1.5 text-xs text-accent-deep mt-3"><CheckCircle2 className="w-3.5 h-3.5" /> 已关联实际知识变更</div>}</div>)}</div>
           )}
         </div>
       </div>

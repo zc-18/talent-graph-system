@@ -51,7 +51,17 @@ def client(monkeypatch, session):
         "bonus_skills": [], "fine_skills": [],
     })
     app.dependency_overrides[get_db] = lambda: session
-    return TestClient(app)
+    user = models.AppUser(username="default-api-user", password_hash="unused",
+                          role="user", status="active")
+    session.add(user)
+    session.flush()
+    session.add(models.UserSession(
+        user_id=user.id, token_hash=token_hash("default-api-token"),
+        expires_at=datetime.utcnow() + timedelta(hours=1)))
+    session.commit()
+    value = TestClient(app)
+    value.headers.update({"Authorization": "Bearer default-api-token"})
+    return value
 
 
 def make_actor(session, role: str, suffix: str, organization: bool = False):
@@ -119,7 +129,6 @@ def test_local_demo_seed_populates_reconciled_version_snapshots(session):
                 for skill in cluster["skills"]
             }
             assert contract_weights == expected_weights
-        current_contract = versions[-1].contract_snapshot
         assert evolution.compute_snapshot_diff(
             evolution.current_capabilities(session, job),
             evolution.version_capabilities(session, versions[-1]),
@@ -642,7 +651,7 @@ def test_hr_completed_with_errors_ranking_and_idempotent_selection(
 def test_discovery_revision_review_and_transactional_publish(client, session, monkeypatch):
     _, _, user_headers = make_actor(session, "user", "candidate")
     _, _, admin_headers = make_actor(session, "admin", "candidate")
-    monkeypatch.setattr("app.routers.discovery.discovery.discover_candidates", lambda keyword: {
+    monkeypatch.setattr("app.routers.discovery.discovery.discover_candidates", lambda keyword, **kwargs: {
         "keyword": keyword, "verdict": "EMERGING", "evidence": [{"title": "e", "content": "c"}],
         "resolution": {"canonical_title": keyword, "track": "algorithm",
                        "industry": "general", "seniority": "middle",
@@ -697,7 +706,7 @@ def test_established_discovery_resolves_formal_job_name_and_replays_contract(
     job.slug = "demo-job-1"
     job.version = 2
     session.commit()
-    monkeypatch.setattr("app.routers.discovery.discovery.discover_candidates", lambda keyword: {
+    monkeypatch.setattr("app.routers.discovery.discovery.discover_candidates", lambda keyword, **kwargs: {
         "keyword": keyword, "verdict": "ESTABLISHED",
         "existing_job": "Java开发工程师", "evidence": [],
         "resolution": {"canonical_title": "Java开发工程师", "track": "software"},
@@ -730,16 +739,20 @@ def test_established_job_evolution_publishes_reconciled_v2_across_reads(
         job_id=job.id, skill_id=python.id, importance="required", weight=.7,
         confidence=.8, source_count=2, status="active"))
     session.commit()
-    monkeypatch.setattr("app.routers.discovery.discovery.discover_candidates", lambda keyword: {
+    monkeypatch.setattr("app.routers.discovery.discovery.discover_candidates", lambda keyword, **kwargs: {
         "keyword": keyword, "verdict": "ESTABLISHED",
         "existing_job": job.name, "evidence": [{"title": "Java market update"}],
         "resolution": {"canonical_title": job.name, "track": "software"},
         "signals": {"mature_veto": True},
     })
 
-    guest = client.post("/api/discovery/discover", json={"keyword": "Java", "save": True})
-    assert guest.status_code == 200
-    assert guest.json()["conflict"]["job_id"] == job.id
+    guest = client.post("/api/discovery/discover", headers={"Authorization": ""},
+                        json={"keyword": "Java", "save": True})
+    assert guest.status_code == 401
+    preview = client.post("/api/discovery/discover", headers=user_headers,
+                          json={"keyword": "Java", "save": True})
+    assert preview.status_code == 200
+    assert preview.json()["conflict"]["job_id"] == job.id
     assert session.query(models.EvolutionRun).count() == 0
     discovered = client.post("/api/discovery/runs", headers=user_headers, json={
         "keyword": "Java", "idempotency_key": "java-to-evolution"})
@@ -870,9 +883,9 @@ def test_legacy_evolution_update_is_preview_only_in_all_modes(
                             ], "stats": {"jd_count": 1}})
     payload = {"job_id": job.id, "new_jds": ["Spring demand"], "use_web": False}
 
-    guest_preview = client.post("/api/evolution/update", json=payload)
-    assert guest_preview.status_code == 200
-    assert guest_preview.json()["dry_run"] is True
+    guest_preview = client.post(
+        "/api/evolution/update", headers={"Authorization": ""}, json=payload)
+    assert guest_preview.status_code == 401
 
     guards.settings.read_only = False
     admin_preview = client.post("/api/evolution/update", headers=admin_headers, json=payload)
@@ -1136,7 +1149,7 @@ def test_admin_user_org_audit_and_usage_management(client, session):
     assert client.patch(f"/api/admin/users/{admin.id}", headers=admin_headers,
                         json={"status": "disabled"}).status_code == 409
     permissions = client.get("/api/admin/permissions", headers=admin_headers).json()["items"]
-    assert {item["role"] for item in permissions} == {"guest", "user", "hr", "admin"}
+    assert {item["role"] for item in permissions} == {"user", "hr", "admin"}
 
     organizations = client.get("/api/admin/organizations?status=active&page=0&size=200",
                                headers=admin_headers).json()

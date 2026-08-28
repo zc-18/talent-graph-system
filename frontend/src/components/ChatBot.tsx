@@ -10,7 +10,7 @@ function renderText(t: string) {
   // 简单 **加粗** 渲染
   return t.split(/(\*\*.+?\*\*)/g).map((p, i) =>
     p.startsWith('**') && p.endsWith('**')
-      ? <strong key={i} className="font-semibold text-slate-900">{p.slice(2, -2)}</strong>
+      ? <strong key={i} className="font-semibold text-body-1">{p.slice(2, -2)}</strong>
       : <span key={i}>{p}</span>)
 }
 
@@ -75,8 +75,7 @@ export default function ChatBot() {
         initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.6, type: 'spring', stiffness: 260, damping: 18 }}
         whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.95 }}
-        className="fixed bottom-4 right-4 lg:bottom-6 lg:right-6 z-50 rounded-full shadow-glow grid place-items-center w-12 h-12 lg:w-[60px] lg:h-[60px]"
-        style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}
+        className="fixed bottom-4 right-4 lg:bottom-6 lg:right-6 z-50 rounded-full shadow-glow grid place-items-center w-12 h-12 lg:w-[60px] lg:h-[60px] bg-grad-fill"
         aria-label={open ? '关闭 AI 助手' : '打开 AI 助手'}>
         {open
           ? <X className="w-6 h-6 text-white" />
@@ -90,36 +89,35 @@ export default function ChatBot() {
             initial={{ opacity: 0, y: 24, scale: 0.92 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.92 }} transition={{ type: 'spring', stiffness: 300, damping: 26 }}
             style={{ transformOrigin: 'bottom right' }}
-            className="fixed inset-x-2 top-16 bottom-20 sm:inset-auto sm:bottom-24 sm:right-6 z-50 sm:w-[384px] sm:h-[560px] sm:max-h-[calc(100vh-8rem)] flex flex-col rounded-3xl overflow-hidden bg-white shadow-2xl border border-white/80">
+            className="fixed inset-x-2 top-16 bottom-20 sm:inset-auto sm:bottom-24 sm:right-6 z-50 sm:w-[384px] sm:h-[560px] sm:max-h-[calc(100vh-8rem)] flex flex-col rounded-3xl overflow-hidden bg-white shadow-2xl border border-line-soft/12">
             {/* 头部 */}
-            <div className="relative px-4 py-3.5 flex items-center gap-3 text-white overflow-hidden"
-              style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}>
-              <div aria-hidden className="absolute inset-0 pointer-events-none bg-cover bg-center opacity-80"
+            <div className="relative px-4 py-3.5 flex items-center gap-3 text-body-1 overflow-hidden bg-grad-sky border-b border-accent/20">
+              <div aria-hidden className="absolute inset-0 pointer-events-none bg-cover bg-center opacity-[0.14]"
                 style={{ backgroundImage: 'url(/chat-banner.webp)' }} />
-              <img src="/avatar.webp" alt="" className="relative z-10 w-11 h-11 rounded-full object-cover ring-2 ring-white/70 bg-white" />
+              <img src="/avatar.webp" alt="" className="relative z-10 w-11 h-11 rounded-full object-cover ring-2 ring-white bg-white shadow-sm" />
               <div className="relative z-10 flex-1 min-w-0">
                 <div className="font-bold text-[15px] flex items-center gap-1.5">智岗小助手 <Sparkles className="w-3.5 h-3.5" /></div>
-                <div className="text-[11px] text-white/85 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 inline-block" /> 在线 · 随时为你解答
+                <div className="text-[11px] text-body-2 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-deep inline-block" /> 在线 · 随时为你解答
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} aria-label="关闭对话" className="relative z-10 text-white/80 hover:text-white p-1"><X className="w-5 h-5" /></button>
+              <button onClick={() => setOpen(false)} aria-label="关闭对话" className="relative z-10 text-body-3 hover:text-body-1 p-1"><X className="w-5 h-5" /></button>
             </div>
 
             {/* 消息区 */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-3.5 py-4 space-y-3 bg-gradient-to-b from-sky-50/60 to-white">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-3.5 py-4 space-y-3 bg-gradient-to-b from-surface-muted to-white">
               {msgs.map((m, i) => (
                 <div key={i} className={`flex gap-2 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   {m.role === 'assistant'
-                    ? <img src="/avatar.webp" className="w-7 h-7 rounded-full object-cover shrink-0 mt-0.5 bg-white border border-slate-100" />
-                    : <img src="/user-avatar.jpeg" className="w-7 h-7 rounded-full object-cover shrink-0 mt-0.5 border border-slate-100" />}
+                    ? <img src="/avatar.webp" className="w-7 h-7 rounded-full object-cover shrink-0 mt-0.5 bg-white border border-line-soft/10" />
+                    : <img src="/user-avatar.jpeg" className="w-7 h-7 rounded-full object-cover shrink-0 mt-0.5 border border-line-soft/10" />}
                   <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap break-words ${
                     m.role === 'user'
-                      ? 'bg-grad-accent text-white rounded-tr-sm'
-                      : 'bg-white text-slate-700 border border-slate-200 shadow-sm rounded-tl-sm'}`}>
+                      ? 'bg-grad-accent ring-1 ring-accent/20 text-accent-deep rounded-tr-sm'
+                      : 'bg-white text-body-1 border border-line-soft/12 shadow-sm rounded-tl-sm'}`}>
                     {m.content ? renderText(m.content)
                       : <span className="inline-flex gap-1 py-1">
-                          {[0, 1, 2].map(d => <span key={d} className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: `${d * 0.15}s` }} />)}
+                          {[0, 1, 2].map(d => <span key={d} className="w-1.5 h-1.5 rounded-full bg-body-3 animate-bounce" style={{ animationDelay: `${d * 0.15}s` }} />)}
                         </span>}
                   </div>
                 </div>
@@ -128,7 +126,7 @@ export default function ChatBot() {
                 <div className="flex flex-wrap gap-2 pt-1 pl-9">
                   {suggestions.map(s => (
                     <button key={s} onClick={() => send(s)}
-                      className="text-[12px] px-3 py-1.5 rounded-full bg-white border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition">
+                      className="text-[12px] px-3 py-1.5 rounded-full bg-white border border-accent/30 text-accent hover:bg-accent/8 transition">
                       {s}
                     </button>
                   ))}
@@ -137,20 +135,19 @@ export default function ChatBot() {
             </div>
 
             {/* 输入区 */}
-            <div className="p-3 border-t border-slate-100 bg-white">
-              <div className="flex items-end gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-accent/60 focus-within:ring-2 focus-within:ring-accent/15 transition">
+            <div className="p-3 border-t border-line-soft/10 bg-white">
+              <div className="flex items-end gap-2 rounded-2xl border border-line-soft/12 bg-surface-muted px-3 py-2 focus-within:border-accent/60 focus-within:ring-2 focus-within:ring-accent/15 transition">
                 <textarea
                   value={input} onChange={e => setInput(e.target.value)} rows={1}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input) } }}
                   placeholder="输入你的问题…" disabled={loading}
-                  className="flex-1 resize-none bg-transparent outline-none text-[13px] text-slate-700 placeholder:text-slate-400 max-h-24" />
+                  className="flex-1 resize-none bg-transparent outline-none text-[13px] text-body-1 placeholder:text-body-3 max-h-24" />
                 <button onClick={() => send(input)} disabled={loading || !input.trim()} aria-label="发送"
-                  className="shrink-0 w-8 h-8 rounded-xl grid place-items-center text-white disabled:opacity-40 transition"
-                  style={{ background: 'linear-gradient(135deg,#6366F1,#22D3EE)' }}>
+                  className="shrink-0 w-8 h-8 rounded-xl grid place-items-center text-white disabled:opacity-40 transition bg-grad-fill shadow-sm">
                   <Send className="w-4 h-4" />
                 </button>
               </div>
-              <div className="text-[10px] text-slate-300 text-center mt-1.5">智岗小助手 · 由 DeepSeek 大模型驱动</div>
+              <div className="text-[10px] text-body-3 text-center mt-1.5">智岗小助手 · 由 DeepSeek 大模型驱动</div>
             </div>
           </motion.div>
         )}

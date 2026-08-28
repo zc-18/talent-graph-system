@@ -87,7 +87,10 @@ def test_missing_history_does_not_fabricate_novelty():
         "具身智能机器人应用技术员",
         [{"kind": "policy", "company": "甲公司"}, {"company": "乙公司"}])
     assert out["signals"]["history_available"] is False
-    assert out["signals"]["historical_novelty"] == 0.0
+    assert out["signals"]["historical_novelty"] is None
+    historical = next(item for item in out["signals"]["signal_details"]
+                      if item["key"] == "historical_novelty")
+    assert historical["empty_reason"] == "历史样本不足"
 
 
 def test_skill_confidence_is_computed_from_each_skills_supporting_employers():

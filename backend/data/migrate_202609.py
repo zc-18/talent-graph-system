@@ -4,6 +4,7 @@
 1. 在目标库（默认读 .env 的 db_name，可用 --db 覆盖，如 talent_graph_v3）创建全部新表
    （crawl_batch / authority_evidence / job_level_skill 由 ORM create_all 自动建）。
 2. 对已有表补加新列（MySQL 8 无 ADD COLUMN IF NOT EXISTS，先查 information_schema）。
+3. 创建并校验 confidence_run / job_confidence_snapshot 置信度审计表。
 
 用法（backend/ 目录下）：
     uv run python data/migrate_202609.py                 # 迁移 .env 指向的库
@@ -16,7 +17,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from sqlalchemy import create_engine, text  # noqa: E402
+from sqlalchemy import create_engine, inspect, text  # noqa: E402
 from app.config import settings  # noqa: E402
 
 # 已有表补列：table -> [(column, DDL 片段)]
@@ -172,6 +173,12 @@ def migrate(db_name: str) -> None:
     from app.db import Base
     Base.metadata.create_all(bind=engine)
     print("[migrate] create_all done (new tables ensured)")
+    required_confidence_tables = {"confidence_run", "job_confidence_snapshot"}
+    missing_confidence_tables = required_confidence_tables - set(inspect(engine).get_table_names())
+    if missing_confidence_tables:
+        raise RuntimeError(
+            f"confidence audit tables missing after migration: {sorted(missing_confidence_tables)}")
+    print("[migrate] confidence audit tables verified")
 
     # 2) 已有表补列（create_all 不会给已存在的表加列）
     with engine.begin() as conn:

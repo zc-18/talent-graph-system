@@ -1,8 +1,11 @@
 """Organization-scoped recruitment batches, ranking and Top-K selection."""
 from __future__ import annotations
 
+import logging
+from datetime import datetime, timedelta
 from time import perf_counter
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile
+from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
 
@@ -17,6 +20,51 @@ from ..services import recruitment, role_contract, talent as talent_service
 from ..services.resume import ResumeFileError
 
 router = APIRouter(prefix="/api/hr", tags=["hr"])
+log = logging.getLogger(__name__)
+
+# A parsed-and-scored candidate is written as "succeeded" by ``recruitment.process_file``
+# but as "completed" by the showcase seeder. Ranking used to test ``== "succeeded"``, so
+# every seeded batch answered "暂无候选人排名" while its own progress card said 14 成功 —
+# the counts come from the batch columns, the rows from this predicate, and the two
+# disagreed. Both spellings mean the same terminal state; keep them together in one set
+# so counting, ranking and Top-K selection can never drift apart again.
+SUCCEEDED_STATUSES = ("succeeded", "completed")
+PROCESSED_STATUSES = SUCCEEDED_STATUSES + ("failed",)
+
+# A batch whose worker died leaves the row in queued/processing forever: the UI polls it
+# indefinitely and uploads stay blocked by the "批次正在处理中" guard. There is no
+# scheduler here, so the read paths reap it.
+STALE_BATCH_TIMEOUT = timedelta(minutes=30)
+
+
+def _safe_commit(db: Session, context: str) -> bool:
+    """Commit side-effects of a read route without letting them break the read.
+
+    ``list_candidates`` / ``get_candidate`` append an AuditLog row and commit inside a
+    GET. If that commit raises (lock wait, replica, disk) the caller gets a 500 even
+    though the data it asked for was already loaded and serialized. The audit trail is
+    secondary to serving the read, so a failure is rolled back and logged instead.
+    """
+    try:
+        db.commit()
+        return True
+    except Exception:  # noqa: BLE001
+        log.exception("deferred write failed on %s; read continues", context)
+        db.rollback()
+        return False
+
+
+def _reap_stale_batches(db: Session, batches: list[models.RecruitmentBatch]) -> None:
+    """Mark batches whose worker never reported back as failed. Best effort."""
+    cutoff = datetime.utcnow() - STALE_BATCH_TIMEOUT
+    stale = [row for row in batches
+             if row.status in {"queued", "processing"}
+             and (row.updated_at or row.created_at) < cutoff]
+    if not stale:
+        return
+    for row in stale:
+        row.status = "failed"
+    _safe_commit(db, "recruitment.batch.reap")
 
 
 def _batch_dict(db: Session, row: models.RecruitmentBatch) -> dict:
@@ -100,8 +148,8 @@ def _refresh_counts(db: Session, batch: models.RecruitmentBatch) -> None:
     # Keep the upload-time total while the worker is still materializing candidates;
     # otherwise the UI denominator shrinks to the number processed so far.
     batch.total_count = max(batch.total_count or 0, len(rows))
-    batch.processed_count = sum(r.parse_status in {"succeeded", "failed"} for r in rows)
-    batch.succeeded_count = sum(r.parse_status == "succeeded" for r in rows)
+    batch.processed_count = sum(r.parse_status in PROCESSED_STATUSES for r in rows)
+    batch.succeeded_count = sum(r.parse_status in SUCCEEDED_STATUSES for r in rows)
     batch.failed_count = sum(r.parse_status == "failed" for r in rows)
 
 
@@ -191,6 +239,7 @@ def list_batches(status: str | None = None, page: int = 1, size: int = 20,
         q = q.filter(models.RecruitmentBatch.status == status)
     total = q.count()
     rows = q.order_by(models.RecruitmentBatch.updated_at.desc()).offset((page - 1) * size).limit(size).all()
+    _reap_stale_batches(db, rows)
     return {"items": [_batch_dict(db, row) for row in rows],
             "total": total, "page": page, "size": size}
 
@@ -202,6 +251,7 @@ def get_batch(batch_id: int, actor: Actor = Depends(require_hr),
     if not batch:
         raise HTTPException(404, "批次不存在")
     require_org(batch, actor)
+    _reap_stale_batches(db, [batch])
     return _batch_dict(db, batch)
 
 
@@ -213,7 +263,7 @@ def list_candidates(batch_id: int, status: str | None = None,
     if not batch:
         raise HTTPException(404, "批次不存在")
     require_org(batch, actor)
-    valid_statuses = {"pending", "processing", "succeeded", "failed"}
+    valid_statuses = {"pending", "processing", "failed", *SUCCEEDED_STATUSES}
     if status and status not in valid_statuses:
         raise HTTPException(422, "候选状态无效")
     page, size = max(1, page), min(100, max(1, size))
@@ -224,11 +274,12 @@ def list_candidates(batch_id: int, status: str | None = None,
     total = query.count()
     rows = query.order_by(models.BatchCandidate.id).offset(
         (page - 1) * size).limit(size).all()
+    # Serialize before the audit commit: a rollback there must not disturb the payload.
+    items = [_candidate_dict(db, row) for row in rows]
     add_audit(db, actor, "recruitment.candidate.list", "recruitment_batch", batch.id,
               summary={"count": len(rows), "status": status or "all"})
-    db.commit()
-    return {"items": [_candidate_dict(db, row) for row in rows],
-            "total": total, "page": page, "size": size}
+    _safe_commit(db, "recruitment.candidate.list")
+    return {"items": items, "total": total, "page": page, "size": size}
 
 
 @router.get("/recruitment-batches/{batch_id}/candidates/{candidate_id}")
@@ -243,10 +294,11 @@ def get_candidate(batch_id: int, candidate_id: int,
         models.BatchCandidate.batch_id == batch.id).first()
     if not candidate:
         raise HTTPException(404, "候选人不存在")
+    detail = _candidate_dict(db, candidate, detail=True)
     add_audit(db, actor, "recruitment.candidate.view", "batch_candidate", candidate.id,
               summary={"status": candidate.parse_status})
-    db.commit()
-    return _candidate_dict(db, candidate, detail=True)
+    _safe_commit(db, "recruitment.candidate.view")
+    return detail
 
 
 @router.delete("/recruitment-batches/{batch_id}/candidates/{candidate_id}", status_code=204)
@@ -284,8 +336,8 @@ def delete_candidate(batch_id: int, candidate_id: int,
     remaining = db.query(models.BatchCandidate).filter(
         models.BatchCandidate.batch_id == batch.id).all()
     batch.total_count = len(remaining)
-    batch.processed_count = sum(row.parse_status in {"succeeded", "failed"} for row in remaining)
-    batch.succeeded_count = sum(row.parse_status == "succeeded" for row in remaining)
+    batch.processed_count = sum(row.parse_status in PROCESSED_STATUSES for row in remaining)
+    batch.succeeded_count = sum(row.parse_status in SUCCEEDED_STATUSES for row in remaining)
     batch.failed_count = sum(row.parse_status == "failed" for row in remaining)
     if batch.status not in {"queued", "processing"}:
         batch.status = _terminal_status(batch)
@@ -423,10 +475,12 @@ def ranking(batch_id: int, min_score: float = 0, page: int = 1, size: int = 50,
         raise HTTPException(404, "批次不存在")
     require_org(batch, actor)
     page, size = max(1, page), min(100, max(1, size))
+    # coalesce, not a bare >=: an unscored row compares NULL >= 0 -> NULL in SQL and is
+    # silently dropped, which reads as "no candidates" rather than "not scored yet".
     q = db.query(models.BatchCandidate).filter(
         models.BatchCandidate.batch_id == batch.id,
-        models.BatchCandidate.parse_status == "succeeded",
-        models.BatchCandidate.overall_score >= min_score)
+        models.BatchCandidate.parse_status.in_(SUCCEEDED_STATUSES),
+        func.coalesce(models.BatchCandidate.overall_score, 0.0) >= min_score)
     total = q.count()
     rows = q.order_by(models.BatchCandidate.rank, models.BatchCandidate.id).offset(
         (page - 1) * size).limit(size).all()
@@ -448,7 +502,7 @@ def select_candidates(batch_id: int, payload: CandidateSelectRequest,
     rows = db.query(models.BatchCandidate).filter(
         models.BatchCandidate.batch_id == batch.id,
         models.BatchCandidate.id.in_(set(payload.candidate_ids)),
-        models.BatchCandidate.parse_status == "succeeded").all()
+        models.BatchCandidate.parse_status.in_(SUCCEEDED_STATUSES)).all()
     if len(rows) != len(set(payload.candidate_ids)):
         raise HTTPException(422, "候选 ID 包含不存在、失败或跨批次记录")
     if payload.team_id is None:

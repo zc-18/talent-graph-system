@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 from datetime import datetime
 from pathlib import Path
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from .. import clients, models
@@ -58,7 +59,27 @@ EMERGING_SEEDS = [
 ]
 
 
-def discover_candidates(keyword: str, max_results: int = 6) -> dict:
+def _historical_counts(db: Session, keyword: str, canonical_title: str | None) -> dict | None:
+    terms = list(dict.fromkeys(
+        value.strip() for value in (canonical_title, keyword.split(" ", 1)[0], keyword)
+        if value and value.strip()))
+    query = db.query(models.RawJD.publish_date).filter(
+        models.RawJD.is_duplicate == False,  # noqa: E712
+        models.RawJD.duplicate_of.is_(None),
+        models.RawJD.raw_text.isnot(None),
+        or_(*(models.RawJD.job_title.like(f"%{term}%") for term in terms)),
+    )
+    dates = [row[0] for row in query.all() if row[0] is not None]
+    if not dates:
+        return None
+    return {
+        "historical": sum(value.year < 2025 for value in dates),
+        "current": sum(value.year >= 2025 for value in dates),
+    }
+
+
+def discover_candidates(keyword: str, max_results: int = 6,
+                        db: Session | None = None) -> dict:
     """Search evidence after the established-job veto and score emergence."""
     resolution = resolve_job_query(keyword)
     if resolution.requires_disambiguation:
@@ -89,7 +110,9 @@ def discover_candidates(keyword: str, max_results: int = 6) -> dict:
     for r in news:
         evidence.append({**r, "title": r.get("title", ""), "url": r.get("url", ""),
                          "content": (r.get("content") or "")[:600], "provider": "tavily-news"})
-    scored = score_emergence(keyword, evidence)
+    history = (_historical_counts(db, keyword, resolution.canonical_title)
+               if db is not None else None)
+    scored = score_emergence(keyword, evidence, history=history)
     return {"keyword": keyword, "evidence": evidence,
             "emergence_score": scored["emergence_score"],
             "evidence_count": len(evidence),
@@ -120,19 +143,25 @@ def score_emergence(keyword: str, evidence: list[dict], history: dict | None = N
 
     history_available = history is not None
     history = history or {}
-    old_count = int(history.get("2018", 0)) + int(history.get("2024", 0))
-    current_count = int(history.get("2026", 0))
-    historical_novelty = (1.0 if current_count and old_count == 0 else
-                          min(1.0, max(0.0, (current_count - old_count) / max(1, old_count)))) \
-        if history_available and current_count else 0.0
+    old_count = int(history.get("historical", history.get("2018", 0) + history.get("2024", 0)))
+    current_count = int(history.get("current", history.get("2026", 0)))
+    historical_novelty = None
+    if history_available:
+        historical_novelty = (1.0 if current_count and old_count == 0 else
+                              min(1.0, max(0.0, (current_count - old_count)
+                                           / max(1, old_count))))
     authority_strength = 1.0 if "policy" in kinds else (0.75 if "report" in kinds else 0.0)
     employer_diffusion = min(1.0, len(employers) / 3.0)
     market_spread = min(1.0, (len(regions) + len(industries)) / 4.0)
     novelty_markers = ("智能体", "具身智能", "大模型", "aigc", "数字人", "生成式人工智能")
     naming_novelty = 1.0 if any(x in keyword.casefold() for x in novelty_markers) else 0.35
-    score = round(0.35 * authority_strength + 0.25 * historical_novelty
-                  + 0.20 * employer_diffusion + 0.10 * market_spread
-                  + 0.10 * naming_novelty, 3)
+    weighted = (0.35 * authority_strength + 0.20 * employer_diffusion
+                + 0.10 * market_spread + 0.10 * naming_novelty)
+    available_weight = 0.75
+    if historical_novelty is not None:
+        weighted += 0.25 * historical_novelty
+        available_weight += 0.25
+    score = round(weighted / available_weight, 3)
     verdict = "EMERGING" if score >= 0.6 and len(employers) >= 2 else "INSUFFICIENT_EVIDENCE"
     return {
         "emergence_score": score, "verdict": verdict,
@@ -140,13 +169,30 @@ def score_emergence(keyword: str, evidence: list[dict], history: dict | None = N
         "signals": {
             "mature_occupation_veto": False,
             "authority_strength": authority_strength,
-            "historical_novelty": round(historical_novelty, 3),
+            "historical_novelty": (round(historical_novelty, 3)
+                                   if historical_novelty is not None else None),
             "history_available": history_available,
+            "history_status": "available" if history_available else "insufficient_history",
             "employer_diffusion": round(employer_diffusion, 3),
             "market_spread": round(market_spread, 3),
             "naming_novelty": naming_novelty,
             "old_corpus_count": old_count,
             "current_corpus_count": current_count,
+            "signal_details": [
+                {"key": "authority_strength", "label": "权威度",
+                 "value": round(authority_strength, 3), "available": True},
+                {"key": "historical_novelty", "label": "历史新颖性",
+                 "value": (round(historical_novelty, 3)
+                           if historical_novelty is not None else None),
+                 "available": historical_novelty is not None,
+                 "empty_reason": (None if historical_novelty is not None else "历史样本不足")},
+                {"key": "employer_diffusion", "label": "雇主扩散",
+                 "value": round(employer_diffusion, 3), "available": True},
+                {"key": "market_spread", "label": "市场覆盖",
+                 "value": round(market_spread, 3), "available": True},
+                {"key": "naming_novelty", "label": "命名新颖性",
+                 "value": round(naming_novelty, 3), "available": True},
+            ],
         },
     }
 

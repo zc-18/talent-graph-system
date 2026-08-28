@@ -1,16 +1,23 @@
 """新岗位发现与定义路由。"""
 from __future__ import annotations
+import logging
 from time import perf_counter
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from sqlalchemy.orm import Session, sessionmaker
 from ..db import get_db
 from .. import models
 from ..schemas import (CandidatePatchRequest, DiscoverRequest, DefineRequest,
                        DiscoveryRunRequest)
 from ..services import discovery, graph_service
 from ..guards import is_read_only, READ_ONLY_MESSAGE
-from ..auth import Actor, add_audit, add_usage, current_actor
+from ..auth import Actor, actor_for_user, add_audit, add_usage, current_actor
 from ..ownership import owned_query, require_org, require_owner
+
+log = logging.getLogger(__name__)
+
+# 排队中的行必须先落库才能返回 run_id，但 conclusion 是 NOT NULL —— 用这个哨兵占位，
+# 前端据此知道结论尚未产生（而不是把它当成一个真的分类结果去渲染）。
+PENDING_CONCLUSION = "PENDING"
 
 router = APIRouter(prefix="/api/discovery", tags=["discovery"])
 
@@ -149,7 +156,7 @@ def seeds():
 @router.post("/discover")
 def discover(payload: DiscoverRequest, db: Session = Depends(get_db)):
     """检索某新兴岗位证据并生成定义；save=True 且岗位尚不存在时落库。"""
-    cand = discovery.discover_candidates(payload.keyword)
+    cand = discovery.discover_candidates(payload.keyword, db=db)
     if cand.get("verdict") == "AMBIGUOUS":
         return {"candidate": cand, "definition": None, "saved": None,
                 "conflict": {"reason": "ambiguous_query",
@@ -171,6 +178,7 @@ def discover(payload: DiscoverRequest, db: Session = Depends(get_db)):
     return {"candidate": {"keyword": cand["keyword"], "emergence_score": cand["emergence_score"],
                           "evidence_count": cand["evidence_count"],
                           "independent_sources": cand.get("independent_sources", 0),
+                          "signals": cand.get("signals", {}),
                           "evidence": cand["evidence"][:6]},
             "definition": definition, "saved": saved, "conflict": conflict,
             **({"dry_run": True, "notice": (READ_ONLY_MESSAGE if is_read_only()
@@ -183,7 +191,7 @@ def define(payload: DefineRequest, db: Session = Depends(get_db)):
     """基于给定证据(可人工补充)生成/保存新岗位定义。"""
     evidence = payload.evidence
     if not evidence:
-        evidence = discovery.discover_candidates(payload.keyword)["evidence"]
+        evidence = discovery.discover_candidates(payload.keyword, db=db)["evidence"]
     definition = discovery.define_new_job(payload.keyword, evidence)
     saved, conflict = None, None
     return {"definition": definition, "saved": saved, "conflict": conflict,
@@ -192,50 +200,174 @@ def define(payload: DefineRequest, db: Session = Depends(get_db)):
                if payload.save else {})}
 
 
+def _evolution_run_for(db: Session, run: models.DiscoveryRun) -> models.EvolutionRun | None:
+    """Resolve the evolution run an ESTABLISHED discovery already spawned.
+
+    Keyed by run id, so it also works on the read path where no actor filter applies.
+    """
+    return db.query(models.EvolutionRun).filter(
+        models.EvolutionRun.idempotency_key == f"discovery:{run.id}").first()
+
+
+def _run_envelope(db: Session, run: models.DiscoveryRun, *,
+                  candidate: models.JobCandidate | None = None,
+                  matched: models.Job | None = None,
+                  evolution_run: models.EvolutionRun | None = None,
+                  idempotent_replay: bool = False) -> dict:
+    """The single response shape for create / replay / poll.
+
+    The poll endpoint returns exactly what the synchronous POST returns, so a client
+    renders a finished background run through the same code path as an inline one.
+    """
+    if candidate is None:
+        candidate = db.query(models.JobCandidate).filter(
+            models.JobCandidate.discovery_run_id == run.id).first()
+    if matched is None and run.matched_job_id:
+        matched = db.get(models.Job, run.matched_job_id)
+    if evolution_run is None:
+        evolution_run = _evolution_run_for(db, run)
+    classification = None if run.conclusion == PENDING_CONCLUSION else run.conclusion
+    return {"idempotent_replay": idempotent_replay,
+            "run_id": run.id, "status": run.status, "error": run.error,
+            "classification": classification,
+            "candidate_id": candidate.id if candidate else None,
+            "run": _run_dict(run),
+            "candidate": _candidate_detail(db, candidate) if candidate else None,
+            "matched_job": _matched_job_dict(matched),
+            "evolution_run_id": evolution_run.id if evolution_run else None}
+
+
+def _execute_run(db: Session, run: models.DiscoveryRun, actor: Actor) -> dict:
+    """The expensive half of a discovery run: web retrieval + LLM definition.
+
+    Worst case this is ~200s of network and model latency, which is why the HTTP route
+    can hand it to a background worker. The caller owns the commit, so the same body
+    serves both the inline path (request session) and the worker path (its own session).
+
+    READ_ONLY does not gate this: a run only writes owner/org-scoped workflow rows
+    (DiscoveryRun / JobCandidate / revisions), never public graph knowledge. The
+    read-only demo therefore still produces a real definition to render.
+    """
+    started = perf_counter()
+    keyword = run.query
+    found = discovery.discover_candidates(keyword, db=db)
+    verdict = (found.get("verdict") or "INSUFFICIENT_EVIDENCE").upper()
+    conclusion = verdict if verdict in {"ESTABLISHED", "AMBIGUOUS"} else "NEW"
+    resolution = found.get("resolution") or {}
+    canonical = found.get("existing_job") or resolution.get("canonical_title") or keyword
+    matched = (_find_published_job(db, canonical, keyword)
+               if conclusion == "ESTABLISHED" else None)
+    evidence = found.get("evidence", [])
+    signals = {**(found.get("signals") or {}),
+               "source_verdict": verdict,
+               "emergence_score": float(found.get("emergence_score") or 0)}
+    definition = discovery.define_new_job(keyword, evidence) if conclusion == "NEW" else None
+
+    # Caller-supplied conditions win over the resolver's guesses, as in the original flow.
+    run.conditions = {**resolution, **(run.conditions or {})}
+    run.evidence_snapshot = evidence
+    run.signal_snapshot = signals
+    run.conclusion = conclusion
+    run.matched_job_id = matched.id if matched else None
+    run.status = "completed"
+    run.error = None
+    db.flush()
+
+    candidate = db.query(models.JobCandidate).filter(
+        models.JobCandidate.discovery_run_id == run.id).first()
+    if conclusion == "NEW" and candidate is None:
+        candidate = models.JobCandidate(
+            discovery_run_id=run.id, owner_user_id=run.owner_user_id,
+            organization_id=run.organization_id, status="draft", current_revision=1)
+        db.add(candidate)
+        db.flush()
+        db.add(models.JobCandidateRevision(
+            candidate_id=candidate.id, revision=1, definition=definition,
+            change_note="initial discovery", created_by=run.owner_user_id))
+    evolution_run = None
+    if conclusion == "ESTABLISHED" and matched:
+        evolution_run, _ = _ensure_evolution_run(db, run, matched, actor)
+    add_audit(db, actor, "discovery.run", "discovery_run", run.id,
+              summary={"status": conclusion})
+    add_usage(db, actor, "discovery", int((perf_counter() - started) * 1000))
+    return _run_envelope(db, run, candidate=candidate, matched=matched,
+                         evolution_run=evolution_run)
+
+
+def _run_discovery_task(bind, run_id: int, user_id: int) -> None:
+    """Background worker for one queued run.
+
+    Takes the engine, not the request session: by the time this runs FastAPI has closed
+    the session ``get_db`` yielded, so reusing it would raise on first access.
+    """
+    db = sessionmaker(bind=bind)()
+    try:
+        run = db.get(models.DiscoveryRun, run_id)
+        user = db.get(models.AppUser, user_id)
+        if run is None or user is None:
+            return
+        if run.status not in {"queued", "failed"}:
+            return
+        run.status = "running"
+        run.error = None
+        db.commit()
+        _execute_run(db, run, actor_for_user(db, user))
+        db.commit()
+    except Exception as exc:  # noqa: BLE001
+        db.rollback()
+        log.exception("discovery run %s failed", run_id)
+        failed = db.get(models.DiscoveryRun, run_id)
+        if failed is not None:
+            failed.status = "failed"
+            failed.error = f"{type(exc).__name__}: {exc}"[:2000]
+            db.commit()
+    finally:
+        db.close()
+
+
 @router.post("/runs", status_code=201)
-def create_run(payload: DiscoveryRunRequest, actor: Actor = Depends(current_actor),
+def create_run(payload: DiscoveryRunRequest, background_tasks: BackgroundTasks,
+               async_mode: bool = False,
+               actor: Actor = Depends(current_actor),
                db: Session = Depends(get_db)):
     """Run discovery and persist only an owner/org-scoped workflow record.
 
+    ``async_mode=true`` (a query parameter, so the shared request schema stays untouched)
+    returns a ``queued`` run id immediately and moves retrieval + LLM into a background
+    task; poll ``GET /runs/{id}`` for the result. The default stays synchronous because
+    non-polling callers read the classification straight out of the create response.
+
     This remains available in READ_ONLY mode because it does not mutate public knowledge.
     """
-    started = perf_counter()
     if payload.idempotency_key:
         existing = db.query(models.DiscoveryRun).filter(
             models.DiscoveryRun.owner_user_id == actor.user_id,
             models.DiscoveryRun.idempotency_key == payload.idempotency_key).first()
         if existing:
-            candidate = db.query(models.JobCandidate).filter(
-                models.JobCandidate.discovery_run_id == existing.id).first()
-            matched = db.get(models.Job, existing.matched_job_id) if existing.matched_job_id else None
-            evolution_run = None
-            created_evolution = False
+            # A failed run must not lock its key forever — re-run instead of replaying.
+            if existing.status == "failed":
+                existing.status = "queued"
+                existing.error = None
+                db.commit()
+                if async_mode:
+                    background_tasks.add_task(_run_discovery_task, db.get_bind(),
+                                              existing.id, actor.user_id)
+                    return _run_envelope(db, existing, idempotent_replay=True)
+                _execute_run(db, existing, actor)
+                db.commit()
+                return _run_envelope(db, existing, idempotent_replay=True)
+            evolution_run, created_evolution = None, False
+            matched = (db.get(models.Job, existing.matched_job_id)
+                       if existing.matched_job_id else None)
             if existing.conclusion == "ESTABLISHED" and matched:
                 evolution_run, created_evolution = _ensure_evolution_run(
                     db, existing, matched, actor)
             if created_evolution:
                 db.commit()
-            return {"idempotent_replay": True, "classification": existing.conclusion,
-                    "candidate_id": candidate.id if candidate else None,
-                    "run": _run_dict(existing),
-                    "candidate": _candidate_detail(db, candidate) if candidate else None,
-                    "matched_job": _matched_job_dict(matched),
-                    "evolution_run_id": evolution_run.id if evolution_run else None}
+            return _run_envelope(db, existing, matched=matched,
+                                 evolution_run=evolution_run, idempotent_replay=True)
 
-    found = discovery.discover_candidates(payload.keyword)
-    verdict = (found.get("verdict") or "INSUFFICIENT_EVIDENCE").upper()
-    conclusion = verdict if verdict in {"ESTABLISHED", "AMBIGUOUS"} else "NEW"
-    resolution = found.get("resolution") or {}
-    canonical = found.get("existing_job") or resolution.get("canonical_title") or payload.keyword
-    matched = None
-    if conclusion == "ESTABLISHED":
-        matched = _find_published_job(db, canonical, payload.keyword)
-    evidence = found.get("evidence", [])
-    signals = {**(found.get("signals") or {}),
-               "source_verdict": verdict,
-               "emergence_score": float(found.get("emergence_score") or 0)}
-    definition = discovery.define_new_job(payload.keyword, evidence) if conclusion == "NEW" else None
-    conditions = {**resolution, **payload.conditions}
+    conditions = dict(payload.conditions)
     for key in ("track", "industry", "seniority", "recruitment_type", "keywords"):
         value = getattr(payload, key)
         if value not in (None, [], ""):
@@ -244,39 +376,57 @@ def create_run(payload: DiscoveryRunRequest, actor: Actor = Depends(current_acto
     run = models.DiscoveryRun(
         owner_user_id=actor.user_id, organization_id=actor.organization_id,
         query=payload.keyword, conditions=conditions,
-        evidence_snapshot=evidence, signal_snapshot=signals,
-        conclusion=conclusion, matched_job_id=matched.id if matched else None,
+        evidence_snapshot=[], signal_snapshot={},
+        conclusion=PENDING_CONCLUSION, status="queued",
         idempotency_key=payload.idempotency_key)
     db.add(run)
     db.flush()
-    candidate = None
-    if conclusion == "NEW":
-        candidate = models.JobCandidate(
-            discovery_run_id=run.id, owner_user_id=actor.user_id,
-            organization_id=actor.organization_id, status="draft", current_revision=1)
-        db.add(candidate)
-        db.flush()
-        db.add(models.JobCandidateRevision(candidate_id=candidate.id, revision=1,
-                                           definition=definition, change_note="initial discovery",
-                                           created_by=actor.user_id))
-    evolution_run = None
-    if conclusion == "ESTABLISHED" and matched:
-        evolution_run, _ = _ensure_evolution_run(db, run, matched, actor)
+
+    if not async_mode:
+        envelope = _execute_run(db, run, actor)
+        db.commit()
+        return envelope
+
     add_audit(db, actor, "discovery.run", "discovery_run", run.id,
-              summary={"status": conclusion})
-    add_usage(db, actor, "discovery", int((perf_counter() - started) * 1000))
+              summary={"status": "queued"})
     db.commit()
-    return {"idempotent_replay": False, "classification": conclusion,
-            "candidate_id": candidate.id if candidate else None,
-            "run": _run_dict(run),
-            "candidate": _candidate_detail(db, candidate) if candidate else None,
-            "matched_job": _matched_job_dict(matched),
-            "evolution_run_id": evolution_run.id if evolution_run else None}
+    background_tasks.add_task(_run_discovery_task, db.get_bind(), run.id, actor.user_id)
+    return _run_envelope(db, run)
+
+
+@router.get("/runs")
+def list_runs(status: str | None = None, page: int = 1, size: int = 20,
+              actor: Actor = Depends(current_actor), db: Session = Depends(get_db)):
+    """Owner/org-scoped run history — the client uses it to resume an unfinished poll."""
+    size = min(max(size, 1), 100)
+    page = max(page, 1)
+    q = owned_query(db.query(models.DiscoveryRun), models.DiscoveryRun, actor)
+    if status:
+        q = q.filter(models.DiscoveryRun.status == status)
+    total = q.count()
+    rows = q.order_by(models.DiscoveryRun.id.desc()).offset((page - 1) * size).limit(size).all()
+    return {"items": [_run_dict(row) for row in rows],
+            "total": total, "page": page, "size": size}
+
+
+@router.get("/runs/{run_id}")
+def get_run(run_id: int, actor: Actor = Depends(current_actor),
+            db: Session = Depends(get_db)):
+    """Poll one run. Returns the same envelope the synchronous POST does."""
+    run = db.get(models.DiscoveryRun, run_id)
+    if not run:
+        raise HTTPException(404, "发现任务不存在")
+    if actor.role == "hr":
+        require_org(run, actor)
+    else:
+        require_owner(run, actor)
+    return _run_envelope(db, run)
 
 
 def _run_dict(run: models.DiscoveryRun) -> dict:
     return {"id": run.id, "query": run.query, "conditions": run.conditions or {},
             "classification": run.conclusion, "matched_job_id": run.matched_job_id,
+            "status": run.status, "error": run.error,
             "signals": run.signal_snapshot or {},
             "evidence": run.evidence_snapshot or [],
             "created_at": run.created_at.isoformat()}

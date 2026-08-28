@@ -6,10 +6,58 @@ from __future__ import annotations
 from datetime import datetime
 from sqlalchemy.orm import Session
 from .. import models
-from .hallucination import job_confidence
+from .confidence_batch import REAL_EXTERNAL_TYPES
+from .hallucination import MIN_SOURCES_REQUIRED, job_confidence
 from .taxonomy import normalize_skill
 
 WEIGHT_DELTA = 0.2   # 权重变化阈值
+
+# 落库准入闸门：与 hallucination 聚合同一个阈值常量，不另立第二套口径。
+MIN_EMPLOYERS_FOR_ACTIVE = MIN_SOURCES_REQUIRED
+
+
+def admission_status(cap: dict) -> str:
+    """判定一条能力项**能否以 active 落库**——交叉验证闸门，不是调用方说了算。
+
+    防的是 2026-08 复盘查到的这类事故：`apply_evolution` 的新增分支历史上把
+    `status="active"` 硬编码进 `models.JobSkill(...)`，更新分支同样无条件写
+    `js.status = "active"`。于是调用方只要在 cap 里声称 `status='active'`，
+    哪怕 `source_count=0`、`factors={}`、`evidence` 一条都没有，也会凭空落出一行
+    绕过「≥2 独立雇主交叉验证」的 active 能力——而这道闸门正是本作品的核心主张。
+
+    生产库 `talent_graph_v3` 里因此留下 **345 行幽灵能力**：source_count=0、
+    factors 全零、confidence=0、evidence 表里一条关联记录都没有，集中在 15 个
+    version>1 的岗位上，其中 93.7% 能被 `capability_change` 的 add 记录逐条对上。
+    后果不止是难看：`job.confidence` 是能力项置信度的加权均值，被这些 0 分行拖死
+    （后端开发工程师 28 个 active 里 27 个是幽灵 → 岗位置信度 0.0334）。
+
+    判据（与 `hallucination.aggregate_capabilities` 完全一致，不放宽）：
+      · 独立雇主数 ≥ MIN_EMPLOYERS_FOR_ACTIVE → active；
+      · 否则只有拿得出 web/权威外部佐证（web_verified / factors.external / 证据
+        里带非 JD 的外部来源）才算过闸；
+      · 都没有 → candidate（保留观察、保留证据链，**不是**淘汰、**不**删行）。
+
+    向后兼容：正常调用方（`data/run_evolution_batch.py` 与治理发布路径）传进来的
+    是聚合结果或经审核的快照，本来就带着 ≥2 的 source_count 与完整 factors/evidence，
+    判定结果仍是 active，行为不变。
+    """
+    if int(cap.get("source_count") or cap.get("employer_count") or 0) >= MIN_EMPLOYERS_FOR_ACTIVE:
+        return "active"
+    if cap.get("web_verified"):
+        return "active"
+    if float((cap.get("factors") or {}).get("external") or 0) >= 1.0:
+        return "active"
+    for ev in cap.get("evidence") or []:
+        if str(ev.get("source_type") or "").casefold() in REAL_EXTERNAL_TYPES:
+            return "active"
+    return "candidate"
+
+
+def _gated(caps: list[dict], admission: dict[str, str]) -> list[dict]:
+    """把闸门判定回填进能力集副本（不改调用方的 dict），供岗位级口径复用。"""
+    return [c if c.get("status") != "active"
+            else {**c, "status": admission.get(c["name"], "candidate")}
+            for c in caps]
 
 
 def compute_changes(old_caps: list[dict], new_caps: list[dict],
@@ -130,11 +178,20 @@ def _imp(x):
 
 def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
                     changes: list[dict], *, commit: bool = True) -> dict:
-    """应用演化：更新 JobSkill、写入变更记录、版本号 +1。"""
+    """应用演化：更新 JobSkill、写入变更记录、版本号 +1。
+
+    **落库状态由交叉验证闸门决定，不由调用方声称的 status 决定**（见
+    `admission_status` 的完整事故说明）：声称 active 但拿不出 ≥2 独立雇主、
+    也拿不出外部权威佐证的能力项一律落 candidate，绝不写成 active。
+    这是 2026-08 复盘 345 行幽灵能力后加的闸门。
+    """
     from .graph_service import upsert_skill, write_evidence
     new_version = (job.version or 1) + 1
 
     active_new = [c for c in new_caps if c.get("status") == "active"]
+    # 准入判定先算好：写行、算岗位置信度、算 evidence_count 三处必须用同一份判定，
+    # 否则又是一次「库里一个样、卡片上另一个样」。
+    admission = {c["name"]: admission_status(c) for c in active_new}
 
     existing = db.query(models.JobSkill).filter(models.JobSkill.job_id == job.id).all()
     # 技能名一次批量取（历史实现逐条 Skill.get，是 N+1）
@@ -195,7 +252,7 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
             js.source_count = c.get("source_count", js.source_count)
             js.level_required = c.get("level_required", js.level_required)
             js.factors = c.get("factors", js.factors) or {}
-            js.status = "active"
+            js.status = admission[c["name"]]
             js.last_seen = datetime.utcnow()
         else:
             js = models.JobSkill(
@@ -203,7 +260,8 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
                 weight=c.get("weight", 0.5), level_required=c.get("level_required", "familiar"),
                 confidence=c.get("confidence", 0.0), source_count=c.get("source_count", 0),
                 factors=c.get("factors") or {},
-                status="active", first_seen=datetime.utcnow(), last_seen=datetime.utcnow())
+                status=admission[c["name"]],
+                first_seen=datetime.utcnow(), last_seen=datetime.utcnow())
             db.add(js)
             db.flush()
         # 证据落库：聚合结果里本来就带着 raw_jd_id，此前被整个忽略，于是每一条经
@@ -222,10 +280,13 @@ def apply_evolution(db: Session, job: models.Job, new_caps: list[dict],
             confidence=ch.get("confidence", 0.0)))
 
     job.version = new_version
-    job.confidence = job_confidence(new_caps)
+    # 岗位级两个数都按**闸门判定后的实际落库状态**算：没过闸的落成 candidate，就不能
+    # 再算进岗位置信度和 JD 支撑数，否则卡片上的数字与库里的行又对不上。
+    job.confidence = job_confidence(_gated(new_caps, admission))
     # 卡片上的「JD 支撑」口径与 upsert_job 保持一致（active 项的 source_count 之和）。
     # 此前只有建图时算一次，演化改了能力集却不重算，岗位列表的数字越跑越旧。
-    job.evidence_count = sum(c.get("source_count", 0) for c in active_new)
+    job.evidence_count = sum(c.get("source_count", 0) for c in active_new
+                             if admission[c["name"]] == "active")
     job.updated_at = datetime.utcnow()
     if commit:
         db.commit()

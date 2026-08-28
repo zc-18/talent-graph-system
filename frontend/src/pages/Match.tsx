@@ -97,7 +97,7 @@ export default function Match() {
   const gauge = res && {
     series: [{
       type: 'gauge', startAngle: 210, endAngle: -30, min: 0, max: 100, radius: '95%',
-      progress: { show: true, width: 12, itemStyle: { color: res.overall_score >= 70 ? '#10B981' : res.overall_score >= 50 ? '#0EA5E9' : '#F59E0B' } },
+      progress: { show: true, width: 12, itemStyle: { color: res.overall_score >= 70 ? '#0284C7' : res.overall_score >= 50 ? '#38BDF8' : '#F59E0B' } },
       axisLine: { lineStyle: { width: 12, color: [[1, 'rgba(2,6,23,0.06)']] } },
       axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false }, pointer: { show: false },
       detail: { fontSize: 34, fontWeight: 800, color: '#0F172A', formatter: '{value}', offsetCenter: [0, '-5%'] },
@@ -109,8 +109,8 @@ export default function Match() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
-          <ITarget className="w-6 h-6 text-white" />
+        <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent ring-1 ring-accent/20 grid place-items-center shadow-glow">
+          <ITarget className="w-6 h-6 text-accent-deep" />
         </div>
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">人岗匹配诊断与差距分析</h1>
@@ -118,7 +118,7 @@ export default function Match() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-5">
         <Card className="p-5 space-y-4">
           <div>
             <div className="label mb-1.5">目标岗位</div>
@@ -170,7 +170,7 @@ export default function Match() {
           </button>
 
           <div className="flex items-start gap-1.5 text-[11px] text-slate-400 leading-relaxed">
-            <IShieldCheck className="w-3.5 h-3.5 shrink-0 mt-0.5 text-emerald-500" />
+            <IShieldCheck className="w-3.5 h-3.5 shrink-0 mt-0.5 text-accent" />
             <span>隐私合规：简历仅在内存中解析用于本次匹配，原始简历与姓名等个人信息<b className="text-slate-500">不在服务器留存</b>，仅保留脱敏技能要素。</span>
           </div>
         </Card>
@@ -178,10 +178,10 @@ export default function Match() {
         <div ref={stepsRef} className="lg:col-span-2 space-y-5">
           {loading && !res && <Card className="p-10"><Spinner label="正在诊断人岗匹配度…" /></Card>}
           {!res && !loading && (
-            <Card className="p-8" delay={0.05}>
+            <Card className="p-5 sm:p-8" delay={0.05}>
               <div className="text-center mb-6">
                 <img ref={floatRef} src="/empty-match.webp" alt=""
-                  className="w-44 h-44 object-contain mx-auto mb-2 mix-blend-multiply drop-shadow-[0_12px_24px_rgba(99,102,241,0.22)]" />
+                  className="mx-auto mb-2 h-32 w-32 object-contain mix-blend-multiply drop-shadow-[0_12px_24px_rgba(99,102,241,0.22)] sm:h-44 sm:w-44" />
                 <h3 className="text-lg font-bold text-slate-800">上传简历或输入技能，开始诊断</h3>
                 <p className="text-sm text-slate-500 mt-1">系统将对比目标岗位能力图谱，输出多维匹配与提升路径</p>
               </div>
@@ -213,7 +213,7 @@ export default function Match() {
                   <div className="label">综合匹配度</div>
                   <ReactECharts option={gauge} style={{ height: 180 }} />
                   <div className="text-center -mt-3">
-                    <Badge tone={res.overall_score >= 70 ? 'emerald' : res.overall_score >= 50 ? 'cyan' : 'amber'}>{res.level}</Badge>
+                    <Badge tone={res.overall_score >= 70 ? 'indigo' : res.overall_score >= 50 ? 'cyan' : 'amber'}>{res.level}</Badge>
                   </div>
                 </Card>
                 <Card className="p-5">
@@ -225,10 +225,10 @@ export default function Match() {
               <Card className="p-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <div className="flex items-center gap-2 label mb-2"><CheckCircle2 className="w-4 h-4 text-emerald-600" /> 已具备 ({res.matched_skills.filter((m: any) => m.importance === 'required').length})</div>
+                    <div className="flex items-center gap-2 label mb-2"><CheckCircle2 className="w-4 h-4 text-accent-deep" /> 已具备 ({res.matched_skills.filter((m: any) => m.importance === 'required').length})</div>
                     <div className="flex flex-wrap gap-1.5">
                       {res.matched_skills.filter((m: any) => m.importance === 'required').map((m: any) => (
-                        <span key={m.name} className="chip border bg-emerald-50 border-emerald-200 text-emerald-700">
+                        <span key={m.name} className="chip border bg-accent/8 border-accent/30 text-accent-deep">
                           {m.name}{m.match_type === 'semantic' && <span className="text-[9px] opacity-70">语义</span>}
                         </span>
                       ))}
@@ -240,7 +240,7 @@ export default function Match() {
                        {topGaps.map((m: any) => (
                          <span key={m.name || m.skill} className="chip border bg-rose-50 border-rose-200 text-rose-700">{m.name || m.skill}</span>
                        ))}
-                       {topGaps.length === 0 && <span className="text-xs text-emerald-600">核心必备能力已全覆盖</span>}
+                       {topGaps.length === 0 && <span className="text-xs text-accent-deep">核心必备能力已全覆盖</span>}
                      </div>
                   </div>
                 </div>
@@ -248,9 +248,9 @@ export default function Match() {
 
               {result.learning_path?.length > 0 && (
                 <Card className="p-5">
-                  <div className="flex items-center gap-2 label mb-4"><IPath className="w-4 h-4 text-cyan-600" /> 岗位学习路径规划</div>
+                  <div className="flex items-center gap-2 label mb-4"><IPath className="w-4 h-4 text-accent-deep" /> 岗位学习路径规划</div>
                   <div ref={pathRef} className="relative pl-6">
-                    <div className="path-line absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-accent to-cyan-400/40" />
+                    <div className="path-line absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-accent to-accent/40" />
                     {result.learning_path.map((p: any) => (
                       <div key={p.step} data-reveal className="relative pb-4">
                         <span className="absolute -left-[19px] top-0.5 w-3.5 h-3.5 rounded-full bg-grad-accent ring-4 ring-white text-[8px] grid place-items-center font-bold text-slate-900">{p.step}</span>
@@ -274,7 +274,7 @@ export default function Match() {
                   <div className="flex items-center gap-2 label mb-3"><ILightbulb className="w-4 h-4 text-amber-600" /> 针对性改进建议</div>
                   <p className="text-sm text-slate-700 leading-relaxed">{result.suggestions.overall_advice}</p>
                   {result.suggestions.timeline && (
-                    <div className="mt-2 text-xs text-cyan-600 flex items-center gap-1"><Sparkles className="w-3 h-3" /> {result.suggestions.timeline}</div>
+                    <div className="mt-2 text-xs text-accent-deep flex items-center gap-1"><Sparkles className="w-3 h-3" /> {result.suggestions.timeline}</div>
                   )}
                   {result.suggestions.skill_advice?.length > 0 && (
                     <div className="mt-3 space-y-2">

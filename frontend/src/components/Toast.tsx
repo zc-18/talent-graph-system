@@ -10,7 +10,7 @@ const ToastCtx = createContext<(kind: ToastKind, text: string) => void>(() => {}
 export function useToast() { return useContext(ToastCtx) }
 
 const ICON = {
-  success: <CheckCircle2 className="w-[18px] h-[18px] text-emerald-500 shrink-0" />,
+  success: <CheckCircle2 className="w-[18px] h-[18px] text-accent-deep shrink-0" />,
   error: <XCircle className="w-[18px] h-[18px] text-rose-500 shrink-0" />,
   info: <Info className="w-[18px] h-[18px] text-sky-500 shrink-0" />,
 }

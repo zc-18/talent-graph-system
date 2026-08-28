@@ -1,9 +1,9 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { Routes, Route, NavLink, useLocation, Link } from 'react-router-dom'
+import { Routes, Route, NavLink, useLocation, Link, Navigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   BriefcaseBusiness, CalendarClock, ChevronLeft, ChevronRight, LogIn, LogOut, Menu,
-  MessageSquareText, ShieldCheck, UserRound, X,
+  MessageSquareText, ShieldCheck, X,
 } from 'lucide-react'
 import { IGauge, ITreeStructure, ISparkle, IGitBranch, IBriefcase, ITarget, IUsersThree } from './components/icons'
 import ChatBot from './components/ChatBot'
@@ -12,6 +12,7 @@ import { ReadOnlyProvider } from './hooks/useReadOnly'
 import { Spinner } from './components/ui'
 import { AuthProvider, RequireAuth, useAuth } from './auth'
 import type { AppRole } from './api'
+import RoleAvatar from './components/RoleAvatar'
 
 // 路由级代码分割：各页面（含 ECharts 等重依赖）按需加载，减小首包
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -27,49 +28,53 @@ const HistoryPage = lazy(() => import('./pages/History'))
 const Feedback = lazy(() => import('./pages/Feedback'))
 const HRWorkspace = lazy(() => import('./pages/HRWorkspace'))
 const Admin = lazy(() => import('./pages/Admin'))
+const Portal = lazy(() => import('./pages/Portal'))
 
 type NavItem = { to: string; label: string; icon: any; end?: boolean; roles?: AppRole[] }
+const ALL_ROLES: AppRole[] = ['user', 'hr', 'admin']
 const NAV: NavItem[] = [
-  { to: '/', label: '数据驾驶舱', icon: IGauge, end: true },
-  { to: '/panorama', label: '全景能力图谱', icon: ITreeStructure },
-  { to: '/discovery', label: '新岗位发现', icon: ISparkle },
-  { to: '/evolution', label: '岗位能力演化', icon: IGitBranch },
-  { to: '/jobs', label: '岗位库管理', icon: IBriefcase },
-  { to: '/match', label: '人岗匹配诊断', icon: ITarget },
-  { to: '/talent', label: '人才与团队盘点', icon: IUsersThree },
-  { to: '/history', label: '我的匹配历史', icon: CalendarClock, roles: ['user', 'hr', 'admin'] },
-  { to: '/feedback', label: '反馈与更新', icon: MessageSquareText, roles: ['user', 'hr', 'admin'] },
+  { to: '/dashboard', label: '数据驾驶舱', icon: IGauge, end: true, roles: ALL_ROLES },
+  { to: '/panorama', label: '全景能力图谱', icon: ITreeStructure, roles: ALL_ROLES },
+  { to: '/discovery', label: '新岗位发现', icon: ISparkle, roles: ALL_ROLES },
+  { to: '/evolution', label: '岗位能力演化', icon: IGitBranch, roles: ALL_ROLES },
+  { to: '/jobs', label: '岗位库管理', icon: IBriefcase, roles: ALL_ROLES },
+  { to: '/match', label: '人岗匹配诊断', icon: ITarget, roles: ALL_ROLES },
+  { to: '/talent', label: '人才与团队盘点', icon: IUsersThree, roles: ALL_ROLES },
+  { to: '/history', label: '我的匹配历史', icon: CalendarClock, roles: ALL_ROLES },
+  { to: '/feedback', label: '反馈与更新', icon: MessageSquareText, roles: ALL_ROLES },
   { to: '/hr', label: 'HR 招聘工作台', icon: BriefcaseBusiness, roles: ['hr', 'admin'] },
   { to: '/admin', label: '系统管理', icon: ShieldCheck, roles: ['admin'] },
 ]
 
 // 导航项样式（桌面收起态 collapsed 时居中、无文字）
 const navClass = (collapsed: boolean) => ({ isActive }: { isActive: boolean }) =>
-  `group relative flex items-center rounded-xl text-sm font-medium transition-all min-h-[44px] ${
-    collapsed ? 'justify-center px-0 py-3' : 'gap-3 px-3.5 py-2.5'
-  } ${isActive ? 'bg-grad-accent text-white shadow-glow' : 'text-slate-500 hover:text-slate-800 hover:bg-white/70'}`
+  `group relative flex min-h-10 items-center rounded-lg text-[13px] font-medium transition-all ${
+    collapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2'
+  } ${isActive ? 'bg-inkSolid text-white shadow-[0_6px_16px_-8px_rgb(0_0_0/0.55)]' : 'text-body-2 hover:text-body-1 hover:bg-accent/8'}`
 
-function Brand({ collapsed = false }: { collapsed?: boolean }) {
+// 品牌区可点击回门户首页（此前侧栏与顶栏的 logo 都是死区，进工作台后没有回首页的入口）
+function Brand({ collapsed = false, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
   return (
-    <div className={`flex items-center gap-3 mb-8 ${collapsed ? 'justify-center px-0' : 'px-2'}`}>
-      <div className="w-10 h-10 rounded-xl bg-white grid place-items-center shadow-card border border-slate-100 shrink-0 overflow-hidden">
-        <img src="/logo.png" alt="智岗图谱" className="w-full h-full object-cover" />
+    <Link to="/" onClick={onNavigate} title="返回首页" aria-label="返回智岗图谱首页"
+      className={`flex items-center gap-3 rounded-xl transition hover:opacity-80 ${collapsed ? 'justify-center px-0' : 'px-1'}`}>
+      <div className="w-9 h-9 rounded-lg bg-white grid place-items-center border border-line-soft/12 shrink-0 overflow-hidden">
+        <img src="/logo.png" alt="" className="w-full h-full object-cover" />
       </div>
       {!collapsed && (
         <div className="overflow-hidden whitespace-nowrap">
           <div className="font-extrabold text-lg leading-tight gradient-text">智岗图谱</div>
-          <div className="text-[11px] text-slate-500 tracking-wide">TalentGraph AI</div>
+          <div className="text-[11px] text-body-3 tracking-wide">TalentGraph AI</div>
         </div>
       )}
-    </div>
+    </Link>
   )
 }
 
 function InfoCard() {
   return (
-    <div className="mt-auto glass p-3.5 text-[11px] text-slate-500 leading-relaxed">
-      <div className="font-semibold text-slate-700 mb-1">多源 · 反幻觉 · 动态演化</div>
-      数据驱动 + 大模型 + 知识图谱<br />构建可自我进化的人才能力大脑
+    <div className="rounded-xl border border-accent/18 bg-accent/6 px-3 py-2 text-[10px] leading-4 text-body-2">
+      <div className="font-semibold text-body-1">岗位证据治理</div>
+      多源验证 · 版本留痕 · 反馈回流
     </div>
   )
 }
@@ -84,43 +89,47 @@ function AccountArea({ collapsed = false, onNavigate }: { collapsed?: boolean; o
   )
   const roleLabel = user.role === 'admin' ? '管理员' : user.role === 'hr' ? 'HR' : '个人用户'
   return (
-    <div className={`mt-3 border-t border-slate-200 pt-3 ${collapsed ? 'flex justify-center' : ''}`}>
-      {!collapsed && <div className="flex items-center gap-2 px-2 mb-2 min-w-0"><div className="w-8 h-8 rounded-lg bg-slate-900 text-white grid place-items-center shrink-0"><UserRound className="w-4 h-4" /></div><div className="min-w-0"><div className="text-xs font-semibold text-slate-800 truncate">{user.username}</div><div className="text-[10px] text-slate-400">{roleLabel}{user.organization_name ? ` · ${user.organization_name}` : ''}</div></div></div>}
-      <button onClick={() => { void logout(); onNavigate?.() }} title="退出登录" className={`btn-ghost text-slate-500 ${collapsed ? '!p-2.5' : 'w-full justify-center'}`}><LogOut className="w-4 h-4" />{!collapsed && '退出登录'}</button>
+    <div className={`border-t border-line-soft/12 pt-2 ${collapsed ? 'flex flex-col items-center gap-1' : ''}`}>
+      <div className={`flex min-w-0 items-center gap-2 ${collapsed ? '' : 'px-1 pb-2'}`}>
+        <RoleAvatar username={user.username} role={user.role} className="h-8 w-8 shrink-0 rounded-lg border border-white shadow-sm" />
+        {!collapsed && <div className="min-w-0"><div className="truncate text-xs font-semibold text-body-1">{user.username}</div><div className="truncate text-[10px] text-body-3">{roleLabel}{user.organization_name ? ` · ${user.organization_name}` : ''}</div></div>}
+      </div>
+      <button onClick={() => { void logout(); onNavigate?.() }} title="退出登录" className={`btn-ghost text-body-2 ${collapsed ? '!p-2.5' : 'w-full justify-center'}`}><LogOut className="w-4 h-4" />{!collapsed && '退出登录'}</button>
     </div>
   )
 }
 
 function useVisibleNav() {
   const { user } = useAuth()
-  return NAV.filter(item => !item.roles || (!!user && item.roles.includes(user.role)))
+  return NAV.filter(item => !!user && (!item.roles || item.roles.includes(user.role)))
 }
 
 // 桌面端侧栏（≥lg 显示，可收起）
 function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const nav = useVisibleNav()
   return (
-    <aside className={`${collapsed ? 'w-[78px]' : 'w-64'} hidden lg:flex shrink-0 h-screen sticky top-0 z-30 flex-col px-3 py-6 overflow-y-auto overflow-x-hidden border-r border-slate-200/70 bg-white/55 backdrop-blur-xl transition-[width] duration-300 ease-in-out relative`}>
-      {/* 浮于侧栏右边缘的收起/展开按钮 */}
+    <div className={`${collapsed ? 'w-[74px]' : 'w-60'} relative sticky top-0 z-30 hidden h-screen shrink-0 transition-[width] duration-300 ease-in-out lg:block`}>
+      <aside className="flex h-full flex-col overflow-hidden border-r border-line-soft/12 bg-white/90 backdrop-blur-xl">
+        <div className="shrink-0 px-3 pb-3 pt-5"><Brand collapsed={collapsed} /></div>
+        <nav className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overflow-x-hidden px-3 py-1">
+          {nav.map(n => (
+            <NavLink key={n.to} to={n.to} end={n.end} title={collapsed ? n.label : undefined} className={navClass(collapsed)}>
+              <n.icon className="h-[18px] w-[18px] shrink-0" />
+              {!collapsed && <span className="whitespace-nowrap">{n.label}</span>}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="shrink-0 space-y-2 border-t border-line-soft/10 bg-white/80 px-3 pb-4 pt-3">
+          {!collapsed && <InfoCard />}
+          <AccountArea collapsed={collapsed} />
+        </div>
+      </aside>
       <button onClick={onToggle} title={collapsed ? '展开侧栏' : '收起侧栏'}
-        className="absolute -right-3 top-8 z-40 w-6 h-6 rounded-full bg-white border border-slate-200 shadow-md grid place-items-center text-slate-400 hover:text-accent hover:border-accent/50 hover:scale-110 transition">
+        aria-label={collapsed ? '展开侧栏' : '收起侧栏'}
+        className="absolute -right-3 top-7 z-40 grid h-7 w-7 place-items-center rounded-full border border-line-soft/14 bg-white text-body-2 shadow-sm transition hover:border-accent/50 hover:text-accent">
         {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
       </button>
-
-      <Brand collapsed={collapsed} />
-
-      <nav className="flex flex-col gap-1">
-        {nav.map(n => (
-          <NavLink key={n.to} to={n.to} end={n.end} title={collapsed ? n.label : undefined} className={navClass(collapsed)}>
-            <n.icon className="w-[18px] h-[18px] shrink-0" />
-            {!collapsed && <span className="whitespace-nowrap">{n.label}</span>}
-          </NavLink>
-        ))}
-      </nav>
-
-      {!collapsed && <InfoCard />}
-      <AccountArea collapsed={collapsed} />
-    </aside>
+    </div>
   )
 }
 
@@ -128,21 +137,24 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 function MobileTopBar({ onOpen }: { onOpen: () => void }) {
   const { user } = useAuth()
   return (
-    <header className="lg:hidden sticky top-0 z-40 flex items-center gap-3 h-14 px-4 bg-white/70 backdrop-blur-xl border-b border-slate-200/70">
+    <header className="lg:hidden sticky top-0 z-40 flex items-center gap-3 h-14 px-4 bg-white/80 backdrop-blur-xl border-b border-line-soft/12">
       <button onClick={onOpen} aria-label="打开菜单"
-        className="w-9 h-9 grid place-items-center rounded-lg text-slate-600 hover:bg-white/80 active:scale-95 transition">
+        className="w-9 h-9 grid place-items-center rounded-lg text-body-2 hover:bg-white/80 active:scale-95 transition">
         <Menu className="w-5 h-5" />
       </button>
-      <div className="w-8 h-8 rounded-lg bg-white grid place-items-center shadow-card border border-slate-100 overflow-hidden shrink-0">
-        <img src="/logo.png" alt="智岗图谱" className="w-full h-full object-cover" />
-      </div>
-      <div className="leading-tight">
-        <div className="font-extrabold text-[15px] gradient-text">智岗图谱</div>
-        <div className="text-[10px] text-slate-500 tracking-wide -mt-0.5">TalentGraph AI</div>
-      </div>
+      {/* 顶栏 logo + 标题整块可点击回首页（此前是死区） */}
+      <Link to="/" title="返回首页" aria-label="返回智岗图谱首页" className="flex min-w-0 items-center gap-3 rounded-xl transition hover:opacity-80">
+        <span className="w-8 h-8 rounded-lg bg-white grid place-items-center shadow-card border border-line-soft/10 overflow-hidden shrink-0">
+          <img src="/logo.png" alt="" className="w-full h-full object-cover" />
+        </span>
+        <span className="block leading-tight">
+          <span className="block font-extrabold text-[15px] gradient-text">智岗图谱</span>
+          <span className="block text-[10px] text-body-3 tracking-wide -mt-0.5">TalentGraph AI</span>
+        </span>
+      </Link>
       <Link to={user ? (user.role === 'admin' ? '/admin' : user.role === 'hr' ? '/hr' : '/history') : '/login'}
-        aria-label={user ? '打开我的工作台' : '登录'} className="ml-auto w-9 h-9 grid place-items-center rounded-lg text-slate-600 hover:bg-white/80">
-        {user ? <UserRound className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+        aria-label={user ? '打开我的工作台' : '登录'} className="ml-auto w-9 h-9 grid place-items-center rounded-lg text-body-2 hover:bg-white/80">
+        {user ? <RoleAvatar username={user.username} role={user.role} className="h-8 w-8 rounded-lg border border-white shadow-sm" /> : <LogIn className="w-5 h-5" />}
       </Link>
     </header>
   )
@@ -155,18 +167,18 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
     <AnimatePresence>
       {open && (
         <>
-          <motion.div className="lg:hidden fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm"
+          <motion.div className="lg:hidden fixed inset-0 z-40 bg-brand-ink/45 backdrop-blur-sm"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
           <motion.aside
-            className="lg:hidden fixed inset-y-0 left-0 z-50 w-64 flex flex-col px-3 py-6 overflow-y-auto overflow-x-hidden bg-white/90 backdrop-blur-xl border-r border-slate-200/70 shadow-2xl"
+            className="lg:hidden fixed inset-y-0 left-0 z-50 flex w-64 flex-col overflow-hidden border-r border-line-soft/12 bg-white/95 shadow-2xl backdrop-blur-xl"
             initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
             transition={{ type: 'tween', duration: 0.28, ease: 'easeInOut' }}>
             <button onClick={onClose} aria-label="关闭菜单"
-              className="absolute right-3 top-5 w-8 h-8 grid place-items-center rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
+              className="absolute right-3 top-5 w-8 h-8 grid place-items-center rounded-lg text-body-3 hover:text-body-1 hover:bg-brand-ink/6 transition">
               <X className="w-4 h-4" />
             </button>
-            <Brand />
-            <nav className="flex flex-col gap-1">
+            <div className="shrink-0 px-3 pb-4 pt-5"><Brand onNavigate={onClose} /></div>
+            <nav className="min-h-0 flex-1 space-y-0.5 overflow-y-auto px-3">
               {nav.map(n => (
                 <NavLink key={n.to} to={n.to} end={n.end} onClick={onClose} className={navClass(false)}>
                   <n.icon className="w-[18px] h-[18px] shrink-0" />
@@ -174,8 +186,7 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
                 </NavLink>
               ))}
             </nav>
-            <InfoCard />
-            <AccountArea onNavigate={onClose} />
+            <div className="shrink-0 space-y-2 border-t border-line-soft/10 px-3 pb-4 pt-3"><InfoCard /><AccountArea onNavigate={onClose} /></div>
           </motion.aside>
         </>
       )}
@@ -190,6 +201,40 @@ function AppContent() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 })
   }, [loc.pathname])
+  const publicRoute = ['/', '/login', '/register'].includes(loc.pathname)
+  const routes = (
+    <AnimatePresence mode="wait">
+      <motion.div key={loc.pathname}
+        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.28 }}>
+        <Suspense fallback={<Spinner />}>
+          <Routes location={loc}>
+            <Route path="/" element={<Portal />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Login register />} />
+            <Route path="/dashboard" element={<RequireAuth roles={ALL_ROLES}><Dashboard /></RequireAuth>} />
+            <Route path="/panorama" element={<RequireAuth roles={ALL_ROLES}><Panorama /></RequireAuth>} />
+            <Route path="/discovery" element={<RequireAuth roles={ALL_ROLES}><Discovery /></RequireAuth>} />
+            <Route path="/evolution" element={<RequireAuth roles={ALL_ROLES}><Evolution /></RequireAuth>} />
+            <Route path="/jobs" element={<RequireAuth roles={ALL_ROLES}><Jobs /></RequireAuth>} />
+            <Route path="/jobs/:id" element={<RequireAuth roles={ALL_ROLES}><JobDetail /></RequireAuth>} />
+            <Route path="/match" element={<RequireAuth roles={ALL_ROLES}><Match /></RequireAuth>} />
+            <Route path="/talent" element={<RequireAuth roles={ALL_ROLES}><Talent /></RequireAuth>} />
+            <Route path="/history" element={<RequireAuth roles={ALL_ROLES}><HistoryPage /></RequireAuth>} />
+            <Route path="/feedback" element={<RequireAuth roles={ALL_ROLES}><Feedback /></RequireAuth>} />
+            <Route path="/hr" element={<RequireAuth roles={['hr', 'admin']}><HRWorkspace /></RequireAuth>} />
+            <Route path="/admin" element={<RequireAuth roles={['admin']}><Admin /></RequireAuth>} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </motion.div>
+    </AnimatePresence>
+  )
+
+  if (publicRoute) {
+    return <div className="min-h-screen min-w-0">{routes}<ChatBot /></div>
+  }
+
   return (
       <div className="flex min-h-screen">
         <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
@@ -199,34 +244,11 @@ function AppContent() {
           {/* pb-24：为右下角 AI 助手悬浮球预留底部安全区，避免遮挡页面末尾内容 */}
           <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-6 lg:py-7 pb-24 lg:pb-28">
             <div className="max-w-[1400px] mx-auto">
-              <AnimatePresence mode="wait">
-                <motion.div key={loc.pathname}
-                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.28 }}>
-                  <Suspense fallback={<Spinner />}>
-                    <Routes location={loc}>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/panorama" element={<Panorama />} />
-                      <Route path="/discovery" element={<Discovery />} />
-                      <Route path="/evolution" element={<Evolution />} />
-                      <Route path="/jobs" element={<Jobs />} />
-                      <Route path="/jobs/:id" element={<JobDetail />} />
-                      <Route path="/match" element={<Match />} />
-                      <Route path="/talent" element={<Talent />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Login register />} />
-                      <Route path="/history" element={<RequireAuth><HistoryPage /></RequireAuth>} />
-                      <Route path="/feedback" element={<RequireAuth><Feedback /></RequireAuth>} />
-                      <Route path="/hr" element={<RequireAuth roles={['hr', 'admin']}><HRWorkspace /></RequireAuth>} />
-                      <Route path="/admin" element={<RequireAuth roles={['admin']}><Admin /></RequireAuth>} />
-                    </Routes>
-                  </Suspense>
-                </motion.div>
-              </AnimatePresence>
+              {routes}
             </div>
           </main>
         </div>
-        {!['/login', '/register'].includes(loc.pathname) && <ChatBot />}
+        <ChatBot />
       </div>
   )
 }

@@ -19,7 +19,6 @@ SESSION_TTL = timedelta(hours=8)
 _bearer = HTTPBearer(auto_error=False)
 
 ROLE_PERMISSIONS = {
-    "guest": ("public:read", "match:once"),
     "user": ("public:read", "match:once", "profile:own", "match:own", "feedback:own"),
     "hr": ("public:read", "candidate:org", "recruitment:org", "team:org", "feedback:org"),
     "admin": ("public:read", "admin:manage", "candidate:review", "audit:read", "usage:read"),
@@ -28,15 +27,15 @@ ROLE_PERMISSIONS = {
 
 @dataclass(frozen=True)
 class Actor:
-    user: models.AppUser | None
+    user: models.AppUser
     role: str
     organization_id: int | None
     permissions: tuple[str, ...]
     session: models.UserSession | None = None
 
     @property
-    def user_id(self) -> int | None:
-        return self.user.id if self.user else None
+    def user_id(self) -> int:
+        return self.user.id
 
 
 def hash_password(password: str) -> str:
@@ -85,16 +84,18 @@ def _organization_id(db: Session, user: models.AppUser) -> int | None:
 
 def actor_for_user(db: Session, user: models.AppUser,
                    session: models.UserSession | None = None) -> Actor:
-    role = user.role if user.role in ROLE_PERMISSIONS else "user"
+    role = user.role
+    if role not in ROLE_PERMISSIONS:
+        raise HTTPException(403, "用户角色不在有效角色模板内")
     return Actor(user, role, _organization_id(db, user), ROLE_PERMISSIONS[role], session)
 
 
-def optional_actor(
+def current_actor(
     credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
     db: Session = Depends(get_db),
 ) -> Actor:
     if credentials is None:
-        return Actor(None, "guest", None, ROLE_PERMISSIONS["guest"])
+        raise HTTPException(401, "请先登录", headers={"WWW-Authenticate": "Bearer"})
     if credentials.scheme.lower() != "bearer":
         raise HTTPException(401, "无效的认证方式", headers={"WWW-Authenticate": "Bearer"})
     session = db.query(models.UserSession).filter(
@@ -108,18 +109,12 @@ def optional_actor(
     return actor_for_user(db, user, session)
 
 
-def current_actor(actor: Actor = Depends(optional_actor)) -> Actor:
-    if actor.user is None:
-        raise HTTPException(401, "请先登录", headers={"WWW-Authenticate": "Bearer"})
-    return actor
-
-
 def actor_dict(actor: Actor) -> dict:
     return {
         "id": actor.user_id,
-        "username": actor.user.username if actor.user else None,
+        "username": actor.user.username,
         "role": actor.role,
-        "status": actor.user.status if actor.user else "anonymous",
+        "status": actor.user.status,
         "organization_id": actor.organization_id,
         "permissions": list(actor.permissions),
     }

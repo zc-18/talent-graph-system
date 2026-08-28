@@ -50,17 +50,17 @@ export default function Talent() {
       {/* Hero：纯 CSS 渐变光晕，public/ 无人才主题配图。
           用裸 div.glass 而非 Card（同 Dashboard），避免多叠一层层叠上下文 */}
       <div className="relative overflow-hidden rounded-2xl glass">
-        <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-br from-violet-50/70 via-transparent to-sky-50/60" />
-        <div aria-hidden className="absolute -top-20 -right-12 w-64 h-64 rounded-full blur-3xl opacity-25 bg-grad-violet" />
-        <div aria-hidden className="absolute -bottom-24 -left-16 w-56 h-56 rounded-full blur-3xl opacity-20 bg-grad-accent" />
+        <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-br from-sky-50/70 via-transparent to-accent/8/50" />
+        <div aria-hidden className="absolute -top-20 -right-12 w-64 h-64 rounded-full blur-3xl opacity-[0.18] bg-grad-accent ring-1 ring-accent/20" />
+        <div aria-hidden className="absolute -bottom-24 -left-16 w-56 h-56 rounded-full blur-3xl opacity-[0.14] bg-grad-accent ring-1 ring-accent/20" />
 
-        <div className="relative z-10 px-6 py-7 sm:px-8 sm:py-9">
+        <div className="relative z-10 px-5 py-6 sm:px-8 sm:py-9">
           <div className="flex items-start gap-4">
             <div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow shrink-0">
-              <IUsersThree className="w-6 h-6 text-white" />
+              <IUsersThree className="w-6 h-6 text-accent-deep" />
             </div>
             <div className="min-w-0">
-              <h1 className="text-3xl font-extrabold text-slate-900">人才与团队盘点</h1>
+              <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">人才与团队盘点</h1>
               <p className="text-slate-500 mt-1 max-w-2xl">
                 脱敏人才画像驱动的团队能力盘点 · 供需缺口对照 · 学到的技能表述
               </p>
@@ -74,7 +74,7 @@ export default function Talent() {
             <span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/70 border border-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm">
               <b className="text-sm font-extrabold text-slate-900 tabular-nums">{corpus.total_skills_extracted}</b>项已抽取技能
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50/80 border border-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-700">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/8/80 border border-accent/20 px-3 py-1.5 text-xs font-medium text-accent-deep">
               <IShieldCheck className="w-3.5 h-3.5" />简历原文与身份信息不入库
             </span>
           </div>
@@ -86,7 +86,7 @@ export default function Talent() {
         {TABS.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
-              tab === t.key ? 'bg-grad-accent text-white shadow-glow'
+              tab === t.key ? 'bg-grad-accent ring-1 ring-accent/20 text-accent-deep shadow-glow'
                 : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>
             <t.icon className="w-4 h-4" />{t.label}
           </button>
@@ -219,7 +219,7 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
           </div>
         )}
         <p className="mt-3 text-xs text-slate-500 flex items-start gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-600" />
+          <ShieldCheck className="w-3.5 h-3.5 mt-0.5 shrink-0 text-accent-deep" />
           {canManageTeam
             ? '组织私有人才数据可在公共图谱只读模式下追加。简历只在内存中解析，服务端仅留存脱敏技能要素。'
             : '当前为公共演示视图；登录 HR 组织账号后可导入授权成员并查看加入前后的覆盖变化。'}
@@ -232,14 +232,14 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <Kpi delay={0} label="团队人数" value={gap.team.size} unit="人" sub={gap.team.name}
-              icon={<IUsersThree className="w-5 h-5 text-white" />} tone="bg-grad-accent" />
+              icon={<IUsersThree className="w-5 h-5 text-accent-deep" />} tone="bg-grad-accent ring-1 ring-accent/20" />
             <Kpi delay={0.05} label="必备能力覆盖" value={`${gap.required_covered}/${gap.required_total}`}
               sub={`覆盖率 ${(gap.coverage_rate * 100).toFixed(0)}%`}
-              icon={<ITarget className="w-5 h-5 text-white" />} tone="bg-grad-violet" />
+              icon={<ITarget className="w-5 h-5 text-accent-deep" />} tone="bg-grad-violet" />
             <Kpi delay={0.1} label="加权覆盖率" value={gap.weighted_coverage * 100} unit="%" decimals={1}
               sub="按岗位能力权重加权" ring={gap.weighted_coverage} />
             <Kpi delay={0.15} label="加分能力覆盖" value={`${gap.bonus_covered}/${gap.bonus_total}`} sub="加分项"
-              icon={<IStack className="w-5 h-5 text-white" />} tone="bg-cyan-500/80" />
+              icon={<IStack className="w-5 h-5 text-accent-deep" />} tone="bg-accent/80" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -261,7 +261,7 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
               </div>
               {gap.missing.length === 0
                 ? <EmptyState text="该岗位的必备能力已全部覆盖" />
-                : <div className="space-y-2 max-h-[420px] overflow-y-auto -mr-2 pr-2">
+                : <div className="space-y-2 max-h-[300px] overflow-y-auto -mr-2 pr-2 sm:max-h-[420px]">
                     {gap.missing.map(m => (
                       <div key={m.skill} className="rounded-xl bg-sky-50/70 border border-slate-200/70 px-3.5 py-2.5">
                         <div className="flex items-center justify-between gap-2">
@@ -291,7 +291,7 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
               </div>
               {gap.contributions.length === 0
                 ? <EmptyState text="团队暂无成员" hint="上传成员简历后自动生成贡献分析" />
-                : <div className="space-y-2 max-h-[420px] overflow-y-auto -mr-2 pr-2">
+                : <div className="space-y-2 max-h-[300px] overflow-y-auto -mr-2 pr-2 sm:max-h-[420px]">
                     {gap.contributions.map(c => {
                       const pct = gap.required_total ? c.covers_required / gap.required_total : 0
                       return (
@@ -299,7 +299,7 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
                           <div className="flex items-center justify-between gap-2">
                             <span className="flex items-center gap-2 min-w-0">
                               <span className="w-7 h-7 rounded-lg bg-grad-violet grid place-items-center shrink-0
-                                               text-[11px] font-bold text-white">
+                                               text-[11px] font-bold text-accent-deep">
                                 {c.display_name.slice(0, 1)}
                               </span>
                               <span className="text-sm font-medium text-slate-800 truncate">
@@ -388,7 +388,7 @@ function SupplyPanel({ jobs }: { jobs: JobListItem[] }) {
         { name: '岗位需求权重', type: 'bar', data: top.map(i => i.weight),
           itemStyle: { color: '#6366F1', borderRadius: [0, 4, 4, 0] }, barGap: 0 },
         { name: '人才供给率', type: 'bar', data: top.map(i => i.supply_rate),
-          itemStyle: { color: '#34D399', borderRadius: [0, 4, 4, 0] } },
+          itemStyle: { color: '#0EA5E9', borderRadius: [0, 4, 4, 0] } },
       ],
     }
   }, [data])
@@ -414,12 +414,12 @@ function SupplyPanel({ jobs }: { jobs: JobListItem[] }) {
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <Kpi delay={0} label="语料人数" value={data.corpus_size} unit="人" sub="脱敏人才画像总量"
-              icon={<IDatabase className="w-5 h-5 text-white" />} tone="bg-grad-accent" />
+              icon={<IDatabase className="w-5 h-5 text-accent-deep" />} tone="bg-grad-accent ring-1 ring-accent/20" />
             <Kpi delay={0.05} label="对口人才" value={data.aligned_talents} unit="人" sub="映射到该岗位"
-              icon={<IUser className="w-5 h-5 text-white" />} tone="bg-grad-violet" />
+              icon={<IUser className="w-5 h-5 text-accent-deep" />} tone="bg-grad-violet" />
             <Kpi delay={0.1} label="必备能力被覆盖" value={`${data.required_covered}/${data.required_total}`}
               sub="语料中至少 1 人具备"
-              icon={<ITarget className="w-5 h-5 text-white" />} tone="bg-cyan-500/80" />
+              icon={<ITarget className="w-5 h-5 text-accent-deep" />} tone="bg-accent/80" />
             <Kpi delay={0.15} label="覆盖率" value={data.coverage_rate * 100} unit="%" decimals={1}
               sub="人才供给对岗位需求" ring={data.coverage_rate} />
           </div>
@@ -448,9 +448,9 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
     <div className="space-y-4">
       {/* 内层横幅不再自带描边：套在 glass 卡里会形成双重边框 */}
       <Card className="p-4">
-        <div className="flex items-start gap-2.5 text-sm text-emerald-900">
-          <span className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 grid place-items-center shrink-0">
-            <IShieldCheck className="w-4 h-4 text-emerald-600" />
+        <div className="flex items-start gap-2.5 text-sm text-accent-deep">
+          <span className="w-8 h-8 rounded-lg bg-accent/8 border border-accent/20 grid place-items-center shrink-0">
+            <IShieldCheck className="w-4 h-4 text-accent-deep" />
           </span>
           <span className="leading-relaxed pt-1.5">{corpus.privacy_notice}</span>
         </div>
@@ -573,7 +573,7 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
         {/* 四个数字从句子里拎出来单独成行，便于逐个核对 */}
         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           <span className="text-slate-500">采纳
-            <b className="ml-1.5 text-base text-emerald-700 tabular-nums">{corpus.alias_accepted}</b>
+            <b className="ml-1.5 text-base text-accent-deep tabular-nums">{corpus.alias_accepted}</b>
             <span className="ml-0.5 text-xs">条</span>
           </span>
           <span className="text-slate-500">拒绝
@@ -628,7 +628,7 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
                 <div className="text-sm text-slate-800 truncate">
                   <span className="font-medium">{a.alias}</span>
                   {a.canonical && <span className="text-slate-400"> → </span>}
-                  {a.canonical && <span className="text-emerald-700">{a.canonical}</span>}
+                  {a.canonical && <span className="text-accent-deep">{a.canonical}</span>}
                 </div>
                 <div className="text-[11px] text-slate-500 mt-0.5 truncate" title={a.reason || ''}>
                   {a.talent_count} 份简历 · {a.reason || '—'}

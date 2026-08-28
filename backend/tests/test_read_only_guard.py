@@ -8,13 +8,16 @@
 指向的库——本机常年指着生产的 talent_graph_v3，等于让单元测试对生产库发 DELETE。
 现在没出事只是因为断言用的 id 恰好不存在，这种"靠运气安全"不该留在测试里。
 """
+from datetime import datetime, timedelta
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app import guards
+from app import guards, models
+from app.auth import token_hash
 from app.db import Base, get_db
 from app.main import app
 
@@ -37,10 +40,21 @@ def sqlite_session():
         s.close()
 
 
-def _client(monkeypatch, session, read_only: bool) -> TestClient:
+def _client(monkeypatch, session, read_only: bool, *, authenticated: bool) -> TestClient:
     monkeypatch.setattr(guards.settings, "read_only", read_only, raising=False)
     app.dependency_overrides[get_db] = lambda: session
-    return TestClient(app)
+    value = TestClient(app)
+    if authenticated:
+        user = models.AppUser(username="readonly-admin", password_hash="unused",
+                              role="admin", status="active")
+        session.add(user)
+        session.flush()
+        session.add(models.UserSession(
+            user_id=user.id, token_hash=token_hash("readonly-admin-token"),
+            expires_at=datetime.utcnow() + timedelta(hours=1)))
+        session.commit()
+        value.headers.update({"Authorization": "Bearer readonly-admin-token"})
+    return value
 
 
 @pytest.fixture(autouse=True)
@@ -51,12 +65,12 @@ def _clear_overrides():
 
 @pytest.fixture()
 def client(monkeypatch, sqlite_session):
-    return _client(monkeypatch, sqlite_session, read_only=True)
+    return _client(monkeypatch, sqlite_session, read_only=True, authenticated=True)
 
 
 @pytest.fixture()
 def rw_client(monkeypatch, sqlite_session):
-    return _client(monkeypatch, sqlite_session, read_only=False)
+    return _client(monkeypatch, sqlite_session, read_only=False, authenticated=False)
 
 
 # ---- 硬闸：没有只读等价物的写操作一律 403 ----------------------------------
@@ -82,6 +96,7 @@ def test_job_delete_blocked(client):
 
 def test_team_member_upload_requires_authentication(client):
     r = client.post("/api/talent/teams/1/members/upload",
+                    headers={"Authorization": ""},
                     files={"file": ("a.txt", b"hello", "text/plain")})
     assert r.status_code == 401
 
@@ -94,7 +109,7 @@ def test_health_exposes_mode(client):
 
 
 def test_read_endpoints_unaffected(client):
-    # 闸门只拦写操作：读接口在只读模式下必须照常 200（空库返回零值统计）
+    # 已登录读接口在只读模式下必须照常 200（空库返回零值统计）。
     assert client.get("/api/graph/stats").status_code == 200
 
 

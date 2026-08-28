@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Filter, GitBranch, Maximize2, Target } from 'lucide-react'
+import { Filter, GitBranch, Maximize2, Minus, Plus, Target } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { ITreeStructure } from '../components/icons'
 import { api, GraphData, CATEGORY_COLORS } from '../api'
@@ -47,18 +47,22 @@ export default function Panorama() {
       const r = parseInt(m.slice(0, 2), 16), g = parseInt(m.slice(2, 4), 16), b = parseInt(m.slice(4, 6), 16)
       return `rgba(${r},${g},${b},${a})`
     }
-    // 浅色渐变调色板（每个技术栈一对 [浅, 深]），更丰富、更柔和
+    // 浅色渐变调色板（每个技术栈一对 [浅, 深]）。
+    // 深端必须与 api.ts 的 CATEGORY_COLORS 逐项一致——那张表管卡片圆点和图例，
+    // 这张表管力导图节点；两处对不上，同一个岗位在列表页和图谱里就是两种颜色。
+    // 全表不含绿 / 青绿：节点 hover 时 emphasis 会把本色提亮，原先的
+    // 物联网 #10B981（emerald）和 数据库与存储 #14B8A6（teal）正是"悬浮发绿"的来源。
     const CAT_GRAD: Record<string, [string, string]> = {
-      人工智能: ['#A5B4FC', '#6366F1'],
+      人工智能: ['#93C5FD', '#3B82F6'],
       大数据: ['#7DD3FC', '#0EA5E9'],
-      物联网: ['#6EE7B7', '#10B981'],
+      物联网: ['#B6AEEA', '#7A6BD8'],
       智能系统: ['#FCD34D', '#F59E0B'],
       云计算与工程: ['#D8B4FE', '#A855F7'],
-      数据工程: ['#F9A8D4', '#EC4899'],
+      数据工程: ['#F9A8D4', '#F472B6'],
       // 技能侧独有的两类（岗位不会用到）：拆自原先什么都往里塞的「云计算与工程」
-      编程语言: ['#7DD3FC', '#0EA5E9'],
-      数据库与存储: ['#5EEAD4', '#14B8A6'],
-      其他: ['#CBD5E1', '#94A3B8'],
+      编程语言: ['#BAE6FD', '#38BDF8'],
+      数据库与存储: ['#A5B4FC', '#4F46E5'],
+      其他: ['#CBD5E1', '#64748B'],
     }
     const mixWhite = (hex: string, t: number) => {
       const m = hex.replace('#', '')
@@ -164,42 +168,58 @@ export default function Panorama() {
     click: (p: any) => { if (p.dataType === 'node') setSel(p.data._raw) },
   }
 
+  /* 触屏被 touch-action:pan-y 挡掉了双指缩放，这里用 graphRoam 把缩放能力补回来。
+     用 try/catch 包住：实例还没挂载或 action 不可用时静默跳过，不影响图谱本身。 */
+  const zoomBy = (factor: number) => {
+    try {
+      const inst = chartRef.current?.getEchartsInstance?.()
+      if (!inst) return
+      const box = inst.getDom()?.getBoundingClientRect?.()
+      inst.dispatchAction({
+        type: 'graphRoam', seriesIndex: 0, zoom: factor,
+        originX: box ? box.width / 2 : undefined, originY: box ? box.height / 2 : undefined,
+      })
+    } catch { /* 缩放是增强项，失败不打断浏览 */ }
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex items-end justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
-            <ITreeStructure className="w-6 h-6 text-white" />
+          <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent ring-1 ring-accent/20 grid place-items-center shadow-glow">
+            <ITreeStructure className="w-6 h-6 text-accent-deep" />
           </div>
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900">新一代信息技术岗位全景图谱</h1>
             <p className="text-sm text-slate-500">技能点级粒度 · 可按技术栈与置信度切换视图</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex rounded-xl border border-slate-200 bg-white/80 p-1" aria-label="图谱视图层级">
+        {/* 窄屏：2 列网格，控件铺满栅格；sm 起切回原来的定宽 flex 排布。
+            纯断点驱动，不做 JS 宽度判断。 */}
+        <div className="grid w-full grid-cols-2 items-center gap-2 sm:flex sm:w-auto sm:flex-wrap">
+          <div className="col-span-2 flex rounded-xl border border-slate-200 bg-white/80 p-1" aria-label="图谱视图层级">
             {([['job', '岗位'], ['capability', '能力簇'], ['skill', '技能点']] as const).map(([value, label]) => (
-              <button key={value} onClick={() => setMode(value)} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${mode === value ? 'bg-slate-900 text-white' : 'text-slate-500 hover:bg-slate-100'}`}>{label}</button>
+              <button key={value} onClick={() => setMode(value)} className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition sm:flex-none ${mode === value ? 'bg-slate-900 text-white' : 'text-slate-500 hover:bg-slate-100'}`}>{label}</button>
             ))}
           </div>
-          <Select value={cat} onChange={setCat} options={cats} className="w-40"
+          <Select value={cat} onChange={setCat} options={cats} className="w-full sm:w-40"
             icon={<Filter className="w-4 h-4" />} align="right" />
           <Select value={level} onChange={setLevel}
             options={levels.map(l => ({ value: l, label: l === '全部' ? '全部级别' : l }))}
-            className="w-32" align="right" />
-          <Select value={recruitmentType} onChange={setRecruitmentType} className="w-28" align="right" label="招聘类型" options={[
+            className="w-full sm:w-32" align="right" />
+          <Select value={recruitmentType} onChange={setRecruitmentType} className="col-span-2 w-full sm:w-28" align="right" label="招聘类型" options={[
             { value: '全部', label: '校招/社招' }, { value: 'campus', label: '校招' }, { value: 'social', label: '社招' }, { value: 'mixed', label: '混合' },
           ]} />
-          <div className="rounded-xl bg-white/80 border border-slate-200 px-3.5 py-2.5 flex items-center gap-2 text-sm text-slate-600">
-            置信≥{Math.round(minConf * 100)}%
-            <input type="range" min={0} max={0.9} step={0.05} value={minConf}
-              onChange={e => setMinConf(parseFloat(e.target.value))} className="accent-accent w-24" />
+          <div className="col-span-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-white/80 px-3.5 py-2.5 text-sm text-slate-600 sm:col-span-1">
+            <span className="whitespace-nowrap">置信≥{Math.round(minConf * 100)}%</span>
+            <input type="range" aria-label="最低置信度" min={0} max={0.9} step={0.05} value={minConf}
+              onChange={e => setMinConf(parseFloat(e.target.value))} className="accent-accent w-full sm:w-24" />
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-5">
-        <div ref={parallaxRef} className="xl:col-span-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">
+        <div ref={parallaxRef} className="lg:col-span-2 xl:col-span-3">
         <Card className="p-2 relative overflow-hidden" hover={false}>
           <div className="absolute inset-0 rounded-2xl overflow-hidden">
             {/* 图谱画布背景：柔和蓝白网络底图 + 鼠标轻微视差（scale 预留位移余量） */}
@@ -207,16 +227,25 @@ export default function Panorama() {
               style={{ backgroundImage: 'url(/graph-bg2.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
             <div className="absolute inset-0 bg-white/25 pointer-events-none" />
           </div>
+          {/* touch-pan-y：竖向手势交还给浏览器（页面照常滚动），横向拖拽/点击节点
+              仍进入 ECharts。触屏被 pan-y 挡掉的双指缩放，用画布右下角的按钮补回。
+              touch-action 只作用于触摸输入，桌面滚轮缩放与拖拽完全不受影响。 */}
           <div className="relative z-10">
             {loading ? <Spinner label="构建图谱中…" /> : error ? <ErrorState text="图谱加载失败" onRetry={load} /> : (
-              <div className="h-[440px] sm:h-[560px] xl:h-[620px]">
+              <div className="relative h-[360px] touch-pan-y sm:h-[520px] lg:h-[560px] xl:h-[620px]">
                 <ReactECharts ref={chartRef} option={option} style={{ height: '100%' }} onEvents={onEvents}
                   notMerge lazyUpdate />
+                <div className="absolute bottom-2 right-2 z-20 flex flex-col gap-1.5 rounded-xl border border-slate-200 bg-white/85 p-1 shadow-sm backdrop-blur">
+                  <button onClick={() => zoomBy(1.3)} aria-label="放大图谱"
+                    className="grid h-8 w-8 place-items-center rounded-lg text-slate-600 transition hover:bg-slate-100 active:scale-95"><Plus className="h-4 w-4" /></button>
+                  <button onClick={() => zoomBy(1 / 1.3)} aria-label="缩小图谱"
+                    className="grid h-8 w-8 place-items-center rounded-lg text-slate-600 transition hover:bg-slate-100 active:scale-95"><Minus className="h-4 w-4" /></button>
+                </div>
               </div>
             )}
           </div>
           {data && (
-            <div className="absolute top-4 left-4 z-20 flex gap-2 text-xs">
+            <div className="absolute top-3 left-3 right-3 z-20 flex flex-wrap gap-1.5 text-xs sm:top-4 sm:left-4 sm:right-auto sm:gap-2">
               <Badge tone="indigo">岗位 {data.stats.jobs}</Badge>
               <Badge tone="cyan">技能点 {data.stats.skills}</Badge>
               {data.stats.capabilities != null && <Badge tone="amber">能力簇 {data.stats.capabilities}</Badge>}

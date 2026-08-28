@@ -1,0 +1,63 @@
+[
+  {
+    "job_id": 13,
+    "job": "嵌入式软件工程师",
+    "job_before": {
+      "confidence": 0.3852,
+      "evidence_count": 8
+    },
+    "rows": [
+      {
+        "action": "backfill_evidence",
+        "job_skill_id": 1755,
+        "skill": "Linux",
+        "before": {
+          "status": "active",
+          "confidence": 0.0,
+          "source_count": 0,
+          "factors": {
+            "support": 0.0,
+            "external": 0.0,
+            "authority": 0.0,
+            "diversity": 0.0,
+            "freshness": 0.0
+          }
+        }
+      },
+      {
+        "action": "backfill_evidence",
+        "job_skill_id": 1757,
+        "skill": "Java",
+        "before": {
+          "status": "active",
+          "confidence": 0.0,
+          "source_count": 0,
+          "factors": {
+            "support": 0.0,
+            "external": 0.0,
+            "authority": 0.0,
+            "diversity": 0.0,
+            "freshness": 0.0
+          }
+        }
+      },
+      {
+        "action": "backfill_evidence",
+        "job_skill_id": 1756,
+        "skill": "实时操作系统",
+        "before": {
+          "status": "active",
+          "confidence": 0.0,
+          "source_count": 0,
+          "factors": {
+            "support": 0.0,
+            "external": 0.0,
+            "authority": 0.0,
+            "diversity": 0.0,
+            "freshness": 0.0
+          }
+        }
+      }
+    ]
+  }
+]

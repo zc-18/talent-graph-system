@@ -1,7 +1,7 @@
 """Read-only API integration tests on an isolated in-memory graph."""
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app import models
+from app.auth import token_hash
 from app.db import Base, get_db
 from app.main import app
 
@@ -46,6 +47,13 @@ def session():
     db.flush()
     db.add(models.Evidence(job_skill_id=relation.id, raw_jd_id=raw.id, source_type="jd",
                            source_name="企业官网", snippet="要求熟练掌握 Java"))
+    user = models.AppUser(username="api-user", password_hash="unused",
+                          role="user", status="active")
+    db.add(user)
+    db.flush()
+    db.add(models.UserSession(
+        user_id=user.id, token_hash=token_hash("api-user-token"),
+        expires_at=datetime.utcnow() + timedelta(hours=1)))
     db.commit()
     try:
         yield db
@@ -56,13 +64,20 @@ def session():
 @pytest.fixture()
 def client(session):
     app.dependency_overrides[get_db] = lambda: session
-    yield TestClient(app)
+    value = TestClient(app)
+    value.headers.update({"Authorization": "Bearer api-user-token"})
+    yield value
     app.dependency_overrides.clear()
 
 
 def test_health(client):
     response = client.get("/api/health")
     assert response.status_code == 200 and response.json()["status"] == "ok"
+
+
+def test_business_api_rejects_anonymous_access(client):
+    response = client.get("/api/jobs", headers={"Authorization": ""})
+    assert response.status_code == 401
 
 
 def test_root(client):
@@ -79,6 +94,11 @@ def test_stats(client):
     assert stats["total_jobs"] == 1
     assert stats["total_skills"] == 1
     assert stats["duplicate_jds"] == 0
+    assert set(stats["factor_averages"]) == {
+        "support", "diversity", "freshness", "authority", "external"}
+    assert stats["confidence_distribution"]["90_and_above"]["count"] == 1
+    assert stats["identified_employer_coverage"] == 0
+    assert stats["valid_evidence_url_ratio"] == 0
 
 
 def test_panorama_graph(client):
@@ -98,10 +118,24 @@ def test_jobs_list_detail_and_evidence(client):
     listing = client.get("/api/jobs?size=5").json()
     assert listing["total"] == 1
     job_id = listing["items"][0]["id"]
+    assert listing["items"][0]["required_count"] == 1
+    assert listing["items"][0]["contract_status"] == "evidence_insufficient"
+    assert listing["items"][0]["employer_count"] == 0
     detail = client.get(f"/api/jobs/{job_id}").json()
     assert detail["id"] == job_id and detail["required_skills"][0]["name"] == "Java"
     evidence = client.get(f"/api/jobs/{job_id}/evidence").json()
     assert evidence["items"][0]["skill"] == "Java"
+
+
+def test_evolution_timeline_uses_only_factual_corpus(client):
+    job_id = client.get("/api/jobs?size=1").json()["items"][0]["id"]
+    timeline = client.get(f"/api/evolution/{job_id}/timeline").json()
+    assert timeline["job_id"] == job_id
+    assert [item["year"] for item in timeline["corpus_slices"]] == [
+        datetime.utcnow().year]
+    assert timeline["corpus_slices"][0]["jd_count"] == 1
+    assert timeline["capability_changes"] == []
+    assert timeline["version_nodes"][0]["version"] == 1
 
 
 def test_job_filter_by_category(client):

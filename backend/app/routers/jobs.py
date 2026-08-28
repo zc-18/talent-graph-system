@@ -7,7 +7,7 @@ from .. import models
 from ..db import get_db
 from ..guards import require_write
 from ..schemas import JobUpsert, ManualSkillEdit
-from ..services import graph_service, role_contract
+from ..services import confidence_batch, graph_service, role_contract
 from ..auth import Actor
 from ..permissions import require_admin
 
@@ -40,26 +40,27 @@ def list_jobs(category: str | None = None, level: str | None = None,
     jobs = query.order_by(models.Job.is_new.desc(), models.Job.confidence.desc(),
                           models.Job.id) \
                 .offset((page - 1) * size).limit(size).all()
-    # 必备能力项数一次 GROUP BY 聚合出来（历史实现是每个岗位一条 count()）。
-    # 只数**粗粒度**：详情页的「必备技能 (N)」也只列粗粒度项，细粒度技能点作为
-    # 「细分技能点」chip 挂在父项下。两处口径不一致时卡片会喊 120、点进去只有 38，
-    # 这种自相矛盾比数字大小本身更伤可信度。
-    req_counts = dict(db.query(models.JobSkill.job_id, func.count(models.JobSkill.id))
-                      .join(models.Skill, models.Skill.id == models.JobSkill.skill_id)
-                      .filter(models.JobSkill.job_id.in_({j.id for j in jobs}),
-                              models.JobSkill.importance == "required",
-                              models.JobSkill.status == "active",
-                              models.Skill.parent_id.is_(None))
-                      .group_by(models.JobSkill.job_id).all()) if jobs else {}
+    contract_summaries = role_contract.contract_summaries_for_jobs(db, jobs)
+    confidence_snapshots = confidence_batch.latest_snapshot_map(db, {job.id for job in jobs})
     items = []
     for j in jobs:
+        confidence_snapshot = confidence_snapshots.get(j.id)
+        contract_summary = contract_summaries.get(j.id, {})
         items.append({"id": j.id, "name": j.name, "category": j.category, "level": j.level,
                       "track": j.track, "industry": j.industry,
                       "recruitment_type": j.recruitment_type,
                       "is_new": bool(j.is_new), "confidence": j.confidence,
                       "evidence_count": j.evidence_count, "emergence_score": j.emergence_score,
-                      "required_count": req_counts.get(j.id, 0), "version": j.version,
-                      "summary": (j.summary or "")[:120]})
+                      "required_count": contract_summary.get("required_count", 0),
+                      "contract_status": contract_summary.get(
+                          "contract_status", "evidence_insufficient"),
+                      "employer_count": contract_summary.get("employer_count", 0),
+                      "version": j.version,
+                      "summary": (j.summary or "")[:120],
+                      "confidence_as_of": (confidence_snapshot.as_of.isoformat()
+                                           if confidence_snapshot else None),
+                      "confidence_delta": (confidence_snapshot.delta
+                                           if confidence_snapshot else 0.0)})
     return {"total": total, "page": page, "size": size, "items": items}
 
 
@@ -125,6 +126,32 @@ def get_versions(job_id: int, page: int = 1, size: int = 20,
                        "skills": skills.get(row.id, []), "synthetic": False,
                        "created_at": row.created_at.isoformat()} for row in rows],
             "total": total, "page": page, "size": size}
+
+
+@router.get("/{job_id}/confidence-history")
+def confidence_history(job_id: int, page: int = 1, size: int = 30,
+                       db: Session = Depends(get_db)):
+    job = db.get(models.Job, job_id)
+    if not job or job.status != "published":
+        raise HTTPException(404, "岗位不存在")
+    page, size = max(1, page), min(100, max(1, size))
+    query = db.query(models.JobConfidenceSnapshot).filter(
+        models.JobConfidenceSnapshot.job_id == job_id)
+    total = query.count()
+    rows = query.order_by(models.JobConfidenceSnapshot.as_of.desc()).offset(
+        (page - 1) * size).limit(size).all()
+    return {
+        "job_id": job.id, "job_name": job.name, "current_version": job.version,
+        "items": [{
+            "id": row.id, "run_id": row.run_id,
+            "job_version_id": row.job_version_id, "job_version": row.job_version,
+            "as_of": row.as_of.isoformat(), "evidence_count": row.evidence_count,
+            "valid_jd_count": row.valid_jd_count, "factors": row.factors or {},
+            "previous_confidence": row.previous_confidence,
+            "confidence": row.confidence, "delta": row.delta,
+        } for row in rows],
+        "total": total, "page": page, "size": size,
+    }
 
 
 @router.get("/{job_id}/evidence")

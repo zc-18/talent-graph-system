@@ -2,15 +2,17 @@
 from __future__ import annotations
 import os
 import logging
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from .config import settings
 from .db import engine, init_db
-from .routers import (admin, auth, chat, discovery, evolution, feedback, graph, hr,
+from .auth import current_actor
+from .routers import (admin, auth, chat, discovery, evolution, feedback, graph, hr, public,
                       jobs, match, me, talent)
+from .services.confidence_batch import scheduler as confidence_scheduler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("talent-graph")
@@ -29,18 +31,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(jobs.router)
-app.include_router(graph.router)
-app.include_router(discovery.router)
-app.include_router(evolution.router)
-app.include_router(match.router)
-app.include_router(talent.router)
+_authenticated = [Depends(current_actor)]
+
+app.include_router(jobs.router, dependencies=_authenticated)
+app.include_router(graph.router, dependencies=_authenticated)
+app.include_router(discovery.router, dependencies=_authenticated)
+app.include_router(evolution.router, dependencies=_authenticated)
+app.include_router(match.router, dependencies=_authenticated)
+app.include_router(talent.router, dependencies=_authenticated)
+# 公开门户数据条：白名单字段，不挂 _authenticated（见 routers/public.py）
+app.include_router(public.router)
 app.include_router(chat.router)
 app.include_router(auth.router)
-app.include_router(me.router)
-app.include_router(hr.router)
-app.include_router(feedback.router)
-app.include_router(admin.router)
+app.include_router(me.router, dependencies=_authenticated)
+app.include_router(hr.router, dependencies=_authenticated)
+app.include_router(feedback.router, dependencies=_authenticated)
+app.include_router(admin.router, dependencies=_authenticated)
 
 
 @app.on_event("startup")
@@ -54,9 +60,16 @@ def _startup():
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
         logger.info("生产数据库连通性检查完成；未执行 runtime create_all")
+        confidence_scheduler.start()
         return
     init_db()
     logger.info("本地/测试数据库初始化完成")
+    confidence_scheduler.start()
+
+
+@app.on_event("shutdown")
+def _shutdown():
+    confidence_scheduler.stop()
 
 
 @app.get("/api/health")

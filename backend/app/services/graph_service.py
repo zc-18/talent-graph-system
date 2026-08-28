@@ -3,6 +3,7 @@
 把交叉验证后的能力项落库为 Job / Skill / JobSkill / Evidence，并提供全景图谱查询。
 """
 from __future__ import annotations
+from urllib.parse import urlparse
 import re
 from datetime import datetime
 from sqlalchemy.orm import Session
@@ -10,6 +11,7 @@ from sqlalchemy import func
 from .. import models, clients
 from .taxonomy import capability_cluster, skill_category, skill_type
 from .hallucination import job_confidence
+from . import confidence_batch
 
 # 每个能力项最多留存的证据条数。JD 提及数可达上千，全存下来是六位数行且对
 # 说服力没有边际收益；source_count 现在是独立雇主数，与证据卡数量分别展示。
@@ -238,6 +240,10 @@ def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) 
         })
     required = [s for s in skills if s["importance"] == "required"]
     bonus = [s for s in skills if s["importance"] == "bonus"]
+    latest = confidence_batch.latest_snapshot_map(db, {job.id}).get(job.id)
+    trend_rows = db.query(models.JobConfidenceSnapshot).filter(
+        models.JobConfidenceSnapshot.job_id == job.id).order_by(
+        models.JobConfidenceSnapshot.as_of.desc()).limit(30).all()
     return {
         "id": job.id, "name": job.name, "slug": job.slug, "category": job.category,
         "track": getattr(job, "track", None), "industry": getattr(job, "industry", None),
@@ -254,6 +260,13 @@ def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) 
         "source_summary": job.source_summary or {},
         "created_at": job.created_at.isoformat() if job.created_at else None,
         "updated_at": job.updated_at.isoformat() if job.updated_at else None,
+        "confidence_as_of": latest.as_of.isoformat() if latest else None,
+        "confidence_delta": latest.delta if latest else 0.0,
+        "confidence_factors": latest.factors if latest else {},
+        "confidence_trend": [{
+            "as_of": row.as_of.isoformat(), "confidence": row.confidence,
+            "delta": row.delta, "run_id": row.run_id,
+        } for row in reversed(trend_rows)],
     }
 
 
@@ -400,8 +413,72 @@ def stats_overview(db: Session) -> dict:
     dup_jds = db.query(func.count(models.RawJD.id)).filter(models.RawJD.is_duplicate == True).scalar() or 0  # noqa: E712
     by_cat = dict(db.query(models.Job.category, func.count(models.Job.id)).group_by(models.Job.category).all())
     avg_conf = db.query(func.avg(models.Job.confidence)).scalar() or 0
+    latest_run = db.query(models.ConfidenceRun).filter(
+        models.ConfidenceRun.status == "completed").order_by(
+        models.ConfidenceRun.as_of.desc()).first()
+    avg_delta = (db.query(func.avg(models.JobConfidenceSnapshot.delta)).filter(
+        models.JobConfidenceSnapshot.run_id == latest_run.id).scalar() or 0
+                 if latest_run else 0)
+    confidence_values = [float(value or 0.0) for value, in db.query(
+        models.Job.confidence).filter(models.Job.status == "published").all()]
+    distribution_ranges = (
+        ("below_60", 0.0, 0.6), ("60_to_80", 0.6, 0.8),
+        ("80_to_90", 0.8, 0.9), ("90_and_above", 0.9, 1.01),
+    )
+    confidence_distribution = {}
+    for label, lower, upper in distribution_ranges:
+        count = sum(lower <= value < upper for value in confidence_values)
+        confidence_distribution[label] = {
+            "count": count,
+            "ratio": round(count / max(1, len(confidence_values)), 4),
+        }
+
+    factor_rows = []
+    if latest_run:
+        factor_rows = [row[0] or {} for row in db.query(
+            models.JobConfidenceSnapshot.factors).filter(
+            models.JobConfidenceSnapshot.run_id == latest_run.id).all()]
+    if not factor_rows:
+        factor_rows = [row[0] or {} for row in db.query(models.JobSkill.factors).filter(
+            models.JobSkill.status == "active", models.JobSkill.factors.isnot(None)).all()]
+    factor_averages = {
+        key: round(sum(float(row.get(key, 0.0) or 0.0) for row in factor_rows)
+                   / max(1, len(factor_rows)), 4)
+        for key in ("support", "diversity", "freshness", "authority", "external")
+    }
+
+    valid_raw_rows = db.query(models.RawJD.id, models.RawJD.employer_id).filter(
+        models.RawJD.is_duplicate == False,  # noqa: E712
+        models.RawJD.duplicate_of.is_(None),
+        models.RawJD.raw_text.isnot(None)).all()
+    identified_employer_ids = {employer_id for _, employer_id in valid_raw_rows if employer_id}
+    active_employer_ids = {row[0] for row in db.query(models.Employer.id).filter(
+        models.Employer.id.in_(identified_employer_ids),
+        models.Employer.status == "active").all()} if identified_employer_ids else set()
+    identified_count = sum(employer_id in active_employer_ids
+                           for _, employer_id in valid_raw_rows)
+
+    evidence_urls = [value or "" for value, in db.query(models.Evidence.source_url).all()]
+
+    def valid_http_url(value: str) -> bool:
+        parsed = urlparse(value.strip())
+        return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+    valid_url_count = sum(valid_http_url(value) for value in evidence_urls)
     return {
         "total_jobs": total_jobs, "new_jobs": new_jobs, "total_skills": total_skills,
         "total_jds": total_jds, "duplicate_jds": dup_jds,
         "categories": by_cat, "avg_confidence": round(float(avg_conf), 4),
+        "confidence_as_of": latest_run.as_of.isoformat() if latest_run else None,
+        "avg_confidence_delta": round(float(avg_delta), 4),
+        "confidence_distribution": confidence_distribution,
+        "factor_averages": factor_averages,
+        "identified_employer_coverage": round(
+            identified_count / max(1, len(valid_raw_rows)), 4),
+        "identified_employer_jds": identified_count,
+        "valid_jd_count": len(valid_raw_rows),
+        "valid_evidence_url_ratio": round(
+            valid_url_count / max(1, len(evidence_urls)), 4),
+        "valid_evidence_url_count": valid_url_count,
+        "evidence_count": len(evidence_urls),
     }

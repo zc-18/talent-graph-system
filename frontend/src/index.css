@@ -1,64 +1,152 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
+/* ============================================================
+   第五轮视觉 token（唯一真相源：_team/DESIGN_TOKENS.md）
+   值必须是「空格分隔的 RGB 通道」——tailwind 侧用
+   rgb(var(--x) / <alpha-value>) 引用，全站的 /xx 透明度后缀才继续有效。
+   单主题：不写暗色媒体查询，不写 [data-theme] 覆盖块。
+   ============================================================ */
+:root{
+  color-scheme: light;
+
+  /* ── 中性深色轴 ─────────────────────────────────────────────
+     主按钮 / 侧栏选中项。刻意用「近黑」而不是深蓝：#0F2A4A 这种低饱和深蓝
+     在深色块上会被看成带绿，用户明确点名过。这里全部走无色相中性灰阶。 */
+  --ink-solid:       10 12 16;      /* #0A0C10 近黑 */
+  --ink-hover:        0  0  0;      /* #000000 纯黑：hover 只变深，不变色相 */
+
+  /* ── 天蓝强调 ───────────────────────────────────────────────
+     用户要的是「淡蓝 / 天蓝」，不是深蓝。sky 色阶全程无绿相。 */
+  --brand-accent:     56 189 248;   /* #38BDF8 sky-400 天蓝，主强调 */
+  --brand-accent-2:  186 230 253;   /* #BAE6FD sky-200 渐变中段 */
+  --brand-accent-3:  240 249 255;   /* #F0F9FF sky-50  渐变近白端 */
+  --brand-accent-deep: 2 132 199;   /* #0284C7 sky-600 需要托白字时用 */
+
+  /* 单点强调：紫（徽标语义 + 标题渐变收尾色） */
+  --brand-violet:    124 108 246;   /* #7C6CF6 */
+
+  /* ── 兼容旧键 ───────────────────────────────────────────────
+     全站仍有大量 brand-ink / brand-ink-soft 引用。重新指向中性 slate 深色，
+     这样即使漏改也不会再冒出蓝绿色块。 */
+  --brand-ink:        15  23  42;   /* #0F172A slate-900（中性） */
+  --brand-ink-soft:   30  41  59;   /* #1E293B slate-800（中性） */
+  --btn-solid:        10  12  16;   /* 保留旧键名，指向 --ink-solid 同值 */
+
+  /* ── 表面：近白 + 极淡蓝 ───────────────────────────────────── */
+  --surface-page:    251 252 253;   /* #FBFCFD */
+  --surface-card:    255 255 255;
+  --surface-muted:   244 248 252;   /* #F4F8FC 微冷近白 */
+
+  /* ── 线条：中性，不带蓝绿 ──────────────────────────────────── */
+  --line-soft:        15  23  42;
+  --line-strong:      15  23  42;
+
+  /* ── 文本：纯中性 slate 灰阶 ────────────────────────────────
+     旧值 #46617E / #7C93AC 绿相偏高（G 通道相对 R 抬得多），正是用户说的
+     「文字带点绿」。换成 slate-900/600/400，色相干净。 */
+  --text-1:           15  23  42;   /* #0F172A */
+  --text-2:           71  85 105;   /* #475569 */
+  --text-3:          148 163 184;   /* #94A3B8 */
+}
 
 html, body, #root { height: 100%; }
 body {
   margin: 0;
-  background-color: #DCEBFB;
+  /* 近白打底 + 右上一大团极淡蓝色晕染、左下更淡的一团（契约 §8）。
+     此前是 bg2.webp 全屏 cover + background-attachment: fixed，
+     移动端每次滚动都要重绘整张背景图，已移除，保持不加回。 */
+  background-color: rgb(var(--surface-page));
   background-image:
-    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(219,235,251,0.22)),
-    url('/bg2.webp');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+    radial-gradient(920px 620px at 88% -6%, rgb(var(--brand-accent) / 0.10), transparent 60%),
+    radial-gradient(760px 540px at 4% 104%, rgb(var(--brand-accent) / 0.05), transparent 62%);
   background-repeat: no-repeat;
-  color: #1E293B;
-  font-family: Inter, 'Noto Sans SC', system-ui, sans-serif;
+  color: rgb(var(--text-1));
+  font-family: 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.28); border-radius: 8px; }
+::-webkit-scrollbar-thumb { background: rgb(var(--brand-ink) / 0.20); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--brand-accent) / 0.45); }
 ::-webkit-scrollbar-track { background: transparent; }
 
 @layer components {
   .glass {
     @apply bg-white/70 border border-white/80 backdrop-blur-xl rounded-2xl;
-    box-shadow: 0 10px 30px -12px rgba(37,99,235,0.18), 0 2px 8px -2px rgba(15,23,42,0.06);
+    box-shadow: 0 10px 30px -12px rgb(var(--brand-ink) / 0.18), 0 2px 8px -2px rgb(var(--brand-ink) / 0.06);
   }
   .glass-hover { @apply transition-all duration-300 hover:bg-white/90; }
-  .glass-hover:hover { box-shadow: 0 16px 40px -12px rgba(37,99,235,0.28); }
+  .glass-hover:hover { box-shadow: 0 16px 40px -12px rgb(var(--brand-ink) / 0.28); }
+  /* 门户/登录用的实心卡片：同一套圆角与阴影语言，但不透明，便于承载截图与长文 */
+  .surface-card {
+    @apply rounded-2xl border bg-white;
+    border-color: rgb(var(--line-soft) / 0.10);
+    box-shadow: 0 10px 30px -18px rgb(var(--brand-ink) / 0.22);
+  }
+
+  /* 按钮（契约 §5）：胶囊 + 中性配色。主按钮近黑实色，不再用渐变填充——
+     彩色只出现在标题渐变文字上。rounded-full 是全站生效的，工作台按钮同步变胶囊。 */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold
            transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-primary {
-    @apply btn text-white bg-grad-accent shadow-glow hover:brightness-105 active:scale-[0.98];
+    @apply btn text-white;
+    background: rgb(var(--ink-solid));
+    /* 阴影用中性黑，不掺蓝——掺蓝的深色阴影在近黑块边缘会显出冷绿边 */
+    box-shadow: 0 1px 2px rgb(0 0 0 / .20), 0 8px 20px -12px rgb(0 0 0 / .45);
   }
+  /* hover 只加深、不换色相。此前是切到 #0F2A4A 深蓝，比底色更浅也更偏蓝绿，
+     就是用户反复指出的「悬浮发绿」。 */
+  .btn-primary:hover:not(:disabled) { background: rgb(var(--ink-hover)); transform: translateY(-1px); }
+  .btn-primary:active:not(:disabled) { transform: translateY(0); }
   .btn-ghost {
-    @apply btn text-slate-600 bg-white/70 border border-slate-200 hover:bg-white hover:border-sky-300;
+    @apply btn bg-white text-body-1;
+    border: 1px solid rgb(var(--line-soft) / .16);
   }
+  .btn-ghost:hover { @apply bg-surface-muted; border-color: rgb(var(--line-strong) / .28); }
+
+  /* 徽章（契约 §6）：白底发丝边胶囊，前面配一颗蓝色圆点 */
+  .pill-badge {
+    @apply inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-xs font-medium text-body-2;
+    border: 1px solid rgb(var(--line-soft) / .14);
+  }
+
+  /* 胶囊/标签：参考用户给的样例——极淡的蓝白渐变 + 发丝边 + 低对比文���。
+     不用实色块，避免一堆同质色块糊成一片。 */
   .chip {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium;
+    @apply inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium;
+    background: linear-gradient(135deg, rgb(var(--brand-accent-3)) 0%, #FFFFFF 100%);
+    border: 1px solid rgb(var(--brand-accent) / .16);
+    color: rgb(var(--text-2));
   }
-  .label { @apply text-xs font-semibold uppercase text-slate-400; letter-spacing: 0; }
+  .label { @apply text-xs font-semibold uppercase text-body-3; letter-spacing: 0; }
   .input {
-    @apply w-full rounded-xl bg-white/80 border border-slate-200 px-3.5 py-2.5 text-sm
-           text-slate-800 placeholder:text-slate-400 outline-none transition
+    @apply w-full rounded-xl bg-white/80 border border-line-soft/12 px-3.5 py-2.5 text-sm
+           text-body-1 placeholder:text-body-3 outline-none transition
            focus:border-accent/60 focus:ring-2 focus:ring-accent/20 focus:bg-white;
   }
+  /* 标题渐变文字（契约 §7）：淡蓝 → 紫 */
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-sky-500 to-cyan-500;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, rgb(var(--brand-accent)) 0%, rgb(var(--brand-violet)) 100%);
   }
   .admin-table { @apply w-full text-sm; }
-  .admin-table thead { @apply bg-slate-50 text-xs text-slate-500; }
+  .admin-table thead { @apply bg-surface-muted text-xs text-body-2; }
   .admin-table th { @apply px-4 py-3 text-left font-semibold whitespace-nowrap; }
-  .admin-table td { @apply px-4 py-3 text-slate-600 whitespace-nowrap; }
-  .admin-table tbody tr { @apply border-t border-slate-100 hover:bg-sky-50/40 transition-colors; }
+  .admin-table td { @apply px-4 py-3 text-body-2 whitespace-nowrap; }
+  .admin-table tbody tr { @apply border-t border-line-soft/8 transition-colors; }
+  .admin-table tbody tr:hover { background: rgb(var(--brand-accent) / 0.05); }
+  .portal-nav-link {
+    @apply inline-flex h-10 w-10 items-center justify-center gap-2 rounded-full border border-line-soft/14 bg-white text-sm font-semibold text-body-1 transition hover:border-accent/50 hover:bg-surface-muted md:w-auto md:px-4;
+  }
+  /* 段落间统一节奏：门户各 section 的纵向留白 */
+  .section-pad { @apply py-16 sm:py-20 lg:py-24; }
+  .section-wrap { @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12; }
+  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.18em] text-accent; }
 }
 
 @supports (padding: env(safe-area-inset-top)) {
@@ -71,7 +159,7 @@ body {
 /* 键盘可达性：全局统一的 focus 可见环（鼠标点击不触发）。
    输入类控件自带 border/ring 焦点样式，排除以免出现双重描边 */
 :focus-visible:not(input):not(textarea):not(select) {
-  outline: 2px solid rgba(59,130,246,0.55);
+  outline: 2px solid rgb(var(--brand-accent) / 0.65);
   outline-offset: 2px;
   border-radius: 8px;
 }

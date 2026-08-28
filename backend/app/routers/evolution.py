@@ -1,5 +1,6 @@
 """既有岗位能力动态更新（演化）路由。"""
 from __future__ import annotations
+from collections import defaultdict
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import models
@@ -8,9 +9,145 @@ from ..schemas import EvolveRequest
 from ..services import extraction, hallucination, evolution, graph_service, leveling
 from ..guards import is_read_only, READ_ONLY_MESSAGE
 from .. import clients
-from ..auth import Actor, optional_actor
+from ..auth import Actor, current_actor
 
 router = APIRouter(prefix="/api/evolution", tags=["evolution"])
+
+
+def _iso(value):
+    return value.isoformat() if value else None
+
+
+@router.get("/{job_id}/timeline")
+def evolution_timeline(job_id: int, db: Session = Depends(get_db)):
+    """Return factual corpus slices and append-only version/change history."""
+    job = db.get(models.Job, job_id)
+    if not job or job.status != "published":
+        raise HTTPException(404, "岗位不存在")
+
+    evidence_rows = (db.query(models.Evidence, models.RawJD)
+                     .join(models.RawJD, models.RawJD.id == models.Evidence.raw_jd_id)
+                     .join(models.JobSkill,
+                           models.JobSkill.id == models.Evidence.job_skill_id)
+                     .filter(models.JobSkill.job_id == job_id,
+                             models.Evidence.source_type == "jd",
+                             models.RawJD.is_duplicate == False,  # noqa: E712
+                             models.RawJD.duplicate_of.is_(None),
+                             models.RawJD.raw_text.isnot(None)).all())
+    raw_by_id = {}
+    urls_by_raw: dict[int, set[str]] = defaultdict(set)
+    for evidence, raw in evidence_rows:
+        raw_by_id.setdefault(raw.id, raw)
+        url = (evidence.source_url or raw.source_url or "").strip()
+        if url.startswith(("http://", "https://")):
+            urls_by_raw[raw.id].add(url)
+
+    employer_ids = {raw.employer_id for raw in raw_by_id.values() if raw.employer_id}
+    employers = {row.id: row for row in db.query(models.Employer).filter(
+        models.Employer.id.in_(employer_ids)).all()} if employer_ids else {}
+    parent_ids = {row.parent_id for row in employers.values() if row.parent_id}
+    if parent_ids:
+        employers.update({row.id: row for row in db.query(models.Employer).filter(
+            models.Employer.id.in_(parent_ids)).all()})
+
+    slices: dict[int, dict] = {}
+    observed_values = []
+    evidenced_values = []
+    for raw in raw_by_id.values():
+        observed = raw.publish_date or raw.collected_at
+        if not observed:
+            continue
+        observed_values.append(observed)
+        if urls_by_raw.get(raw.id):
+            evidenced_values.append(observed)
+        bucket = slices.setdefault(observed.year, {
+            "year": observed.year, "jd_ids": set(), "employer_ids": set(),
+            "platforms": set(), "urls": set(), "start": observed, "end": observed,
+        })
+        bucket["jd_ids"].add(raw.id)
+        bucket["platforms"].add(raw.platform or raw.source or "未知来源")
+        bucket["urls"].update(urls_by_raw.get(raw.id, set()))
+        bucket["start"] = min(bucket["start"], observed)
+        bucket["end"] = max(bucket["end"], observed)
+        employer = employers.get(raw.employer_id)
+        if employer and employer.status == "active":
+            unit_id = employer.parent_id or employer.id
+            unit = employers.get(unit_id)
+            if unit and unit.status == "active":
+                bucket["employer_ids"].add(unit_id)
+
+    corpus_slices = [{
+        "year": year,
+        "label": f"{year} 语料",
+        "start_at": _iso(bucket["start"]),
+        "end_at": _iso(bucket["end"]),
+        "jd_count": len(bucket["jd_ids"]),
+        "employer_count": len(bucket["employer_ids"]),
+        "platforms": sorted(bucket["platforms"]),
+        "valid_url_count": len(bucket["urls"]),
+        "url_coverage": round(len(bucket["urls"]) / max(1, len(bucket["jd_ids"])), 4),
+    } for year, bucket in sorted(slices.items())]
+
+    changes = db.query(models.CapabilityChange).filter(
+        models.CapabilityChange.job_id == job_id).order_by(
+        models.CapabilityChange.version, models.CapabilityChange.id).all()
+    changes_by_version: dict[int, list] = defaultdict(list)
+    for change in changes:
+        changes_by_version[change.version].append(change)
+    versions = db.query(models.JobVersion).filter(
+        models.JobVersion.job_id == job_id).order_by(models.JobVersion.version).all()
+    version_nodes = [{
+        "id": version.id,
+        "version": version.version,
+        "status": version.status,
+        "effective_at": _iso(version.effective_at or version.created_at),
+        "summary": version.summary,
+        "evidence_window": version.evidence_window or {},
+        "change_count": len(changes_by_version.get(version.version, [])),
+    } for version in versions]
+    if not version_nodes:
+        version_nodes = [{
+            "id": None, "version": job.version or 1, "status": "published",
+            "effective_at": _iso(job.created_at), "summary": job.summary,
+            "evidence_window": {}, "change_count": len(changes),
+        }]
+    proposal_runs = db.query(models.EvolutionRun).filter(
+        models.EvolutionRun.job_id == job_id).order_by(models.EvolutionRun.created_at).all()
+
+    first_published = min(
+        (value for value in [*(v.effective_at or v.created_at for v in versions),
+                             job.created_at] if value), default=None)
+    has_historical_slice = any(item["year"] < 2026 for item in corpus_slices)
+    if not corpus_slices:
+        coverage_note = "未发现可核验岗位语料；不生成历史变化。"
+    elif job.is_new and not has_historical_slice:
+        coverage_note = "仅展示首次观察、首次考证和首次发布；未生成虚假历史变化。"
+    else:
+        coverage_note = "时间切片仅由已关联、非重复且可追溯的真实 JD 生成。"
+    return {
+        "job_id": job.id,
+        "job_name": job.name,
+        "lifecycle_mode": ("first_observation" if job.is_new and not has_historical_slice
+                           else "historical_evolution"),
+        "first_observed_at": _iso(min(observed_values) if observed_values else None),
+        "first_evidenced_at": _iso(min(evidenced_values) if evidenced_values else None),
+        "first_published_at": _iso(first_published),
+        "corpus_slices": corpus_slices,
+        "version_nodes": version_nodes,
+        "capability_changes": [{
+            "version": row.version, "change_type": row.change_type,
+            "skill_name": row.skill_name, "importance": row.importance,
+            "old_value": row.old_value, "new_value": row.new_value,
+            "reason": row.reason, "data_source": row.data_source or {},
+            "confidence": row.confidence, "created_at": _iso(row.created_at),
+        } for row in changes],
+        "proposal_runs": [{
+            "id": row.id, "from_version": row.from_version,
+            "proposed_version": row.proposed_version, "status": row.status,
+            "created_at": _iso(row.created_at),
+        } for row in proposal_runs],
+        "coverage_note": coverage_note,
+    }
 
 
 @router.get("/{job_id}/changes")
@@ -69,7 +206,7 @@ def level_diff(job_id: int, frm: str, to: str, db: Session = Depends(get_db)):
 
 
 @router.post("/update")
-def update_job(payload: EvolveRequest, actor: Actor = Depends(optional_actor),
+def update_job(payload: EvolveRequest, actor: Actor = Depends(current_actor),
                db: Session = Depends(get_db)):
     """用新 JD 驱动既有岗位能力演化：识别变化→标注增删改→落库。"""
     job = db.query(models.Job).get(payload.job_id)

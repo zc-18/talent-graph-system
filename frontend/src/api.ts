@@ -46,6 +46,9 @@ export interface JobListItem {
   required_count: number; version: number; summary: string
   track?: string; industry?: string; recruitment_type?: string
   core_capabilities?: string[]
+  confidence_as_of?: string | null; confidence_delta?: number | null
+  contract_status?: 'ready' | 'evidence_insufficient' | string
+  employer_count?: number
 }
 export interface Paginated<T> { items: T[]; total: number; page: number; size: number }
 export type AppRole = 'user' | 'hr' | 'admin'
@@ -78,6 +81,13 @@ export interface JobVersion {
 }
 export interface ConfidenceFactors {
   support: number; diversity: number; freshness: number; authority: number; external: number
+}
+export interface ConfidenceSnapshot {
+  id?: number; run_id?: number; job_id?: number; computed_at?: string | null
+  as_of?: string | null; created_at?: string | null; confidence?: number
+  score?: number; score_before?: number | null; score_after?: number; delta?: number | null
+  previous_confidence?: number | null; evidence_count?: number; valid_jd_count?: number
+  factors?: ConfidenceFactors | null; job_version?: number
 }
 export interface Skill {
   id: number; skill_id: number; name: string; category: string; skill_type: string
@@ -121,6 +131,8 @@ export interface JobDetail {
   summary: string; core_responsibilities: string[]; typical_scenarios: string[]
   required_skills: Skill[]; bonus_skills: Skill[]; confidence: number
   evidence_count: number; emergence_score: number; version: number; source_summary: any
+  confidence_as_of?: string | null; confidence_delta?: number | null
+  confidence_factors?: ConfidenceFactors | null; confidence_trend?: ConfidenceSnapshot[]
 }
 export interface GraphData {
   nodes: any[]; edges: any[]; stats: { jobs: number; skills: number; relations: number; capabilities?: number; mode?: string }
@@ -128,6 +140,47 @@ export interface GraphData {
 export interface Stats {
   total_jobs: number; new_jobs: number; total_skills: number; total_jds: number
   duplicate_jds: number; categories: Record<string, number>; avg_confidence: number
+  confidence_as_of?: string | null; avg_confidence_delta?: number | null
+  confidence_distribution?: Record<string, { count: number; ratio: number }>
+  factor_averages?: ConfidenceFactors
+  identified_employer_coverage?: number; identified_employer_jds?: number
+  valid_jd_count?: number; valid_evidence_url_ratio?: number
+  valid_evidence_url_count?: number; evidence_count?: number
+}
+
+export interface EvolutionTimelineSlice {
+  year: number; label: string; start_at?: string | null; end_at?: string | null
+  jd_count: number; employer_count: number; platforms: string[]
+  valid_url_count: number; url_coverage: number
+}
+export interface EvolutionTimeline {
+  job_id: number; job_name: string
+  lifecycle_mode: 'first_observation' | 'historical_evolution'
+  first_observed_at?: string | null; first_evidenced_at?: string | null
+  first_published_at?: string | null; coverage_note: string
+  corpus_slices: EvolutionTimelineSlice[]
+  version_nodes: Array<{ id?: number | null; version: number; status: string
+    effective_at?: string | null; summary?: string | null; evidence_window?: any
+    change_count: number }>
+  capability_changes: CapChange[]
+  proposal_runs: Array<{ id: number; from_version: number; proposed_version: number
+    status: string; created_at: string }>
+}
+
+export type DiscoveryRunStatus = 'queued' | 'running' | 'completed' | 'failed'
+export interface DiscoveryRunRecord {
+  id: number; query: string; conditions: Record<string, any>
+  classification: string | null; matched_job_id: number | null
+  status: DiscoveryRunStatus; error: string | null
+  signals: Record<string, any>; evidence: any[]; created_at: string
+}
+/** `GET /discovery/runs/{id}` 与同步 POST 返回同一个信封，前端只写一套渲染。 */
+export interface DiscoveryRunResult {
+  idempotent_replay: boolean; run_id: number
+  status: DiscoveryRunStatus; error: string | null
+  classification: string | null; candidate_id: number | null
+  run: DiscoveryRunRecord; candidate: any; matched_job: any
+  evolution_run_id: number | null
 }
 
 export interface MatchHistoryItem {
@@ -228,9 +281,17 @@ export interface AliasItem {
   confidence: number; reason: string | null; skill_id: number | null
 }
 
+/** 门户首屏公开数据条。字段与 backend/app/routers/public.py 的 _PUBLIC_FIELDS 白名单一一对应，
+    未登录可访问；/graph/stats 仍然需要登录，没有被放开。 */
+export interface PublicStats {
+  total_jobs: number; new_jobs: number; total_skills: number; total_jds: number
+  avg_confidence: number; identified_employer_coverage: number; evidence_count: number
+}
+
 export const api = {
   health: () => http.get<{ status: string; read_only?: boolean }>('/health').then(r => r.data),
   stats: () => http.get<Stats>('/graph/stats').then(r => r.data),
+  publicStats: () => http.get<PublicStats>('/public/stats').then(r => r.data),
   categories: () => http.get<{ categories: string[]; levels: string[] }>('/graph/categories').then(r => r.data),
   panorama: (category?: string, level?: string, minConf = 0, mode: 'job' | 'capability' | 'skill' = 'skill', track?: string, recruitmentType?: string) =>
     http.get<GraphData>('/graph/panorama', { params: { category, level, min_confidence: minConf, mode, track, recruitment_type: recruitmentType } }).then(r => r.data),
@@ -243,16 +304,25 @@ export const api = {
   jobVersions: (id: number) => http.get<{ items: JobVersion[] } | Paginated<JobVersion>>(`/jobs/${id}/versions`).then(r => r.data),
   jobEvidence: (id: number) => http.get(`/jobs/${id}/evidence`).then(r => r.data),
   jobAuthority: (id: number) => http.get<{ items: AuthorityItem[] }>(`/jobs/${id}/authority`).then(r => r.data),
+  jobConfidenceHistory: (id: number) => http.get<{ items: ConfidenceSnapshot[] } | ConfidenceSnapshot[]>(`/jobs/${id}/confidence-history`)
+    .then(r => Array.isArray(r.data) ? r.data : r.data.items || []),
   seeds: () => http.get<{ seeds: string[] }>('/discovery/seeds').then(r => r.data),
-  discover: (keyword: string, save = false) =>
-    http.post('/discovery/discover', { keyword, save }).then(r => r.data),
-  discoveryRun: (body: any) => http.post('/discovery/runs', body).then(r => r.data),
+  // async=true 时后端只建 queued 行就返回，检索与大模型挪到后台任务，随后轮询
+  // discoveryRunResult 取结果——同步跑最坏要 200 秒，够浏览器和网关各超时一次。
+  discoveryRun: (body: any, options: { async?: boolean } = {}) =>
+    http.post<DiscoveryRunResult>('/discovery/runs', body,
+      options.async ? { params: { async_mode: true } } : undefined).then(r => r.data),
+  discoveryRuns: (params: any = {}) =>
+    http.get<Paginated<DiscoveryRunRecord>>('/discovery/runs', { params }).then(r => r.data),
+  discoveryRunResult: (id: number) =>
+    http.get<DiscoveryRunResult>(`/discovery/runs/${id}`).then(r => r.data),
   discoveryCandidates: (params: any = {}) => http.get<Paginated<DiscoveryCandidate>>('/discovery/candidates', { params }).then(r => r.data),
   discoveryCandidate: (id: number) => http.get<DiscoveryCandidate>(`/discovery/candidates/${id}`).then(r => r.data),
   updateDiscoveryCandidate: (id: number, body: any) => http.patch<DiscoveryCandidate>(`/discovery/candidates/${id}`, body).then(r => r.data),
   submitDiscoveryCandidate: (id: number) => http.post<DiscoveryCandidate>(`/discovery/candidates/${id}/submit`).then(r => r.data),
 
   changes: (jobId: number) => http.get(`/evolution/${jobId}/changes`).then(r => r.data),
+  evolutionTimeline: (jobId: number) => http.get<EvolutionTimeline>(`/evolution/${jobId}/timeline`).then(r => r.data),
   jobLevels: (jobId: number) => http.get<JobLevels>(`/evolution/${jobId}/levels`).then(r => r.data),
   levelDiff: (jobId: number, frm: string, to: string) =>
     http.get<{ from: string; to: string; from_label: string; to_label: string; changes: CapChange[] }>(
@@ -348,7 +418,9 @@ export const api = {
 // 岗位领域 + 技能分类共用一张色表。后两项（编程语言 / 数据库与存储）只出现在技能侧，
 // 岗位不会用到——技能分类与岗位领域是两个集合，见后端 taxonomy.CATEGORIES 的说明。
 export const CATEGORY_COLORS: Record<string, string> = {
-  人工智能: '#6366F1', 大数据: '#22D3EE', 物联网: '#34D399',
+  // 用户明确否掉了青/绿系（墨青、teal、emerald）。整张表改为「蓝为主轴 + 紫/琥珀/玫红
+  // 做区分」，全表不含任何绿或青绿色，同时保持相邻项在力导图里仍能一眼分开。
+  人工智能: '#3B82F6', 大数据: '#0EA5E9', 物联网: '#7A6BD8',
   智能系统: '#F59E0B', 云计算与工程: '#A855F7', 数据工程: '#F472B6', 其他: '#64748B',
-  编程语言: '#0EA5E9', 数据库与存储: '#14B8A6',
+  编程语言: '#38BDF8', 数据库与存储: '#4F46E5',
 }

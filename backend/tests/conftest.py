@@ -6,5 +6,6 @@ import sys
 # isolated SQLite database before any application module can construct its engine.
 os.environ["DATABASE_URL_OVERRIDE"] = "sqlite://"
 os.environ["READ_ONLY"] = "1"
+os.environ["CONFIDENCE_SCHEDULER_ENABLED"] = "0"
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

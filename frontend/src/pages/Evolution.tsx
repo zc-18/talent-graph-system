@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Loader2, Plus, X, Wand2, ArrowRight, Layers, Clock, Target, BriefcaseBusiness } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { IGitBranch } from '../components/icons'
-import { api, errMsg, JobListItem, JobLevels, CapChange, JobVersion } from '../api'
+import { api, errMsg, JobListItem, JobLevels, CapChange, JobVersion, EvolutionTimeline } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, EmptyState } from '../components/ui'
 import ChangeDiff from '../components/ChangeDiff'
 import Select from '../components/Select'
@@ -32,6 +32,35 @@ function dataSourceLabel(value: any): string {
     if (key === 'jd_count') return `${item} 条 JD`
     return `${key}: ${typeof item === 'object' ? JSON.stringify(item) : item}`
   }).join(' · ') || '未记录'
+}
+
+function dateLabel(value?: string | null) {
+  return value ? new Date(value).toLocaleDateString('zh-CN') : '尚无记录'
+}
+
+function TimelineOverview({ timeline }: { timeline: EvolutionTimeline }) {
+  const lifecycle = [
+    ['首次观察', timeline.first_observed_at],
+    ['首次考证', timeline.first_evidenced_at],
+    ['首次发布', timeline.first_published_at],
+  ]
+  return (
+    <Card className="p-4 sm:p-5">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div><div className="label">真实语料时间线</div><div className="mt-1 font-bold text-slate-900">{timeline.job_name}</div></div>
+        <Badge tone={timeline.lifecycle_mode === 'first_observation' ? 'amber' : 'cyan'}>{timeline.lifecycle_mode === 'first_observation' ? '首次观察生命周期' : '历史演化生命周期'}</Badge>
+      </div>
+      <div className="mt-4 grid grid-cols-1 border-y border-slate-200 sm:grid-cols-3">
+        {lifecycle.map(([label, value], index) => <div key={label} className={`py-3 ${index ? 'border-t border-slate-200 sm:border-l sm:border-t-0 sm:pl-4' : ''}`}><div className="text-[10px] font-semibold text-slate-400">{label}</div><div className="mt-1 text-sm font-bold tabular-nums text-slate-800">{dateLabel(value)}</div></div>)}
+      </div>
+      <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {timeline.corpus_slices.map(slice => <div key={slice.year} className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-3"><div className="flex items-center justify-between gap-2"><b className="text-sm text-slate-800">{slice.label}</b><span className="text-[10px] text-slate-400">URL {Math.round(slice.url_coverage * 100)}%</span></div><div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500"><span>{slice.jd_count} 条 JD</span><span>{slice.employer_count} 个雇主</span><span>{slice.platforms.length} 个渠道</span></div></div>)}
+        {timeline.corpus_slices.length === 0 && <div className="text-sm text-slate-400">暂无可核验语料切片</div>}
+      </div>
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3"><span className="text-[11px] font-semibold text-slate-500">版本节点</span>{timeline.version_nodes.map(node => <span key={`${node.id}-${node.version}`} className="rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] text-slate-600">v{node.version} · {node.status} · {node.change_count} 项变化</span>)}</div>
+      <p className="mt-3 text-[11px] leading-5 text-slate-500">{timeline.coverage_note}</p>
+    </Card>
+  )
 }
 
 /** 级别演化视图：初级→中级→高级 阶梯式画像 + 相邻级别差异 */
@@ -69,8 +98,8 @@ function LevelEvolution({ jobId }: { jobId: number }) {
             <Card key={lv} delay={idx * 0.06} className={`p-5 ${idx === 1 ? 'lg:mt-6' : idx === 2 ? 'lg:mt-12' : ''}`}>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className={`w-7 h-7 rounded-lg grid place-items-center text-white text-xs font-bold ${
-                    idx === 0 ? 'bg-sky-400' : idx === 1 ? 'bg-grad-accent' : 'bg-grad-violet'}`}>{idx + 1}</span>
+                  <span className={`w-7 h-7 rounded-lg grid place-items-center text-accent-deep text-xs font-bold ${
+                    idx === 0 ? 'bg-sky-400' : idx === 1 ? 'bg-grad-accent ring-1 ring-accent/20' : 'bg-grad-violet'}`}>{idx + 1}</span>
                   <span className="font-bold text-slate-800">{LEVEL_LABEL[lv] || lv}</span>
                 </div>
                 <span className="text-[11px] text-slate-400">{bucket?.jd_count ?? 0} 条 JD 支撑</span>
@@ -133,6 +162,7 @@ export default function Evolution() {
   const [result, setResult] = useState<any>(null)
   const [history, setHistory] = useState<any>(null)
   const [versions, setVersions] = useState<JobVersion[]>([])
+  const [timeline, setTimeline] = useState<EvolutionTimeline | null>(null)
   const [selectedVersion, setSelectedVersion] = useState<number | null>(null)
   const toast = useToast()
   const floatRef = useFloat<HTMLImageElement>({ y: 9, duration: 3.6, deps: [history, result, loading] })
@@ -143,7 +173,9 @@ export default function Evolution() {
       .catch(e => toast('error', errMsg(e, '岗位列表加载失败')))
   }, [])
   useEffect(() => { if (jobId) {
+    setTimeline(null)
     api.changes(jobId).then(setHistory).catch(() => setHistory({ items: [] }))
+    api.evolutionTimeline(jobId).then(setTimeline).catch(() => setTimeline(null))
     api.jobVersions(jobId).then(data => { const list = data.items || []; setVersions(list); setSelectedVersion(list[list.length - 1]?.version ?? list[0]?.version ?? null) }).catch(() => { setVersions([]); setSelectedVersion(null) })
     setResult(null)
   } }, [jobId])
@@ -165,8 +197,8 @@ export default function Evolution() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
-          <IGitBranch className="w-6 h-6 text-white" />
+        <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent ring-1 ring-accent/20 grid place-items-center shadow-glow">
+          <IGitBranch className="w-6 h-6 text-accent-deep" />
         </div>
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">既有岗位能力动态演化</h1>
@@ -178,7 +210,9 @@ export default function Evolution() {
         {[['time', '时间演化', Clock], ['level', '级别演化', Layers]].map(([k, label, Icon]: any) => (
           <button key={k} onClick={() => setMode(k)}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
-              mode === k ? 'bg-grad-accent text-white shadow-glow' : 'btn-ghost'}`}>
+              mode === k
+                ? 'bg-grad-sky text-body-1 border border-accent/35 shadow-[0_2px_10px_-4px_rgb(var(--brand-accent)/0.45)]'
+                : 'btn-ghost'}`}>
             <Icon className="w-4 h-4" /> {label}
           </button>
         ))}
@@ -189,6 +223,8 @@ export default function Evolution() {
           </div>
         )}
       </div>
+
+      {mode === 'time' && timeline && <TimelineOverview timeline={timeline} />}
 
       {mode === 'level' ? (jobId ? <LevelEvolution jobId={jobId} /> : <Spinner />) : (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -253,12 +289,12 @@ export default function Evolution() {
                 {[['新增', result.evolution.added, 'emerald'], ['删除', result.evolution.deleted, 'rose'], ['修改', result.evolution.modified, 'amber']].map(
                   ([l, v, t]: any) => (
                     <div key={l} className="rounded-xl bg-sky-50/70 p-3 text-center">
-                      <div className={`text-2xl font-extrabold ${t === 'emerald' ? 'text-emerald-600' : t === 'rose' ? 'text-rose-600' : 'text-amber-600'}`}>{v}</div>
+                      <div className={`text-2xl font-extrabold ${t === 'emerald' ? 'text-accent-deep' : t === 'rose' ? 'text-rose-600' : 'text-amber-600'}`}>{v}</div>
                       <div className="text-xs text-slate-500">{l}能力项</div>
                     </div>
                   ))}
               </div>
-              <div className="space-y-2 max-h-[360px] overflow-auto">
+              <div className="space-y-2 max-h-[280px] overflow-auto sm:max-h-[360px]">
                 {result.changes.map((c: any, i: number) => (
                   <div key={i} className="rounded-xl bg-sky-50/70 px-3.5 py-2.5">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -277,11 +313,11 @@ export default function Evolution() {
               {!history ? <Spinner /> : history.items.length === 0 ? (
                 <div className="text-center py-6">
                   <img ref={floatRef} src="/decor-evolution.webp" alt=""
-                    className="w-40 h-40 object-contain mx-auto mb-2 mix-blend-multiply drop-shadow-[0_12px_24px_rgba(52,211,153,0.2)]" />
+                    className="mx-auto mb-2 h-28 w-28 object-contain mix-blend-multiply drop-shadow-[0_12px_24px_rgba(56,189,248,0.22)] sm:h-40 sm:w-40" />
                   <div className="text-slate-400">暂无演化记录，提交新 JD 开始演化。</div>
                 </div>
               ) : (
-                <div className="space-y-2 max-h-[420px] overflow-auto">
+                <div className="space-y-2 max-h-[300px] overflow-auto sm:max-h-[420px]">
                   {history.items.slice(0, 20).map((c: any, i: number) => (
                     <div key={i} className="rounded-xl bg-sky-50/70 px-3.5 py-2.5">
                       <div className="flex items-center gap-2 text-xs flex-wrap">

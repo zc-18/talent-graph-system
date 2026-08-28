@@ -4,12 +4,14 @@ import {
   ArrowLeft, FileText, GitBranch, History, Network, ExternalLink, Landmark, Sparkles, ChevronRight,
 } from 'lucide-react'
 import { ITarget, IStack, IShieldCheck, IBriefcase } from '../components/icons'
-import { api, errMsg, JobDetail as TJob, Skill as TSkill, AuthorityItem, CATEGORY_COLORS, RoleContract } from '../api'
+import { api, errMsg, JobDetail as TJob, Skill as TSkill, AuthorityItem, CATEGORY_COLORS, ConfidenceSnapshot, RoleContract } from '../api'
 import { Card, Spinner, ConfidencePill, Badge, ErrorState } from '../components/ui'
 import ChangeDiff from '../components/ChangeDiff'
 import { useToast } from '../components/Toast'
 import { useReveal } from '../hooks/gsapFx'
 import { useAuth } from '../auth'
+import { ConfidenceMeta, ConfidenceTrend } from '../components/ConfidenceMeta'
+import ConfidenceExplain from '../components/ConfidenceExplain'
 
 const LEVEL_LABEL: Record<string, string> = { junior: '初级', middle: '中级', senior: '高级', expert: '专家' }
 const SKILL_LEVEL: Record<string, string> = { familiar: '了解', proficient: '熟练', expert: '精通' }
@@ -187,7 +189,7 @@ function EmptyHistory({ job, authority, eraCounts, earliestJd }: {
             {steps.map(s => (
               <div key={s.k} className="relative pb-5">
                 <span className={`absolute -left-[18px] top-1 w-3 h-3 rounded-full ring-4 ring-white ${
-                  s.tone === 'indigo' ? 'bg-indigo-400' : s.tone === 'violet' ? 'bg-violet-400' : 'bg-cyan-400'}`} />
+                  s.tone === 'indigo' ? 'bg-indigo-400' : s.tone === 'violet' ? 'bg-violet-400' : 'bg-accent'}`} />
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm font-semibold text-slate-800">{s.title}</span>
                   <span className="text-[11px] text-slate-400">{s.date}</span>
@@ -213,16 +215,24 @@ export default function JobDetail() {
   const [loadError, setLoadError] = useState(false)
   const [authority, setAuthority] = useState<AuthorityItem[]>([])
   const [contract, setContract] = useState<RoleContract | null>(null)
+  const [confidenceHistory, setConfidenceHistory] = useState<ConfidenceSnapshot[]>([])
   const toast = useToast()
   const auth = useAuth()
   const revealRef = useReveal('[data-reveal]', { scroll: true, stagger: 0.05, deps: [job, tab] })
 
-  const reload = () => { setLoadError(false); api.job(jobId).then(setJob).catch(() => setLoadError(true)) }
+  const reload = () => {
+    setLoadError(false)
+    api.job(jobId).then(data => {
+      setJob(data)
+      setConfidenceHistory(data.confidence_trend || [])
+    }).catch(() => setLoadError(true))
+  }
   useEffect(() => { reload() }, [jobId])
   useEffect(() => {
     setAuthority([])
     api.jobAuthority(jobId).then(d => setAuthority(d.items || [])).catch(() => {})
     api.jobContract(jobId).then(setContract).catch(() => setContract(null))
+    api.jobConfidenceHistory(jobId).then(setConfidenceHistory).catch(() => {})
   }, [jobId])
   useEffect(() => {
     if (tab === 'evidence' && !evidence) api.jobEvidence(jobId).then(setEvidence).catch(e => toast('error', errMsg(e, '证据加载失败')))
@@ -274,7 +284,7 @@ export default function JobDetail() {
         <ArrowLeft className="w-4 h-4" /> 返回
       </button>
 
-      <Card className="p-6 relative overflow-hidden">
+      <Card className="relative overflow-hidden p-5 sm:p-6">
         <div aria-hidden className="absolute inset-0 pointer-events-none bg-cover bg-right opacity-60"
           style={{ backgroundImage: 'url(/hero-jobdetail.webp)' }} />
         <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-l from-white/75 via-white/20 to-transparent" />
@@ -292,9 +302,11 @@ export default function JobDetail() {
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{job.name}</h1>
             <p className="text-sm text-slate-500 mt-2 max-w-3xl leading-relaxed">{job.summary}</p>
           </div>
-          <div className="text-left sm:text-right sm:shrink-0">
+          <div className="w-full text-left sm:w-auto sm:text-right sm:shrink-0">
             <div className="text-xs text-slate-500 mb-1">岗位定义置信度</div>
-            <div className="text-3xl font-extrabold gradient-text">{Math.round(job.confidence * 100)}%</div>
+            {job.confidence_factors
+              ? <ConfidenceExplain value={job.confidence} factors={job.confidence_factors}><span className="text-3xl font-extrabold gradient-text">{Math.round(job.confidence * 100)}%</span></ConfidenceExplain>
+              : <div className="text-3xl font-extrabold gradient-text">{Math.round(job.confidence * 100)}%</div>}
             <div className="text-[11px] text-slate-400 mt-1">{job.evidence_count} 条证据支撑</div>
             <div className="flex flex-col sm:flex-row gap-2 mt-3">
               <button onClick={() => nav('/match', { state: { jobId } })} className="btn-primary justify-center"><ITarget className="w-4 h-4" /> 匹配</button>
@@ -303,6 +315,13 @@ export default function JobDetail() {
             </div>
           </div>
         </div>
+        <div className="relative mt-5 grid gap-4 border-t border-slate-200/80 pt-4 md:grid-cols-[minmax(0,0.85fr)_minmax(300px,1.15fr)]">
+          <div className="min-w-0">
+            <div className="mb-2 text-[11px] font-semibold text-slate-500">置信度数据状态</div>
+            <ConfidenceMeta asOf={job.confidence_as_of} delta={job.confidence_delta} />
+          </div>
+          <ConfidenceTrend items={confidenceHistory} />
+        </div>
       </Card>
 
       <div className="flex flex-wrap gap-1.5">
@@ -310,7 +329,7 @@ export default function JobDetail() {
           ([k, label, Icon]: any) => (
             <button key={k} onClick={() => setTab(k)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
-                tab === k ? 'bg-grad-accent text-white shadow-glow' : 'btn-ghost'}`}>
+                tab === k ? 'bg-grad-accent ring-1 ring-accent/20 text-accent-deep shadow-glow' : 'btn-ghost'}`}>
               <Icon className="w-4 h-4" /> {label}
             </button>
           ))}
@@ -435,7 +454,7 @@ export default function JobDetail() {
       {tab === 'evidence' && (
         <Card className="p-5">
           <div className="text-sm text-slate-500 mb-4 flex items-center gap-2">
-            <IShieldCheck className="w-4 h-4 text-emerald-600" />
+            <IShieldCheck className="w-4 h-4 text-accent-deep" />
             反幻觉机制：每个能力项均保留多源证据与置信度，可追溯到原始招聘 JD
           </div>
           {!evidence ? <Spinner /> : (
@@ -449,16 +468,16 @@ export default function JobDetail() {
                    评委的原话就是「标着几处来源但是没有具体显示出来」。 */
                 <details key={i} open={i < 3} className="rounded-xl bg-sky-50/70 px-4 py-3 group">
                   <summary className="flex items-center justify-between gap-2 flex-wrap cursor-pointer list-none">
-                    <div className="flex items-center gap-2">
+                    <div className="flex min-w-0 flex-wrap items-center gap-2">
                       <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform group-open:rotate-90" />
                       <FileText className="w-4 h-4 text-slate-500" />
-                      <span className="text-sm font-medium text-slate-800">{it.skill}</span>
+                      <span className="min-w-0 break-words text-sm font-medium text-slate-800">{it.skill}</span>
                       <Badge tone={it.importance === 'required' ? 'indigo' : 'slate'}>
                         {it.importance === 'required' ? '必备' : '加分'}</Badge>
                       {it.status === 'deprecated' && <Badge tone="rose">已淘汰</Badge>}
                       {it.status === 'candidate' && <Badge tone="slate">候选</Badge>}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-400">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400">
                       {/* source_count 是「提及该技能的 JD 数」，证据行按上限留存代表样本。
                           原文案写成「87 来源」，而展开只有 6 张卡，看起来像坏了——
                           两个数字各自都是真的，撒谎的是把它们混成一个词。 */}
@@ -470,7 +489,7 @@ export default function JobDetail() {
                   {evs.length === 0 ? (
                     <div className="mt-2 pl-6 text-xs text-slate-400">该能力项暂无独立JD证据（人工添加或低频项）</div>
                   ) : (
-                  <div className="mt-2.5 pl-0 sm:pl-6 grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <div className="mt-2.5 grid grid-cols-1 gap-2 pl-0 sm:pl-6 xl:grid-cols-2">
                     {evs.slice(0, 12).map((e: any, j: number) => {
                       // snippet 存的是抽取出的技能短语本身（"Python"），不是 JD 原句；
                       // 直接甩一个单词出来像渲染出错，点明它是原文命中词更诚实。
@@ -521,7 +540,7 @@ export default function JobDetail() {
                 return (
                   <div key={i} className="relative pb-5">
                     <span className={`absolute -left-[18px] top-1 w-3 h-3 rounded-full ring-4 ring-white ${
-                      tone === 'emerald' ? 'bg-emerald-400' : tone === 'rose' ? 'bg-rose-400' : 'bg-amber-400'}`} />
+                      tone === 'emerald' ? 'bg-accent' : tone === 'rose' ? 'bg-rose-400' : 'bg-amber-400'}`} />
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-slate-800">{c.skill_name}</span>
                       <ChangeDiff change={c} />

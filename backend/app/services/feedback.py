@@ -9,6 +9,13 @@ from ..auth import Actor, add_audit
 
 
 VALID_STATUSES = {"submitted", "triaged", "approved", "rejected", "applied"}
+STATUS_LABELS = {
+    "submitted": "已提交",
+    "triaged": "已分诊",
+    "approved": "已批准",
+    "rejected": "已驳回",
+    "applied": "已应用",
+}
 TRANSITIONS = {
     "submitted": {"triage": "triaged"},
     "triaged": {"approve": "approved", "reject": "rejected"},
@@ -153,6 +160,7 @@ def ticket_detail(db: Session, ticket: models.FeedbackTicket) -> dict:
                        if item["type"] in {"triage", "approve", "reject", "apply"}]
     return {
         "id": ticket.id, "status": ticket.status,
+        "status_label": STATUS_LABELS.get(ticket.status, ticket.status),
         "target_type": ticket.target_type, "target_id": ticket.target_id,
         "current_revision": ticket.current_revision,
         "category": current.category if current else None,

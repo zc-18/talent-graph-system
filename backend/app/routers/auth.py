@@ -36,7 +36,6 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
                           role=payload.role, status="active")
     db.add(user)
     db.flush()
-    organization_id = None
     if payload.role == "hr":
         org_name = payload.organization_name.strip()
         if db.query(models.Organization).filter(models.Organization.name == org_name).first():
@@ -45,7 +44,6 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
         org = models.Organization(name=org_name, status="active", created_by=user.id)
         db.add(org)
         db.flush()
-        organization_id = org.id
         db.add(models.OrganizationMember(organization_id=org.id, user_id=user.id,
                                          role="hr", status="active"))
     token, session = create_session(db, user)
@@ -61,7 +59,8 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     started = perf_counter()
     username = payload.username.strip().lower()
     user = db.query(models.AppUser).filter(models.AppUser.username == username).first()
-    if not user or user.status != "active" or not verify_password(payload.password, user.password_hash):
+    if (not user or user.status != "active" or user.role not in {"user", "hr", "admin"}
+            or not verify_password(payload.password, user.password_hash)):
         add_audit(db, None, "auth.login", "app_user", user.id if user else None,
                   result="denied", summary={"reason_code": "invalid_credentials"})
         add_usage(db, None, "login", int((perf_counter() - started) * 1000), False)

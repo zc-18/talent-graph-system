@@ -518,6 +518,44 @@ class JobVersionSkill(Base):
     evidence_refs = Column(JSON, nullable=True)
 
 
+class ConfidenceRun(Base):
+    """One idempotent full-database confidence calculation at a factual as-of time."""
+    __tablename__ = "confidence_run"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    as_of = Column(DateTime, nullable=False, unique=True, index=True)
+    trigger = Column(String(24), nullable=False, default="scheduled", index=True)
+    status = Column(String(16), nullable=False, default="running", index=True)
+    formula = Column(String(512), nullable=False)
+    job_count = Column(Integer, nullable=False, default=0)
+    evidence_count = Column(Integer, nullable=False, default=0)
+    valid_jd_count = Column(Integer, nullable=False, default=0)
+    error = Column(Text, nullable=True)
+    started_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    completed_at = Column(DateTime, nullable=True)
+
+
+class JobConfidenceSnapshot(Base):
+    """Auditable per-job result produced by a confidence run."""
+    __tablename__ = "job_confidence_snapshot"
+    __table_args__ = (
+        UniqueConstraint("run_id", "job_id", name="uq_confidence_snapshot_run_job"),
+        UniqueConstraint("job_id", "as_of", name="uq_confidence_snapshot_job_asof"),
+    )
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    run_id = Column(Integer, ForeignKey("confidence_run.id"), nullable=False, index=True)
+    job_id = Column(Integer, ForeignKey("job.id"), nullable=False, index=True)
+    job_version_id = Column(Integer, ForeignKey("job_version.id"), nullable=True, index=True)
+    job_version = Column(Integer, nullable=False, default=1)
+    as_of = Column(DateTime, nullable=False, index=True)
+    evidence_count = Column(Integer, nullable=False, default=0)
+    valid_jd_count = Column(Integer, nullable=False, default=0)
+    factors = Column(JSON, nullable=False)
+    previous_confidence = Column(Float, nullable=False, default=0.0)
+    confidence = Column(Float, nullable=False, default=0.0)
+    delta = Column(Float, nullable=False, default=0.0)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
 class EvolutionRun(Base):
     __tablename__ = "evolution_run"
     __table_args__ = (UniqueConstraint("organization_id", "idempotency_key", name="uq_evolution_idem"),)
@@ -560,6 +598,12 @@ class DiscoveryRun(Base):
     signal_snapshot = Column(JSON, nullable=True)
     conclusion = Column(String(32), nullable=False, index=True)
     matched_job_id = Column(Integer, ForeignKey("job.id"), nullable=True, index=True)
+    # 后台化状态机：queued -> running -> completed/failed（对齐 EvolutionRun 的列定义）。
+    # 默认取 completed 而不是 queued：历史行、展示种子（data/seed_showcase_records.py）与
+    # 直接构造 DiscoveryRun 的测试都不传 status，它们代表的是**已经跑完**的同步任务；
+    # 默认成 queued 会让这些行在列表里永远显示"排队中"。后台路径显式写 queued。
+    status = Column(String(24), nullable=False, default="completed", index=True)
+    error = Column(Text, nullable=True)
     idempotency_key = Column(String(128), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 

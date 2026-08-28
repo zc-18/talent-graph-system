@@ -180,7 +180,7 @@ export default function Select({ value, onChange, options, placeholder = '请选
                       onClick={() => commit(o.value)} onMouseEnter={() => setHi(i)} tabIndex={-1}
                       title={o.label}
                       className={`w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-sm text-left transition
-                        ${active ? 'bg-grad-accent text-white font-semibold' : hi === i ? 'bg-sky-50 text-slate-700' : 'text-slate-600 hover:bg-sky-50'}`}>
+                        ${active ? 'bg-grad-accent ring-1 ring-accent/20 text-accent-deep font-semibold' : hi === i ? 'bg-sky-50 text-slate-700' : 'text-slate-600 hover:bg-sky-50'}`}>
                       <span className="truncate">{o.label}</span>
                       {active && <Check className="w-4 h-4 shrink-0" />}
                     </button>

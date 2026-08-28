@@ -43,7 +43,7 @@ export default function ConfirmDialog({ open, title, description, confirmText = 
             <div className="flex justify-end gap-2 mt-5">
               <button onClick={onCancel} className="btn-ghost">取消</button>
               <button ref={confirmRef} onClick={onConfirm}
-                className={`btn text-white ${danger ? 'bg-rose-500 hover:bg-rose-600' : 'bg-grad-accent hover:brightness-105'} active:scale-[0.98]`}>
+                className={`btn text-white ${danger ? 'bg-rose-500 hover:bg-rose-600' : 'bg-inkSolid hover:bg-black'} active:scale-[0.98]`}>
                 {confirmText}
               </button>
             </div>

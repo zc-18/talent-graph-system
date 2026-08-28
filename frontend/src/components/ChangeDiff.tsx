@@ -44,8 +44,8 @@ export default function ChangeDiff({ change, compact = false }: { change: any; c
     const s = summarize(nv)
     return (
       <span className="inline-flex items-center gap-1.5 flex-wrap">
-        <Badge tone="emerald">新增</Badge>
-        {s && <span className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5">{s}</span>}
+        <Badge tone="cyan">新增</Badge>
+        {s && <span className="text-[11px] text-accent-deep bg-accent/8 border border-accent/25 rounded-full px-2 py-0.5">{s}</span>}
       </span>
     )
   }

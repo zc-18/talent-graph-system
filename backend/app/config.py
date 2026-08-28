@@ -39,6 +39,12 @@ class Settings(BaseSettings):
     # 公网部署的 .env 必须显式 READ_ONLY=1。
     read_only: bool = False
 
+    # System-owned confidence refresh. Public READ_ONLY only blocks user graph writes;
+    # this evidence replay remains enabled and runs at 02:30 Asia/Shanghai.
+    confidence_scheduler_enabled: bool = True
+    confidence_scheduler_hour: int = 2
+    confidence_scheduler_minute: int = 30
+
     @property
     def database_url(self) -> str:
         if self.database_url_override:
