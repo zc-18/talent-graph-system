@@ -64,10 +64,35 @@
 html, body, #root { height: 100%; }
 body {
   margin: 0;
-  /* 柔光洗：--surface-page 打底 → 大半径 radial 淡蓝/淡紫（不是硬色块）
-     → 最底层叠一张低透明度背景图。
-     层序：先写的在上。第 3 层是半透明的页面色洗，让 /app-bg.webp 透出约 12%。
-     禁止 background-attachment: fixed（移动端滚动重绘卡顿，契约已明令）。 */
+  background-color: rgb(var(--surface-page));
+  color: rgb(var(--text-1));
+  font-family: 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 柔光洗：--surface-page 打底 → 大半径 radial 淡蓝/淡紫（不是硬色块）
+   → 最底层叠一张低透明度背景图。
+   层序：先写的在上。第 3 层是半透明的页面色洗，让 /app-bg.webp 透出约 12%。
+
+   为什么挂在 fixed 伪元素上而不是直接写在 body：
+   `html, body, #root { height: 100% }` 让 html 的盒子恰好一屏高，而背景定位区域
+   取的是根元素的盒子；配上 background-repeat: no-repeat，超过 100vh 的部分就只剩
+   background-color，任何能滚动的页面都会在正好一屏处出现一条硬边（/、/jobs、
+   /jobs/:id、/talent、/dashboard、/feedback 全中）。
+   用 position: fixed 的独立合成层代替 background-attachment: fixed —— 后者要求浏览器
+   每帧重绘背景（移动端卡顿，契约已明令禁止），前者只是一个不参与滚动的合成层。
+
+   ⚠ 这一层能显示，依赖一条容易被破坏的 CSS 规则：`html` 自身没有背景时，`body` 的
+   背景会**传播到 canvas**，于是 body 不再自己绘制背景，z-index:-1 的伪元素才不会被埋掉。
+   **谁要是给 `html` 加了 background，传播就停止，这一层会立刻消失且不报任何错**
+   （移动端 uni-app 那边就是栽在同一类问题上）。真要改，先确认伪元素还看得见。 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-color: rgb(var(--surface-page));
   background-image:
     radial-gradient(1180px 760px at 86% -10%, rgb(var(--bar-2) / 0.20), transparent 62%),
@@ -77,10 +102,6 @@ body {
   background-repeat: no-repeat;
   background-size: auto, auto, auto, cover;
   background-position: center, center, center, 50% 0;
-  color: rgb(var(--text-1));
-  font-family: 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
-  letter-spacing: 0;
-  -webkit-font-smoothing: antialiased;
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
