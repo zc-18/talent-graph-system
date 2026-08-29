@@ -123,7 +123,9 @@ function StatBar({ stats, state }: { stats: PublicStats | null; state: LoadState
     <div className="tg-topbar grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line-soft/6 bg-line-soft/8 shadow-[0_10px_30px_-18px_rgb(var(--brand-ink)/0.22)] sm:grid-cols-2 lg:grid-cols-4">
       {items.map(item => (
         <div key={item.label} className="bg-white px-5 py-5 sm:px-6">
-          <div className="text-xs font-semibold text-body-3">{item.label}</div>
+          {/* 用 text-body-2 而不是 .label 的 text-body-3：#94A0BF 在白卡上只有 2.6:1，
+              12px 的四个标签正是本轮被点名「必须可见」的元素，text-body-2 (#5A678C) 是 5.6:1。 */}
+          <div className="text-xs font-semibold text-body-2">{item.label}</div>
           {state === 'loading' || item.value == null ? (
             <div className="mt-2 h-8 w-24 animate-pulse rounded-xl bg-brand-ink/8" aria-label="数据加载中" />
           ) : (
