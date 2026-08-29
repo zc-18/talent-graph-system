@@ -1,0 +1,30 @@
+{
+  "adapters": {
+    "iguopin": {
+      "tier": "gov",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-08-29T09:22:32",
+      "stats": {
+        "requests": 105,
+        "collected": 1009,
+        "robots_blocked": 0,
+        "errors": 12
+      },
+      "notes": "两趟采集：pass1 = 17 簇 67 检索词（其中 工业互联网/提示词工程/AI产品 共 12 个请求遇 ConnectError，未采到数据）；pass2 = 仅重跑这 3 个簇补齐。stats 为两趟累计，逐请求明细以 crawl_log.jsonl 为准（append-only，含全部两趟）。"
+    },
+    "feishu_ats": {
+      "tier": "official",
+      "authority": 1.0,
+      "rate_limit_s": 4.0,
+      "finished_at": "2026-08-29T09:18:33",
+      "stats": {
+        "requests": 277,
+        "collected": 102,
+        "robots_blocked": 0,
+        "errors": 11
+      },
+      "notes": "--per-query 1（本适配器语义=每公司上限），仅 嵌入式/计算机视觉/深度学习/边缘计算 4 簇；jobs.ecoflow.com 连续 10 次 ConnectError、hozonauto 1 次 ConnectTimeout，均为网络失败非封禁。"
+    }
+  }
+}
