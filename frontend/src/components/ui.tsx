@@ -4,14 +4,16 @@ import { WifiOff, RotateCcw, Inbox } from 'lucide-react'
 import ConfidenceExplain from './ConfidenceExplain'
 import type { ConfidenceFactors } from '../api'
 
+/** 全站唯一的页头。四个页面此前各写各的标题块，图标块样式从此只有这一处。 */
 export function PageHeader({ title, subtitle, icon, action }: {
   title: string; subtitle?: string; icon?: ReactNode; action?: ReactNode
 }) {
   return (
-    <div className="flex items-start justify-between mb-6">
-      <div className="flex items-center gap-3">
-        {icon && <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow">{icon}</div>}
-        <div>
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex min-w-0 items-center gap-3">
+        {/* text-white 挂在容器上：图标一律 currentColor，避免各页各写一个前景色 */}
+        {icon && <div className="w-11 h-11 shrink-0 rounded-2xl bg-grad-accent grid place-items-center text-white shadow-glow">{icon}</div>}
+        <div className="min-w-0">
           <h1 className="text-2xl font-extrabold tracking-tight text-body-1">{title}</h1>
           {subtitle && <p className="text-sm text-body-2 mt-0.5">{subtitle}</p>}
         </div>
@@ -51,10 +53,10 @@ export function Spinner({ label = '加载中…' }: { label?: string }) {
 
 export function ConfidencePill({ value, factors }: { value: number; factors?: ConfidenceFactors | null }) {
   const pct = Math.round(value * 100)
-  // 三档刻度去绿：高=品牌蓝、中=中性墨蓝、低=琥珀警示，语义层级不变
-  const color = value >= 0.75 ? 'text-accent bg-accent/10 border-accent/30'
-    : value >= 0.5 ? 'text-body-2 bg-brand-ink/6 border-line-soft/14'
-    : 'text-amber-700 bg-amber-50 border-amber-200'
+  // 三档刻度走语义 token：高=强调蓝、中=中性、低=警示琥珀
+  const color = value >= 0.75 ? 'text-accent-deep bg-accent/8 border-accent/25'
+    : value >= 0.5 ? 'text-body-2 bg-brand-ink/6 border-line-soft/12'
+    : 'text-warn bg-warn-weak border-warn/30'
   const pill = (
     <span className={`chip border ${color} ${factors ? 'underline decoration-dotted underline-offset-2' : ''}`}
       title={factors ? '点击查看置信度计算方式' : '能力置信度（交叉验证）'}>置信 {pct}%</span>
@@ -65,14 +67,14 @@ export function ConfidencePill({ value, factors }: { value: number; factors?: Co
 
 export function Badge({ children, tone = 'slate' }: { children: ReactNode; tone?: string }) {
   const map: Record<string, string> = {
-    slate: 'bg-gradient-to-br from-surface-muted to-white text-body-2 border-line-soft/12',
-    indigo: 'bg-gradient-to-br from-surface-muted to-white text-brand-ink border-brand-ink/15',
+    slate: 'bg-gradient-to-br from-surface-muted to-white text-body-2 border-line-soft/10',
+    indigo: 'bg-gradient-to-br from-surface-muted to-white text-brand-ink border-brand-ink/12',
     cyan: 'bg-gradient-to-br from-brand-accent3 to-white text-accent-deep border-accent/22',
     // 紫仅供「新兴岗位」这类单点语义徽标使用，勿用作大面积背景
-    violet: 'bg-accent-violet/8 text-accent-violet border-accent-violet/25',
-    emerald: 'bg-accent/8 text-accent-deep border-accent/30',
-    amber: 'bg-amber-50 text-amber-700 border-amber-200',
-    rose: 'bg-rose-50 text-rose-700 border-rose-200',
+    violet: 'bg-accent-violet/10 text-accent-deep border-accent-violet/30',
+    emerald: 'bg-success-weak text-success border-success/25',
+    amber: 'bg-warn-weak text-warn border-warn/25',
+    rose: 'bg-danger-weak text-danger border-danger/25',
   }
   return <span className={`chip border ${map[tone] || map.slate}`}>{children}</span>
 }
@@ -104,8 +106,8 @@ export function EmptyState({ text, hint }: { text: string; hint?: string }) {
 export function ErrorState({ text = '数据加载失败，请检查网络后重试', onRetry }: { text?: string; onRetry?: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 gap-3">
-      <div className="w-12 h-12 rounded-2xl bg-rose-50 grid place-items-center">
-        <WifiOff className="w-6 h-6 text-rose-400" />
+      <div className="w-12 h-12 rounded-2xl bg-danger-weak grid place-items-center">
+        <WifiOff className="w-6 h-6 text-danger" />
       </div>
       <div className="text-sm text-body-2">{text}</div>
       {onRetry && (

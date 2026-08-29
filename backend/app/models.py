@@ -406,6 +406,11 @@ class AppUser(Base):
     password_hash = Column(String(512), nullable=False)
     role = Column(String(16), nullable=False, default="user", index=True)
     status = Column(String(16), nullable=False, default="active", index=True)
+    # 自助资料：昵称仅用于展示，登录标识仍是 username（不参与鉴权、不唯一约束）。
+    nickname = Column(String(64), nullable=True)
+    # 站内相对路径（预置图库 /avatars/aNN.webp 或本站上传 /avatars/uNN-<hash>.ext），
+    # 刻意不存外部 URL：外链头像等于把任意第三方地址塞进每个页面。
+    avatar_url = Column(String(512), nullable=True)
     last_login_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)

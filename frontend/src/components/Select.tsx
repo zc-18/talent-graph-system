@@ -146,12 +146,12 @@ export default function Select({ value, onChange, options, placeholder = '请选
     <div ref={ref} className={`relative ${className}`} onKeyDown={onKeyDown}>
       <button ref={btnRef} type="button" onClick={() => (open ? setOpen(false) : openMenu())}
         aria-haspopup="listbox" aria-expanded={open} aria-label={label || placeholder}
-        className={`w-full flex items-center gap-2 rounded-xl bg-white/80 border px-3.5 py-2.5 text-sm text-slate-700 transition outline-none
+        className={`w-full flex items-center gap-2 rounded-xl bg-white/80 border px-3.5 py-2.5 text-sm text-body-1 transition outline-none
           focus-visible:ring-2 focus-visible:ring-accent/30
-          ${open ? 'border-accent/60 ring-2 ring-accent/15 bg-white' : 'border-slate-200 hover:border-sky-300'}`}>
-        {icon && <span className="text-slate-400 shrink-0">{icon}</span>}
-        <span className={`flex-1 text-left truncate ${current ? '' : 'text-slate-400'}`}>{current?.label ?? placeholder}</span>
-        <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+          ${open ? 'border-accent/60 ring-2 ring-accent/15 bg-white' : 'border-line-soft/8 hover:border-accent/40'}`}>
+        {icon && <span className="text-body-3 shrink-0">{icon}</span>}
+        <span className={`flex-1 text-left truncate ${current ? '' : 'text-body-3'}`}>{current?.label ?? placeholder}</span>
+        <ChevronDown className={`w-4 h-4 text-body-3 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
       {/* AnimatePresence 必须在 portal 内部：framer-motion 用 isValidElement 过滤子节点，
           portal 的 $$typeof 是 REACT_PORTAL_TYPE，套在外面会被静默丢弃、菜单永不渲染。
@@ -164,7 +164,7 @@ export default function Select({ value, onChange, options, placeholder = '请选
               initial={{ opacity: 0, y: pos.flip ? 6 : -6, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: pos.flip ? 6 : -6, scale: 0.98 }} transition={{ duration: 0.16 }}
-              className="fixed z-[70] rounded-2xl bg-white border border-slate-200 shadow-xl overflow-hidden"
+              className="fixed z-[70] rounded-2xl bg-white border border-line-soft/8 shadow-xl overflow-hidden"
               style={{
                 top: pos.top, bottom: pos.bottom, left: pos.left, width: pos.width,
                 boxShadow: '0 16px 40px -12px rgba(37,99,235,0.25)',
@@ -180,7 +180,7 @@ export default function Select({ value, onChange, options, placeholder = '请选
                       onClick={() => commit(o.value)} onMouseEnter={() => setHi(i)} tabIndex={-1}
                       title={o.label}
                       className={`w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-sm text-left transition
-                        ${active ? 'bg-grad-accent ring-1 ring-accent/20 text-accent-deep font-semibold' : hi === i ? 'bg-sky-50 text-slate-700' : 'text-slate-600 hover:bg-sky-50'}`}>
+                        ${active ? 'bg-grad-accent text-white font-semibold' : hi === i ? 'bg-accent/6 text-body-1' : 'text-body-2 hover:bg-accent/6'}`}>
                       <span className="truncate">{o.label}</span>
                       {active && <Check className="w-4 h-4 shrink-0" />}
                     </button>

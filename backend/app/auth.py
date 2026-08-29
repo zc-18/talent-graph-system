@@ -113,6 +113,8 @@ def actor_dict(actor: Actor) -> dict:
     return {
         "id": actor.user_id,
         "username": actor.user.username,
+        "nickname": actor.user.nickname or actor.user.username,
+        "avatar_url": actor.user.avatar_url,
         "role": actor.role,
         "status": actor.user.status,
         "organization_id": actor.organization_id,

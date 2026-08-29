@@ -1,0 +1,6567 @@
+{
+ "employers": [
+  {
+   "id": 1,
+   "name": "中国广视索福瑞媒介研究有限责任公司",
+   "norm": "中国广视索福瑞媒介研究",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 2,
+   "name": "联合永道（上海）信息技术有限公司",
+   "norm": "联合永道信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 3,
+   "name": "北京慧铭软件有限公司",
+   "norm": "北京慧铭软件",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 4,
+   "name": "航天星图科技（北京）有限公司",
+   "norm": "航天星图科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 5,
+   "name": "上海微创软件股份有限公司",
+   "norm": "上海微创软件",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 6,
+   "name": "字节跳动",
+   "norm": "字节跳动",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 7,
+   "name": "北京万维盈创科技发展有限公司",
+   "norm": "北京万维盈创科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 8,
+   "name": "北京阿博泰克北大青鸟信息技术有限公司",
+   "norm": "北京阿博泰克北大青鸟信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 9,
+   "name": "传智播客教育集团修正分校",
+   "norm": "传智播客教育集团修正分校",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 10,
+   "name": "北京中公教育科技股份有限公司",
+   "norm": "北京中公教育科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 11,
+   "name": "北京传智播客教育科技有限公司",
+   "norm": "北京传智播客教育科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 12,
+   "name": "博彦科技股份有限公司",
+   "norm": "博彦科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 13,
+   "name": "北京飞利信科技股份有限公司",
+   "norm": "北京飞利信科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 14,
+   "name": "新浪微博",
+   "norm": "新浪微博",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 15,
+   "name": "亚信科技（中国）有限公司",
+   "norm": "亚信科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 16,
+   "name": "广州嘉为科技有限公司",
+   "norm": "广州嘉为科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 17,
+   "name": "北京道冲泰科科技有限公司",
+   "norm": "北京道冲泰科科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 18,
+   "name": "北京智联友道科技有限公司",
+   "norm": "北京智联友道科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 19,
+   "name": "北京腾信软创科技股份有限公司",
+   "norm": "北京腾信软创科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 20,
+   "name": "易思奇汽车电子（上海）有限公司",
+   "norm": "易思奇汽车电子",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 21,
+   "name": "北京普瑞亿科科技有限公司",
+   "norm": "北京普瑞亿科科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 22,
+   "name": "北京朗镜科技有限责任公司",
+   "norm": "北京朗镜科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 23,
+   "name": "北京英视睿达科技有限公司",
+   "norm": "北京英视睿达科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 24,
+   "name": "北京薪享宏福教育咨询有限公司",
+   "norm": "北京薪享宏福教育咨询",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 25,
+   "name": "北京易云华控技术有限公司",
+   "norm": "北京易云华控技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 26,
+   "name": "亚马逊中国",
+   "norm": "亚马逊中国",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 27,
+   "name": "北京中知智慧科技有限公司",
+   "norm": "北京中知智慧科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 28,
+   "name": "北京国双科技有限公司",
+   "norm": "北京国双科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 29,
+   "name": "深圳前海川谷信息技术有限公司",
+   "norm": "深圳前海川谷信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 30,
+   "name": "北京艾沃仕科技有限公司",
+   "norm": "北京艾沃仕科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 31,
+   "name": "慧与软件（济宁）人才产业基地管理有限公司",
+   "norm": "慧与软件人才产业基地管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 32,
+   "name": "北京东方国信科技股份有限公司",
+   "norm": "北京东方国信科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 33,
+   "name": "中国电子科技集团公司第十五研究所（华北计算技术研究所）",
+   "norm": "中国电子科技集团公司第十五研究所",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 34,
+   "name": "北京慕华信息科技有限公司",
+   "norm": "北京慕华信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 35,
+   "name": "北京贝瑞和康生物技术有限公司",
+   "norm": "北京贝瑞和康生物技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 36,
+   "name": "沈阳民航东北凯亚有限公司大连分公司",
+   "norm": "沈阳民航东北凯亚有限公司大连",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 37,
+   "name": "中科软科技股份有限公司",
+   "norm": "中科软科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 38,
+   "name": "云星数据（深圳）有限公司",
+   "norm": "云星数据",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 39,
+   "name": "北京减脂时代科技有限公司",
+   "norm": "北京减脂时代科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 40,
+   "name": "北京清软创新科技股份有限公司",
+   "norm": "北京清软创新科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 41,
+   "name": "北京捷泰天域信息技术有限公司",
+   "norm": "北京捷泰天域信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 42,
+   "name": "北京搜狗科技发展有限公司",
+   "norm": "北京搜狗科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 43,
+   "name": "北京慧闻科技发展有限公司",
+   "norm": "北京慧闻科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 44,
+   "name": "苏州思必驰信息科技有限公司",
+   "norm": "苏州思必驰信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 45,
+   "name": "北京宏图远见科技有限公司",
+   "norm": "北京宏图远见科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 46,
+   "name": "出门问问信息科技有限公司",
+   "norm": "出门问问信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 47,
+   "name": "银河互联网电视有限公司",
+   "norm": "银河互联网电视",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 48,
+   "name": "北京新东方教育科技（集团）有限公司",
+   "norm": "北京新东方教育科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 49,
+   "name": "上海拓畅信息技术有限公司北京分公司",
+   "norm": "上海拓畅信息技术有限公司北京",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 50,
+   "name": "奥成佳和（北京）软件开发有限公司",
+   "norm": "奥成佳和软件开发",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 51,
+   "name": "北京云智汇科技有限公司",
+   "norm": "北京云智汇科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 52,
+   "name": "斯润天朗（北京）科技有限公司",
+   "norm": "斯润天朗科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 53,
+   "name": "广东道一信息技术股份有限公司",
+   "norm": "广东道一信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 54,
+   "name": "金电联行（北京）信息技术有限公司",
+   "norm": "金电联行信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 55,
+   "name": "苏州博远容天信息科技股份有限公司",
+   "norm": "苏州博远容天信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 56,
+   "name": "北京思源时代科技有限公司",
+   "norm": "北京思源时代科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 57,
+   "name": "文思海辉金融",
+   "norm": "文思海辉金融",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 58,
+   "name": "上海艾杰飞人力资源有限公司",
+   "norm": "上海艾杰飞人力资源",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 59,
+   "name": "蓝科财务咨询（上海）有限公司",
+   "norm": "蓝科财务咨询",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 60,
+   "name": "国科创（北京）信息技术有限公司",
+   "norm": "国科创信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 61,
+   "name": "中国民生银行股份有限公司信用卡中心",
+   "norm": "中国民生银行股份有限公司信用卡中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 62,
+   "name": "黑龙江海康软件工程有限公司",
+   "norm": "黑龙江海康软件工程",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 63,
+   "name": "北京周同科技有限公司",
+   "norm": "北京周同科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 64,
+   "name": "今目标",
+   "norm": "今目标",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 65,
+   "name": "IBM China",
+   "norm": "ibmchina",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 66,
+   "name": "马上消费金融股份有限公司",
+   "norm": "马上消费金融",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 67,
+   "name": "北京市渠道网络技术开发有限公司",
+   "norm": "北京市渠道网络技术开发",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 68,
+   "name": "北京寻宝天行网络技术有限公司",
+   "norm": "北京寻宝天行网络技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 69,
+   "name": "北京天谱同盛教育科技有限公司",
+   "norm": "北京天谱同盛教育科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 70,
+   "name": "完美世界（北京）总部/完美时空",
+   "norm": "完美世界总部/完美时空",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 71,
+   "name": "阿依瓦（北京）技术有限公司",
+   "norm": "阿依瓦技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 72,
+   "name": "北京尚水信息技术股份有限公司",
+   "norm": "北京尚水信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 73,
+   "name": "北京光宇在线科技有限责任公司",
+   "norm": "北京光宇在线科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 74,
+   "name": "商助科技（北京）有限公司",
+   "norm": "商助科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 75,
+   "name": "美亚宏信（北京）信息技术有限公司",
+   "norm": "美亚宏信信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 76,
+   "name": "北京德才仕科技有限公司",
+   "norm": "北京德才仕科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 77,
+   "name": "YOHO!有货（江苏）商贸服务有限公司",
+   "norm": "yoho!有货商贸服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 78,
+   "name": "中国交通报社",
+   "norm": "中国交通报社",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 79,
+   "name": "北京北信源软件股份有限公司",
+   "norm": "北京北信源软件",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 80,
+   "name": "武汉雍禾美度医疗美容门诊部有限公司",
+   "norm": "武汉雍禾美度医疗美容门诊部",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 81,
+   "name": "宁德新能源科技有限公司",
+   "norm": "宁德新能源科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 82,
+   "name": "房天下（北京）",
+   "norm": "房天下",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 83,
+   "name": "北京万步健康科技有限公司",
+   "norm": "北京万步健康科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 84,
+   "name": "北京铁道工程机电技术研究所股份有限公司",
+   "norm": "北京铁道工程机电技术研究所",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 85,
+   "name": "北京教培师训网络科技股份有限公司",
+   "norm": "北京教培师训网络科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 86,
+   "name": "北京多维视通技术有限公司",
+   "norm": "北京多维视通技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 87,
+   "name": "环球大数据科技有限公司",
+   "norm": "环球大数据科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 88,
+   "name": "古莘信息技术（广州）有限公司",
+   "norm": "古莘信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 89,
+   "name": "北京中科软通科技有限责任公司",
+   "norm": "北京中科软通科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 90,
+   "name": "北京六合波尔信息科技有限公司",
+   "norm": "北京六合波尔信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 91,
+   "name": "西门子(中国)有限公司 工业销售集团(DF&amp;PD S)",
+   "norm": "西门子有限公司工业销售集团(df&amp;pds)",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 92,
+   "name": "北京安德医智科技有限公司",
+   "norm": "北京安德医智科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 93,
+   "name": "北京大唐高鸿数据网络技术股份有限公司",
+   "norm": "北京大唐高鸿数据网络技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 94,
+   "name": "普尔莱克乳业（北京）有限公司",
+   "norm": "普尔莱克乳业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 95,
+   "name": "北京奥金智策传媒科技有限公司",
+   "norm": "北京奥金智策传媒科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 96,
+   "name": "中经网数据有限公司",
+   "norm": "中经网数据",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 97,
+   "name": "量子数聚（北京）科技有限公司",
+   "norm": "量子数聚科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 98,
+   "name": "北京快鱼电子股份公司",
+   "norm": "北京快鱼电子股份",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 99,
+   "name": "美林数据技术股份有限公司",
+   "norm": "美林数据技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 100,
+   "name": "浙江未来技术研究院（嘉兴）",
+   "norm": "浙江未来技术研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 101,
+   "name": "BJCP直通车项目组1",
+   "norm": "bjcp直通车项目组1",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 102,
+   "name": "广东星舆科技有限公司",
+   "norm": "广东星舆科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 103,
+   "name": "上海神州数码信息技术服务有限公司",
+   "norm": "上海神州数码信息技术服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 104,
+   "name": "国广中播传媒技术有限公司",
+   "norm": "国广中播传媒技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 105,
+   "name": "北京侨福置业有限公司",
+   "norm": "北京侨福置业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 106,
+   "name": "联想集团",
+   "norm": "联想集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 107,
+   "name": "神州数码信息服务股份有限公司",
+   "norm": "神州数码信息服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 108,
+   "name": "中国软件与技术服务股份有限公司",
+   "norm": "中国软件与技术服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 109,
+   "name": "北京安软信息科技有限公司",
+   "norm": "北京安软信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 110,
+   "name": "融中集团",
+   "norm": "融中集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 111,
+   "name": "北京佳易慧通科技有限责任公司",
+   "norm": "北京佳易慧通科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 112,
+   "name": "医药魔方",
+   "norm": "医药魔方",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 113,
+   "name": "中信云网有限公司",
+   "norm": "中信云网",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 114,
+   "name": "深圳市华云中盛科技有限公司",
+   "norm": "深圳市华云中盛科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 115,
+   "name": "北京兰云科技有限公司",
+   "norm": "北京兰云科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 116,
+   "name": "北京芯盾时代科技有限公司",
+   "norm": "北京芯盾时代科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 117,
+   "name": "江苏人加信息科技有限公司",
+   "norm": "江苏人加信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 118,
+   "name": "北京融英乐知科技有限公司",
+   "norm": "北京融英乐知科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 119,
+   "name": "北醒（北京）光子科技有限公司",
+   "norm": "北醒光子科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 120,
+   "name": "北京赛威迅通科技有限公司",
+   "norm": "北京赛威迅通科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 121,
+   "name": "南京烽火星空通信发展有限公司",
+   "norm": "南京烽火星空通信发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 122,
+   "name": "北京全景赛斯科技发展有限公司",
+   "norm": "北京全景赛斯科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 123,
+   "name": "北京洞察力科技股份有限公司",
+   "norm": "北京洞察力科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 124,
+   "name": "展讯通信（天津）有限公司",
+   "norm": "展讯通信",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 125,
+   "name": "北京新媒传信科技有限公司",
+   "norm": "北京新媒传信科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 126,
+   "name": "山东正心医疗科技有限公司",
+   "norm": "山东正心医疗科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 127,
+   "name": "德联易控科技（北京）有限公司",
+   "norm": "德联易控科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 128,
+   "name": "南京汇银迅信息技术有限公司",
+   "norm": "南京汇银迅信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 129,
+   "name": "寰宇优才教育科技（北京）有限公司",
+   "norm": "寰宇优才教育科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 130,
+   "name": "北京理工雷科电子信息技术有限公司",
+   "norm": "北京理工雷科电子信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 131,
+   "name": "上海数慧系统技术有限公司",
+   "norm": "上海数慧系统技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 132,
+   "name": "北京清果金融信息服务有限公司",
+   "norm": "北京清果金融信息服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 133,
+   "name": "万宝盛华人力资源（中国）有限公司",
+   "norm": "万宝盛华人力资源",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 134,
+   "name": "北京市盈科律师事务所",
+   "norm": "北京市盈科律师事务所",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 135,
+   "name": "北京华开领航科技有限责任公司",
+   "norm": "北京华开领航科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 136,
+   "name": "威创集团股份有限公司",
+   "norm": "威创集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 137,
+   "name": "北京君正集成电路股份有限公司",
+   "norm": "北京君正集成电路",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 138,
+   "name": "纵目科技（上海）股份有限公司",
+   "norm": "纵目科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 139,
+   "name": "方正信息产业集团",
+   "norm": "方正信息产业集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 140,
+   "name": "小米通讯技术有限公司",
+   "norm": "小米通讯技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 141,
+   "name": "西门子（中国）有限公司 数字化工厂技术集团 Digital Factory (DF)",
+   "norm": "西门子有限公司数字化工厂技术集团digitalfactory",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 142,
+   "name": "北京中科特瑞科技有限公司",
+   "norm": "北京中科特瑞科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 143,
+   "name": "金财互联数据服务有限公司",
+   "norm": "金财互联数据服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 144,
+   "name": "优师优堂（北京）网络科技有限公司",
+   "norm": "优师优堂网络科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 145,
+   "name": "同程艺龙",
+   "norm": "同程艺龙",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 146,
+   "name": "河北奥伦达旅游开发有限公司",
+   "norm": "河北奥伦达旅游开发",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 147,
+   "name": "甲骨文（中国）软件系统有限公司",
+   "norm": "甲骨文软件系统",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 148,
+   "name": "博微太赫兹信息科技有限公司",
+   "norm": "博微太赫兹信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 149,
+   "name": "广州笨笨网络科技有限公司",
+   "norm": "广州笨笨网络科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 150,
+   "name": "新华网股份有限公司",
+   "norm": "新华网",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 151,
+   "name": "北京时尚百联科技股份有限公司",
+   "norm": "北京时尚百联科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 152,
+   "name": "去哪儿网金融事业部",
+   "norm": "去哪儿网金融",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 153,
+   "name": "京东集团总部",
+   "norm": "京东集团总部",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 154,
+   "name": "新港海岸（北京）科技有限公司",
+   "norm": "新港海岸科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 155,
+   "name": "百望股份有限公司",
+   "norm": "百望",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 156,
+   "name": "联想（北京）有限公司 — 联想服务",
+   "norm": "联想有限公司联想服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 157,
+   "name": "西安翼展电子科技有限公司",
+   "norm": "西安翼展电子科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 158,
+   "name": "北京赫德阳数据通信科技有限公司",
+   "norm": "北京赫德阳数据通信科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 159,
+   "name": "去哪儿网总部",
+   "norm": "去哪儿网总部",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 160,
+   "name": "北京雅邦网络技术发展有限公司",
+   "norm": "北京雅邦网络技术发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 161,
+   "name": "平安科技（深圳）有限公司",
+   "norm": "平安科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 162,
+   "name": "北京航天华腾科技有限公司",
+   "norm": "北京航天华腾科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 163,
+   "name": "北京奇客创想科技股份有限公司",
+   "norm": "北京奇客创想科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 164,
+   "name": "智医纵横（北京）科技有限公司",
+   "norm": "智医纵横科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 165,
+   "name": "去哪儿网",
+   "norm": "去哪儿网",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 166,
+   "name": "上海芮美生物科技有限公司",
+   "norm": "上海芮美生物科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 167,
+   "name": "北京名道恒通信息技术有限公司",
+   "norm": "北京名道恒通信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 168,
+   "name": "亚信在线BIU",
+   "norm": "亚信在线biu",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 169,
+   "name": "中国移动通信集团终端有限公司",
+   "norm": "中国移动通信集团终端",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 170,
+   "name": "亚信软件研发中心PRD",
+   "norm": "亚信软件研发中心prd",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 171,
+   "name": "北京车与车科技有限公司",
+   "norm": "北京车与车科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 172,
+   "name": "凌云光技术集团视觉器件业务部",
+   "norm": "凌云光技术集团视觉器件业务部",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 173,
+   "name": "广联达科技股份有限公司",
+   "norm": "广联达科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 174,
+   "name": "未来电视有限公司",
+   "norm": "未来电视",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 175,
+   "name": "北京鼎兴达信息科技股份有限公司",
+   "norm": "北京鼎兴达信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 176,
+   "name": "民航数据通信有限责任公司",
+   "norm": "民航数据通信",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 177,
+   "name": "FICO（费埃哲信息技术（北京）有限公司）",
+   "norm": "fico(费埃哲信息技术有限公司)",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 178,
+   "name": "北京明朝万达科技股份有限公司",
+   "norm": "北京明朝万达科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 179,
+   "name": "北京聚源锐思数据科技有限公司",
+   "norm": "北京聚源锐思数据科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 180,
+   "name": "上海音智达信息技术有限公司",
+   "norm": "上海音智达信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 181,
+   "name": "时光网",
+   "norm": "时光网",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 182,
+   "name": "北京先进数通信息技术股份公司",
+   "norm": "北京先进数通信息技术股份",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 183,
+   "name": "广东旭诚科技有限公司北京分公司",
+   "norm": "广东旭诚科技有限公司北京",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 184,
+   "name": "空中网",
+   "norm": "空中网",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 185,
+   "name": "广东旭诚科技有限公司",
+   "norm": "广东旭诚科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 186,
+   "name": "北京北纬通信科技股份有限公司",
+   "norm": "北京北纬通信科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 187,
+   "name": "瑞晶睿达电子技术（北京）有限公司",
+   "norm": "瑞晶睿达电子技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 188,
+   "name": "上海睿成软件有限公司",
+   "norm": "上海睿成软件",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 189,
+   "name": "北京智慧眼科技股份有限公司",
+   "norm": "北京智慧眼科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 190,
+   "name": "苏州中科全象智能科技有限公司",
+   "norm": "苏州中科全象智能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 191,
+   "name": "北京青钱信息技术有限公司",
+   "norm": "北京青钱信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 192,
+   "name": "中科宇图科技股份有限公司",
+   "norm": "中科宇图科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 193,
+   "name": "北京华影云商科技有限公司",
+   "norm": "北京华影云商科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 194,
+   "name": "北京嘉士宝科技有限公司",
+   "norm": "北京嘉士宝科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 195,
+   "name": "汽车之家",
+   "norm": "汽车之家",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 196,
+   "name": "二六三网络通信股份有限公司",
+   "norm": "二六三网络通信",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 197,
+   "name": "建研科技股份有限公司",
+   "norm": "建研科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 198,
+   "name": "上海星红桉数据科技有限公司",
+   "norm": "上海星红桉数据科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 199,
+   "name": "秒针信息技术有限公司",
+   "norm": "秒针信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 200,
+   "name": "北京天行网安信息技术有限责任公司",
+   "norm": "北京天行网安信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 201,
+   "name": "北京家视天下科技有限公司",
+   "norm": "北京家视天下科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 202,
+   "name": "紫光陕数大数据有限公司",
+   "norm": "紫光陕数大数据",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 203,
+   "name": "铁力山（北京）控制技术有限公司",
+   "norm": "铁力山控制技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 204,
+   "name": "饿了么",
+   "norm": "饿了么",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 205,
+   "name": "北京心联光电科技有限公司",
+   "norm": "北京心联光电科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 206,
+   "name": "研华（中国）有限公司",
+   "norm": "研华",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 207,
+   "name": "贵州华芯通半导体技术有限公司",
+   "norm": "贵州华芯通半导体技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 208,
+   "name": "北京博科管理技术有限公司",
+   "norm": "北京博科管理技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 209,
+   "name": "去哪儿网机票事业部",
+   "norm": "去哪儿网机票",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 210,
+   "name": "零度智控（北京）智能科技有限公司",
+   "norm": "零度智控智能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 211,
+   "name": "哈尔滨新光光电科技有限公司",
+   "norm": "哈尔滨新光光电科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 212,
+   "name": "北京友通上昊科技有限公司",
+   "norm": "北京友通上昊科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 213,
+   "name": "Hewlett Packard Enterprise",
+   "norm": "hewlettpackardenterprise",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 214,
+   "name": "北京日桥信息技术有限公司",
+   "norm": "北京日桥信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 215,
+   "name": "嘉兴驭光光电科技有限公司",
+   "norm": "嘉兴驭光光电科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 216,
+   "name": "晶晨半导体（上海）股份有限公司",
+   "norm": "晶晨半导体",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 217,
+   "name": "中国科学院自动化研究所（洛阳）机器人与智能装备创新研究院",
+   "norm": "中国科学院自动化研究所机器人与智能装备创新研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 218,
+   "name": "清北网校",
+   "norm": "清北网校",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 219,
+   "name": "北京华电通达科技有限公司",
+   "norm": "北京华电通达科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 220,
+   "name": "美芯晟科技（北京）有限公司",
+   "norm": "美芯晟科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 221,
+   "name": "北京休恩博得科技股份有限公司",
+   "norm": "北京休恩博得科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 222,
+   "name": "金色大田科技有限公司",
+   "norm": "金色大田科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 223,
+   "name": "亚马逊（中国）投资有限公司",
+   "norm": "亚马逊投资",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 224,
+   "name": "北大青鸟环宇消防设备股份有限公司",
+   "norm": "北大青鸟环宇消防设备",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 225,
+   "name": "北京昀朴科技有限公司",
+   "norm": "北京昀朴科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 226,
+   "name": "福州龙腾简合网络技术有限公司",
+   "norm": "福州龙腾简合网络技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 227,
+   "name": "北京麦达数字技术服务有限公司",
+   "norm": "北京麦达数字技术服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 228,
+   "name": "北京市鑫海威信息中心",
+   "norm": "北京市鑫海威信息中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 229,
+   "name": "北京清影华康科技有限公司",
+   "norm": "北京清影华康科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 230,
+   "name": "北京依派伟业数码科技有限公司",
+   "norm": "北京依派伟业数码科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 231,
+   "name": "秦皇岛市共享科技发展有限公司",
+   "norm": "秦皇岛市共享科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 232,
+   "name": "通联数据股份公司",
+   "norm": "通联数据股份",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 233,
+   "name": "广东红橙云大数据有限公司",
+   "norm": "广东红橙云大数据",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 234,
+   "name": "佳能医疗系统（中国）有限公司",
+   "norm": "佳能医疗系统",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 235,
+   "name": "北京喂呦科技有限公司",
+   "norm": "北京喂呦科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 236,
+   "name": "北京迈纳士手术机器人技术股份有限公司",
+   "norm": "北京迈纳士手术机器人技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 237,
+   "name": "北京鑫方盛电子商务股份有限公司",
+   "norm": "北京鑫方盛电子商务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 238,
+   "name": "哈啰宝贝科技（北京）有限公司",
+   "norm": "哈啰宝贝科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 239,
+   "name": "北京来也网络科技有限公司",
+   "norm": "北京来也网络科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 240,
+   "name": "北京亚太摩尔自动化设备有限公司",
+   "norm": "北京亚太摩尔自动化设备",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 241,
+   "name": "汉王科技股份有限公司",
+   "norm": "汉王科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 242,
+   "name": "南京简智仪器设备有限公司",
+   "norm": "南京简智仪器设备",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 243,
+   "name": "搜狐视频",
+   "norm": "搜狐视频",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 244,
+   "name": "中科慧远视觉技术（洛阳）有限公司",
+   "norm": "中科慧远视觉技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 245,
+   "name": "广东知一数据有限公司",
+   "norm": "广东知一数据",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 246,
+   "name": "中德人工智能研究院有限公司",
+   "norm": "中德人工智能研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 247,
+   "name": "北京双泽维度信息技术有限公司",
+   "norm": "北京双泽维度信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 248,
+   "name": "百丽新零售",
+   "norm": "百丽新零售",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 249,
+   "name": "三一重型装备有限公司",
+   "norm": "三一重型装备",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 250,
+   "name": "新博卓畅技术（北京）有限公司",
+   "norm": "新博卓畅技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 251,
+   "name": "顺丰科技有限公司",
+   "norm": "顺丰科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 252,
+   "name": "维升（天津）企业管理有限公司",
+   "norm": "维升企业管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 253,
+   "name": "悠易互通（北京）广告有限公司",
+   "norm": "悠易互通广告",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 254,
+   "name": "南通东华软件有限公司",
+   "norm": "南通东华软件",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 255,
+   "name": "紫光股份有限公司",
+   "norm": "紫光",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 256,
+   "name": "湖南三一泵送机械有限公司",
+   "norm": "湖南三一泵送机械",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 257,
+   "name": "北京齐尔布莱特科技有限公司",
+   "norm": "北京齐尔布莱特科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 258,
+   "name": "北京社文知识产权管理有限公司",
+   "norm": "北京社文知识产权管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 259,
+   "name": "南京蓝鲸人网络科技有限公司",
+   "norm": "南京蓝鲸人网络科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 260,
+   "name": "北京永新联合电子技术有限公司",
+   "norm": "北京永新联合电子技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 261,
+   "name": "北京协同创新研究院",
+   "norm": "北京协同创新研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 262,
+   "name": "TCL集团工业研究院",
+   "norm": "tcl集团工业研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 263,
+   "name": "北京眸视科技有限公司",
+   "norm": "北京眸视科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 264,
+   "name": "凌云光技术集团光纤仪器与器件事业部",
+   "norm": "凌云光技术集团光纤仪器与器件",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 265,
+   "name": "北京允睿讯通科技有限公司",
+   "norm": "北京允睿讯通科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 266,
+   "name": "广东微模式软件股份有限公司",
+   "norm": "广东微模式软件",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 267,
+   "name": "vivo智能手机（维沃移动通信有限公司）",
+   "norm": "vivo智能手机",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 268,
+   "name": "分享一下（北京）科技有限公司",
+   "norm": "分享一下科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 269,
+   "name": "北京神州泰岳软件股份有限公司",
+   "norm": "北京神州泰岳软件",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 270,
+   "name": "北京智行者科技有限公司",
+   "norm": "北京智行者科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 271,
+   "name": "京东方健康投资管理有限公司",
+   "norm": "京东方健康投资管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 272,
+   "name": "北京视野金融信息服务有限公司",
+   "norm": "北京视野金融信息服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 273,
+   "name": "建投数据科技股份有限公司",
+   "norm": "建投数据科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 274,
+   "name": "龙湖集团地产",
+   "norm": "龙湖集团地产",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 275,
+   "name": "怡和科技（上海）有限公司",
+   "norm": "怡和科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 276,
+   "name": "家宅融智（北京）科技有限公司",
+   "norm": "家宅融智科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 277,
+   "name": "赞同科技股份有限公司",
+   "norm": "赞同科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 278,
+   "name": "年享人力资源管理（上海）有限公司",
+   "norm": "年享人力资源管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 279,
+   "name": "央视市场研究股份有限公司",
+   "norm": "央视市场研究",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 280,
+   "name": "北明智通（北京）科技有限公司",
+   "norm": "北明智通科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 281,
+   "name": "达观数据",
+   "norm": "达观数据",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 282,
+   "name": "长天科技有限公司",
+   "norm": "长天科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 283,
+   "name": "北京广而告之网讯传媒有限公司",
+   "norm": "北京广而告之网讯传媒",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 284,
+   "name": "巧达科技（北京）有限公司",
+   "norm": "巧达科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 285,
+   "name": "北京外研在线教育科技有限公司",
+   "norm": "北京外研在线教育科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 286,
+   "name": "九坤投资（北京）有限公司",
+   "norm": "九坤投资",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 287,
+   "name": "奇虎360科技有限公司",
+   "norm": "奇虎360科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 288,
+   "name": "北京易鲸捷信息技术有限公司",
+   "norm": "北京易鲸捷信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 289,
+   "name": "北京信瑞思企业管理咨询有限公司",
+   "norm": "北京信瑞思企业管理咨询",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 290,
+   "name": "网易·网易有道",
+   "norm": "网易网易有道",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 291,
+   "name": "网易·网易伏羲",
+   "norm": "网易网易伏羲",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 292,
+   "name": "网易·网易智企",
+   "norm": "网易网易智企",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 293,
+   "name": "网易·网易云音乐",
+   "norm": "网易网易云音乐",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 294,
+   "name": "网易·网易游戏（互娱）",
+   "norm": "网易网易游戏",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 295,
+   "name": "网易·网易元气",
+   "norm": "网易网易元气",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 296,
+   "name": "网易·网易职能",
+   "norm": "网易网易职能",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 297,
+   "name": "网易·网易严选",
+   "norm": "网易网易严选",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 298,
+   "name": "网易·网易传媒",
+   "norm": "网易网易传媒",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 299,
+   "name": "网易·其他",
+   "norm": "网易其他",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 300,
+   "name": "网易·网易智邮",
+   "norm": "网易网易智邮",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 301,
+   "name": "腾讯",
+   "norm": "腾讯",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 302,
+   "name": "NIO蔚来",
+   "norm": "nio蔚来",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 303,
+   "name": "小鹏汽车",
+   "norm": "小鹏汽车",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 304,
+   "name": "得物App",
+   "norm": "得物app",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 305,
+   "name": "EcoFlow 正浩创新",
+   "norm": "ecoflow正浩创新",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 306,
+   "name": "零一万物AGI",
+   "norm": "零一万物agi",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 307,
+   "name": "生数科技",
+   "norm": "生数科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 308,
+   "name": "出门问问（Mobvoi）",
+   "norm": "出门问问",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 309,
+   "name": "Insta360",
+   "norm": "insta360",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 310,
+   "name": "猎户星空",
+   "norm": "猎户星空",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 311,
+   "name": "爱奇艺",
+   "norm": "爱奇艺",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 312,
+   "name": "合众新能源汽车有限公司",
+   "norm": "合众新能源汽车",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 313,
+   "name": "雄安米格科技有限公司",
+   "norm": "雄安米格科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 314,
+   "name": "中电科海洋信息技术研究院有限公司",
+   "norm": "中电科海洋信息技术研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 315,
+   "name": "天府绛溪实验室",
+   "norm": "天府绛溪实验室",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 316,
+   "name": "中远海运科技股份有限公司",
+   "norm": "中远海运科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 317,
+   "name": "煤炭科学研究总院有限公司",
+   "norm": "煤炭科学研究总院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 318,
+   "name": "横琴人才集团有限公司",
+   "norm": "横琴人才",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 319,
+   "name": "福建陆源智能科技有限公司",
+   "norm": "福建陆源智能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 320,
+   "name": "中国钢研科技集团有限公司",
+   "norm": "中国钢研科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 321,
+   "name": "中国移动通信集团北京有限公司",
+   "norm": "中国移动通信集团北京",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 322,
+   "name": "中电金信数字科技集团股份有限公司",
+   "norm": "中电金信数字科技集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 323,
+   "name": "广东著一智慧科技有限公司",
+   "norm": "广东著一智慧科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 324,
+   "name": "泰豪集团有限公司",
+   "norm": "泰豪",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 325,
+   "name": "上海中远海运资讯科技有限公司",
+   "norm": "上海中远海运资讯科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 326,
+   "name": "中国远洋海运集团有限公司",
+   "norm": "中国远洋海运",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 327,
+   "name": "中国联合网络通信有限公司研究院",
+   "norm": "中国联合网络通信有限公司研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 328,
+   "name": "北京首都科技发展集团有限公司",
+   "norm": "北京首都科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 329,
+   "name": "南京星蝠科技有限公司",
+   "norm": "南京星蝠科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 330,
+   "name": "中国联合网络通信有限公司软件研究院",
+   "norm": "中国联合网络通信有限公司软件研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 331,
+   "name": "中数联物流科技（上海）有限公司",
+   "norm": "中数联物流科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 332,
+   "name": "中煤科工集团重庆研究院有限公司",
+   "norm": "中煤科工集团重庆研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 333,
+   "name": "中煤科工重庆设计研究院(集团)有限公司",
+   "norm": "中煤科工重庆设计研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 334,
+   "name": "中煤科工集团沈阳研究院有限公司",
+   "norm": "中煤科工集团沈阳研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 335,
+   "name": "联通数字科技有限公司",
+   "norm": "联通数字科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 336,
+   "name": "中煤科工集团北京华宇工程有限公司",
+   "norm": "中煤科工集团北京华宇工程",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 337,
+   "name": "北京国聘人才服务有限公司",
+   "norm": "北京国聘人才服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 338,
+   "name": "煤炭科学技术研究院有限公司",
+   "norm": "煤炭科学技术研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 339,
+   "name": "凯盛数智信息技术科技（上海）有限公司",
+   "norm": "凯盛数智信息技术科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 340,
+   "name": "北京南瑞普瑞用电技术有限公司",
+   "norm": "北京南瑞普瑞用电技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 341,
+   "name": "中国钢研工程事业部",
+   "norm": "中国钢研工程",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 342,
+   "name": "中材国际智能科技有限公司",
+   "norm": "中材国际智能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 343,
+   "name": "国机工业互联网研究院（河南）有限公司",
+   "norm": "国机工业互联网研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 344,
+   "name": "雄安人才服务有限公司",
+   "norm": "雄安人才服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 345,
+   "name": "国投人力资源服务有限公司",
+   "norm": "国投人力资源服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 346,
+   "name": "凌云工业股份有限公司",
+   "norm": "凌云工业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 347,
+   "name": "上海船舶设备研究所（中国船舶集团有限公司第七〇四研究所）",
+   "norm": "上海船舶设备研究所(中国船舶集团有限公司第七〇四研究所)",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 348,
+   "name": "中煤科工集团上海研究院有限公司（中煤科工上海有限公司）",
+   "norm": "中煤科工集团上海研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 349,
+   "name": "新时代健康产业（集团）有限公司",
+   "norm": "新时代健康产业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 350,
+   "name": "中国大唐集团数字科技有限公司",
+   "norm": "中国大唐集团数字科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 351,
+   "name": "陕西电子信息集团有限公司",
+   "norm": "陕西电子信息",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 352,
+   "name": "北京市农林科学院",
+   "norm": "北京市农林科学院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 353,
+   "name": "湖南云箭集团有限公司",
+   "norm": "湖南云箭",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 354,
+   "name": "中存大数据科技有限公司",
+   "norm": "中存大数据科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 355,
+   "name": "中能建数字科技集团有限公司",
+   "norm": "中能建数字科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 356,
+   "name": "长城证券股份有限公司",
+   "norm": "长城证券",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 357,
+   "name": "国药集团动物保健股份有限公司",
+   "norm": "国药集团动物保健",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 358,
+   "name": "天津中远海运数智能源科技有限公司",
+   "norm": "天津中远海运数智能源科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 359,
+   "name": "东方电子股份有限公司",
+   "norm": "东方电子",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 360,
+   "name": "中煤科工集团信息技术有限公司",
+   "norm": "中煤科工集团信息技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 361,
+   "name": "宁夏天地奔牛实业集团有限公司",
+   "norm": "宁夏天地奔牛实业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 362,
+   "name": "中远海运散货运输有限公司",
+   "norm": "中远海运散货运输",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 363,
+   "name": "同致电子科技（厦门）有限公司",
+   "norm": "同致电子科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 364,
+   "name": "中远海运重工有限公司",
+   "norm": "中远海运重工",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 365,
+   "name": "建科公共设施运营管理有限公司",
+   "norm": "建科公共设施运营管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 366,
+   "name": "中煤科工（西安）智能成套装备科技有限公司",
+   "norm": "中煤科工智能成套装备科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 367,
+   "name": "中科风云(雄安)科技有限公司",
+   "norm": "中科风云科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 368,
+   "name": "中远海运物流供应链有限公司",
+   "norm": "中远海运物流供应链",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 369,
+   "name": "中国长城科技集团股份有限公司",
+   "norm": "中国长城科技集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 370,
+   "name": "中国水环境集团有限公司",
+   "norm": "中国水环境",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 371,
+   "name": "广东交科检测有限公司",
+   "norm": "广东交科检测",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 372,
+   "name": "中国联合网络通信有限公司广东省分公司",
+   "norm": "中国联合网络通信有限公司广东省",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 373,
+   "name": "北京赛四达科技股份有限公司",
+   "norm": "北京赛四达科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 374,
+   "name": "四川新网银行股份有限公司",
+   "norm": "四川新网银行",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 375,
+   "name": "中国联合网络通信有限公司甘肃省分公司",
+   "norm": "中国联合网络通信有限公司甘肃省",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 376,
+   "name": "芜湖国中人力资源管理有限公司",
+   "norm": "芜湖国中人力资源管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 377,
+   "name": "招商局通商融资租赁有限公司",
+   "norm": "招商局通商融资租赁",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 378,
+   "name": "中国航天空气动力技术研究院",
+   "norm": "中国航天空气动力技术研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 379,
+   "name": "国家电投集团数字科技有限公司",
+   "norm": "国家电投集团数字科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 380,
+   "name": "中能融合智慧科技有限公司",
+   "norm": "中能融合智慧科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 381,
+   "name": "中国纺织科学研究院有限公司",
+   "norm": "中国纺织科学研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 382,
+   "name": "中南出版传媒集团股份有限公司",
+   "norm": "中南出版传媒集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 383,
+   "name": "中国医药工业研究总院有限公司",
+   "norm": "中国医药工业研究总院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 384,
+   "name": "中国联合网络通信有限公司重庆市分公司",
+   "norm": "中国联合网络通信有限公司重庆市",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 385,
+   "name": "成都贝尔通讯实业有限公司",
+   "norm": "成都贝尔通讯实业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 386,
+   "name": "大连中远海运重工有限公司",
+   "norm": "大连中远海运重工",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 387,
+   "name": "中国联合网络通信有限公司四川省分公司",
+   "norm": "中国联合网络通信有限公司四川省",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 388,
+   "name": "崖州湾国家实验室",
+   "norm": "崖州湾国家实验室",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 389,
+   "name": "中煤科工集团南京设计研究院有限公司",
+   "norm": "中煤科工集团南京设计研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 390,
+   "name": "北京洛斯达科技发展有限公司",
+   "norm": "北京洛斯达科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 391,
+   "name": "中讯邮电咨询设计院有限公司",
+   "norm": "中讯邮电咨询设计院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 392,
+   "name": "成都先导药物开发股份有限公司",
+   "norm": "成都先导药物开发",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 393,
+   "name": "中国联合网络通信有限公司上海市分公司",
+   "norm": "中国联合网络通信有限公司上海市",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 394,
+   "name": "国核信息科技有限公司",
+   "norm": "国核信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 395,
+   "name": "中国建材集团数字科技有限公司",
+   "norm": "中国建材集团数字科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 396,
+   "name": "康龙化成（北京）新药技术股份有限公司",
+   "norm": "康龙化成新药技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 397,
+   "name": "工业互联网创新中心(上海)有限公司",
+   "norm": "工业互联网创新中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 398,
+   "name": "湃乐多（上海）航运科技有限公司",
+   "norm": "湃乐多航运科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 399,
+   "name": "中煤科工集团常州研究院有限公司",
+   "norm": "中煤科工集团常州研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 400,
+   "name": "中国联合网络通信有限公司北京网络运营事业部",
+   "norm": "中国联合网络通信有限公司北京网络运营",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 401,
+   "name": "联通数据智能有限公司",
+   "norm": "联通数据智能",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 402,
+   "name": "中国联合网络通信有限公司江西省分公司",
+   "norm": "中国联合网络通信有限公司江西省",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 403,
+   "name": "北京神舟航天软件技术股份有限公司",
+   "norm": "北京神舟航天软件技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 404,
+   "name": "北京车易网科技有限公司",
+   "norm": "北京车易网科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 405,
+   "name": "中电科国海信通科技（海南）有限公司",
+   "norm": "中电科国海信通科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 406,
+   "name": "长春设备工艺研究所",
+   "norm": "长春设备工艺研究所",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 407,
+   "name": "长城信息股份有限公司",
+   "norm": "长城信息",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 408,
+   "name": "北京天玛智控科技股份有限公司",
+   "norm": "北京天玛智控科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 409,
+   "name": "中煤科工西安研究院（集团）有限公司",
+   "norm": "中煤科工西安研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 410,
+   "name": "中国联合网络通信有限公司福建省分公司",
+   "norm": "中国联合网络通信有限公司福建省",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 411,
+   "name": "中国东方电气集团有限公司",
+   "norm": "中国东方电气",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 412,
+   "name": "天地科技股份有限公司国际分公司",
+   "norm": "天地科技股份有限公司国际",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 413,
+   "name": "成都阿加犀智能科技有限公司",
+   "norm": "成都阿加犀智能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 414,
+   "name": "国家海洋技术中心",
+   "norm": "国家海洋技术中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 415,
+   "name": "河南省视博电子股份有限公司",
+   "norm": "河南省视博电子",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 416,
+   "name": "山东宏桥新型材料有限公司",
+   "norm": "山东宏桥新型材料",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 417,
+   "name": "北京蓝科芯创科技有限公司",
+   "norm": "北京蓝科芯创科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 418,
+   "name": "清创能拓（北京）新能源科技有限公司",
+   "norm": "清创能拓新能源科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 419,
+   "name": "拓维信息系统股份有限公司",
+   "norm": "拓维信息系统",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 420,
+   "name": "蚂蚁科技集团股份有限公司",
+   "norm": "蚂蚁科技集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 421,
+   "name": "北京糖彩科技有限公司",
+   "norm": "北京糖彩科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 422,
+   "name": "多益网络有限公司",
+   "norm": "多益网络",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 423,
+   "name": "中国文化传媒集团有限公司",
+   "norm": "中国文化传媒",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 424,
+   "name": "钛动科技股份有限公司",
+   "norm": "钛动科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 425,
+   "name": "招商局金融科技有限公司",
+   "norm": "招商局金融科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 426,
+   "name": "湖北省人才发展集团有限公司",
+   "norm": "湖北省人才发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 427,
+   "name": "中州航空有限责任公司",
+   "norm": "中州航空",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 428,
+   "name": "国机数字科技有限公司",
+   "norm": "国机数字科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 429,
+   "name": "数字海南有限公司",
+   "norm": "数字海南",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 430,
+   "name": "中铝财务有限责任公司",
+   "norm": "中铝财务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 431,
+   "name": "北京金融大数据有限公司",
+   "norm": "北京金融大数据",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 432,
+   "name": "璞擎电子（上海）有限公司",
+   "norm": "璞擎电子",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 433,
+   "name": "国研大数据研究院有限公司",
+   "norm": "国研大数据研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 434,
+   "name": "国药集团新疆新特药业有限公司",
+   "norm": "国药集团新疆新特药业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 435,
+   "name": "中海物业管理有限公司",
+   "norm": "中海物业管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 436,
+   "name": "北京市地铁运营有限公司技术创新研究院分公司",
+   "norm": "北京市地铁运营有限公司技术创新研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 437,
+   "name": "中数联物流运营有限公司",
+   "norm": "中数联物流运营",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 438,
+   "name": "中国数联物流信息有限公司",
+   "norm": "中国数联物流信息",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 439,
+   "name": "扬州中远海运重工有限公司",
+   "norm": "扬州中远海运重工",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 440,
+   "name": "中国远洋海运集团航运先进技术研究院",
+   "norm": "中国远洋海运集团航运先进技术研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 441,
+   "name": "行云数聚（北京）科技有限公司",
+   "norm": "行云数聚科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 442,
+   "name": "中国有色桂林矿产地质研究院有限公司",
+   "norm": "中国有色桂林矿产地质研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 443,
+   "name": "中色卢安夏铜业有限公司",
+   "norm": "中色卢安夏铜业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 444,
+   "name": "重庆赛美数智科技有限公司",
+   "norm": "重庆赛美数智科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 445,
+   "name": "海南海控人才服务有限公司",
+   "norm": "海南海控人才服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 446,
+   "name": "国核自仪系统工程有限公司",
+   "norm": "国核自仪系统工程",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 447,
+   "name": "成都积微物联集团股份有限公司",
+   "norm": "成都积微物联集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 448,
+   "name": "上海发电设备成套设计研究院有限责任公司",
+   "norm": "上海发电设备成套设计研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 449,
+   "name": "海南省征信有限公司",
+   "norm": "海南省征信",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 450,
+   "name": "通用技术集团健康数字科技（北京）有限公司",
+   "norm": "通用技术集团健康数字科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 451,
+   "name": "太极计算机股份有限公司",
+   "norm": "太极计算机",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 452,
+   "name": "河北雄安本真科技有限公司",
+   "norm": "河北雄安本真科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 453,
+   "name": "雄安睿哲科技有限公司",
+   "norm": "雄安睿哲科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 454,
+   "name": "四川天正信息科技有限公司",
+   "norm": "四川天正信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 455,
+   "name": "上饶市睿豪体育科技有限公司",
+   "norm": "上饶市睿豪体育科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 456,
+   "name": "中化学数智科技有限公司",
+   "norm": "中化学数智科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 457,
+   "name": "航天天目（重庆）卫星科技有限公司",
+   "norm": "航天天目卫星科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 458,
+   "name": "雄安新区未来网络创新研究院（非营利机构）",
+   "norm": "雄安新区未来网络创新研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 459,
+   "name": "厦门职行力信息科技有限公司",
+   "norm": "厦门职行力信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 460,
+   "name": "北京其然科技有限公司",
+   "norm": "北京其然科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 461,
+   "name": "联通智网科技股份有限公司",
+   "norm": "联通智网科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 462,
+   "name": "中能智新科技产业发展有限公司",
+   "norm": "中能智新科技产业发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 463,
+   "name": "上海圈讯科技股份有限公司",
+   "norm": "上海圈讯科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 464,
+   "name": "国投航空科技（北京）有限公司",
+   "norm": "国投航空科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 465,
+   "name": "成都精灵云科技有限公司",
+   "norm": "成都精灵云科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 466,
+   "name": "深圳市兴源智能仪表股份有限公司",
+   "norm": "深圳市兴源智能仪表",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 467,
+   "name": "济南职伴互联网有限公司",
+   "norm": "济南职伴互联网",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 468,
+   "name": "国投人力资源服务有限公司人才服务中心",
+   "norm": "国投人力资源服务有限公司人才服务中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 469,
+   "name": "浙江三狮南方新材料有限公司",
+   "norm": "浙江三狮南方新材料",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 470,
+   "name": "中能建数智(西安)新能科技有限公司",
+   "norm": "中能建数智新能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 471,
+   "name": "国投（北京）科技创新有限公司",
+   "norm": "国投科技创新",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 472,
+   "name": "北京北森云计算股份有限公司（测试）",
+   "norm": "北京北森云计算",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 473,
+   "name": "通号信息产业有限公司",
+   "norm": "通号信息产业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 474,
+   "name": "北京华大智宝电子系统有限公司",
+   "norm": "北京华大智宝电子系统",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 475,
+   "name": "北京力天世技系统集成有限公司",
+   "norm": "北京力天世技系统集成",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 476,
+   "name": "河南省保时安科技股份有限公司",
+   "norm": "河南省保时安科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 477,
+   "name": "杭州朗旭新能源科技有限公司",
+   "norm": "杭州朗旭新能源科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 478,
+   "name": "西安全路通号器材研究有限公司",
+   "norm": "西安全路通号器材研究",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 479,
+   "name": "北京经纬恒润科技股份有限公司",
+   "norm": "北京经纬恒润科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 480,
+   "name": "中储恒科物联网系统有限公司",
+   "norm": "中储恒科物联网系统",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 481,
+   "name": "汉威科技集团股份有限公司",
+   "norm": "汉威科技集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 482,
+   "name": "北京建筑机械化研究院有限公司",
+   "norm": "北京建筑机械化研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 483,
+   "name": "中国电子科技集团公司第五十研究所",
+   "norm": "中国电子科技集团公司第五十研究所",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 484,
+   "name": "国电投核力电科（无锡）技术有限公司",
+   "norm": "国电投核力电科技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 485,
+   "name": "北京京仪自动化装备技术股份有限公司",
+   "norm": "北京京仪自动化装备技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 486,
+   "name": "中煤科工开采研究院有限公司",
+   "norm": "中煤科工开采研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 487,
+   "name": "唐智科技湖南发展有限公司",
+   "norm": "唐智科技湖南发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 488,
+   "name": "富临精工股份有限公司",
+   "norm": "富临精工",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 489,
+   "name": "中国雄安集团数字城市科技有限公司",
+   "norm": "中国雄安集团数字城市科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 490,
+   "name": "中国国际人才开发中心有限公司",
+   "norm": "中国国际人才开发中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 491,
+   "name": "华中药业股份有限公司",
+   "norm": "华中药业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 492,
+   "name": "中建营筑（成都）城市运营管理有限公司",
+   "norm": "中建营筑城市运营管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 493,
+   "name": "中煤科工集团新疆研究院有限公司",
+   "norm": "中煤科工集团新疆研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 494,
+   "name": "中数联物流咨询研究（上海）有限公司",
+   "norm": "中数联物流咨询研究",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 495,
+   "name": "中煤科工集团唐山研究院有限公司",
+   "norm": "中煤科工集团唐山研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 496,
+   "name": "云宙时代科技有限公司",
+   "norm": "云宙时代科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 497,
+   "name": "通号城市轨道交通技术有限公司",
+   "norm": "通号城市轨道交通技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 498,
+   "name": "希迪智驾（成都）科技有限公司",
+   "norm": "希迪智驾科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 499,
+   "name": "中国科学院人才交流开发中心",
+   "norm": "中国科学院人才交流开发中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 500,
+   "name": "中船西南（重庆）装备研究院有限公司",
+   "norm": "中船西南装备研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 501,
+   "name": "北京德安源环境科技发展有限公司",
+   "norm": "北京德安源环境科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 502,
+   "name": "中煤科工智能储装技术有限公司",
+   "norm": "中煤科工智能储装技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 503,
+   "name": "雄安世寰智能科技有限公司",
+   "norm": "雄安世寰智能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 504,
+   "name": "海南东方新丝路职业学院有限责任公司",
+   "norm": "海南东方新丝路职业学院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 505,
+   "name": "山西运城制版集团股份有限公司",
+   "norm": "山西运城制版集团",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 506,
+   "name": "三亚科城文化发展有限公司",
+   "norm": "三亚科城文化发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 507,
+   "name": "武汉网锐检测科技有限公司",
+   "norm": "武汉网锐检测科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 508,
+   "name": "上海盟珂教育科技有限公司",
+   "norm": "上海盟珂教育科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 509,
+   "name": "中国联通（香港）创新研究院有限公司",
+   "norm": "中国联通创新研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 510,
+   "name": "中国联合网络通信有限公司海南省分公司",
+   "norm": "中国联合网络通信有限公司海南省",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 511,
+   "name": "重庆中电自能科技有限公司",
+   "norm": "重庆中电自能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 512,
+   "name": "中移数智科技有限公司",
+   "norm": "中移数智科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 513,
+   "name": "四川成都超精密光学创新研究院",
+   "norm": "四川成都超精密光学创新研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 514,
+   "name": "北京时代民芯科技有限公司",
+   "norm": "北京时代民芯科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 515,
+   "name": "云筑信息科技（成都）有限公司",
+   "norm": "云筑信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 516,
+   "name": "湖南小翅科技有限公司",
+   "norm": "湖南小翅科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 517,
+   "name": "成都劳恩普斯科技有限公司",
+   "norm": "成都劳恩普斯科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 518,
+   "name": "北京码博科技有限公司",
+   "norm": "北京码博科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 519,
+   "name": "厦门顾诺集团有限公司",
+   "norm": "厦门顾诺",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 520,
+   "name": "海南海控数智科技有限公司",
+   "norm": "海南海控数智科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 521,
+   "name": "北京脑科学与类脑研究所",
+   "norm": "北京脑科学与类脑研究所",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 522,
+   "name": "中建四局华南建设有限公司",
+   "norm": "中建四局华南建设",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 523,
+   "name": "中煤科工机器人科技有限公司",
+   "norm": "中煤科工机器人科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 524,
+   "name": "上海人工智能研究院有限公司",
+   "norm": "上海人工智能研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 525,
+   "name": "厦门美亚中敏科技有限公司",
+   "norm": "厦门美亚中敏科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 526,
+   "name": "北京怀柔科学城管理委员会",
+   "norm": "北京怀柔科学城管理委员会",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 527,
+   "name": "中国联通总部",
+   "norm": "中国联通总部",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 528,
+   "name": "中国煤炭科工集团太原研究院有限公司",
+   "norm": "中国煤炭科工集团太原研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 529,
+   "name": "成都瓦博科技有限公司",
+   "norm": "成都瓦博科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 530,
+   "name": "安标国家矿用产品安全标志中心有限公司",
+   "norm": "安标国家矿用产品安全标志中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 531,
+   "name": "成都玖锦科技有限公司",
+   "norm": "成都玖锦科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 532,
+   "name": "北京大学长沙计算与数字经济研究院",
+   "norm": "北京大学长沙计算与数字经济研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 533,
+   "name": "中电信数智科技有限公司",
+   "norm": "中电信数智科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 534,
+   "name": "神州高铁技术股份有限公司",
+   "norm": "神州高铁技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 535,
+   "name": "正星科技股份有限公司",
+   "norm": "正星科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 536,
+   "name": "中国联合网络通信有限公司西藏自治区分公司",
+   "norm": "中国联合网络通信有限公司西藏自治区",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 537,
+   "name": "国新国际（中国）有限公司",
+   "norm": "国新国际",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 538,
+   "name": "哈尔滨电机厂有限责任公司",
+   "norm": "哈尔滨电机厂",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 539,
+   "name": "中国联合网络通信有限公司安徽省分公司",
+   "norm": "中国联合网络通信有限公司安徽省",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 540,
+   "name": "中铝数为（成都）科技有限责任公司",
+   "norm": "中铝数为科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 541,
+   "name": "北矿机电科技有限责任公司",
+   "norm": "北矿机电科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 542,
+   "name": "长沙素灵智造科技有限公司",
+   "norm": "长沙素灵智造科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 543,
+   "name": "京博（海南）新材料有限公司",
+   "norm": "京博新材料",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 544,
+   "name": "万友汽车投资有限公司",
+   "norm": "万友汽车投资",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 545,
+   "name": "北京国际大数据交易有限公司",
+   "norm": "北京国际大数据交易",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 546,
+   "name": "上海上班族数字科技有限公司",
+   "norm": "上海上班族数字科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 547,
+   "name": "北京北方长城光电仪器有限公司武汉分公司",
+   "norm": "北京北方长城光电仪器有限公司武汉",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 548,
+   "name": "北京中科科仪股份有限公司",
+   "norm": "北京中科科仪",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 549,
+   "name": "湖北三江航天万峰科技发展有限公司",
+   "norm": "湖北三江航天万峰科技发展",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 550,
+   "name": "海南狮子鱼深海技术有限公司",
+   "norm": "海南狮子鱼深海技术",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 551,
+   "name": "赛维航电科技有限公司",
+   "norm": "赛维航电科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 552,
+   "name": "成都壹为新能源汽车有限公司",
+   "norm": "成都壹为新能源汽车",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 553,
+   "name": "连云港杰瑞电子有限公司",
+   "norm": "连云港杰瑞电子",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 554,
+   "name": "中国机械工业集团有限公司",
+   "norm": "中国机械工业",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 555,
+   "name": "中远海运博鳌有限公司博鳌亚洲论坛大酒店",
+   "norm": "中远海运博鳌有限公司博鳌亚洲论坛大酒店",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 556,
+   "name": "中国工业互联网研究院",
+   "norm": "中国工业互联网研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 557,
+   "name": "广州虹科电子科技有限公司",
+   "norm": "广州虹科电子科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 558,
+   "name": "北京市海讯达通信有限责任公司",
+   "norm": "北京市海讯达通信",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 559,
+   "name": "广东航天七零六信息科技有限公司",
+   "norm": "广东航天七零六信息科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 560,
+   "name": "湖南湘江智能科技创新中心有限公司",
+   "norm": "湖南湘江智能科技创新中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 561,
+   "name": "钢研昊普（苏州）创新中心有限公司",
+   "norm": "钢研昊普创新中心",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 562,
+   "name": "北控城市环境服务集团有限公司",
+   "norm": "北控城市环境服务",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 563,
+   "name": "金航数码科技有限责任公司",
+   "norm": "金航数码科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 564,
+   "name": "中国五洲工程设计集团有限公司",
+   "norm": "中国五洲工程设计",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 565,
+   "name": "深圳市金洲精工科技股份有限公司",
+   "norm": "深圳市金洲精工科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 566,
+   "name": "中复神鹰碳纤维西宁有限公司",
+   "norm": "中复神鹰碳纤维西宁",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 567,
+   "name": "先进计算与关键软件（信创）海河实验室",
+   "norm": "先进计算与关键软件海河实验室",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 568,
+   "name": "雄安科技产业园开发管理有限公司",
+   "norm": "雄安科技产业园开发管理",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 569,
+   "name": "东莞高伟光学电子有限公司",
+   "norm": "东莞高伟光学电子",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 570,
+   "name": "中煤科工集团杭州研究院有限公司",
+   "norm": "中煤科工集团杭州研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 571,
+   "name": "中衍高新材料（江西）有限公司",
+   "norm": "中衍高新材料",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 572,
+   "name": "国电投核力同创（北京）科技有限公司",
+   "norm": "国电投核力同创科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 573,
+   "name": "中国化工集团曙光橡胶工业研究设计院有限公司",
+   "norm": "中国化工集团曙光橡胶工业研究设计院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 574,
+   "name": "山东崇实智慧能源科技有限公司",
+   "norm": "山东崇实智慧能源科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 575,
+   "name": "北方联创通信有限公司",
+   "norm": "北方联创通信",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 576,
+   "name": "内蒙古第一机械集团有限公司",
+   "norm": "内蒙古第一机械",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 577,
+   "name": "北京智慧能源研究院",
+   "norm": "北京智慧能源研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 578,
+   "name": "中信重工机械股份有限公司",
+   "norm": "中信重工机械",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 579,
+   "name": "海南省交通规划勘察设计研究院有限公司",
+   "norm": "海南省交通规划勘察设计研究院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 580,
+   "name": "海南省工程咨询设计集团有限公司",
+   "norm": "海南省工程咨询设计",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 581,
+   "name": "北汽福田汽车股份有限公司诸城奥铃汽车厂",
+   "norm": "北汽福田汽车股份有限公司诸城奥铃汽车厂",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 582,
+   "name": "中国建筑材料科学研究总院有限公司",
+   "norm": "中国建筑材料科学研究总院",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 583,
+   "name": "神工坊（安徽）智能科技有限责任公司",
+   "norm": "神工坊智能科技",
+   "parent_id": null,
+   "status": "active"
+  },
+  {
+   "id": 584,
+   "name": "海南蜈支洲旅游开发股份有限公司三亚蜈支洲岛旅游区",
+   "norm": "海南蜈支洲旅游开发股份有限公司三亚蜈支洲岛旅游区",
+   "parent_id": null,
+   "status": "active"
+  }
+ ],
+ "aliases": [],
+ "raw_companies": [
+  {
+   "company": "中国广视索福瑞媒介研究有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "联合永道（上海）信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京慧铭软件有限公司",
+   "n": 1
+  },
+  {
+   "company": "航天星图科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海微创软件股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "字节跳动",
+   "n": 8
+  },
+  {
+   "company": "北京万维盈创科技发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京阿博泰克北大青鸟信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "传智播客教育集团修正分校",
+   "n": 1
+  },
+  {
+   "company": "北京中公教育科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京传智播客教育科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "博彦科技股份有限公司",
+   "n": 2
+  },
+  {
+   "company": "北京飞利信科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "新浪微博",
+   "n": 1
+  },
+  {
+   "company": "亚信科技（中国）有限公司",
+   "n": 1
+  },
+  {
+   "company": "广州嘉为科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京道冲泰科科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京智联友道科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京腾信软创科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "易思奇汽车电子（上海）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京普瑞亿科科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京朗镜科技有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "北京英视睿达科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京薪享宏福教育咨询有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京易云华控技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "亚马逊中国",
+   "n": 1
+  },
+  {
+   "company": "北京中知智慧科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京国双科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "深圳前海川谷信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京艾沃仕科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "慧与软件（济宁）人才产业基地管理有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京东方国信科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国电子科技集团公司第十五研究所（华北计算技术研究所）",
+   "n": 1
+  },
+  {
+   "company": "北京慕华信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京贝瑞和康生物技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "沈阳民航东北凯亚有限公司大连分公司",
+   "n": 1
+  },
+  {
+   "company": "中科软科技股份有限公司",
+   "n": 2
+  },
+  {
+   "company": "云星数据（深圳）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京减脂时代科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京清软创新科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京捷泰天域信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京搜狗科技发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京慧闻科技发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "苏州思必驰信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京宏图远见科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "出门问问信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "银河互联网电视有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京新东方教育科技（集团）有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海拓畅信息技术有限公司北京分公司",
+   "n": 1
+  },
+  {
+   "company": "奥成佳和（北京）软件开发有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京云智汇科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "斯润天朗（北京）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "广东道一信息技术股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "金电联行（北京）信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "苏州博远容天信息科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京思源时代科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "文思海辉金融",
+   "n": 1
+  },
+  {
+   "company": "上海艾杰飞人力资源有限公司",
+   "n": 1
+  },
+  {
+   "company": "蓝科财务咨询（上海）有限公司",
+   "n": 1
+  },
+  {
+   "company": "国科创（北京）信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国民生银行股份有限公司信用卡中心",
+   "n": 1
+  },
+  {
+   "company": "黑龙江海康软件工程有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京周同科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "今目标",
+   "n": 1
+  },
+  {
+   "company": "IBM China",
+   "n": 1
+  },
+  {
+   "company": "马上消费金融股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京市渠道网络技术开发有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京寻宝天行网络技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京天谱同盛教育科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "完美世界（北京）总部/完美时空",
+   "n": 1
+  },
+  {
+   "company": "阿依瓦（北京）技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京尚水信息技术股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京光宇在线科技有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "商助科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "美亚宏信（北京）信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京德才仕科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "YOHO!有货（江苏）商贸服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国交通报社",
+   "n": 1
+  },
+  {
+   "company": "北京北信源软件股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "武汉雍禾美度医疗美容门诊部有限公司",
+   "n": 1
+  },
+  {
+   "company": "宁德新能源科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "房天下（北京）",
+   "n": 1
+  },
+  {
+   "company": "北京万步健康科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京铁道工程机电技术研究所股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京教培师训网络科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京多维视通技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "环球大数据科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "古莘信息技术（广州）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京中科软通科技有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "北京六合波尔信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "西门子(中国)有限公司 工业销售集团(DF&amp;PD S)",
+   "n": 1
+  },
+  {
+   "company": "北京安德医智科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京大唐高鸿数据网络技术股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "普尔莱克乳业（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京奥金智策传媒科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中经网数据有限公司",
+   "n": 1
+  },
+  {
+   "company": "量子数聚（北京）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京快鱼电子股份公司",
+   "n": 1
+  },
+  {
+   "company": "美林数据技术股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "浙江未来技术研究院（嘉兴）",
+   "n": 1
+  },
+  {
+   "company": "BJCP直通车项目组1",
+   "n": 1
+  },
+  {
+   "company": "广东星舆科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海神州数码信息技术服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "国广中播传媒技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京侨福置业有限公司",
+   "n": 1
+  },
+  {
+   "company": "联想集团",
+   "n": 1
+  },
+  {
+   "company": "神州数码信息服务股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国软件与技术服务股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京安软信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "融中集团",
+   "n": 1
+  },
+  {
+   "company": "北京佳易慧通科技有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "医药魔方",
+   "n": 1
+  },
+  {
+   "company": "中信云网有限公司",
+   "n": 1
+  },
+  {
+   "company": "深圳市华云中盛科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京兰云科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京芯盾时代科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "江苏人加信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京融英乐知科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北醒（北京）光子科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京赛威迅通科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "南京烽火星空通信发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京全景赛斯科技发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京洞察力科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "展讯通信（天津）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京新媒传信科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "山东正心医疗科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "德联易控科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "南京汇银迅信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "寰宇优才教育科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京理工雷科电子信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海数慧系统技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京清果金融信息服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "万宝盛华人力资源（中国）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京市盈科律师事务所",
+   "n": 1
+  },
+  {
+   "company": "北京华开领航科技有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "威创集团股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京君正集成电路股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "纵目科技（上海）股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "方正信息产业集团",
+   "n": 1
+  },
+  {
+   "company": "小米通讯技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "西门子（中国）有限公司 数字化工厂技术集团 Digital Factory (DF)",
+   "n": 1
+  },
+  {
+   "company": "北京中科特瑞科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "金财互联数据服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "优师优堂（北京）网络科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "同程艺龙",
+   "n": 1
+  },
+  {
+   "company": "河北奥伦达旅游开发有限公司",
+   "n": 1
+  },
+  {
+   "company": "甲骨文（中国）软件系统有限公司",
+   "n": 1
+  },
+  {
+   "company": "博微太赫兹信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "广州笨笨网络科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "新华网股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京时尚百联科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "去哪儿网金融事业部",
+   "n": 1
+  },
+  {
+   "company": "京东集团总部",
+   "n": 1
+  },
+  {
+   "company": "新港海岸（北京）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "百望股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "联想（北京）有限公司 — 联想服务",
+   "n": 1
+  },
+  {
+   "company": "西安翼展电子科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京赫德阳数据通信科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "去哪儿网总部",
+   "n": 1
+  },
+  {
+   "company": "北京雅邦网络技术发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "平安科技（深圳）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京航天华腾科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京奇客创想科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "智医纵横（北京）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "去哪儿网",
+   "n": 1
+  },
+  {
+   "company": "上海芮美生物科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京名道恒通信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "亚信在线BIU",
+   "n": 1
+  },
+  {
+   "company": "中国移动通信集团终端有限公司",
+   "n": 1
+  },
+  {
+   "company": "亚信软件研发中心PRD",
+   "n": 1
+  },
+  {
+   "company": "北京车与车科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "凌云光技术集团视觉器件业务部",
+   "n": 1
+  },
+  {
+   "company": "广联达科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "未来电视有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京鼎兴达信息科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "民航数据通信有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "FICO（费埃哲信息技术（北京）有限公司）",
+   "n": 1
+  },
+  {
+   "company": "北京明朝万达科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京聚源锐思数据科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海音智达信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "时光网",
+   "n": 1
+  },
+  {
+   "company": "北京先进数通信息技术股份公司",
+   "n": 1
+  },
+  {
+   "company": "广东旭诚科技有限公司北京分公司",
+   "n": 1
+  },
+  {
+   "company": "空中网",
+   "n": 1
+  },
+  {
+   "company": "广东旭诚科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京北纬通信科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "瑞晶睿达电子技术（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "展讯通信（上海）有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海睿成软件有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京智慧眼科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "苏州中科全象智能科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京青钱信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "中科宇图科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京华影云商科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京嘉士宝科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "汽车之家",
+   "n": 1
+  },
+  {
+   "company": "二六三网络通信股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "建研科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海星红桉数据科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "秒针信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京天行网安信息技术有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "北京家视天下科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "紫光陕数大数据有限公司",
+   "n": 1
+  },
+  {
+   "company": "铁力山（北京）控制技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "饿了么",
+   "n": 1
+  },
+  {
+   "company": "北京心联光电科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "研华（中国）有限公司",
+   "n": 1
+  },
+  {
+   "company": "贵州华芯通半导体技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京博科管理技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "去哪儿网机票事业部",
+   "n": 1
+  },
+  {
+   "company": "零度智控（北京）智能科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "哈尔滨新光光电科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京友通上昊科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "Hewlett Packard Enterprise",
+   "n": 1
+  },
+  {
+   "company": "北京日桥信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "嘉兴驭光光电科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "晶晨半导体（上海）股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国科学院自动化研究所（洛阳）机器人与智能装备创新研究院",
+   "n": 1
+  },
+  {
+   "company": "清北网校",
+   "n": 1
+  },
+  {
+   "company": "北京华电通达科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "美芯晟科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京休恩博得科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "金色大田科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "亚马逊（中国）投资有限公司",
+   "n": 1
+  },
+  {
+   "company": "北大青鸟环宇消防设备股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京昀朴科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "福州龙腾简合网络技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京麦达数字技术服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京市鑫海威信息中心",
+   "n": 1
+  },
+  {
+   "company": "北京清影华康科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京依派伟业数码科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "秦皇岛市共享科技发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "通联数据股份公司",
+   "n": 1
+  },
+  {
+   "company": "广东红橙云大数据有限公司",
+   "n": 1
+  },
+  {
+   "company": "佳能医疗系统（中国）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京喂呦科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京迈纳士手术机器人技术股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京鑫方盛电子商务股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "哈啰宝贝科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京来也网络科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京亚太摩尔自动化设备有限公司",
+   "n": 1
+  },
+  {
+   "company": "汉王科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "南京简智仪器设备有限公司",
+   "n": 1
+  },
+  {
+   "company": "搜狐视频",
+   "n": 1
+  },
+  {
+   "company": "中科慧远视觉技术（洛阳）有限公司",
+   "n": 1
+  },
+  {
+   "company": "广东知一数据有限公司",
+   "n": 1
+  },
+  {
+   "company": "中德人工智能研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京双泽维度信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "百丽新零售",
+   "n": 1
+  },
+  {
+   "company": "三一重型装备有限公司",
+   "n": 1
+  },
+  {
+   "company": "新博卓畅技术（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "顺丰科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "维升（天津）企业管理有限公司",
+   "n": 1
+  },
+  {
+   "company": "悠易互通（北京）广告有限公司",
+   "n": 1
+  },
+  {
+   "company": "南通东华软件有限公司",
+   "n": 1
+  },
+  {
+   "company": "紫光股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "湖南三一泵送机械有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京齐尔布莱特科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京社文知识产权管理有限公司",
+   "n": 1
+  },
+  {
+   "company": "南京蓝鲸人网络科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京永新联合电子技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京协同创新研究院",
+   "n": 1
+  },
+  {
+   "company": "TCL集团工业研究院",
+   "n": 1
+  },
+  {
+   "company": "北京眸视科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "凌云光技术集团光纤仪器与器件事业部",
+   "n": 1
+  },
+  {
+   "company": "北京允睿讯通科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "广东微模式软件股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "vivo智能手机（维沃移动通信有限公司）",
+   "n": 1
+  },
+  {
+   "company": "分享一下（北京）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京神州泰岳软件股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京智行者科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "京东方健康投资管理有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京视野金融信息服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "建投数据科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "龙湖集团地产",
+   "n": 1
+  },
+  {
+   "company": "怡和科技（上海）有限公司",
+   "n": 1
+  },
+  {
+   "company": "家宅融智（北京）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "赞同科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "年享人力资源管理（上海）有限公司",
+   "n": 1
+  },
+  {
+   "company": "央视市场研究股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北明智通（北京）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "达观数据",
+   "n": 1
+  },
+  {
+   "company": "长天科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京广而告之网讯传媒有限公司",
+   "n": 1
+  },
+  {
+   "company": "巧达科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京外研在线教育科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "九坤投资（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "奇虎360科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "北京易鲸捷信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京信瑞思企业管理咨询有限公司",
+   "n": 1
+  },
+  {
+   "company": "",
+   "n": 300
+  },
+  {
+   "company": "网易·网易有道",
+   "n": 14
+  },
+  {
+   "company": "网易·网易伏羲",
+   "n": 29
+  },
+  {
+   "company": "网易·网易智企",
+   "n": 21
+  },
+  {
+   "company": "网易·网易云音乐",
+   "n": 32
+  },
+  {
+   "company": "网易·网易游戏（互娱）",
+   "n": 86
+  },
+  {
+   "company": "网易·网易游戏（雷火）",
+   "n": 22
+  },
+  {
+   "company": "网易·网易元气",
+   "n": 10
+  },
+  {
+   "company": "网易·网易职能",
+   "n": 21
+  },
+  {
+   "company": "网易·网易严选",
+   "n": 6
+  },
+  {
+   "company": "网易·网易传媒",
+   "n": 6
+  },
+  {
+   "company": "网易·其他",
+   "n": 3
+  },
+  {
+   "company": "网易·网易智邮",
+   "n": 3
+  },
+  {
+   "company": "腾讯",
+   "n": 272
+  },
+  {
+   "company": "NIO蔚来",
+   "n": 199
+  },
+  {
+   "company": "小鹏汽车",
+   "n": 244
+  },
+  {
+   "company": "得物App",
+   "n": 202
+  },
+  {
+   "company": "EcoFlow 正浩创新",
+   "n": 37
+  },
+  {
+   "company": "零一万物AGI",
+   "n": 35
+  },
+  {
+   "company": "生数科技",
+   "n": 35
+  },
+  {
+   "company": "出门问问（Mobvoi）",
+   "n": 7
+  },
+  {
+   "company": "Insta360",
+   "n": 8
+  },
+  {
+   "company": "猎户星空",
+   "n": 5
+  },
+  {
+   "company": "爱奇艺",
+   "n": 1
+  },
+  {
+   "company": "合众新能源汽车有限公司",
+   "n": 1
+  },
+  {
+   "company": "雄安米格科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "中电科海洋信息技术研究院有限公司",
+   "n": 3
+  },
+  {
+   "company": "天府绛溪实验室",
+   "n": 35
+  },
+  {
+   "company": "中远海运科技股份有限公司",
+   "n": 7
+  },
+  {
+   "company": "煤炭科学研究总院有限公司",
+   "n": 4
+  },
+  {
+   "company": "横琴人才集团有限公司",
+   "n": 8
+  },
+  {
+   "company": "福建陆源智能科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国钢研科技集团有限公司",
+   "n": 16
+  },
+  {
+   "company": "中国移动通信集团北京有限公司",
+   "n": 3
+  },
+  {
+   "company": "中电金信数字科技集团股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "广东著一智慧科技有限公司",
+   "n": 4
+  },
+  {
+   "company": "泰豪集团有限公司",
+   "n": 2
+  },
+  {
+   "company": "上海中远海运资讯科技有限公司",
+   "n": 5
+  },
+  {
+   "company": "中国远洋海运集团有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国联合网络通信有限公司研究院",
+   "n": 10
+  },
+  {
+   "company": "北京首都科技发展集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "南京星蝠科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司软件研究院",
+   "n": 8
+  },
+  {
+   "company": "中数联物流科技（上海）有限公司",
+   "n": 42
+  },
+  {
+   "company": "中煤科工集团重庆研究院有限公司",
+   "n": 2
+  },
+  {
+   "company": "中煤科工重庆设计研究院(集团)有限公司",
+   "n": 1
+  },
+  {
+   "company": "中煤科工集团沈阳研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "联通数字科技有限公司",
+   "n": 20
+  },
+  {
+   "company": "中煤科工集团北京华宇工程有限公司",
+   "n": 3
+  },
+  {
+   "company": "北京国聘人才服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "煤炭科学技术研究院有限公司",
+   "n": 2
+  },
+  {
+   "company": "凯盛数智信息技术科技（上海）有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京南瑞普瑞用电技术有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国钢研工程事业部",
+   "n": 1
+  },
+  {
+   "company": "中材国际智能科技有限公司",
+   "n": 3
+  },
+  {
+   "company": "国机工业互联网研究院（河南）有限公司",
+   "n": 7
+  },
+  {
+   "company": "雄安人才服务有限公司",
+   "n": 12
+  },
+  {
+   "company": "国投人力资源服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "凌云工业股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海船舶设备研究所（中国船舶集团有限公司第七〇四研究所）",
+   "n": 2
+  },
+  {
+   "company": "中煤科工集团上海研究院有限公司（中煤科工上海有限公司）",
+   "n": 1
+  },
+  {
+   "company": "新时代健康产业（集团）有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国大唐集团数字科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "陕西电子信息集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京市农林科学院",
+   "n": 4
+  },
+  {
+   "company": "湖南云箭集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "中存大数据科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中能建数字科技集团有限公司",
+   "n": 2
+  },
+  {
+   "company": "长城证券股份有限公司",
+   "n": 4
+  },
+  {
+   "company": "国药集团动物保健股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "天津中远海运数智能源科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "东方电子股份有限公司",
+   "n": 3
+  },
+  {
+   "company": "中煤科工集团信息技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "宁夏天地奔牛实业集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "中远海运散货运输有限公司",
+   "n": 1
+  },
+  {
+   "company": "同致电子科技（厦门）有限公司",
+   "n": 1
+  },
+  {
+   "company": "中远海运重工有限公司",
+   "n": 1
+  },
+  {
+   "company": "建科公共设施运营管理有限公司",
+   "n": 4
+  },
+  {
+   "company": "中煤科工（西安）智能成套装备科技有限公司",
+   "n": 8
+  },
+  {
+   "company": "中科风云(雄安)科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中远海运物流供应链有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国长城科技集团股份有限公司",
+   "n": 4
+  },
+  {
+   "company": "中国水环境集团有限公司",
+   "n": 5
+  },
+  {
+   "company": "广东交科检测有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司广东省分公司",
+   "n": 3
+  },
+  {
+   "company": "北京赛四达科技股份有限公司",
+   "n": 3
+  },
+  {
+   "company": "四川新网银行股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司甘肃省分公司",
+   "n": 2
+  },
+  {
+   "company": "芜湖国中人力资源管理有限公司",
+   "n": 4
+  },
+  {
+   "company": "招商局通商融资租赁有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国航天空气动力技术研究院",
+   "n": 1
+  },
+  {
+   "company": "国家电投集团数字科技有限公司",
+   "n": 17
+  },
+  {
+   "company": "中能融合智慧科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国纺织科学研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "中南出版传媒集团股份有限公司",
+   "n": 8
+  },
+  {
+   "company": "中国医药工业研究总院有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司重庆市分公司",
+   "n": 4
+  },
+  {
+   "company": "成都贝尔通讯实业有限公司",
+   "n": 3
+  },
+  {
+   "company": "大连中远海运重工有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司四川省分公司",
+   "n": 5
+  },
+  {
+   "company": "崖州湾国家实验室",
+   "n": 2
+  },
+  {
+   "company": "中煤科工集团南京设计研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京洛斯达科技发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "中讯邮电咨询设计院有限公司",
+   "n": 4
+  },
+  {
+   "company": "成都先导药物开发股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司上海市分公司",
+   "n": 2
+  },
+  {
+   "company": "国核信息科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国建材集团数字科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "康龙化成（北京）新药技术股份有限公司",
+   "n": 6
+  },
+  {
+   "company": "工业互联网创新中心(上海)有限公司",
+   "n": 1
+  },
+  {
+   "company": "湃乐多（上海）航运科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中煤科工集团常州研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司北京网络运营事业部",
+   "n": 4
+  },
+  {
+   "company": "联通数据智能有限公司",
+   "n": 9
+  },
+  {
+   "company": "中国联合网络通信有限公司江西省分公司",
+   "n": 4
+  },
+  {
+   "company": "北京神舟航天软件技术股份有限公司",
+   "n": 12
+  },
+  {
+   "company": "北京车易网科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中电科国海信通科技（海南）有限公司",
+   "n": 1
+  },
+  {
+   "company": "长春设备工艺研究所",
+   "n": 1
+  },
+  {
+   "company": "长城信息股份有限公司",
+   "n": 2
+  },
+  {
+   "company": "北京天玛智控科技股份有限公司",
+   "n": 2
+  },
+  {
+   "company": "中煤科工西安研究院（集团）有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国联合网络通信有限公司福建省分公司",
+   "n": 4
+  },
+  {
+   "company": "中国东方电气集团有限公司",
+   "n": 9
+  },
+  {
+   "company": "天地科技股份有限公司国际分公司",
+   "n": 1
+  },
+  {
+   "company": "成都阿加犀智能科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "国家海洋技术中心",
+   "n": 1
+  },
+  {
+   "company": "河南省视博电子股份有限公司",
+   "n": 2
+  },
+  {
+   "company": "山东宏桥新型材料有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京蓝科芯创科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "清创能拓（北京）新能源科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "拓维信息系统股份有限公司",
+   "n": 2
+  },
+  {
+   "company": "蚂蚁科技集团股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京糖彩科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "多益网络有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国文化传媒集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "钛动科技股份有限公司",
+   "n": 3
+  },
+  {
+   "company": "招商局金融科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "湖北省人才发展集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "中州航空有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "国机数字科技有限公司",
+   "n": 8
+  },
+  {
+   "company": "数字海南有限公司",
+   "n": 1
+  },
+  {
+   "company": "中铝财务有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "北京金融大数据有限公司",
+   "n": 1
+  },
+  {
+   "company": "璞擎电子（上海）有限公司",
+   "n": 1
+  },
+  {
+   "company": "国研大数据研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "国药集团新疆新特药业有限公司",
+   "n": 3
+  },
+  {
+   "company": "中海物业管理有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京市地铁运营有限公司技术创新研究院分公司",
+   "n": 1
+  },
+  {
+   "company": "中数联物流运营有限公司",
+   "n": 3
+  },
+  {
+   "company": "中国数联物流信息有限公司",
+   "n": 7
+  },
+  {
+   "company": "扬州中远海运重工有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国远洋海运集团航运先进技术研究院",
+   "n": 3
+  },
+  {
+   "company": "行云数聚（北京）科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国有色桂林矿产地质研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "中色卢安夏铜业有限公司",
+   "n": 2
+  },
+  {
+   "company": "重庆赛美数智科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "海南海控人才服务有限公司",
+   "n": 1
+  },
+  {
+   "company": "国核自仪系统工程有限公司",
+   "n": 3
+  },
+  {
+   "company": "成都积微物联集团股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海发电设备成套设计研究院有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "海南省征信有限公司",
+   "n": 1
+  },
+  {
+   "company": "通用技术集团健康数字科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "太极计算机股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "河北雄安本真科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "雄安睿哲科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "四川天正信息科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "上饶市睿豪体育科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中化学数智科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "航天天目（重庆）卫星科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "雄安新区未来网络创新研究院（非营利机构）",
+   "n": 1
+  },
+  {
+   "company": "厦门职行力信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京其然科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "联通智网科技股份有限公司",
+   "n": 3
+  },
+  {
+   "company": "中能智新科技产业发展有限公司",
+   "n": 4
+  },
+  {
+   "company": "上海圈讯科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "国投航空科技（北京）有限公司",
+   "n": 1
+  },
+  {
+   "company": "成都精灵云科技有限公司",
+   "n": 10
+  },
+  {
+   "company": "深圳市兴源智能仪表股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "济南职伴互联网有限公司",
+   "n": 1
+  },
+  {
+   "company": "国投人力资源服务有限公司人才服务中心",
+   "n": 2
+  },
+  {
+   "company": "浙江三狮南方新材料有限公司",
+   "n": 1
+  },
+  {
+   "company": "中能建数智(西安)新能科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "国投（北京）科技创新有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京北森云计算股份有限公司（测试）",
+   "n": 3
+  },
+  {
+   "company": "通号信息产业有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京华大智宝电子系统有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京力天世技系统集成有限公司",
+   "n": 2
+  },
+  {
+   "company": "河南省保时安科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "杭州朗旭新能源科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "西安全路通号器材研究有限公司",
+   "n": 2
+  },
+  {
+   "company": "北京经纬恒润科技股份有限公司",
+   "n": 5
+  },
+  {
+   "company": "中储恒科物联网系统有限公司",
+   "n": 2
+  },
+  {
+   "company": "汉威科技集团股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京建筑机械化研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国电子科技集团公司第五十研究所",
+   "n": 2
+  },
+  {
+   "company": "国电投核力电科（无锡）技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京京仪自动化装备技术股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中煤科工开采研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "唐智科技湖南发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "富临精工股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国雄安集团数字城市科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国国际人才开发中心有限公司",
+   "n": 1
+  },
+  {
+   "company": "华中药业股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中建营筑（成都）城市运营管理有限公司",
+   "n": 1
+  },
+  {
+   "company": "中煤科工集团新疆研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "中数联物流咨询研究（上海）有限公司",
+   "n": 1
+  },
+  {
+   "company": "中煤科工集团唐山研究院有限公司",
+   "n": 2
+  },
+  {
+   "company": "云宙时代科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "通号城市轨道交通技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "希迪智驾（成都）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国科学院人才交流开发中心",
+   "n": 1
+  },
+  {
+   "company": "中船西南（重庆）装备研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京德安源环境科技发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "中煤科工智能储装技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "雄安世寰智能科技有限公司",
+   "n": 4
+  },
+  {
+   "company": "海南东方新丝路职业学院有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "山西运城制版集团股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "三亚科城文化发展有限公司",
+   "n": 4
+  },
+  {
+   "company": "武汉网锐检测科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海盟珂教育科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国联通（香港）创新研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司海南省分公司",
+   "n": 2
+  },
+  {
+   "company": "重庆中电自能科技有限公司",
+   "n": 3
+  },
+  {
+   "company": "中移数智科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "四川成都超精密光学创新研究院",
+   "n": 1
+  },
+  {
+   "company": "北京时代民芯科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "云筑信息科技（成都）有限公司",
+   "n": 4
+  },
+  {
+   "company": "湖南小翅科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "成都劳恩普斯科技有限公司",
+   "n": 6
+  },
+  {
+   "company": "北京码博科技有限公司",
+   "n": 5
+  },
+  {
+   "company": "厦门顾诺集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "海南海控数智科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "北京脑科学与类脑研究所",
+   "n": 1
+  },
+  {
+   "company": "中建四局华南建设有限公司",
+   "n": 1
+  },
+  {
+   "company": "中煤科工机器人科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海人工智能研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "厦门美亚中敏科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京怀柔科学城管理委员会",
+   "n": 2
+  },
+  {
+   "company": "中国联通总部",
+   "n": 1
+  },
+  {
+   "company": "中国煤炭科工集团太原研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "成都瓦博科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "安标国家矿用产品安全标志中心有限公司",
+   "n": 1
+  },
+  {
+   "company": "成都玖锦科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京大学长沙计算与数字经济研究院",
+   "n": 1
+  },
+  {
+   "company": "中电信数智科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "神州高铁技术股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "正星科技股份有限公司",
+   "n": 6
+  },
+  {
+   "company": "中国联合网络通信有限公司西藏自治区分公司",
+   "n": 1
+  },
+  {
+   "company": "国新国际（中国）有限公司",
+   "n": 1
+  },
+  {
+   "company": "哈尔滨电机厂有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "中国联合网络通信有限公司安徽省分公司",
+   "n": 1
+  },
+  {
+   "company": "中铝数为（成都）科技有限责任公司",
+   "n": 2
+  },
+  {
+   "company": "北矿机电科技有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "长沙素灵智造科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "京博（海南）新材料有限公司",
+   "n": 1
+  },
+  {
+   "company": "万友汽车投资有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京国际大数据交易有限公司",
+   "n": 1
+  },
+  {
+   "company": "上海上班族数字科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京北方长城光电仪器有限公司武汉分公司",
+   "n": 1
+  },
+  {
+   "company": "北京中科科仪股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "湖北三江航天万峰科技发展有限公司",
+   "n": 1
+  },
+  {
+   "company": "海南狮子鱼深海技术有限公司",
+   "n": 1
+  },
+  {
+   "company": "赛维航电科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "成都壹为新能源汽车有限公司",
+   "n": 1
+  },
+  {
+   "company": "连云港杰瑞电子有限公司",
+   "n": 2
+  },
+  {
+   "company": "中国机械工业集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "中远海运博鳌有限公司博鳌亚洲论坛大酒店",
+   "n": 1
+  },
+  {
+   "company": "中国工业互联网研究院",
+   "n": 2
+  },
+  {
+   "company": "广州虹科电子科技有限公司",
+   "n": 2
+  },
+  {
+   "company": "北京市海讯达通信有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "广东航天七零六信息科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "湖南湘江智能科技创新中心有限公司",
+   "n": 1
+  },
+  {
+   "company": "钢研昊普（苏州）创新中心有限公司",
+   "n": 1
+  },
+  {
+   "company": "北控城市环境服务集团有限公司",
+   "n": 2
+  },
+  {
+   "company": "金航数码科技有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "中国五洲工程设计集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "深圳市金洲精工科技股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "中复神鹰碳纤维西宁有限公司",
+   "n": 1
+  },
+  {
+   "company": "先进计算与关键软件（信创）海河实验室",
+   "n": 1
+  },
+  {
+   "company": "雄安科技产业园开发管理有限公司",
+   "n": 2
+  },
+  {
+   "company": "东莞高伟光学电子有限公司",
+   "n": 1
+  },
+  {
+   "company": "中煤科工集团杭州研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "中衍高新材料（江西）有限公司",
+   "n": 1
+  },
+  {
+   "company": "国电投核力同创（北京）科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "中国化工集团曙光橡胶工业研究设计院有限公司",
+   "n": 1
+  },
+  {
+   "company": "山东崇实智慧能源科技有限公司",
+   "n": 1
+  },
+  {
+   "company": "北方联创通信有限公司",
+   "n": 1
+  },
+  {
+   "company": "内蒙古第一机械集团有限公司",
+   "n": 1
+  },
+  {
+   "company": "北京智慧能源研究院",
+   "n": 1
+  },
+  {
+   "company": "中信重工机械股份有限公司",
+   "n": 1
+  },
+  {
+   "company": "海南省交通规划勘察设计研究院有限公司",
+   "n": 1
+  },
+  {
+   "company": "海南省工程咨询设计集团有限公司",
+   "n": 2
+  },
+  {
+   "company": "北汽福田汽车股份有限公司诸城奥铃汽车厂",
+   "n": 1
+  },
+  {
+   "company": "中国建筑材料科学研究总院有限公司",
+   "n": 1
+  },
+  {
+   "company": "神工坊（安徽）智能科技有限责任公司",
+   "n": 1
+  },
+  {
+   "company": "海南蜈支洲旅游开发股份有限公司三亚蜈支洲岛旅游区",
+   "n": 1
+  }
+ ],
+ "per_job": {
+  "自动驾驶算法工程师": [
+   {
+    "company": "",
+    "n": 30
+   },
+   {
+    "company": "小鹏汽车",
+    "n": 6
+   },
+   {
+    "company": "网易·网易伏羲",
+    "n": 4
+   },
+   {
+    "company": "希迪智驾（成都）科技有限公司",
+    "n": 1
+   }
+  ],
+  "机器人算法工程师": [
+   {
+    "company": "",
+    "n": 27
+   },
+   {
+    "company": "网易·网易伏羲",
+    "n": 2
+   },
+   {
+    "company": "中国东方电气集团有限公司",
+    "n": 1
+   },
+   {
+    "company": "中国科学院人才交流开发中心",
+    "n": 1
+   },
+   {
+    "company": "中船西南（重庆）装备研究院有限公司",
+    "n": 1
+   },
+   {
+    "company": "天府绛溪实验室",
+    "n": 1
+   },
+   {
+    "company": "联通数字科技有限公司",
+    "n": 1
+   }
+  ],
+  "智能硬件开发工程师": [
+   {
+    "company": "NIO蔚来",
+    "n": 12
+   },
+   {
+    "company": "小鹏汽车",
+    "n": 6
+   },
+   {
+    "company": "北控城市环境服务集团有限公司",
+    "n": 1
+   },
+   {
+    "company": "海南海控数智科技有限公司",
+    "n": 1
+   }
+  ],
+  "车联网系统工程师": [
+   {
+    "company": "小鹏汽车",
+    "n": 10
+   },
+   {
+    "company": "NIO蔚来",
+    "n": 9
+   },
+   {
+    "company": "北京经纬恒润科技股份有限公司",
+    "n": 1
+   },
+   {
+    "company": "广东航天七零六信息科技有限公司",
+    "n": 1
+   },
+   {
+    "company": "腾讯",
+    "n": 1
+   }
+  ],
+  "多模态算法工程师": [
+   {
+    "company": "",
+    "n": 11
+   },
+   {
+    "company": "腾讯",
+    "n": 4
+   },
+   {
+    "company": "生数科技",
+    "n": 2
+   },
+   {
+    "company": "网易·网易云音乐",
+    "n": 2
+   },
+   {
+    "company": "NIO蔚来",
+    "n": 1
+   },
+   {
+    "company": "天府绛溪实验室",
+    "n": 1
+   },
+   {
+    "company": "网易·网易伏羲",
+    "n": 1
+   },
+   {
+    "company": "零一万物AGI",
+    "n": 1
+   }
+  ]
+ }
+}

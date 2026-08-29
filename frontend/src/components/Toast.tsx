@@ -11,8 +11,8 @@ export function useToast() { return useContext(ToastCtx) }
 
 const ICON = {
   success: <CheckCircle2 className="w-[18px] h-[18px] text-accent-deep shrink-0" />,
-  error: <XCircle className="w-[18px] h-[18px] text-rose-500 shrink-0" />,
-  info: <Info className="w-[18px] h-[18px] text-sky-500 shrink-0" />,
+  error: <XCircle className="w-[18px] h-[18px] text-danger shrink-0" />,
+  info: <Info className="w-[18px] h-[18px] text-accent shrink-0" />,
 }
 
 export function ToastProvider({ children }: { children: ReactNode }) {
@@ -35,7 +35,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <motion.div key={t.id}
               initial={{ opacity: 0, y: -12, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.96 }} transition={{ duration: 0.2 }}
-              className="pointer-events-auto flex items-center gap-2.5 max-w-full sm:max-w-md rounded-xl bg-white/95 backdrop-blur-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-xl"
+              className="pointer-events-auto flex items-center gap-2.5 max-w-full sm:max-w-md rounded-xl bg-white/95 backdrop-blur-xl border border-line-soft/8 px-4 py-2.5 text-sm text-body-1 shadow-xl"
               style={{ boxShadow: '0 12px 32px -8px rgba(15,23,42,0.18)' }}>
               {ICON[t.kind]}
               <span className="leading-snug">{t.text}</span>

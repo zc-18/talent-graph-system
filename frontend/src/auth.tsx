@@ -12,6 +12,8 @@ type AuthContextValue = {
   register: (body: { username: string; password: string; role?: 'user' | 'hr'; organization_name?: string }) => Promise<AuthUser>
   logout: () => Promise<void>
   can: (...roles: AppRole[]) => boolean
+  /** 用服务端返回的 actor 对象整体替换本地 user（编辑资料保存后调用） */
+  applyUser: (next: AuthUser) => void
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -60,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try { if (user) await api.logout() } finally { await clear() }
     },
     can: (...roles) => !!user && roles.includes(user.role),
+    applyUser: setUser,
   }), [accept, clear, ready, user])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

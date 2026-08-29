@@ -186,20 +186,20 @@ export default function Panorama() {
     <div className="space-y-5">
       <div className="flex items-end justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent ring-1 ring-accent/20 grid place-items-center shadow-glow">
+          <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
             <ITreeStructure className="w-6 h-6 text-accent-deep" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900">新一代信息技术岗位全景图谱</h1>
-            <p className="text-sm text-slate-500">技能点级粒度 · 可按技术栈与置信度切换视图</p>
+            <h1 className="text-2xl font-extrabold text-body-1">新一代信息技术岗位全景图谱</h1>
+            <p className="text-sm text-body-2">技能点级粒度 · 可按技术栈与置信度切换视图</p>
           </div>
         </div>
         {/* 窄屏：2 列网格，控件铺满栅格；sm 起切回原来的定宽 flex 排布。
             纯断点驱动，不做 JS 宽度判断。 */}
         <div className="grid w-full grid-cols-2 items-center gap-2 sm:flex sm:w-auto sm:flex-wrap">
-          <div className="col-span-2 flex rounded-xl border border-slate-200 bg-white/80 p-1" aria-label="图谱视图层级">
+          <div className="col-span-2 flex rounded-xl border border-line-soft/8 bg-white/80 p-1" aria-label="图谱视图层级">
             {([['job', '岗位'], ['capability', '能力簇'], ['skill', '技能点']] as const).map(([value, label]) => (
-              <button key={value} onClick={() => setMode(value)} className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition sm:flex-none ${mode === value ? 'bg-slate-900 text-white' : 'text-slate-500 hover:bg-slate-100'}`}>{label}</button>
+              <button key={value} onClick={() => setMode(value)} className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition sm:flex-none ${mode === value ? 'bg-grad-accent text-white' : 'text-body-2 hover:bg-brand-ink/8'}`}>{label}</button>
             ))}
           </div>
           <Select value={cat} onChange={setCat} options={cats} className="w-full sm:w-40"
@@ -210,7 +210,7 @@ export default function Panorama() {
           <Select value={recruitmentType} onChange={setRecruitmentType} className="col-span-2 w-full sm:w-28" align="right" label="招聘类型" options={[
             { value: '全部', label: '校招/社招' }, { value: 'campus', label: '校招' }, { value: 'social', label: '社招' }, { value: 'mixed', label: '混合' },
           ]} />
-          <div className="col-span-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-white/80 px-3.5 py-2.5 text-sm text-slate-600 sm:col-span-1">
+          <div className="col-span-2 flex items-center gap-2 rounded-xl border border-line-soft/8 bg-white/80 px-3.5 py-2.5 text-sm text-body-2 sm:col-span-1">
             <span className="whitespace-nowrap">置信≥{Math.round(minConf * 100)}%</span>
             <input type="range" aria-label="最低置信度" min={0} max={0.9} step={0.05} value={minConf}
               onChange={e => setMinConf(parseFloat(e.target.value))} className="accent-accent w-full sm:w-24" />
@@ -235,11 +235,11 @@ export default function Panorama() {
               <div className="relative h-[360px] touch-pan-y sm:h-[520px] lg:h-[560px] xl:h-[620px]">
                 <ReactECharts ref={chartRef} option={option} style={{ height: '100%' }} onEvents={onEvents}
                   notMerge lazyUpdate />
-                <div className="absolute bottom-2 right-2 z-20 flex flex-col gap-1.5 rounded-xl border border-slate-200 bg-white/85 p-1 shadow-sm backdrop-blur">
+                <div className="absolute bottom-2 right-2 z-20 flex flex-col gap-1.5 rounded-xl border border-line-soft/8 bg-white/85 p-1 shadow-sm backdrop-blur">
                   <button onClick={() => zoomBy(1.3)} aria-label="放大图谱"
-                    className="grid h-8 w-8 place-items-center rounded-lg text-slate-600 transition hover:bg-slate-100 active:scale-95"><Plus className="h-4 w-4" /></button>
+                    className="grid h-8 w-8 place-items-center rounded-lg text-body-2 transition hover:bg-brand-ink/8 active:scale-95"><Plus className="h-4 w-4" /></button>
                   <button onClick={() => zoomBy(1 / 1.3)} aria-label="缩小图谱"
-                    className="grid h-8 w-8 place-items-center rounded-lg text-slate-600 transition hover:bg-slate-100 active:scale-95"><Minus className="h-4 w-4" /></button>
+                    className="grid h-8 w-8 place-items-center rounded-lg text-body-2 transition hover:bg-brand-ink/8 active:scale-95"><Minus className="h-4 w-4" /></button>
                 </div>
               </div>
             )}
@@ -257,9 +257,9 @@ export default function Panorama() {
 
         <Card className="p-5">
           {sel ? <NodePanel node={sel} /> : (
-            <div className="text-slate-500 text-sm flex flex-col items-center justify-center h-full text-center gap-3 py-10">
-              <Maximize2 className="w-7 h-7 text-slate-600" />
-              点击图谱中的<span className="text-slate-700 font-semibold">岗位/技能</span>节点查看详情<br />
+            <div className="text-body-2 text-sm flex flex-col items-center justify-center h-full text-center gap-3 py-10">
+              <Maximize2 className="w-7 h-7 text-body-2" />
+              点击图谱中的<span className="text-body-1 font-semibold">岗位/技能</span>节点查看详情<br />
               可拖拽、缩放、聚焦邻接关系
             </div>
           )}
@@ -284,25 +284,25 @@ function NodePanel({ node }: { node: any }) {
 
   if (node.type === 'capability' || node.type === 'cluster') {
     return (
-      <div className="space-y-3"><Badge tone="amber">能力簇</Badge><div className="text-xl font-extrabold text-slate-900">{node.name}</div><div className="text-xs text-slate-500">所属领域：{node.category || '通用'}</div>{node.skills?.length > 0 && <><div className="label mt-3">细分技能点</div><div className="flex flex-wrap gap-1.5">{node.skills.map((skill: any) => <Badge key={typeof skill === 'string' ? skill : skill.name} tone="slate">{typeof skill === 'string' ? skill : skill.name}</Badge>)}</div></>}</div>
+      <div className="space-y-3"><Badge tone="amber">能力簇</Badge><div className="text-xl font-extrabold text-body-1">{node.name}</div><div className="text-xs text-body-2">所属领域：{node.category || '通用'}</div>{node.skills?.length > 0 && <><div className="label mt-3">细分技能点</div><div className="flex flex-wrap gap-1.5">{node.skills.map((skill: any) => <Badge key={typeof skill === 'string' ? skill : skill.name} tone="slate">{typeof skill === 'string' ? skill : skill.name}</Badge>)}</div></>}</div>
     )
   }
   if (node.type === 'skill') {
     return (
       <div className="space-y-3">
         <Badge tone="cyan">技能点</Badge>
-        <div className="text-xl font-extrabold text-slate-900">{node.name}</div>
-        <div className="text-xs text-slate-500">所属技术栈：{node.category}</div>
+        <div className="text-xl font-extrabold text-body-1">{node.name}</div>
+        <div className="text-xs text-body-2">所属技术栈：{node.category}</div>
         <div className="label mt-3">关联岗位</div>
         <div className="space-y-1.5 max-h-72 overflow-auto">
           {detail?.related_jobs?.map((j: any) => (
-            <div key={j.job_id} className="flex justify-between text-sm bg-sky-50/70 rounded-lg px-2.5 py-1.5">
-              <span className="text-slate-700">{j.name}</span>
+            <div key={j.job_id} className="flex justify-between text-sm bg-accent/6 rounded-lg px-2.5 py-1.5">
+              <span className="text-body-1">{j.name}</span>
               <Badge tone={j.importance === 'required' ? 'indigo' : 'slate'}>
                 {j.importance === 'required' ? '必备' : '加分'}
               </Badge>
             </div>
-          )) || <div className="text-xs text-slate-400">加载中…</div>}
+          )) || <div className="text-xs text-body-3">加载中…</div>}
         </div>
       </div>
     )
@@ -312,10 +312,10 @@ function NodePanel({ node }: { node: any }) {
       <div className="flex items-center gap-2">
         <Badge tone="indigo">岗位</Badge>{node.is_new && <Badge tone="amber">新兴</Badge>}
       </div>
-      <div className="text-xl font-extrabold text-slate-900">{node.name}</div>
+      <div className="text-xl font-extrabold text-body-1">{node.name}</div>
       {detail && (
         <>
-          <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">{detail.summary}</p>
+          <p className="text-xs text-body-2 leading-relaxed line-clamp-3">{detail.summary}</p>
           <div className="label mt-2">必备技能</div>
           <div className="flex flex-wrap gap-1.5">
             {detail.required_skills?.slice(0, 12).map((s: any) => (

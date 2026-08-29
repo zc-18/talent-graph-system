@@ -65,8 +65,8 @@ export default function History() {
     <div className="space-y-5">
       <div className="flex items-end justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-grad-accent ring-1 ring-accent/20 grid place-items-center shadow-glow"><CalendarClock className="w-5 h-5 text-accent-deep" /></div>
-          <div><h1 className="text-2xl font-extrabold text-slate-900">个人匹配历史</h1><p className="text-sm text-slate-500">固定引用当时的岗位版本，可重新打开结果与学习路径</p></div>
+          <div className="w-11 h-11 rounded-xl bg-grad-accent grid place-items-center shadow-glow"><CalendarClock className="w-5 h-5 text-white" /></div>
+          <div><h1 className="text-2xl font-extrabold text-body-1">个人匹配历史</h1><p className="text-sm text-body-2">固定引用当时的岗位版本，可重新打开结果与学习路径</p></div>
         </div>
         <Link to="/match" className="btn-primary"><Target className="w-4 h-4" /> 新建匹配</Link>
       </div>
@@ -77,10 +77,10 @@ export default function History() {
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_420px] gap-4 lg:gap-5">
           <div className="space-y-3">
             {items.map(item => (
-              <button key={item.id} onClick={() => open(item)} className="w-full text-left rounded-xl border border-slate-200 bg-white/75 p-4 hover:border-sky-300 hover:bg-white transition">
+              <button key={item.id} onClick={() => open(item)} className="w-full text-left rounded-xl border border-line-soft/8 bg-white/75 p-4 hover:border-accent/40 hover:bg-white transition">
                 <div className="flex items-start justify-between gap-3">
-                  <div><div className="font-bold text-slate-800">{item.job_name}</div><div className="text-xs text-slate-400 mt-1">{new Date(item.created_at).toLocaleString()} · 岗位版本 v{item.job_version}</div></div>
-                  <div className="flex shrink-0 items-center gap-2 sm:gap-3"><span className="text-xl font-extrabold text-slate-900 tabular-nums sm:text-2xl">{Math.round(item.overall_score)}<span className="ml-0.5 text-xs font-bold text-slate-400">分</span></span><ArrowRight className="w-4 h-4 text-slate-300" /></div>
+                  <div><div className="font-bold text-body-1">{item.job_name}</div><div className="text-xs text-body-3 mt-1">{new Date(item.created_at).toLocaleString()} · 岗位版本 v{item.job_version}</div></div>
+                  <div className="flex shrink-0 items-center gap-2 sm:gap-3"><span className="text-xl font-extrabold text-body-1 tabular-nums sm:text-2xl">{Math.round(item.overall_score)}<span className="ml-0.5 text-xs font-bold text-body-3">分</span></span><ArrowRight className="w-4 h-4 text-body-3" /></div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 mt-3"><Badge tone="cyan">{item.level || '匹配完成'}</Badge><Badge tone={gapSummary(item).tone}>{gapSummary(item).text}</Badge></div>
               </button>
@@ -89,8 +89,8 @@ export default function History() {
           <Card className="p-5 lg:sticky lg:top-6 h-fit">
             {!selected ? <EmptyState text="选择一条历史查看快照" /> : (
               <div className="space-y-4">
-                <div className="flex items-start justify-between gap-3"><div><div className="label">历史快照</div><h2 className="font-extrabold text-xl text-slate-900 mt-1">{selected.job_name || selected.job?.name}</h2></div><Badge tone="cyan">v{selected.job_version || selected.job?.version}</Badge></div>
-                <div className="rounded-xl bg-sky-50/70 p-4"><div className="text-xs text-slate-500">当时综合匹配度</div><div className="mt-1 text-3xl font-extrabold text-slate-900 tabular-nums">{Math.round(selected.overall_score ?? selected.result?.overall_score ?? 0)}<span className="ml-1 text-base font-bold text-slate-400">分</span></div><div className="mt-0.5 text-[11px] text-slate-400">百分制 · 取自当时的岗位版本快照</div></div>
+                <div className="flex items-start justify-between gap-3"><div><div className="label">历史快照</div><h2 className="font-extrabold text-xl text-body-1 mt-1">{selected.job_name || selected.job?.name}</h2></div><Badge tone="cyan">v{selected.job_version || selected.job?.version}</Badge></div>
+                <div className="rounded-xl bg-accent/6 p-4"><div className="text-xs text-body-2">当时综合匹配度</div><div className="mt-1 text-3xl font-extrabold text-body-1 tabular-nums">{Math.round(selected.overall_score ?? selected.result?.overall_score ?? 0)}<span className="ml-1 text-base font-bold text-body-3">分</span></div><div className="mt-0.5 text-[11px] text-body-3">百分制 · 取自当时的岗位版本快照</div></div>
                 {(() => {
                   const gaps = selected.top_gaps ?? selected.result?.missing_required
                   const list = Array.isArray(gaps) ? gaps : null
@@ -102,8 +102,8 @@ export default function History() {
                   })
                   return (
                     <div><div className="label mb-2">Top 关键缺口</div>{!list || list.length === 0
-                      ? <div className={`rounded-xl px-3.5 py-3 text-sm leading-relaxed ${summary.tone === 'emerald' ? 'bg-accent/8 text-accent-deep' : summary.tone === 'cyan' ? 'bg-accent/8 text-accent-deep' : 'bg-slate-50 text-slate-500'}`}>{summary.tone === 'emerald' ? '当时该岗位的必备能力已全部覆盖，没有关键缺口。' : summary.tone === 'cyan' ? '这条记录的快照没有列出必备缺口，但也没有留下覆盖计数，无法据此判定为零缺口。' : '这条记录的快照里没有缺口明细，无法判断是「一项不缺」还是「未记录」。'}</div>
-                      : <div className="space-y-2">{list.slice(0, 10).map((gap: any, index: number) => <div key={gap.name || gap.skill || index} className="flex justify-between gap-3 text-sm border-b border-slate-100 pb-2"><span className="min-w-0 break-words text-slate-700">{gap.name || gap.skill}</span><Badge tone={gap.importance === 'required' ? 'rose' : 'amber'}>{gap.priority || '待提升'}</Badge></div>)}</div>}</div>
+                      ? <div className={`rounded-xl px-3.5 py-3 text-sm leading-relaxed ${summary.tone === 'emerald' ? 'bg-accent/8 text-accent-deep' : summary.tone === 'cyan' ? 'bg-accent/8 text-accent-deep' : 'bg-surface-muted text-body-2'}`}>{summary.tone === 'emerald' ? '当时该岗位的必备能力已全部覆盖，没有关键缺口。' : summary.tone === 'cyan' ? '这条记录的快照没有列出必备缺口，但也没有留下覆盖计数，无法据此判定为零缺口。' : '这条记录的快照里没有缺口明细，无法判断是「一项不缺」还是「未记录」。'}</div>
+                      : <div className="space-y-2">{list.slice(0, 10).map((gap: any, index: number) => <div key={gap.name || gap.skill || index} className="flex justify-between gap-3 text-sm border-b border-line-soft/6 pb-2"><span className="min-w-0 break-words text-body-1">{gap.name || gap.skill}</span><Badge tone={gap.importance === 'required' ? 'rose' : 'amber'}>{gap.priority || '待提升'}</Badge></div>)}</div>}</div>
                   )
                 })()}
                 <Link to="/match" state={{ jobId: selected.job_id || selected.job?.id }} className="btn-ghost w-full justify-center"><RotateCcw className="w-4 h-4" /> 按此岗位再次匹配</Link>

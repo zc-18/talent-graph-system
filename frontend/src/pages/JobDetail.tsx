@@ -20,9 +20,9 @@ function FineChips({ items }: { items: TSkill[] }) {
   return (
     <>
       {items.map((f: TSkill) => (
-        <span key={f.skill_id} className="chip border bg-white/80 border-sky-200 text-slate-600 text-[11px]"
+        <span key={f.skill_id} className="chip border bg-white/80 border-accent/25 text-body-2 text-[11px]"
           title={`置信度 ${Math.round(f.confidence * 100)}%`}>
-          {f.name} <span className="text-slate-400">·{Math.round(f.confidence * 100)}%</span>
+          {f.name} <span className="text-body-3">·{Math.round(f.confidence * 100)}%</span>
         </span>
       ))}
     </>
@@ -37,18 +37,18 @@ function CandidateChips({ items }: { items: TSkill[] }) {
   const [open, setOpen] = useState(false)
   if (!items.length) return null
   return (
-    <div className="mt-2 pt-2 border-t border-slate-100">
+    <div className="mt-2 pt-2 border-t border-line-soft/6">
       <button onClick={() => setOpen(o => !o)}
-        className="text-[11px] text-slate-400 hover:text-slate-600 transition inline-flex items-center gap-1">
+        className="text-[11px] text-body-3 hover:text-body-2 transition inline-flex items-center gap-1">
         <ChevronRight className={`w-3 h-3 transition-transform ${open ? 'rotate-90' : ''}`} />
         候选技能点 {items.length} 项（单来源，待交叉验证）
       </button>
       {open && (
         <div className="mt-2 flex flex-wrap gap-1.5">
           {items.map((f: TSkill) => (
-            <span key={f.skill_id} className="chip border border-dashed bg-slate-50/80 border-slate-300 text-slate-500 text-[11px]"
+            <span key={f.skill_id} className="chip border border-dashed bg-surface-muted border-line-soft/14 text-body-2 text-[11px]"
               title={`置信度 ${Math.round(f.confidence * 100)}% · 仅 ${f.source_count} 个来源`}>
-              {f.name} <span className="text-slate-400">·{Math.round(f.confidence * 100)}%</span>
+              {f.name} <span className="text-body-3">·{Math.round(f.confidence * 100)}%</span>
             </span>
           ))}
         </div>
@@ -65,16 +65,16 @@ function DeprecatedChips({ items }: { items: TSkill[] }) {
   const [open, setOpen] = useState(false)
   if (!items.length) return null
   return (
-    <div className="mt-2 pt-2 border-t border-slate-100">
+    <div className="mt-2 pt-2 border-t border-line-soft/6">
       <button onClick={() => setOpen(o => !o)}
-        className="text-[11px] text-rose-300 hover:text-rose-500 transition inline-flex items-center gap-1">
+        className="text-[11px] text-danger/60 hover:text-danger transition inline-flex items-center gap-1">
         <ChevronRight className={`w-3 h-3 transition-transform ${open ? 'rotate-90' : ''}`} />
         已淘汰 {items.length} 项（最新窗口 JD 中未再出现）
       </button>
       {open && (
         <div className="mt-2 flex flex-wrap gap-1.5">
           {items.map((f: TSkill) => (
-            <span key={f.skill_id} className="chip border border-dashed bg-rose-50/60 border-rose-200 text-rose-400 line-through text-[11px]"
+            <span key={f.skill_id} className="chip border border-dashed bg-danger-weak/60 border-danger/25 text-danger/80 line-through text-[11px]"
               title="经演化判定需求消退，保留历史可回溯">
               {f.name}
             </span>
@@ -87,27 +87,27 @@ function DeprecatedChips({ items }: { items: TSkill[] }) {
 
 function SkillRow({ s, fineChildren = [], fineCandidates = [], fineDeprecated = [] }: any) {
   return (
-    <div className="rounded-xl bg-sky-50/70 hover:bg-sky-100/80 px-3.5 py-2.5 transition group">
+    <div className="rounded-xl bg-accent/6 hover:bg-accent/12 px-3.5 py-2.5 transition group">
       {/* 首行：技能名 + 分类/级别；操作按钮固定右侧。徽章不换行，窄屏截断而非竖排 */}
       <div className="flex items-center gap-2 min-w-0">
-        <span className="text-sm font-medium text-slate-800 shrink-0">{s.name}</span>
-        <span className="chip border bg-slate-100 text-slate-600 border-slate-200 whitespace-nowrap truncate min-w-0">{s.category}</span>
-        <span className="text-[11px] text-slate-400 shrink-0 hidden sm:inline">{SKILL_LEVEL[s.level_required] || ''}</span>
+        <span className="text-sm font-medium text-body-1 shrink-0">{s.name}</span>
+        <span className="chip border bg-brand-ink/8 text-body-2 border-line-soft/8 whitespace-nowrap truncate min-w-0">{s.category}</span>
+        <span className="text-[11px] text-body-3 shrink-0 hidden sm:inline">{SKILL_LEVEL[s.level_required] || ''}</span>
         <span className="flex-1" />
       </div>
       {/* 次行：权重条 + 来源数/置信度 */}
       <div className="mt-1.5 flex items-center gap-2.5">
-        <div className="flex-1 h-1.5 rounded-full bg-sky-50/80 overflow-hidden">
+        <div className="flex-1 h-1.5 rounded-full bg-accent/8 overflow-hidden">
           <div className="h-full rounded-full bg-grad-accent" style={{ width: `${Math.round(s.weight * 100)}%` }} />
         </div>
-        <span className="text-[11px] text-slate-400 shrink-0 sm:hidden">{SKILL_LEVEL[s.level_required] || ''}</span>
-        <span className="text-[11px] text-slate-400 shrink-0" title="独立来源数">×{s.source_count}</span>
+        <span className="text-[11px] text-body-3 shrink-0 sm:hidden">{SKILL_LEVEL[s.level_required] || ''}</span>
+        <span className="text-[11px] text-body-3 shrink-0" title="独立来源数">×{s.source_count}</span>
         <span className="shrink-0"><ConfidencePill value={s.confidence} factors={s.factors} /></span>
       </div>
       {/* 细分技能点：已通过交叉验证的挂父项下直接展示 */}
       {fineChildren.length > 0 && (
-        <div className="mt-2 pt-2 border-t border-sky-100/80 flex items-center gap-1.5 flex-wrap">
-          <span className="text-[10px] text-slate-400 shrink-0">细分技能点</span>
+        <div className="mt-2 pt-2 border-t border-accent/12 flex items-center gap-1.5 flex-wrap">
+          <span className="text-[10px] text-body-3 shrink-0">细分技能点</span>
           <FineChips items={fineChildren} />
         </div>
       )}
@@ -138,7 +138,7 @@ function EmptyHistory({ job, authority, eraCounts, earliestJd }: {
 
   if (!isNew) {
     return (
-      <div className="text-center py-12 text-slate-400 text-sm">
+      <div className="text-center py-12 text-body-3 text-sm">
         暂无演化记录。可在「岗位能力演化」页用新 JD 驱动该岗位能力更新。
       </div>
     )
@@ -162,20 +162,20 @@ function EmptyHistory({ job, authority, eraCounts, earliestJd }: {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl bg-amber-50/70 border border-amber-100 px-4 py-3">
+      <div className="rounded-xl bg-warn-weak/70 border border-warn/20 px-4 py-3">
         <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-          <span className="text-sm font-medium text-slate-800">该岗位尚无跨时间切片的演化记录</span>
+          <Sparkles className="w-4 h-4 text-warn shrink-0" />
+          <span className="text-sm font-medium text-body-1">该岗位尚无跨时间切片的演化记录</span>
         </div>
-        <p className="text-xs text-slate-500 leading-relaxed">
+        <p className="text-xs text-body-2 leading-relaxed">
           {eraCounts
             ? <>本岗位在 2018 年（<b>{eraCounts['2018'] ?? 0}</b> 条）与 2024 年（<b>{eraCounts['2024'] ?? 0}</b> 条）
-              历史语料切片中共检索到 <b className="text-amber-600">{hist}</b> 条 JD
+              历史语料切片中共检索到 <b className="text-warn">{hist}</b> 条 JD
               {hist === 0 && '——历史语料里根本不存在这个岗位'}，
               因此只有基于 2026 年现网语料的 v1 基线，没有可比对的历史版本。</>
             : <>本岗位为权威依据驱动的新兴岗位，历史语料切片中无对应 JD，故只有 v1 基线。</>}
           <br />
-          <span className="text-slate-400">
+          <span className="text-body-3">
             这不是缺失，而是「新岗位涌现」最直接的数据证据：不是我们宣称它新，
             而是历史招聘语料里检索不到它。系统不会为了填满时间线而生成没有语料依据的演化记录。
           </span>
@@ -185,16 +185,16 @@ function EmptyHistory({ job, authority, eraCounts, earliestJd }: {
         <div>
           <div className="label mb-3">岗位溯源时间线</div>
           <div className="relative pl-6">
-            <div className="absolute left-2 top-1 bottom-1 w-px bg-slate-200" />
+            <div className="absolute left-2 top-1 bottom-1 w-px bg-brand-ink/12" />
             {steps.map(s => (
               <div key={s.k} className="relative pb-5">
                 <span className={`absolute -left-[18px] top-1 w-3 h-3 rounded-full ring-4 ring-white ${
-                  s.tone === 'indigo' ? 'bg-indigo-400' : s.tone === 'violet' ? 'bg-violet-400' : 'bg-accent'}`} />
+                  s.tone === 'indigo' ? 'bg-accent-violet/70' : s.tone === 'violet' ? 'bg-accent-violet/70' : 'bg-accent'}`} />
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-semibold text-slate-800">{s.title}</span>
-                  <span className="text-[11px] text-slate-400">{s.date}</span>
+                  <span className="text-sm font-semibold text-body-1">{s.title}</span>
+                  <span className="text-[11px] text-body-3">{s.date}</span>
                 </div>
-                <p className="text-xs text-slate-500 mt-1">{s.desc}</p>
+                <p className="text-xs text-body-2 mt-1">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -280,7 +280,7 @@ export default function JobDetail() {
 
   return (
     <div ref={revealRef} className="space-y-5">
-      <button onClick={() => nav(-1)} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700">
+      <button onClick={() => nav(-1)} className="flex items-center gap-1.5 text-sm text-body-2 hover:text-body-1">
         <ArrowLeft className="w-4 h-4" /> 返回
       </button>
 
@@ -299,15 +299,15 @@ export default function JobDetail() {
               {emergence === 'revived' && <Badge tone="emerald"><Sparkles className="w-3 h-3 inline -mt-0.5 mr-0.5" />复兴</Badge>}
               <Badge tone="cyan">v{job.version}</Badge>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{job.name}</h1>
-            <p className="text-sm text-slate-500 mt-2 max-w-3xl leading-relaxed">{job.summary}</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-body-1">{job.name}</h1>
+            <p className="text-sm text-body-2 mt-2 max-w-3xl leading-relaxed">{job.summary}</p>
           </div>
           <div className="w-full text-left sm:w-auto sm:text-right sm:shrink-0">
-            <div className="text-xs text-slate-500 mb-1">岗位定义置信度</div>
+            <div className="text-xs text-body-2 mb-1">岗位定义置信度</div>
             {job.confidence_factors
               ? <ConfidenceExplain value={job.confidence} factors={job.confidence_factors}><span className="text-3xl font-extrabold gradient-text">{Math.round(job.confidence * 100)}%</span></ConfidenceExplain>
               : <div className="text-3xl font-extrabold gradient-text">{Math.round(job.confidence * 100)}%</div>}
-            <div className="text-[11px] text-slate-400 mt-1">{job.evidence_count} 条证据支撑</div>
+            <div className="text-[11px] text-body-3 mt-1">{job.evidence_count} 条证据支撑</div>
             <div className="flex flex-col sm:flex-row gap-2 mt-3">
               <button onClick={() => nav('/match', { state: { jobId } })} className="btn-primary justify-center"><ITarget className="w-4 h-4" /> 匹配</button>
               <button onClick={() => nav('/panorama', { state: { jobId } })} className="btn-ghost justify-center"><Network className="w-4 h-4" /> 图谱定位</button>
@@ -315,9 +315,9 @@ export default function JobDetail() {
             </div>
           </div>
         </div>
-        <div className="relative mt-5 grid gap-4 border-t border-slate-200/80 pt-4 md:grid-cols-[minmax(0,0.85fr)_minmax(300px,1.15fr)]">
+        <div className="relative mt-5 grid gap-4 border-t border-line-soft/8 pt-4 md:grid-cols-[minmax(0,0.85fr)_minmax(300px,1.15fr)]">
           <div className="min-w-0">
-            <div className="mb-2 text-[11px] font-semibold text-slate-500">置信度数据状态</div>
+            <div className="mb-2 text-[11px] font-semibold text-body-2">置信度数据状态</div>
             <ConfidenceMeta asOf={job.confidence_as_of} delta={job.confidence_delta} />
           </div>
           <ConfidenceTrend items={confidenceHistory} />
@@ -329,7 +329,7 @@ export default function JobDetail() {
           ([k, label, Icon]: any) => (
             <button key={k} onClick={() => setTab(k)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
-                tab === k ? 'bg-grad-accent ring-1 ring-accent/20 text-accent-deep shadow-glow' : 'btn-ghost'}`}>
+                tab === k ? 'bg-grad-accent text-white shadow-glow' : 'btn-ghost'}`}>
               <Icon className="w-4 h-4" /> {label}
             </button>
           ))}
@@ -347,16 +347,16 @@ export default function JobDetail() {
             {contract && (
               <Card className="p-5">
                 <div className="flex items-start justify-between gap-3 mb-4">
-                  <div><div className="label">岗位核心契约</div><div className="text-xs text-slate-500 mt-1">{contract.track || '通用'} 轨道 · {LEVEL_LABEL[contract.seniority] || contract.seniority || '级别未指定'} · {contract.recruitment_type === 'campus' ? '校招' : contract.recruitment_type === 'social' ? '社招' : '校社招混合'}</div></div>
+                  <div><div className="label">岗位核心契约</div><div className="text-xs text-body-2 mt-1">{contract.track || '通用'} 轨道 · {LEVEL_LABEL[contract.seniority] || contract.seniority || '级别未指定'} · {contract.recruitment_type === 'campus' ? '校招' : contract.recruitment_type === 'social' ? '社招' : '校社招混合'}</div></div>
                   <Badge tone={contract.status === 'evidence_insufficient' ? 'amber' : 'emerald'}>{contract.status === 'evidence_insufficient' ? '证据待补' : `v${contract.version} 当前版本`}</Badge>
                 </div>
                 <div className="space-y-2">{contract.clusters.map(cluster => (
-                  <details key={`${cluster.importance}-${cluster.name}`} className="group rounded-xl border border-slate-200 bg-white/65 px-3.5 py-3">
-                    <summary className="list-none cursor-pointer flex items-center gap-3"><span className={`w-2 h-2 rounded-full ${cluster.importance === 'required' ? 'bg-indigo-500' : 'bg-amber-400'}`} /><span className="font-semibold text-sm text-slate-800 flex-1">{cluster.name}</span><Badge tone={cluster.importance === 'required' ? 'indigo' : 'amber'}>{cluster.importance === 'required' ? '必备' : '加分'}</Badge><ConfidencePill value={cluster.confidence} /><ChevronRight className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-90" /></summary>
-                    <div className="mt-3 pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">{cluster.skills.map((skill, index) => {
+                  <details key={`${cluster.importance}-${cluster.name}`} className="group rounded-xl border border-line-soft/8 bg-white/65 px-3.5 py-3">
+                    <summary className="list-none cursor-pointer flex items-center gap-3"><span className={`w-2 h-2 rounded-full ${cluster.importance === 'required' ? 'bg-accent-violet' : 'bg-warn/80'}`} /><span className="font-semibold text-sm text-body-1 flex-1">{cluster.name}</span><Badge tone={cluster.importance === 'required' ? 'indigo' : 'amber'}>{cluster.importance === 'required' ? '必备' : '加分'}</Badge><ConfidencePill value={cluster.confidence} /><ChevronRight className="w-4 h-4 text-body-3 transition-transform group-open:rotate-90" /></summary>
+                    <div className="mt-3 pt-3 border-t border-line-soft/6 flex flex-wrap gap-1.5">{cluster.skills.map((skill, index) => {
                       const name = typeof skill === 'string' ? skill : skill.name
                       return <Badge key={`${name}-${index}`} tone="slate">{name}</Badge>
-                    })}{cluster.employer_count != null && <span className="w-full text-[11px] text-slate-400 mt-1">{cluster.employer_count} 个独立雇主支持 · 覆盖率 {Math.round((cluster.support_ratio || 0) * 100)}%</span>}</div>
+                    })}{cluster.employer_count != null && <span className="w-full text-[11px] text-body-3 mt-1">{cluster.employer_count} 个独立雇主支持 · 覆盖率 {Math.round((cluster.support_ratio || 0) * 100)}%</span>}</div>
                   </details>
                 ))}</div>
               </Card>
@@ -374,10 +374,10 @@ export default function JobDetail() {
                 ))}
               </div>
               {(orphanFine.length > 0 || orphanCand.length > 0 || orphanDep.length > 0) && (
-                <div className="mt-3 pt-3 border-t border-slate-100">
+                <div className="mt-3 pt-3 border-t border-line-soft/6">
                   {orphanFine.length > 0 && (
                     <>
-                      <div className="text-[11px] text-slate-400 mb-1.5">其他细分技能点</div>
+                      <div className="text-[11px] text-body-3 mb-1.5">其他细分技能点</div>
                       <div className="flex flex-wrap gap-1.5"><FineChips items={orphanFine} /></div>
                     </>
                   )}
@@ -392,8 +392,8 @@ export default function JobDetail() {
                 <details open={!contract}><summary className="list-none cursor-pointer label flex items-center gap-2">完整技能与证据 · 加分 ({coarseBonus.length}) <ChevronRight className="w-4 h-4 ml-auto" /></summary>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {coarseBonus.map(s => (
-                    <span key={s.skill_id} className="chip border bg-white/70 border-slate-200 text-slate-600">
-                      {s.name} <span className="text-slate-400">·{Math.round(s.confidence * 100)}%</span>
+                    <span key={s.skill_id} className="chip border bg-white/70 border-line-soft/8 text-body-2">
+                      {s.name} <span className="text-body-3">·{Math.round(s.confidence * 100)}%</span>
                     </span>
                   ))}
                 </div>
@@ -404,10 +404,10 @@ export default function JobDetail() {
           {/* 右列高度通常小于左列：sticky 跟随滚动，避免滚到底部时右侧大片留白 */}
           <div className="space-y-5 lg:sticky lg:top-6 self-start">
             <Card className="p-5">
-              <div className="label mb-3 flex items-center gap-2"><IBriefcase className="w-4 h-4 text-violet-600" /> 核心职责</div>
+              <div className="label mb-3 flex items-center gap-2"><IBriefcase className="w-4 h-4 text-accent-violet" /> 核心职责</div>
               <ul className="space-y-2">
                 {job.core_responsibilities.map((r, i) => (
-                  <li key={i} className="text-sm text-slate-600 flex gap-2">
+                  <li key={i} className="text-sm text-body-2 flex gap-2">
                     <span className="text-accent font-bold">{i + 1}</span>{r}
                   </li>
                 ))}
@@ -422,26 +422,26 @@ export default function JobDetail() {
             {authority.length > 0 && (
               <Card className="p-5">
                 <div className="label mb-3 flex items-center gap-2">
-                  <Landmark className="w-4 h-4 text-indigo-600" /> 权威依据
+                  <Landmark className="w-4 h-4 text-accent-deep" /> 权威依据
                 </div>
                 <div className="space-y-2.5">
                   {authority.map((a, i) => (
-                    <div key={i} className="rounded-xl bg-sky-50/70 px-3 py-2.5">
+                    <div key={i} className="rounded-xl bg-accent/6 px-3 py-2.5">
                       <div className="flex items-center gap-2 flex-wrap">
                         <Badge tone={a.kind === 'policy' ? 'indigo' : 'cyan'}>
                           {a.kind === 'policy' ? '部委文件' : '机构报告'}</Badge>
-                        <span className="text-[11px] text-slate-400">{a.issuer}{a.publish_date ? ` · ${String(a.publish_date).slice(0, 10)}` : ''}</span>
+                        <span className="text-[11px] text-body-3">{a.issuer}{a.publish_date ? ` · ${String(a.publish_date).slice(0, 10)}` : ''}</span>
                       </div>
                       {a.url ? (
                         <a href={a.url} target="_blank" rel="noreferrer"
-                          className="mt-1 flex items-start gap-1 text-sm font-medium text-slate-800 hover:text-accent">
+                          className="mt-1 flex items-start gap-1 text-sm font-medium text-body-1 hover:text-accent">
                           <span className="min-w-0">{a.title}</span>
-                          <ExternalLink className="w-3 h-3 text-slate-400 shrink-0 mt-1" />
+                          <ExternalLink className="w-3 h-3 text-body-3 shrink-0 mt-1" />
                         </a>
                       ) : (
-                        <div className="mt-1 text-sm font-medium text-slate-800">{a.title}</div>
+                        <div className="mt-1 text-sm font-medium text-body-1">{a.title}</div>
                       )}
-                      {a.excerpt && <p className="text-[11px] text-slate-500 mt-1 line-clamp-3">{a.excerpt}</p>}
+                      {a.excerpt && <p className="text-[11px] text-body-2 mt-1 line-clamp-3">{a.excerpt}</p>}
                     </div>
                   ))}
                 </div>
@@ -453,7 +453,7 @@ export default function JobDetail() {
 
       {tab === 'evidence' && (
         <Card className="p-5">
-          <div className="text-sm text-slate-500 mb-4 flex items-center gap-2">
+          <div className="text-sm text-body-2 mb-4 flex items-center gap-2">
             <IShieldCheck className="w-4 h-4 text-accent-deep" />
             反幻觉机制：每个能力项均保留多源证据与置信度，可追溯到原始招聘 JD
           </div>
@@ -466,18 +466,18 @@ export default function JobDetail() {
                    不全展开——重建后单个岗位可有上百项。summary 上的 list-none 去掉了原生
                    三角箭头，必须自己补一个 ChevronRight，否则整页看起来只是一排静态标签，
                    评委的原话就是「标着几处来源但是没有具体显示出来」。 */
-                <details key={i} open={i < 3} className="rounded-xl bg-sky-50/70 px-4 py-3 group">
+                <details key={i} open={i < 3} className="rounded-xl bg-accent/6 px-4 py-3 group">
                   <summary className="flex items-center justify-between gap-2 flex-wrap cursor-pointer list-none">
                     <div className="flex min-w-0 flex-wrap items-center gap-2">
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform group-open:rotate-90" />
-                      <FileText className="w-4 h-4 text-slate-500" />
-                      <span className="min-w-0 break-words text-sm font-medium text-slate-800">{it.skill}</span>
+                      <ChevronRight className="w-3.5 h-3.5 text-body-3 shrink-0 transition-transform group-open:rotate-90" />
+                      <FileText className="w-4 h-4 text-body-2" />
+                      <span className="min-w-0 break-words text-sm font-medium text-body-1">{it.skill}</span>
                       <Badge tone={it.importance === 'required' ? 'indigo' : 'slate'}>
                         {it.importance === 'required' ? '必备' : '加分'}</Badge>
                       {it.status === 'deprecated' && <Badge tone="rose">已淘汰</Badge>}
                       {it.status === 'candidate' && <Badge tone="slate">候选</Badge>}
                     </div>
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-body-3">
                       {/* source_count 是「提及该技能的 JD 数」，证据行按上限留存代表样本。
                           原文案写成「87 来源」，而展开只有 6 张卡，看起来像坏了——
                           两个数字各自都是真的，撒谎的是把它们混成一个词。 */}
@@ -487,7 +487,7 @@ export default function JobDetail() {
                     </div>
                   </summary>
                   {evs.length === 0 ? (
-                    <div className="mt-2 pl-6 text-xs text-slate-400">该能力项暂无独立JD证据（人工添加或低频项）</div>
+                    <div className="mt-2 pl-6 text-xs text-body-3">该能力项暂无独立JD证据（人工添加或低频项）</div>
                   ) : (
                   <div className="mt-2.5 grid grid-cols-1 gap-2 pl-0 sm:pl-6 xl:grid-cols-2">
                     {evs.slice(0, 12).map((e: any, j: number) => {
@@ -500,20 +500,20 @@ export default function JobDetail() {
                             <Badge tone={e.type === 'web' ? 'cyan' : e.type === 'llm' ? 'amber' : 'indigo'}>
                               {e.type === 'web' ? '网络佐证' : e.type === 'llm' ? 'LLM' : e.source || '招聘JD'}</Badge>
                             {e.type === 'web' && e.source && <span className="text-[10px] text-accent">{e.source}</span>}
-                            {e.company && <span className="text-[11px] text-slate-500 truncate">{e.company}</span>}
-                            {e.job_title && <span className="text-[11px] text-slate-400 truncate hidden sm:inline">{e.job_title}</span>}
+                            {e.company && <span className="text-[11px] text-body-2 truncate">{e.company}</span>}
+                            {e.job_title && <span className="text-[11px] text-body-3 truncate hidden sm:inline">{e.job_title}</span>}
                             <span className="flex-1" />
-                            {e.publish_date && <span className="text-[10px] text-slate-400 shrink-0">{String(e.publish_date).slice(0, 10)}</span>}
-                            {e.url && <ExternalLink className="w-3 h-3 text-slate-400 shrink-0" />}
+                            {e.publish_date && <span className="text-[10px] text-body-3 shrink-0">{String(e.publish_date).slice(0, 10)}</span>}
+                            {e.url && <ExternalLink className="w-3 h-3 text-body-3 shrink-0" />}
                           </div>
-                          <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">
-                            {isBareToken ? <>原文命中：<span className="text-slate-600">{it.skill}</span></> : e.snippet}
+                          <p className="text-[11px] text-body-3 mt-1 line-clamp-2">
+                            {isBareToken ? <>原文命中：<span className="text-body-2">{it.skill}</span></> : e.snippet}
                           </p>
                         </>
                       )
-                      const cls = 'block rounded-lg bg-white/80 border border-sky-100 px-3 py-2 transition'
+                      const cls = 'block rounded-lg bg-white/80 border border-accent/14 px-3 py-2 transition'
                       return e.url ? (
-                        <a key={j} href={e.url} target="_blank" rel="noreferrer" className={`${cls} hover:bg-sky-100/70 hover:border-sky-200`}>{inner}</a>
+                        <a key={j} href={e.url} target="_blank" rel="noreferrer" className={`${cls} hover:bg-accent/12 hover:border-accent/25`}>{inner}</a>
                       ) : (
                         <div key={j} className={cls}>{inner}</div>
                       )
@@ -534,19 +534,19 @@ export default function JobDetail() {
             <EmptyHistory job={job} authority={authority} eraCounts={eraCounts} earliestJd={earliestJd} />
           ) : (
             <div className="relative pl-6">
-              <div className="absolute left-2 top-1 bottom-1 w-px bg-slate-200" />
+              <div className="absolute left-2 top-1 bottom-1 w-px bg-brand-ink/12" />
               {history.items.map((c: any, i: number) => {
                 const tone = c.change_type === 'add' ? 'emerald' : c.change_type === 'delete' ? 'rose' : 'amber'
                 return (
                   <div key={i} className="relative pb-5">
                     <span className={`absolute -left-[18px] top-1 w-3 h-3 rounded-full ring-4 ring-white ${
-                      tone === 'emerald' ? 'bg-accent' : tone === 'rose' ? 'bg-rose-400' : 'bg-amber-400'}`} />
+                      tone === 'emerald' ? 'bg-accent' : tone === 'rose' ? 'bg-danger/80' : 'bg-warn/80'}`} />
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-slate-800">{c.skill_name}</span>
+                      <span className="text-sm font-semibold text-body-1">{c.skill_name}</span>
                       <ChangeDiff change={c} />
-                      <span className="text-[11px] text-slate-400">v{c.version}{c.created_at ? ` · ${String(c.created_at).slice(0, 10)}` : ''}</span>
+                      <span className="text-[11px] text-body-3">v{c.version}{c.created_at ? ` · ${String(c.created_at).slice(0, 10)}` : ''}</span>
                     </div>
-                    <p className="text-xs text-slate-500 mt-1">{c.reason}</p>
+                    <p className="text-xs text-body-2 mt-1">{c.reason}</p>
                   </div>
                 )
               })}

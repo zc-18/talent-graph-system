@@ -47,18 +47,18 @@ function TimelineOverview({ timeline }: { timeline: EvolutionTimeline }) {
   return (
     <Card className="p-4 sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <div><div className="label">真实语料时间线</div><div className="mt-1 font-bold text-slate-900">{timeline.job_name}</div></div>
+        <div><div className="label">真实语料时间线</div><div className="mt-1 font-bold text-body-1">{timeline.job_name}</div></div>
         <Badge tone={timeline.lifecycle_mode === 'first_observation' ? 'amber' : 'cyan'}>{timeline.lifecycle_mode === 'first_observation' ? '首次观察生命周期' : '历史演化生命周期'}</Badge>
       </div>
-      <div className="mt-4 grid grid-cols-1 border-y border-slate-200 sm:grid-cols-3">
-        {lifecycle.map(([label, value], index) => <div key={label} className={`py-3 ${index ? 'border-t border-slate-200 sm:border-l sm:border-t-0 sm:pl-4' : ''}`}><div className="text-[10px] font-semibold text-slate-400">{label}</div><div className="mt-1 text-sm font-bold tabular-nums text-slate-800">{dateLabel(value)}</div></div>)}
+      <div className="mt-4 grid grid-cols-1 border-y border-line-soft/8 sm:grid-cols-3">
+        {lifecycle.map(([label, value], index) => <div key={label} className={`py-3 ${index ? 'border-t border-line-soft/8 sm:border-l sm:border-t-0 sm:pl-4' : ''}`}><div className="text-[10px] font-semibold text-body-3">{label}</div><div className="mt-1 text-sm font-bold tabular-nums text-body-1">{dateLabel(value)}</div></div>)}
       </div>
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        {timeline.corpus_slices.map(slice => <div key={slice.year} className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-3"><div className="flex items-center justify-between gap-2"><b className="text-sm text-slate-800">{slice.label}</b><span className="text-[10px] text-slate-400">URL {Math.round(slice.url_coverage * 100)}%</span></div><div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500"><span>{slice.jd_count} 条 JD</span><span>{slice.employer_count} 个雇主</span><span>{slice.platforms.length} 个渠道</span></div></div>)}
-        {timeline.corpus_slices.length === 0 && <div className="text-sm text-slate-400">暂无可核验语料切片</div>}
+        {timeline.corpus_slices.map(slice => <div key={slice.year} className="rounded-lg border border-line-soft/8 bg-surface-muted px-3 py-3"><div className="flex items-center justify-between gap-2"><b className="text-sm text-body-1">{slice.label}</b><span className="text-[10px] text-body-3">URL {Math.round(slice.url_coverage * 100)}%</span></div><div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-body-2"><span>{slice.jd_count} 条 JD</span><span>{slice.employer_count} 个雇主</span><span>{slice.platforms.length} 个渠道</span></div></div>)}
+        {timeline.corpus_slices.length === 0 && <div className="text-sm text-body-3">暂无可核验语料切片</div>}
       </div>
-      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3"><span className="text-[11px] font-semibold text-slate-500">版本节点</span>{timeline.version_nodes.map(node => <span key={`${node.id}-${node.version}`} className="rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] text-slate-600">v{node.version} · {node.status} · {node.change_count} 项变化</span>)}</div>
-      <p className="mt-3 text-[11px] leading-5 text-slate-500">{timeline.coverage_note}</p>
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-line-soft/6 pt-3"><span className="text-[11px] font-semibold text-body-2">版本节点</span>{timeline.version_nodes.map(node => <span key={`${node.id}-${node.version}`} className="rounded-md border border-line-soft/8 bg-white px-2 py-1 text-[11px] text-body-2">v{node.version} · {node.status} · {node.change_count} 项变化</span>)}</div>
+      <p className="mt-3 text-[11px] leading-5 text-body-2">{timeline.coverage_note}</p>
     </Card>
   )
 }
@@ -83,10 +83,10 @@ function LevelEvolution({ jobId }: { jobId: number }) {
     }).catch(() => setError(true))
   }, [jobId])
 
-  if (error) return <Card className="p-8 text-center text-sm text-slate-400">该岗位暂未构建分级画像</Card>
+  if (error) return <Card className="p-8 text-center text-sm text-body-3">该岗位暂未构建分级画像</Card>
   if (!levels) return <Card className="p-5"><Spinner label="加载分级画像…" /></Card>
   const avail = LEVEL_ORDER.filter(l => (levels.available || []).includes(l))
-  if (avail.length < 2) return <Card className="p-8 text-center text-sm text-slate-400">该岗位暂未构建分级画像</Card>
+  if (avail.length < 2) return <Card className="p-8 text-center text-sm text-body-3">该岗位暂未构建分级画像</Card>
 
   return (
     <div className="space-y-4">
@@ -99,21 +99,21 @@ function LevelEvolution({ jobId }: { jobId: number }) {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <span className={`w-7 h-7 rounded-lg grid place-items-center text-accent-deep text-xs font-bold ${
-                    idx === 0 ? 'bg-sky-400' : idx === 1 ? 'bg-grad-accent ring-1 ring-accent/20' : 'bg-grad-violet'}`}>{idx + 1}</span>
-                  <span className="font-bold text-slate-800">{LEVEL_LABEL[lv] || lv}</span>
+                    idx === 0 ? 'bg-accent/70' : idx === 1 ? 'bg-grad-accent' : 'bg-grad-violet'}`}>{idx + 1}</span>
+                  <span className="font-bold text-body-1">{LEVEL_LABEL[lv] || lv}</span>
                 </div>
-                <span className="text-[11px] text-slate-400">{bucket?.jd_count ?? 0} 条 JD 支撑</span>
+                <span className="text-[11px] text-body-3">{bucket?.jd_count ?? 0} 条 JD 支撑</span>
               </div>
               <div className="space-y-1.5">
                 {skills.map(s => (
-                  <div key={s.name} className="flex items-center gap-2 rounded-lg bg-sky-50/70 px-2.5 py-1.5">
-                    <span className="text-xs font-medium text-slate-700 truncate">{s.name}</span>
+                  <div key={s.name} className="flex items-center gap-2 rounded-lg bg-accent/6 px-2.5 py-1.5">
+                    <span className="text-xs font-medium text-body-1 truncate">{s.name}</span>
                     <span className="flex-1" />
-                    <span className="text-[10px] text-slate-400 tabular-nums shrink-0">权重 {Math.round(s.weight * 100)}%</span>
+                    <span className="text-[10px] text-body-3 tabular-nums shrink-0">权重 {Math.round(s.weight * 100)}%</span>
                     <span className="shrink-0"><ConfidencePill value={s.confidence} factors={s.factors} /></span>
                   </div>
                 ))}
-                {skills.length === 0 && <div className="text-xs text-slate-400 py-3 text-center">暂无数据</div>}
+                {skills.length === 0 && <div className="text-xs text-body-3 py-3 text-center">暂无数据</div>}
               </div>
             </Card>
           )
@@ -128,17 +128,17 @@ function LevelEvolution({ jobId }: { jobId: number }) {
               <ArrowRight className="w-4 h-4 text-accent" />
               {LEVEL_LABEL[frm]} → {LEVEL_LABEL[to]} 能力跃迁
             </div>
-            {!changes ? <div className="text-xs text-slate-400">对比中…</div> : changes.length === 0 ? (
-              <div className="text-xs text-slate-400">两级别能力要求基本一致</div>
+            {!changes ? <div className="text-xs text-body-3">对比中…</div> : changes.length === 0 ? (
+              <div className="text-xs text-body-3">两级别能力要求基本一致</div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {changes.map((c, j) => (
-                  <div key={j} className="rounded-xl bg-sky-50/70 px-3 py-2">
+                  <div key={j} className="rounded-xl bg-accent/6 px-3 py-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-medium text-slate-800">{c.skill_name}</span>
+                      <span className="text-sm font-medium text-body-1">{c.skill_name}</span>
                       <ChangeDiff change={c} />
                     </div>
-                    {c.reason && <p className="text-[11px] text-slate-500 mt-1">{c.reason}</p>}
+                    {c.reason && <p className="text-[11px] text-body-2 mt-1">{c.reason}</p>}
                   </div>
                 ))}
               </div>
@@ -197,12 +197,12 @@ export default function Evolution() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent ring-1 ring-accent/20 grid place-items-center shadow-glow">
+        <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
           <IGitBranch className="w-6 h-6 text-accent-deep" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900">既有岗位能力动态演化</h1>
-          <p className="text-sm text-slate-500">用最新招聘 JD 驱动既有岗位能力更新，自动标注新增 / 删除 / 修改并溯源</p>
+          <h1 className="text-2xl font-extrabold text-body-1">既有岗位能力动态演化</h1>
+          <p className="text-sm text-body-2">用最新招聘 JD 驱动既有岗位能力更新，自动标注新增 / 删除 / 修改并溯源</p>
         </div>
       </div>
 
@@ -245,14 +245,14 @@ export default function Evolution() {
                 placeholder="粘贴招聘 JD 文本…" />
               {jds.length > 1 && (
                 <button onClick={() => setJds(jds.filter((_, k) => k !== i))} aria-label={`删除第 ${i + 1} 条 JD`}
-                  className="absolute top-2 right-2 text-slate-400 hover:text-rose-400 p-1 -m-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-rose-300"><X className="w-4 h-4" /></button>
+                  className="absolute top-2 right-2 text-body-3 hover:text-danger/80 p-1 -m-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-danger/35"><X className="w-4 h-4" /></button>
               )}
             </div>
           ))}
           <button onClick={run} disabled={loading || !jobId} className="btn-primary w-full">
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} 预览能力变化
           </button>
-          <p className="text-[11px] text-amber-600">
+          <p className="text-[11px] text-warn">
             此处仅生成变化预览，不写入公共图谱；新版本须通过管理员演化任务审核发布。
             {readOnly ? ' 当前环境为公共图谱只读模式。' : ''}
           </p>
@@ -269,9 +269,9 @@ export default function Evolution() {
                     if (!version) return null
                     const clusters = version.contract?.clusters || version.clusters || []
                     return (
-                      <div className="mt-4 rounded-xl bg-sky-50/70 p-4">
-                        <div className="flex items-center justify-between gap-2"><Badge tone="cyan">{version.status}</Badge><span className="text-xs text-slate-400">{version.effective_at ? new Date(version.effective_at).toLocaleDateString() : typeof version.evidence_window === 'string' ? version.evidence_window : ''}</span></div>
-                        <p className="text-sm text-slate-600 mt-3">{version.summary || `岗位 v${version.version} 完整能力快照`}</p>
+                      <div className="mt-4 rounded-xl bg-accent/6 p-4">
+                        <div className="flex items-center justify-between gap-2"><Badge tone="cyan">{version.status}</Badge><span className="text-xs text-body-3">{version.effective_at ? new Date(version.effective_at).toLocaleDateString() : typeof version.evidence_window === 'string' ? version.evidence_window : ''}</span></div>
+                        <p className="text-sm text-body-2 mt-3">{version.summary || `岗位 v${version.version} 完整能力快照`}</p>
                         <div className="flex flex-wrap gap-1.5 mt-3">{clusters.map(cluster => <Badge key={cluster.name} tone={cluster.importance === 'required' ? 'indigo' : 'amber'}>{cluster.name}</Badge>)}</div>
                       </div>
                     )
@@ -288,49 +288,49 @@ export default function Evolution() {
               <div className="grid grid-cols-3 gap-3">
                 {[['新增', result.evolution.added, 'emerald'], ['删除', result.evolution.deleted, 'rose'], ['修改', result.evolution.modified, 'amber']].map(
                   ([l, v, t]: any) => (
-                    <div key={l} className="rounded-xl bg-sky-50/70 p-3 text-center">
-                      <div className={`text-2xl font-extrabold ${t === 'emerald' ? 'text-accent-deep' : t === 'rose' ? 'text-rose-600' : 'text-amber-600'}`}>{v}</div>
-                      <div className="text-xs text-slate-500">{l}能力项</div>
+                    <div key={l} className="rounded-xl bg-accent/6 p-3 text-center">
+                      <div className={`text-2xl font-extrabold ${t === 'emerald' ? 'text-accent-deep' : t === 'rose' ? 'text-danger' : 'text-warn'}`}>{v}</div>
+                      <div className="text-xs text-body-2">{l}能力项</div>
                     </div>
                   ))}
               </div>
               <div className="space-y-2 max-h-[280px] overflow-auto sm:max-h-[360px]">
                 {result.changes.map((c: any, i: number) => (
-                  <div key={i} className="rounded-xl bg-sky-50/70 px-3.5 py-2.5">
+                  <div key={i} className="rounded-xl bg-accent/6 px-3.5 py-2.5">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-slate-800">{c.skill_name}</span>
+                      <span className="text-sm font-semibold text-body-1">{c.skill_name}</span>
                       <ChangeDiff change={c} />
                     </div>
-                    <p className="text-xs text-slate-500 mt-1">{c.reason}</p>
-                    <p className="text-[11px] text-slate-400 mt-1">数据源 · {dataSourceLabel(c.data_source)}</p>
+                    <p className="text-xs text-body-2 mt-1">{c.reason}</p>
+                    <p className="text-[11px] text-body-3 mt-1">数据源 · {dataSourceLabel(c.data_source)}</p>
                   </div>
                 ))}
               </div>
             </div>
           ) : (
-            <div className="text-sm text-slate-500">
+            <div className="text-sm text-body-2">
               <div className="label mb-3">该岗位历史演化记录</div>
               {!history ? <Spinner /> : history.items.length === 0 ? (
                 <div className="text-center py-6">
                   <img ref={floatRef} src="/decor-evolution.webp" alt=""
                     className="mx-auto mb-2 h-28 w-28 object-contain mix-blend-multiply drop-shadow-[0_12px_24px_rgba(56,189,248,0.22)] sm:h-40 sm:w-40" />
-                  <div className="text-slate-400">暂无演化记录，提交新 JD 开始演化。</div>
+                  <div className="text-body-3">暂无演化记录，提交新 JD 开始演化。</div>
                 </div>
               ) : (
                 <div className="space-y-2 max-h-[300px] overflow-auto sm:max-h-[420px]">
                   {history.items.slice(0, 20).map((c: any, i: number) => (
-                    <div key={i} className="rounded-xl bg-sky-50/70 px-3.5 py-2.5">
+                    <div key={i} className="rounded-xl bg-accent/6 px-3.5 py-2.5">
                       <div className="flex items-center gap-2 text-xs flex-wrap">
-                        <span className="font-medium text-slate-700">{c.skill_name}</span>
+                        <span className="font-medium text-body-1">{c.skill_name}</span>
                         <ChangeDiff change={c} compact />
-                        <span className="text-slate-400">v{c.version}</span>
+                        <span className="text-body-3">v{c.version}</span>
                       </div>
-                      <p className="text-[11px] text-slate-500 mt-1">{c.reason || '未记录变更原因'}</p>
-                      <p className="text-[11px] text-slate-400 mt-1">数据源 · {dataSourceLabel(c.data_source)}</p>
+                      <p className="text-[11px] text-body-2 mt-1">{c.reason || '未记录变更原因'}</p>
+                      <p className="text-[11px] text-body-3 mt-1">数据源 · {dataSourceLabel(c.data_source)}</p>
                     </div>
                   ))}
                   {history.items.length > 20 && (
-                    <div className="text-[11px] text-slate-400 pt-1">
+                    <div className="text-[11px] text-body-3 pt-1">
                       显示前 20 条 / 共 {history.items.length} 条变更
                     </div>
                   )}

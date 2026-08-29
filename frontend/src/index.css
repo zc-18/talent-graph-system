@@ -3,65 +3,80 @@
 @tailwind utilities;
 
 /* ============================================================
-   第五轮视觉 token（唯一真相源：_team/DESIGN_TOKENS.md）
+   第六轮视觉 token（唯一真相源：_team/DESIGN_TOKENS.md + 本轮设计契约）
    值必须是「空格分隔的 RGB 通道」——tailwind 侧用
    rgb(var(--x) / <alpha-value>) 引用，全站的 /xx 透明度后缀才继续有效。
+   写成 hex 会让约 200 处 bg-accent/20、focus:border-accent/60 静默失效。
    单主题：不写暗色媒体查询，不写 [data-theme] 覆盖块。
    ============================================================ */
 :root{
   color-scheme: light;
 
-  /* ── 中性深色轴 ─────────────────────────────────────────────
-     主按钮 / 侧栏选中项。刻意用「近黑」而不是深蓝：#0F2A4A 这种低饱和深蓝
-     在深色块上会被看成带绿，用户明确点名过。这里全部走无色相中性灰阶。 */
-  --ink-solid:       10 12 16;      /* #0A0C10 近黑 */
-  --ink-hover:        0  0  0;      /* #000000 纯黑：hover 只变深，不变色相 */
+  /* ── 强调：蓝 → 紫 ─────────────────────────────────────────
+     强调色只出现在：按钮 / 顶边饰条 / 关键数字 / 选中态。
+     全站不再有 #0F2A4A 墨蓝实心块。 */
+  --brand-accent:     91 124 240;   /* #5B7CF0 主强调（按钮起点） */
+  --brand-accent-2:  139 111 232;   /* #8B6FE8 主强调（按钮终点） */
+  --brand-accent-3:  240 243 254;   /* #F0F3FE 近白端，chip / 浅底面板用 */
+  --brand-accent-deep: 62  86 196;  /* #3E56C4 需要在白底上托文字时用（对比 6.3:1） */
 
-  /* ── 天蓝强调 ───────────────────────────────────────────────
-     用户要的是「淡蓝 / 天蓝」，不是深蓝。sky 色阶全程无绿相。 */
-  --brand-accent:     56 189 248;   /* #38BDF8 sky-400 天蓝，主强调 */
-  --brand-accent-2:  186 230 253;   /* #BAE6FD sky-200 渐变中段 */
-  --brand-accent-3:  240 249 255;   /* #F0F9FF sky-50  渐变近白端 */
-  --brand-accent-deep: 2 132 199;   /* #0284C7 sky-600 需要托白字时用 */
+  /* 顶边饰条三段色 */
+  --bar-1:           108 143 245;   /* #6C8FF5 */
+  --bar-2:           167 139 250;   /* #A78BFA */
+  --bar-3:           125 211 252;   /* #7DD3FC */
 
-  /* 单点强调：紫（徽标语义 + 标题渐变收尾色） */
-  --brand-violet:    124 108 246;   /* #7C6CF6 */
+  /* 单点强调：紫（新兴岗位徽标、标题渐变收尾） */
+  --brand-violet:    167 139 250;   /* #A78BFA */
 
   /* ── 兼容旧键 ───────────────────────────────────────────────
-     全站仍有大量 brand-ink / brand-ink-soft 引用。重新指向中性 slate 深色，
-     这样即使漏改也不会再冒出蓝绿色块。 */
-  --brand-ink:        15  23  42;   /* #0F172A slate-900（中性） */
-  --brand-ink-soft:   30  41  59;   /* #1E293B slate-800（中性） */
-  --btn-solid:        10  12  16;   /* 保留旧键名，指向 --ink-solid 同值 */
+     全站仍有大量 brand-ink / brand-ink-soft / ink-solid 引用（多为阴影与描边）。
+     重新指向新的标题/正文蓝灰，漏改的地方也不会再冒出墨蓝实心块。 */
+  --brand-ink:        35  48  92;   /* #23305C 标题色 */
+  --brand-ink-soft:   90 103 140;   /* #5A678C 正文色 */
+  --ink-solid:        35  48  92;   /* 旧键：深色实心块 → 已降级为标题蓝 */
+  --ink-hover:        26  36  70;
+  --btn-solid:        35  48  92;   /* 旧键，Portal 顶部按钮已改走 .btn-primary */
 
-  /* ── 表面：近白 + 极淡蓝 ───────────────────────────────────── */
-  --surface-page:    251 252 253;   /* #FBFCFD */
+  /* ── 表面：淡蓝 → 淡紫柔光洗 ───────────────────────────────── */
+  --surface-page:    242 245 251;   /* #F2F5FB 淡蓝 */
+  --surface-page-2:  237 233 247;   /* #EDE9F7 淡紫 */
   --surface-card:    255 255 255;
-  --surface-muted:   244 248 252;   /* #F4F8FC 微冷近白 */
+  --surface-muted:   246 248 253;   /* #F6F8FD 卡内次级面 */
 
-  /* ── 线条：中性，不带蓝绿 ──────────────────────────────────── */
-  --line-soft:        15  23  42;
-  --line-strong:      15  23  42;
+  /* ── 线条：卡片边框 rgba(35,48,92,.06)，即 line-soft/6 ──────── */
+  --line-soft:        35  48  92;
+  --line-strong:      35  48  92;
 
-  /* ── 文本：纯中性 slate 灰阶 ────────────────────────────────
-     旧值 #46617E / #7C93AC 绿相偏高（G 通道相对 R 抬得多），正是用户说的
-     「文字带点绿」。换成 slate-900/600/400，色相干净。 */
-  --text-1:           15  23  42;   /* #0F172A */
-  --text-2:           71  85 105;   /* #475569 */
-  --text-3:          148 163 184;   /* #94A3B8 */
+  /* ── 文本 ─────────────────────────────────────────────────── */
+  --text-1:           35  48  92;   /* #23305C 标题 */
+  --text-2:           90 103 140;   /* #5A678C 正文 */
+  --text-3:          148 160 191;   /* #94A0BF 次文 */
+
+  /* ── 语义色 ───────────────────────────────────────────────── */
+  --danger:          224  87 107;   /* #E0576B */
+  --danger-weak:     253 236 239;   /* #FDECEF */
+  --warn:            201 134  11;   /* #C9860B */
+  --warn-weak:       253 243 224;   /* #FDF3E0 */
+  --success:          18 166 122;   /* #12A67A */
+  --success-weak:    230 247 241;   /* #E6F7F1 */
 }
 
 html, body, #root { height: 100%; }
 body {
   margin: 0;
-  /* 近白打底 + 右上一大团极淡蓝色晕染、左下更淡的一团（契约 §8）。
-     此前是 bg2.webp 全屏 cover + background-attachment: fixed，
-     移动端每次滚动都要重绘整张背景图，已移除，保持不加回。 */
+  /* 柔光洗：--surface-page 打底 → 大半径 radial 淡蓝/淡紫（不是硬色块）
+     → 最底层叠一张低透明度背景图。
+     层序：先写的在上。第 3 层是半透明的页面色洗，让 /app-bg.webp 透出约 12%。
+     禁止 background-attachment: fixed（移动端滚动重绘卡顿，契约已明令）。 */
   background-color: rgb(var(--surface-page));
   background-image:
-    radial-gradient(920px 620px at 88% -6%, rgb(var(--brand-accent) / 0.10), transparent 60%),
-    radial-gradient(760px 540px at 4% 104%, rgb(var(--brand-accent) / 0.05), transparent 62%);
+    radial-gradient(1180px 760px at 86% -10%, rgb(var(--bar-2) / 0.20), transparent 62%),
+    radial-gradient(980px 660px at 2% 104%, rgb(var(--bar-1) / 0.14), transparent 64%),
+    linear-gradient(158deg, rgb(var(--surface-page) / 0.88) 0%, rgb(var(--surface-page-2) / 0.88) 100%),
+    url('/app-bg.webp');
   background-repeat: no-repeat;
+  background-size: auto, auto, auto, cover;
+  background-position: center, center, center, 50% 0;
   color: rgb(var(--text-1));
   font-family: 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
   letter-spacing: 0;
@@ -69,79 +84,100 @@ body {
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: rgb(var(--brand-ink) / 0.20); border-radius: 8px; }
+::-webkit-scrollbar-thumb { background: rgb(var(--brand-ink) / 0.18); border-radius: 8px; }
 ::-webkit-scrollbar-thumb:hover { background: rgb(var(--brand-accent) / 0.45); }
 ::-webkit-scrollbar-track { background: transparent; }
 
 @layer components {
-  .glass {
-    @apply bg-white/70 border border-white/80 backdrop-blur-xl rounded-2xl;
-    box-shadow: 0 10px 30px -12px rgb(var(--brand-ink) / 0.18), 0 2px 8px -2px rgb(var(--brand-ink) / 0.06);
+  /* ── 可复用工具 1：毛玻璃卡 ───────────────────────────────────
+     契约：#FFFFFF / 92%，radius 20（rounded-2xl 已在 tailwind 侧改为 20px），
+     border rgba(35,48,92,.06)。
+     .glass 是历史别名（全站约 40 处在用）——两个选择器写在同一条规则里，
+     既让 .tg-glass 不会因暂时无人引用被 purge 掉，也保证二者永远同源。 */
+  .tg-glass, .glass {
+    @apply rounded-2xl backdrop-blur-xl;
+    background: rgb(var(--surface-card) / 0.92);
+    border: 1px solid rgb(var(--line-soft) / 0.06);
+    box-shadow: 0 10px 30px -14px rgb(var(--brand-ink) / 0.16), 0 2px 6px -2px rgb(var(--brand-ink) / 0.05);
   }
-  .glass-hover { @apply transition-all duration-300 hover:bg-white/90; }
-  .glass-hover:hover { box-shadow: 0 16px 40px -12px rgb(var(--brand-ink) / 0.28); }
+  /* ── 可复用工具 2：3px 顶边渐变饰条 ─────────────────────────
+     贴在任何 position:relative + overflow-hidden 的容器顶部。 */
+  .tg-topbar { position: relative; }
+  .tg-topbar::before {
+    content: '';
+    position: absolute; inset: 0 0 auto 0; height: 3px;
+    background: linear-gradient(90deg, rgb(var(--bar-1)) 0%, rgb(var(--bar-2)) 52%, rgb(var(--bar-3)) 100%);
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .glass-hover { @apply transition-all duration-300; }
+  .glass-hover:hover {
+    background: rgb(var(--surface-card) / 0.97);
+    box-shadow: 0 18px 40px -16px rgb(var(--brand-ink) / 0.22);
+  }
   /* 门户/登录用的实心卡片：同一套圆角与阴影语言，但不透明，便于承载截图与长文 */
   .surface-card {
     @apply rounded-2xl border bg-white;
-    border-color: rgb(var(--line-soft) / 0.10);
-    box-shadow: 0 10px 30px -18px rgb(var(--brand-ink) / 0.22);
+    border-color: rgb(var(--line-soft) / 0.06);
+    box-shadow: 0 10px 30px -18px rgb(var(--brand-ink) / 0.20);
   }
 
-  /* 按钮（契约 §5）：胶囊 + 中性配色。主按钮近黑实色，不再用渐变填充——
-     彩色只出现在标题渐变文字上。rounded-full 是全站生效的，工作台按钮同步变胶囊。 */
+  /* 按钮：主按钮回到强调渐变 + 辉光（契约指定 #5B7CF0 → #8B6FE8）。
+     hover 不换色相，只抬亮度与辉光半径。 */
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold
            transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-primary {
     @apply btn text-white;
-    background: rgb(var(--ink-solid));
-    /* 阴影用中性黑，不掺蓝——掺蓝的深色阴影在近黑块边缘会显出冷绿边 */
-    box-shadow: 0 1px 2px rgb(0 0 0 / .20), 0 8px 20px -12px rgb(0 0 0 / .45);
+    background-image: linear-gradient(120deg, rgb(var(--brand-accent)) 0%, rgb(var(--brand-accent-2)) 100%);
+    box-shadow: 0 10px 28px rgb(var(--brand-accent) / 0.28);
   }
-  /* hover 只加深、不换色相。此前是切到 #0F2A4A 深蓝，比底色更浅也更偏蓝绿，
-     就是用户反复指出的「悬浮发绿」。 */
-  .btn-primary:hover:not(:disabled) { background: rgb(var(--ink-hover)); transform: translateY(-1px); }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 14px 32px rgb(var(--brand-accent) / 0.34);
+  }
   .btn-primary:active:not(:disabled) { transform: translateY(0); }
   .btn-ghost {
     @apply btn bg-white text-body-1;
-    border: 1px solid rgb(var(--line-soft) / .16);
+    border: 1px solid rgb(var(--line-soft) / .10);
   }
-  .btn-ghost:hover { @apply bg-surface-muted; border-color: rgb(var(--line-strong) / .28); }
+  .btn-ghost:hover { @apply bg-surface-muted; border-color: rgb(var(--brand-accent) / .35); }
 
-  /* 徽章（契约 §6）：白底发丝边胶囊，前面配一颗蓝色圆点 */
+  /* 徽章：白底发丝边胶囊，前面配一颗强调色圆点 */
   .pill-badge {
     @apply inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-xs font-medium text-body-2;
-    border: 1px solid rgb(var(--line-soft) / .14);
+    border: 1px solid rgb(var(--line-soft) / .10);
   }
 
-  /* 胶囊/标签：参考用户给的样例——极淡的蓝白渐变 + 发丝边 + 低对比文���。
-     不用实色块，避免一堆同质色块糊成一片。 */
+  /* 胶囊/标签：极淡的蓝白渐变 + 发丝边 + 低对比文字 */
   .chip {
     @apply inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium;
     background: linear-gradient(135deg, rgb(var(--brand-accent-3)) 0%, #FFFFFF 100%);
-    border: 1px solid rgb(var(--brand-accent) / .16);
+    border: 1px solid rgb(var(--brand-accent) / .14);
     color: rgb(var(--text-2));
   }
   .label { @apply text-xs font-semibold uppercase text-body-3; letter-spacing: 0; }
   .input {
-    @apply w-full rounded-xl bg-white/80 border border-line-soft/12 px-3.5 py-2.5 text-sm
+    @apply w-full rounded-xl bg-white/85 border border-line-soft/8 px-3.5 py-2.5 text-sm
            text-body-1 placeholder:text-body-3 outline-none transition
            focus:border-accent/60 focus:ring-2 focus:ring-accent/20 focus:bg-white;
   }
-  /* 标题渐变文字（契约 §7）：淡蓝 → 紫 */
+  /* 标题渐变文字：蓝 → 紫 */
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(100deg, rgb(var(--brand-accent)) 0%, rgb(var(--brand-violet)) 100%);
+    background-image: linear-gradient(100deg, rgb(var(--brand-accent)) 0%, rgb(var(--brand-accent-2)) 60%, rgb(var(--bar-2)) 100%);
   }
   .admin-table { @apply w-full text-sm; }
   .admin-table thead { @apply bg-surface-muted text-xs text-body-2; }
   .admin-table th { @apply px-4 py-3 text-left font-semibold whitespace-nowrap; }
   .admin-table td { @apply px-4 py-3 text-body-2 whitespace-nowrap; }
-  .admin-table tbody tr { @apply border-t border-line-soft/8 transition-colors; }
+  .admin-table tbody tr { @apply border-t border-line-soft/6 transition-colors; }
   .admin-table tbody tr:hover { background: rgb(var(--brand-accent) / 0.05); }
   .portal-nav-link {
-    @apply inline-flex h-10 w-10 items-center justify-center gap-2 rounded-full border border-line-soft/14 bg-white text-sm font-semibold text-body-1 transition hover:border-accent/50 hover:bg-surface-muted md:w-auto md:px-4;
+    @apply inline-flex h-10 w-10 items-center justify-center gap-2 rounded-full border border-line-soft/10 bg-white text-sm font-semibold text-body-1 transition hover:border-accent/50 hover:bg-surface-muted md:w-auto md:px-4;
   }
   /* 段落间统一节奏：门户各 section 的纵向留白 */
   .section-pad { @apply py-16 sm:py-20 lg:py-24; }

@@ -109,12 +109,12 @@ export default function Match() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent ring-1 ring-accent/20 grid place-items-center shadow-glow">
+        <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-accent grid place-items-center shadow-glow">
           <ITarget className="w-6 h-6 text-accent-deep" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900">人岗匹配诊断与差距分析</h1>
-          <p className="text-sm text-slate-500">简历解析（PDF/Word）· 多维度匹配 · 差距诊断 · 学习路径规划</p>
+          <h1 className="text-2xl font-extrabold text-body-1">人岗匹配诊断与差距分析</h1>
+          <p className="text-sm text-body-2">简历解析（PDF/Word）· 多维度匹配 · 差距诊断 · 学习路径规划</p>
         </div>
       </div>
 
@@ -141,12 +141,12 @@ export default function Match() {
           {mode === 'upload' ? (
             <button type="button" onClick={() => fileRef.current?.click()}
               aria-label="上传 PDF 或 Word 简历文件"
-              className="w-full border-2 border-dashed border-sky-200 rounded-2xl p-8 text-center cursor-pointer hover:border-accent/50 transition bg-sky-50/40 outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:border-accent/50">
+              className="w-full border-2 border-dashed border-accent/25 rounded-2xl p-8 text-center cursor-pointer hover:border-accent/50 transition bg-accent/4 outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:border-accent/50">
               <input ref={fileRef} type="file" accept=".pdf,.docx,.txt" className="hidden" tabIndex={-1}
                 onChange={e => e.target.files?.[0] && onFile(e.target.files[0])} />
-              <IUpload className="w-8 h-8 mx-auto text-slate-400" />
-              <p className="text-sm text-slate-600 mt-2">点击上传 PDF / DOCX / TXT 简历</p>
-              <p className="text-[11px] text-slate-400 mt-1">提取准确率 ≥ 90%</p>
+              <IUpload className="w-8 h-8 mx-auto text-body-3" />
+              <p className="text-sm text-body-2 mt-2">点击上传 PDF / DOCX / TXT 简历</p>
+              <p className="text-[11px] text-body-3 mt-1">提取准确率 ≥ 90%</p>
             </button>
           ) : (
             <textarea value={resumeText} onChange={e => setResumeText(e.target.value)} rows={7}
@@ -154,12 +154,12 @@ export default function Match() {
           )}
 
           {extracted && (
-            <div className="rounded-xl bg-sky-50/70 p-3">
-              <div className="flex items-center gap-2 text-sm text-slate-700 mb-2">
+            <div className="rounded-xl bg-accent/6 p-3">
+              <div className="flex items-center gap-2 text-sm text-body-1 mb-2">
                 <IUser className="w-4 h-4 text-accent" /> {extracted.candidate_name || '候选人'} · {extracted.years_experience}年经验
               </div>
-              <div className="text-[11px] text-slate-500 mb-2">请确认提取技能，点击 × 可移除误识别项</div>
-              <div className="flex flex-wrap gap-1.5">{confirmedSkills.map(s => <span key={s} className="chip border bg-white border-slate-200 text-slate-700">{s}<button onClick={() => setConfirmedSkills(list => list.filter(item => item !== s))} aria-label={`移除 ${s}`}><X className="w-3 h-3" /></button></span>)}</div>
+              <div className="text-[11px] text-body-2 mb-2">请确认提取技能，点击 × 可移除误识别项</div>
+              <div className="flex flex-wrap gap-1.5">{confirmedSkills.map(s => <span key={s} className="chip border bg-white border-line-soft/8 text-body-1">{s}<button onClick={() => setConfirmedSkills(list => list.filter(item => item !== s))} aria-label={`移除 ${s}`}><X className="w-3 h-3" /></button></span>)}</div>
               <div className="flex gap-2 mt-2"><input value={newSkill} onChange={e => setNewSkill(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); if (newSkill.trim() && !confirmedSkills.includes(newSkill.trim())) setConfirmedSkills(list => [...list, newSkill.trim()]); setNewSkill('') } }} className="input !py-1.5" placeholder="补充技能" /><button onClick={() => { if (newSkill.trim() && !confirmedSkills.includes(newSkill.trim())) setConfirmedSkills(list => [...list, newSkill.trim()]); setNewSkill('') }} className="btn-ghost !p-2" aria-label="添加技能"><Plus className="w-4 h-4" /></button></div>
             </div>
           )}
@@ -169,9 +169,9 @@ export default function Match() {
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ITarget className="w-4 h-4" />} 开始匹配诊断
           </button>
 
-          <div className="flex items-start gap-1.5 text-[11px] text-slate-400 leading-relaxed">
+          <div className="flex items-start gap-1.5 text-[11px] text-body-3 leading-relaxed">
             <IShieldCheck className="w-3.5 h-3.5 shrink-0 mt-0.5 text-accent" />
-            <span>隐私合规：简历仅在内存中解析用于本次匹配，原始简历与姓名等个人信息<b className="text-slate-500">不在服务器留存</b>，仅保留脱敏技能要素。</span>
+            <span>隐私合规：简历仅在内存中解析用于本次匹配，原始简历与姓名等个人信息<b className="text-body-2">不在服务器留存</b>，仅保留脱敏技能要素。</span>
           </div>
         </Card>
 
@@ -182,8 +182,8 @@ export default function Match() {
               <div className="text-center mb-6">
                 <img ref={floatRef} src="/empty-match.webp" alt=""
                   className="mx-auto mb-2 h-32 w-32 object-contain mix-blend-multiply drop-shadow-[0_12px_24px_rgba(99,102,241,0.22)] sm:h-44 sm:w-44" />
-                <h3 className="text-lg font-bold text-slate-800">上传简历或输入技能，开始诊断</h3>
-                <p className="text-sm text-slate-500 mt-1">系统将对比目标岗位能力图谱，输出多维匹配与提升路径</p>
+                <h3 className="text-lg font-bold text-body-1">上传简历或输入技能，开始诊断</h3>
+                <p className="text-sm text-body-2 mt-1">系统将对比目标岗位能力图谱，输出多维匹配与提升路径</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
@@ -192,18 +192,18 @@ export default function Match() {
                   [IPath, '学习路径规划', '按技能先修关系拓扑排序，分步提升', '#A855F7'],
                   [ILightbulb, '针对性建议', '大模型给出资源方向与达标周期', '#F59E0B'],
                 ].map(([Icon, t, d, c]: any, i: number) => (
-                  <div key={i} className="rounded-2xl bg-sky-50/70 border border-slate-200/60 p-4 flex gap-3">
+                  <div key={i} className="rounded-2xl bg-accent/6 border border-line-soft/8 p-4 flex gap-3">
                     <div className="w-9 h-9 rounded-xl grid place-items-center shrink-0" style={{ background: c }}>
                       <Icon className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <div className="text-[13px] font-bold text-slate-800">{t}</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">{d}</div>
+                      <div className="text-[13px] font-bold text-body-1">{t}</div>
+                      <div className="text-[11px] text-body-2 mt-0.5 leading-relaxed">{d}</div>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-5 text-xs text-slate-400 text-center">简历技能提取准确率 ≥ 90% · 支持 PDF / Word / 文本</div>
+              <div className="mt-5 text-xs text-body-3 text-center">简历技能提取准确率 ≥ 90% · 支持 PDF / Word / 文本</div>
             </Card>
           )}
           {res && (
@@ -235,10 +235,10 @@ export default function Match() {
                     </div>
                   </div>
                   <div>
-                     <div className="flex items-center gap-2 label mb-2"><XCircle className="w-4 h-4 text-rose-600" /> Top 关键能力缺口 ({topGaps.length})</div>
+                     <div className="flex items-center gap-2 label mb-2"><XCircle className="w-4 h-4 text-danger" /> Top 关键能力缺口 ({topGaps.length})</div>
                      <div className="flex flex-wrap gap-1.5">
                        {topGaps.map((m: any) => (
-                         <span key={m.name || m.skill} className="chip border bg-rose-50 border-rose-200 text-rose-700">{m.name || m.skill}</span>
+                         <span key={m.name || m.skill} className="chip border bg-danger-weak border-danger/25 text-danger">{m.name || m.skill}</span>
                        ))}
                        {topGaps.length === 0 && <span className="text-xs text-accent-deep">核心必备能力已全覆盖</span>}
                      </div>
@@ -253,14 +253,14 @@ export default function Match() {
                     <div className="path-line absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-accent to-accent/40" />
                     {result.learning_path.map((p: any) => (
                       <div key={p.step} data-reveal className="relative pb-4">
-                        <span className="absolute -left-[19px] top-0.5 w-3.5 h-3.5 rounded-full bg-grad-accent ring-4 ring-white text-[8px] grid place-items-center font-bold text-slate-900">{p.step}</span>
+                        <span className="absolute -left-[19px] top-0.5 w-3.5 h-3.5 rounded-full bg-grad-accent ring-4 ring-white text-[8px] grid place-items-center font-bold text-white">{p.step}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-slate-800">{p.skill}</span>
+                          <span className="text-sm font-semibold text-body-1">{p.skill}</span>
                           <Badge tone={p.priority === '高' ? 'rose' : 'amber'}>{p.priority}优先</Badge>
                           <Badge tone="slate">{p.category}</Badge>
                         </div>
                         {p.prerequisites?.length > 0 && (
-                          <p className="text-[11px] text-slate-400 mt-0.5">先修：{p.prerequisites.join('、')}</p>
+                          <p className="text-[11px] text-body-3 mt-0.5">先修：{p.prerequisites.join('、')}</p>
                         )}
                       </div>
                     ))}
@@ -271,18 +271,18 @@ export default function Match() {
 
               {result.suggestions?.overall_advice && (
                 <Card className="p-5">
-                  <div className="flex items-center gap-2 label mb-3"><ILightbulb className="w-4 h-4 text-amber-600" /> 针对性改进建议</div>
-                  <p className="text-sm text-slate-700 leading-relaxed">{result.suggestions.overall_advice}</p>
+                  <div className="flex items-center gap-2 label mb-3"><ILightbulb className="w-4 h-4 text-warn" /> 针对性改进建议</div>
+                  <p className="text-sm text-body-1 leading-relaxed">{result.suggestions.overall_advice}</p>
                   {result.suggestions.timeline && (
                     <div className="mt-2 text-xs text-accent-deep flex items-center gap-1"><Sparkles className="w-3 h-3" /> {result.suggestions.timeline}</div>
                   )}
                   {result.suggestions.skill_advice?.length > 0 && (
                     <div className="mt-3 space-y-2">
                       {result.suggestions.skill_advice.slice(0, 6).map((a: any, i: number) => (
-                        <div key={i} className="rounded-lg bg-sky-50/70 px-3 py-2 text-xs">
-                          <span className="text-slate-800 font-medium">{a.skill}</span>
-                          <span className="text-slate-500"> — {a.action}</span>
-                          {a.resource && <span className="text-slate-400"> · {a.resource}</span>}
+                        <div key={i} className="rounded-lg bg-accent/6 px-3 py-2 text-xs">
+                          <span className="text-body-1 font-medium">{a.skill}</span>
+                          <span className="text-body-2"> — {a.action}</span>
+                          {a.resource && <span className="text-body-3"> · {a.resource}</span>}
                         </div>
                       ))}
                     </div>

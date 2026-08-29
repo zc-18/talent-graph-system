@@ -1,5 +1,5 @@
 {
-  "checked": 95,
+  "checked": 160,
   "valid": [
     {
       "slug": "nio",
@@ -7,18 +7,18 @@
       "base": "https://nio.jobs.feishu.cn",
       "title": "NIO蔚来-社会招聘",
       "portal_type": 6,
-      "count": 2170,
-      "sample": "资深大语言模型算法（上海）",
+      "count": 1814,
+      "sample": "VPD-项目管理（上海）",
       "has_desc": true
     },
     {
       "slug": "xiaopeng",
       "home": 200,
       "base": "https://xiaopeng.jobs.feishu.cn",
-      "title": "加入小鹏汽车",
+      "title": "加入小鹏集团",
       "portal_type": 6,
-      "count": 1616,
-      "sample": "机器人运控软件开发工程师",
+      "count": 1619,
+      "sample": "具身智能算法工程师/专家",
       "has_desc": true
     },
     {
@@ -27,8 +27,8 @@
       "base": "https://poizon.jobs.feishu.cn",
       "title": "加入得物App",
       "portal_type": 6,
-      "count": 547,
-      "sample": "内容策划",
+      "count": 607,
+      "sample": "推荐算法实习生（）",
       "has_desc": true
     },
     {
@@ -37,18 +37,18 @@
       "base": "https://jobs.ecoflow.com",
       "title": "EcoFlow 正浩创新 | 社会招聘",
       "portal_type": 6,
-      "count": 178,
-      "sample": "【西安】高级功率软件工程师",
+      "count": 170,
+      "sample": "欧洲电商运营（TikTOK）",
       "has_desc": true
     },
     {
-      "slug": "01ai",
+      "slug": "thundersoft",
       "home": 200,
-      "base": "https://01ai.jobs.feishu.cn",
-      "title": "加入零一万物AGI",
+      "base": "https://thundersoft.jobs.feishu.cn",
+      "title": "ThunderSoft|中科创达是领先的智能操作系统产品和技术提供商",
       "portal_type": 6,
-      "count": 56,
-      "sample": "大模型与智能体行业销售专家",
+      "count": 161,
+      "sample": "动力/底盘测试工程师-增程管理方向",
       "has_desc": true
     },
     {
@@ -57,8 +57,68 @@
       "base": "https://shengshu.jobs.feishu.cn",
       "title": "欢迎加入生数科技",
       "portal_type": 6,
-      "count": 56,
-      "sample": "IR经理",
+      "count": 104,
+      "sample": "视频生成模型后训练 / 行业微调算法工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "booster",
+      "home": 200,
+      "base": "https://booster.jobs.feishu.cn",
+      "title": "加入Booster Robotics",
+      "portal_type": 6,
+      "count": 96,
+      "sample": "装配组长-无锡",
+      "has_desc": true
+    },
+    {
+      "slug": "qcraft",
+      "home": 200,
+      "base": "https://qcraft.jobs.feishu.cn",
+      "title": "加入轻舟智航QCraft",
+      "portal_type": 6,
+      "count": 57,
+      "sample": "SLAM建图算法工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "zepp",
+      "home": 200,
+      "base": "https://zepp.jobs.feishu.cn",
+      "title": "加入华米科技",
+      "portal_type": 6,
+      "count": 55,
+      "sample": "总账会计",
+      "has_desc": true
+    },
+    {
+      "slug": "01ai",
+      "home": 200,
+      "base": "https://01ai.jobs.feishu.cn",
+      "title": "加入零一万物AGI",
+      "portal_type": 6,
+      "count": 44,
+      "sample": "安全研发实习生",
+      "has_desc": true
+    },
+    {
+      "slug": "westwell",
+      "home": 200,
+      "base": "https://westwell.jobs.feishu.cn",
+      "title": "加入westwell 西井科技",
+      "portal_type": 6,
+      "count": 44,
+      "sample": "电气调试工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "holomatic",
+      "home": 200,
+      "base": "https://holomatic.jobs.feishu.cn",
+      "title": "加入禾多",
+      "portal_type": 6,
+      "count": 21,
+      "sample": "感知融合算法工程师-北京",
       "has_desc": true
     },
     {
@@ -78,7 +138,7 @@
       "title": "Join Insta360!",
       "portal_type": 6,
       "count": 15,
-      "sample": "AI开发实习生-大模型方向",
+      "sample": "南京实习基地-CMI 调研运营实习生",
       "has_desc": true
     },
     {
@@ -102,6 +162,16 @@
       "has_desc": true
     },
     {
+      "slug": "trunk",
+      "home": 200,
+      "base": "https://trunk.jobs.feishu.cn",
+      "title": "加入主线科技",
+      "portal_type": 6,
+      "count": 8,
+      "sample": "自动驾驶算法工程师",
+      "has_desc": true
+    },
+    {
       "slug": "iq",
       "home": 200,
       "base": "https://iq.jobs.feishu.cn",
@@ -119,8 +189,8 @@
       "base": "https://01ai.jobs.feishu.cn",
       "title": "加入零一万物AGI",
       "portal_type": 6,
-      "count": 56,
-      "sample": "大模型与智能体行业销售专家",
+      "count": 44,
+      "sample": "安全研发实习生",
       "has_desc": true
     },
     {
@@ -129,8 +199,8 @@
       "base": "https://nio.jobs.feishu.cn",
       "title": "NIO蔚来-社会招聘",
       "portal_type": 6,
-      "count": 2170,
-      "sample": "资深大语言模型算法（上海）",
+      "count": 1814,
+      "sample": "VPD-项目管理（上海）",
       "has_desc": true
     },
     {
@@ -139,8 +209,8 @@
       "base": "https://shengshu.jobs.feishu.cn",
       "title": "欢迎加入生数科技",
       "portal_type": 6,
-      "count": 56,
-      "sample": "IR经理",
+      "count": 104,
+      "sample": "视频生成模型后训练 / 行业微调算法工程师",
       "has_desc": true
     },
     {
@@ -156,17 +226,17 @@
     {
       "slug": "sensetime",
       "home": 200,
-      "base": "https://hr.sensetime.com",
+      "base": "https://sensetime.jobs.feishu.cn",
       "title": "加入商汤科技"
     },
     {
       "slug": "xiaopeng",
       "home": 200,
       "base": "https://xiaopeng.jobs.feishu.cn",
-      "title": "加入小鹏汽车",
+      "title": "加入小鹏集团",
       "portal_type": 6,
-      "count": 1616,
-      "sample": "机器人运控软件开发工程师",
+      "count": 1619,
+      "sample": "具身智能算法工程师/专家",
       "has_desc": true
     },
     {
@@ -175,8 +245,8 @@
       "base": "https://poizon.jobs.feishu.cn",
       "title": "加入得物App",
       "portal_type": 6,
-      "count": 547,
-      "sample": "内容策划",
+      "count": 607,
+      "sample": "推荐算法实习生（）",
       "has_desc": true
     },
     {
@@ -196,7 +266,7 @@
       "title": "Join Insta360!",
       "portal_type": 6,
       "count": 15,
-      "sample": "AI开发实习生-大模型方向",
+      "sample": "南京实习基地-CMI 调研运营实习生",
       "has_desc": true
     },
     {
@@ -217,8 +287,8 @@
       "base": "https://jobs.ecoflow.com",
       "title": "EcoFlow 正浩创新 | 社会招聘",
       "portal_type": 6,
-      "count": 178,
-      "sample": "【西安】高级功率软件工程师",
+      "count": 170,
+      "sample": "欧洲电商运营（TikTOK）",
       "has_desc": true
     },
     {
@@ -587,6 +657,312 @@
     },
     {
       "slug": "innovusion",
+      "home": 404
+    },
+    {
+      "slug": "banma",
+      "home": 404
+    },
+    {
+      "slug": "ecarx",
+      "home": 404
+    },
+    {
+      "slug": "thundersoft",
+      "home": 200,
+      "base": "https://thundersoft.jobs.feishu.cn",
+      "title": "ThunderSoft|中科创达是领先的智能操作系统产品和技术提供商",
+      "portal_type": 6,
+      "count": 161,
+      "sample": "动力/底盘测试工程师-增程管理方向",
+      "has_desc": true
+    },
+    {
+      "slug": "desaysv",
+      "home": 404
+    },
+    {
+      "slug": "hirain",
+      "home": 404
+    },
+    {
+      "slug": "jingwei",
+      "home": 404
+    },
+    {
+      "slug": "zeekr",
+      "home": 404
+    },
+    {
+      "slug": "lynkco",
+      "home": 404
+    },
+    {
+      "slug": "jidu",
+      "home": 404
+    },
+    {
+      "slug": "aiways",
+      "home": 404
+    },
+    {
+      "slug": "nezha",
+      "home": 404
+    },
+    {
+      "slug": "hycan",
+      "home": 404
+    },
+    {
+      "slug": "arcfox",
+      "home": 404
+    },
+    {
+      "slug": "deeproute",
+      "home": 404
+    },
+    {
+      "slug": "qcraft",
+      "home": 200,
+      "base": "https://qcraft.jobs.feishu.cn",
+      "title": "加入轻舟智航QCraft",
+      "portal_type": 6,
+      "count": 57,
+      "sample": "SLAM建图算法工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "holomatic",
+      "home": 200,
+      "base": "https://holomatic.jobs.feishu.cn",
+      "title": "加入禾多",
+      "portal_type": 6,
+      "count": 21,
+      "sample": "感知融合算法工程师-北京",
+      "has_desc": true
+    },
+    {
+      "slug": "zongmutech",
+      "home": 404
+    },
+    {
+      "slug": "minieye",
+      "home": 404
+    },
+    {
+      "slug": "nullmax",
+      "home": 404
+    },
+    {
+      "slug": "tusimple",
+      "home": 404
+    },
+    {
+      "slug": "inceptio",
+      "home": 404
+    },
+    {
+      "slug": "uisee",
+      "home": 404
+    },
+    {
+      "slug": "neolix",
+      "home": 404
+    },
+    {
+      "slug": "westwell",
+      "home": 200,
+      "base": "https://westwell.jobs.feishu.cn",
+      "title": "加入westwell 西井科技",
+      "portal_type": 6,
+      "count": 44,
+      "sample": "电气调试工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "trunk",
+      "home": 200,
+      "base": "https://trunk.jobs.feishu.cn",
+      "title": "加入主线科技",
+      "portal_type": 6,
+      "count": 8,
+      "sample": "自动驾驶算法工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "freetech",
+      "home": 404
+    },
+    {
+      "slug": "iflytekauto",
+      "home": 404
+    },
+    {
+      "slug": "fourier",
+      "home": 404
+    },
+    {
+      "slug": "robotera",
+      "home": 404
+    },
+    {
+      "slug": "astribot",
+      "home": 404
+    },
+    {
+      "slug": "limxdynamics",
+      "home": 404
+    },
+    {
+      "slug": "engineai",
+      "home": 404
+    },
+    {
+      "slug": "booster",
+      "home": 200,
+      "base": "https://booster.jobs.feishu.cn",
+      "title": "加入Booster Robotics",
+      "portal_type": 6,
+      "count": 96,
+      "sample": "装配组长-无锡",
+      "has_desc": true
+    },
+    {
+      "slug": "dobot",
+      "home": 404
+    },
+    {
+      "slug": "jaka",
+      "home": 404
+    },
+    {
+      "slug": "geekplus",
+      "home": 404
+    },
+    {
+      "slug": "syrius",
+      "home": 404
+    },
+    {
+      "slug": "hairobotics",
+      "home": 200,
+      "base": "https://hairobotics.jobs.feishu.cn",
+      "title": "加入深圳市海柔创新科技有限公司"
+    },
+    {
+      "slug": "deeprobotics",
+      "home": 404
+    },
+    {
+      "slug": "elephantrobotics",
+      "home": 404
+    },
+    {
+      "slug": "youibot",
+      "home": 404
+    },
+    {
+      "slug": "siasun",
+      "home": 404
+    },
+    {
+      "slug": "cloudminds",
+      "home": 404
+    },
+    {
+      "slug": "anker",
+      "home": 404
+    },
+    {
+      "slug": "ninebot",
+      "home": 404
+    },
+    {
+      "slug": "xreal",
+      "home": 200,
+      "base": "https://xreal.jobs.feishu.cn",
+      "title": "加入XREAL"
+    },
+    {
+      "slug": "rokid",
+      "home": 404
+    },
+    {
+      "slug": "zepp",
+      "home": 200,
+      "base": "https://zepp.jobs.feishu.cn",
+      "title": "加入华米科技",
+      "portal_type": 6,
+      "count": 55,
+      "sample": "总账会计",
+      "has_desc": true
+    },
+    {
+      "slug": "amazfit",
+      "home": 404
+    },
+    {
+      "slug": "goertek",
+      "home": 404
+    },
+    {
+      "slug": "transsion",
+      "home": 404
+    },
+    {
+      "slug": "yealink",
+      "home": 404
+    },
+    {
+      "slug": "unisoc",
+      "home": 404
+    },
+    {
+      "slug": "ingenic",
+      "home": 404
+    },
+    {
+      "slug": "espressif",
+      "home": 404
+    },
+    {
+      "slug": "quectelwireless",
+      "home": 404
+    },
+    {
+      "slug": "minimax",
+      "home": 404
+    },
+    {
+      "slug": "deepseek",
+      "home": 404
+    },
+    {
+      "slug": "zhipu",
+      "home": 404
+    },
+    {
+      "slug": "baai",
+      "home": 404
+    },
+    {
+      "slug": "openbmb",
+      "home": 404
+    },
+    {
+      "slug": "shengshuai",
+      "home": 404
+    },
+    {
+      "slug": "vivo",
+      "home": 404
+    },
+    {
+      "slug": "kunlun",
+      "home": 404
+    },
+    {
+      "slug": "seedream",
       "home": 404
     }
   ]

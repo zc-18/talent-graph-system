@@ -2,14 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { Upload, Loader2, ShieldCheck, ExternalLink, Plus, Trash2, History } from 'lucide-react'
 import {
-  IUsersThree, IDatabase, ITarget, IShieldCheck, IUser, IStack, ITrendUp, ILightbulb,
+  IShieldCheck, ILightbulb, ITarget, IUser,
+  ITalent, ICorpus, ICoverage, IJob, ISkill, IEvolution,
 } from '../components/icons'
 import {
   api, errMsg, JobListItem, TalentCorpus, TalentProfile, SupplyDemand,
   TeamItem, TeamGap, AliasItem,
   TeamEvent,
 } from '../api'
-import { Card, Badge, Spinner, EmptyState, ErrorState, Meter } from '../components/ui'
+import { Card, Badge, Spinner, EmptyState, ErrorState, Meter, PageHeader } from '../components/ui'
 import { Kpi } from '../components/Kpi'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
@@ -18,9 +19,9 @@ import { useAuth } from '../auth'
 type Tab = 'team' | 'supply' | 'corpus' | 'alias'
 
 const TABS = [
-  { key: 'team', label: '团队能力盘点', icon: IUsersThree },
-  { key: 'supply', label: '供需缺口对照', icon: ITrendUp },
-  { key: 'corpus', label: '简历语料台账', icon: IDatabase },
+  { key: 'team', label: '团队能力盘点', icon: ITalent },
+  { key: 'supply', label: '供需缺口对照', icon: IEvolution },
+  { key: 'corpus', label: '简历语料台账', icon: ICorpus },
   { key: 'alias', label: '学到的技能表述', icon: ILightbulb },
 ] as const
 
@@ -49,45 +50,36 @@ export default function Talent() {
     <div className="space-y-6">
       {/* Hero：纯 CSS 渐变光晕，public/ 无人才主题配图。
           用裸 div.glass 而非 Card（同 Dashboard），避免多叠一层层叠上下文 */}
-      <div className="relative overflow-hidden rounded-2xl glass">
-        <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-br from-sky-50/70 via-transparent to-accent/8/50" />
-        <div aria-hidden className="absolute -top-20 -right-12 w-64 h-64 rounded-full blur-3xl opacity-[0.18] bg-grad-accent ring-1 ring-accent/20" />
-        <div aria-hidden className="absolute -bottom-24 -left-16 w-56 h-56 rounded-full blur-3xl opacity-[0.14] bg-grad-accent ring-1 ring-accent/20" />
+      <div className="tg-topbar relative overflow-hidden rounded-2xl glass">
+        <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-br from-accent/6 via-transparent to-accent/8" />
+        <div aria-hidden className="absolute -top-20 -right-12 w-64 h-64 rounded-full blur-3xl opacity-[0.18] bg-grad-accent" />
+        <div aria-hidden className="absolute -bottom-24 -left-16 w-56 h-56 rounded-full blur-3xl opacity-[0.14] bg-grad-accent" />
 
         <div className="relative z-10 px-5 py-6 sm:px-8 sm:py-9">
-          <div className="flex items-start gap-4">
-            <div className="w-11 h-11 rounded-xl bg-grad-violet grid place-items-center shadow-glow shrink-0">
-              <IUsersThree className="w-6 h-6 text-accent-deep" />
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">人才与团队盘点</h1>
-              <p className="text-slate-500 mt-1 max-w-2xl">
-                脱敏人才画像驱动的团队能力盘点 · 供需缺口对照 · 学到的技能表述
-              </p>
-            </div>
-          </div>
+          <PageHeader icon={<ITalent className="w-6 h-6" />} title="人才与团队盘点"
+            subtitle="脱敏人才画像驱动的团队能力盘点 · 供需缺口对照 · 学到的技能表述" />
 
           <div className="mt-5 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/70 border border-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm">
-              <b className="text-sm font-extrabold text-slate-900 tabular-nums">{corpus.total_profiles}</b>份脱敏人才画像
+            <span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/70 border border-white/80 px-3 py-1.5 text-xs text-body-2 shadow-sm">
+              <b className="text-sm font-extrabold text-body-1 tabular-nums">{corpus.total_profiles}</b>份脱敏人才画像
             </span>
-            <span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/70 border border-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm">
-              <b className="text-sm font-extrabold text-slate-900 tabular-nums">{corpus.total_skills_extracted}</b>项已抽取技能
+            <span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/70 border border-white/80 px-3 py-1.5 text-xs text-body-2 shadow-sm">
+              <b className="text-sm font-extrabold text-body-1 tabular-nums">{corpus.total_skills_extracted}</b>项已抽取技能
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/8/80 border border-accent/20 px-3 py-1.5 text-xs font-medium text-accent-deep">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/8 border border-accent/20 px-3 py-1.5 text-xs font-medium text-accent-deep">
               <IShieldCheck className="w-3.5 h-3.5" />简历原文与身份信息不入库
             </span>
           </div>
         </div>
       </div>
 
-      {/* 未选中项不用 btn-ghost：它自带 border-slate-200，在导轨内会形成双重描边 */}
+      {/* 未选中项不用 btn-ghost：它自带 border-line-soft/8，在导轨内会形成双重描边 */}
       <div className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-white/60 border border-white/80 backdrop-blur-xl shadow-card sm:inline-flex">
         {TABS.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition ${
-              tab === t.key ? 'bg-grad-accent ring-1 ring-accent/20 text-accent-deep shadow-glow'
-                : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>
+              tab === t.key ? 'bg-grad-accent text-white shadow-glow'
+                : 'text-body-2 hover:bg-white hover:text-body-1'}`}>
             <t.icon className="w-4 h-4" />{t.label}
           </button>
         ))}
@@ -212,13 +204,13 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
                 <Plus className="w-4 h-4" /> 创建团队
               </button>
             </div>
-            <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-body-2 cursor-pointer">
               <input type="checkbox" checked={authorized} onChange={e => setAuthorized(e.target.checked)} />
               已获得成员简历处理授权
             </label>
           </div>
         )}
-        <p className="mt-3 text-xs text-slate-500 flex items-start gap-1.5">
+        <p className="mt-3 text-xs text-body-2 flex items-start gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 mt-0.5 shrink-0 text-accent-deep" />
           {canManageTeam
             ? '组织私有人才数据可在公共图谱只读模式下追加。简历只在内存中解析，服务端仅留存脱敏技能要素。'
@@ -232,25 +224,26 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <Kpi delay={0} label="团队人数" value={gap.team.size} unit="人" sub={gap.team.name}
-              icon={<IUsersThree className="w-5 h-5 text-accent-deep" />} tone="bg-grad-accent ring-1 ring-accent/20" />
+              icon={<ITalent className="w-5 h-5" />} tone="bg-grad-accent" />
             <Kpi delay={0.05} label="必备能力覆盖" value={`${gap.required_covered}/${gap.required_total}`}
               sub={`覆盖率 ${(gap.coverage_rate * 100).toFixed(0)}%`}
-              icon={<ITarget className="w-5 h-5 text-accent-deep" />} tone="bg-grad-violet" />
+              icon={<IJob className="w-5 h-5" />} tone="bg-grad-violet" />
             <Kpi delay={0.1} label="加权覆盖率" value={gap.weighted_coverage * 100} unit="%" decimals={1}
-              sub="按岗位能力权重加权" ring={gap.weighted_coverage} />
+              sub="按岗位能力权重加权" ring={gap.weighted_coverage}
+              icon={<ICoverage className="w-5 h-5" />} tone="bg-grad-accent" />
             <Kpi delay={0.15} label="加分能力覆盖" value={`${gap.bonus_covered}/${gap.bonus_total}`} sub="加分项"
-              icon={<IStack className="w-5 h-5 text-accent-deep" />} tone="bg-accent/80" />
+              icon={<ISkill className="w-5 h-5" />} tone="bg-grad-violet" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card className="p-5" delay={0.05}>
               <div className="flex items-center justify-between gap-2 mb-3">
-                <h3 className="font-semibold text-slate-800 flex items-center gap-2 min-w-0">
-                  <span className="w-6 h-6 rounded-lg bg-rose-50 border border-rose-100 grid place-items-center shrink-0">
-                    <ITarget className="w-3.5 h-3.5 text-rose-500" />
+                <h3 className="font-semibold text-body-1 flex items-center gap-2 min-w-0">
+                  <span className="w-6 h-6 rounded-lg bg-danger-weak border border-danger/20 grid place-items-center shrink-0">
+                    <ITarget className="w-3.5 h-3.5 text-danger" />
                   </span>
                   <span className="shrink-0">还缺谁</span>
-                  <span className="text-xs font-normal text-slate-400 truncate">团队没人具备的必备能力</span>
+                  <span className="text-xs font-normal text-body-3 truncate">团队没人具备的必备能力</span>
                 </h3>
                 {/* shrink-0 + nowrap：1024px 两栏时卡片最窄，否则标题会断成「还缺 / 谁」、徽章文字也会折行 */}
                 {gap.missing.length > 0 && (
@@ -263,16 +256,16 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
                 ? <EmptyState text="该岗位的必备能力已全部覆盖" />
                 : <div className="space-y-2 max-h-[300px] overflow-y-auto -mr-2 pr-2 sm:max-h-[420px]">
                     {gap.missing.map(m => (
-                      <div key={m.skill} className="rounded-xl bg-sky-50/70 border border-slate-200/70 px-3.5 py-2.5">
+                      <div key={m.skill} className="rounded-xl bg-accent/6 border border-line-soft/8 px-3.5 py-2.5">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-sm font-medium text-slate-800 truncate" title={m.skill}>{m.skill}</span>
-                          <span className="text-xs font-semibold text-rose-600 tabular-nums shrink-0">
+                          <span className="text-sm font-medium text-body-1 truncate" title={m.skill}>{m.skill}</span>
+                          <span className="text-xs font-semibold text-danger tabular-nums shrink-0">
                             {m.weight.toFixed(2)}
                           </span>
                         </div>
                         {/* rose 不再铺满整行底色，只作为权重的语义编码留在数字与条上 */}
                         <div className="mt-1.5">
-                          <Meter value={m.weight} tone="bg-gradient-to-r from-rose-400 to-amber-400" min={4} />
+                          <Meter value={m.weight} tone="bg-gradient-to-r from-danger/80 to-warn/80" min={4} />
                         </div>
                       </div>
                     ))}
@@ -281,12 +274,12 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
 
             <Card className="p-5" delay={0.1}>
               <div className="flex items-center justify-between gap-2 mb-3">
-                <h3 className="font-semibold text-slate-800 flex items-center gap-2 min-w-0">
-                  <span className="w-6 h-6 rounded-lg bg-indigo-50 border border-indigo-100 grid place-items-center shrink-0">
-                    <IUser className="w-3.5 h-3.5 text-indigo-500" />
+                <h3 className="font-semibold text-body-1 flex items-center gap-2 min-w-0">
+                  <span className="w-6 h-6 rounded-lg bg-accent-violet/10 border border-accent-violet/25 grid place-items-center shrink-0">
+                    <IUser className="w-3.5 h-3.5 text-accent-violet" />
                   </span>
                   <span className="shrink-0">谁能补</span>
-                  <span className="text-xs font-normal text-slate-400 truncate">成员对必备能力的贡献</span>
+                  <span className="text-xs font-normal text-body-3 truncate">成员对必备能力的贡献</span>
                 </h3>
               </div>
               {gap.contributions.length === 0
@@ -295,34 +288,34 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
                     {gap.contributions.map(c => {
                       const pct = gap.required_total ? c.covers_required / gap.required_total : 0
                       return (
-                        <div key={c.member_id} className="rounded-xl bg-sky-50/70 border border-slate-200/70 px-3.5 py-2.5">
+                        <div key={c.member_id} className="rounded-xl bg-accent/6 border border-line-soft/8 px-3.5 py-2.5">
                           <div className="flex items-center justify-between gap-2">
                             <span className="flex items-center gap-2 min-w-0">
-                              <span className="w-7 h-7 rounded-lg bg-grad-violet grid place-items-center shrink-0
-                                               text-[11px] font-bold text-accent-deep">
+                              <span className="w-7 h-7 rounded-lg bg-grad-accent grid place-items-center shrink-0
+                                               text-[11px] font-bold text-white">
                                 {c.display_name.slice(0, 1)}
                               </span>
-                              <span className="text-sm font-medium text-slate-800 truncate">
+                              <span className="text-sm font-medium text-body-1 truncate">
                                 {c.display_name}
-                                <span className="ml-1.5 font-mono text-[11px] font-normal text-slate-400">{c.talent_code}</span>
+                                <span className="ml-1.5 font-mono text-[11px] font-normal text-body-3">{c.talent_code}</span>
                               </span>
                             </span>
                             <div className="flex items-center gap-1.5 shrink-0">
                               <Badge tone="indigo">覆盖 {c.covers_required}</Badge>
                               {c.uniquely_covers > 0 && <Badge tone="amber">独有 {c.uniquely_covers}</Badge>}
                               {canManageTeam && <button onClick={() => void removeMember(c.member_id, c.display_name)}
-                                className="icon-btn !w-7 !h-7 text-rose-500" title="移出团队" aria-label={`移出 ${c.display_name}`}>
+                                className="icon-btn !w-7 !h-7 text-danger" title="移出团队" aria-label={`移出 ${c.display_name}`}>
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>}
                             </div>
                           </div>
                           <div className="mt-2 flex items-center gap-2">
                             <div className="flex-1"><Meter value={pct} /></div>
-                            <span className="w-10 shrink-0 text-right text-[11px] text-slate-500 tabular-nums">
+                            <span className="w-10 shrink-0 text-right text-[11px] text-body-2 tabular-nums">
                               {Math.round(pct * 100)}%
                             </span>
                           </div>
-                          <div className="mt-1.5 text-xs text-slate-500 truncate">
+                          <div className="mt-1.5 text-xs text-body-2 truncate">
                             {c.role_label || '—'} · 技能 {c.skill_count} 项
                             {c.unique_skills.length > 0 && <> · 仅他会：{c.unique_skills.slice(0, 3).join('、')}</>}
                           </div>
@@ -334,19 +327,19 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
           </div>
           {canManageTeam && (
             <Card className="p-5" delay={0.12}>
-              <h3 className="font-semibold text-slate-800 flex items-center gap-2 mb-3">
-                <History className="w-4 h-4 text-indigo-500" /> 团队变化历史
+              <h3 className="font-semibold text-body-1 flex items-center gap-2 mb-3">
+                <History className="w-4 h-4 text-accent-violet" /> 团队变化历史
               </h3>
               {teamEvents.length === 0 ? <EmptyState text="暂无团队变更" /> : (
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-line-soft/6">
                   {teamEvents.slice(0, 10).map(event => {
                     const labels: Record<string, string> = { created: '创建团队', member_added: '加入成员', member_uploaded: '上传成员', member_removed: '移出成员' }
                     const before = event.before?.coverage_rate
                     const after = event.after?.coverage_rate
                     return <div key={event.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
-                      <div className="min-w-0"><b className="text-slate-700">{labels[event.action] || event.action}</b>
-                        <span className="ml-2 text-slate-500">{event.details?.display_name || event.details?.code || ''}</span></div>
-                      <div className="shrink-0 text-xs text-slate-400">
+                      <div className="min-w-0"><b className="text-body-1">{labels[event.action] || event.action}</b>
+                        <span className="ml-2 text-body-2">{event.details?.display_name || event.details?.code || ''}</span></div>
+                      <div className="shrink-0 text-xs text-body-3">
                         {before != null && after != null && <span className="mr-3">覆盖率 {Math.round(before * 100)}% → {Math.round(after * 100)}%</span>}
                         {new Date(event.created_at).toLocaleString('zh-CN')}
                       </div>
@@ -403,8 +396,8 @@ function SupplyPanel({ jobs }: { jobs: JobListItem[] }) {
               options={jobs.map(j => ({ value: String(j.id), label: j.name }))} />
           </div>
           {data && (
-            <div className="text-xs text-slate-500 sm:pb-2.5">
-              对照 <b className="text-slate-700 tabular-nums">{data.corpus_size}</b> 份脱敏画像
+            <div className="text-xs text-body-2 sm:pb-2.5">
+              对照 <b className="text-body-1 tabular-nums">{data.corpus_size}</b> 份脱敏画像
             </div>
           )}
         </div>
@@ -414,18 +407,19 @@ function SupplyPanel({ jobs }: { jobs: JobListItem[] }) {
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <Kpi delay={0} label="语料人数" value={data.corpus_size} unit="人" sub="脱敏人才画像总量"
-              icon={<IDatabase className="w-5 h-5 text-accent-deep" />} tone="bg-grad-accent ring-1 ring-accent/20" />
+              icon={<ICorpus className="w-5 h-5" />} tone="bg-grad-accent" />
             <Kpi delay={0.05} label="对口人才" value={data.aligned_talents} unit="人" sub="映射到该岗位"
-              icon={<IUser className="w-5 h-5 text-accent-deep" />} tone="bg-grad-violet" />
+              icon={<ITalent className="w-5 h-5" />} tone="bg-grad-violet" />
             <Kpi delay={0.1} label="必备能力被覆盖" value={`${data.required_covered}/${data.required_total}`}
               sub="语料中至少 1 人具备"
-              icon={<ITarget className="w-5 h-5 text-accent-deep" />} tone="bg-accent/80" />
+              icon={<IJob className="w-5 h-5" />} tone="bg-grad-accent" />
             <Kpi delay={0.15} label="覆盖率" value={data.coverage_rate * 100} unit="%" decimals={1}
-              sub="人才供给对岗位需求" ring={data.coverage_rate} />
+              sub="人才供给对岗位需求" ring={data.coverage_rate}
+              icon={<ICoverage className="w-5 h-5" />} tone="bg-grad-violet" />
           </div>
           <Card className="p-5" delay={0.05}>
-            <h3 className="font-semibold text-slate-800 mb-1">需求权重 vs 人才供给率（缺口最大的前 12 项）</h3>
-            <p className="text-xs text-slate-500 mb-3">{data.note}</p>
+            <h3 className="font-semibold text-body-1 mb-1">需求权重 vs 人才供给率（缺口最大的前 12 项）</h3>
+            <p className="text-xs text-body-2 mb-3">{data.note}</p>
             <ReactECharts option={option} style={{ height: 420 }} notMerge />
           </Card>
         </>
@@ -457,12 +451,12 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
       </Card>
 
       <Card className="p-5" delay={0.05}>
-        <h3 className="font-semibold text-slate-800 mb-3">采集批次与许可证</h3>
+        <h3 className="font-semibold text-body-1 mb-3">采集批次与许可证</h3>
         {/* 负边距要与卡片 p-5 一致，否则横向滚动条与内容左边缘对不齐 */}
         <div className="overflow-x-auto -mx-5 px-5">
           <table className="w-full text-sm min-w-[720px]">
             <thead>
-              <tr className="text-left text-xs text-slate-500 border-b border-slate-100">
+              <tr className="text-left text-xs text-body-2 border-b border-line-soft/6">
                 <th className="py-2 pr-3">批次</th><th className="py-2 pr-3">类型</th>
                 <th className="py-2 pr-3">来源</th><th className="py-2 pr-3">许可/依据</th>
                 <th className="py-2 pr-3">robots 遵循</th><th className="py-2 pr-3">入库</th>
@@ -470,7 +464,7 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
             </thead>
             <tbody>
               {corpus.batches.map(b => (
-                <tr key={b.batch_key} className="border-b border-slate-50">
+                <tr key={b.batch_key} className="border-b border-line-soft/4">
                   <td className="py-2 pr-3 font-mono text-xs">{b.batch_key}</td>
                   <td className="py-2 pr-3"><Badge tone="indigo">{SRC_LABEL[b.source_type] || b.source_type}</Badge></td>
                   <td className="py-2 pr-3 max-w-[200px] truncate" title={b.source_name}>{b.source_name}</td>
@@ -484,13 +478,13 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
                         : '本批次逐 host 检查 robots.txt，有 URL 被 Disallow，采集器已跳过、未采集'}>
                     {b.robots_ok
                       ? '✅ 遵循'
-                      : <>✅ 遵循<span className="ml-1 text-xs text-slate-400">（有拦截已跳过）</span></>}
+                      : <>✅ 遵循<span className="ml-1 text-xs text-body-3">（有拦截已跳过）</span></>}
                   </td>
                   <td className="py-2 pr-3 tabular-nums" title={`采集 ${b.collected} 份，清洗后留 ${b.kept} 份，跨批次近重复剔除后实际入库 ${b.profiles} 份`}>
                     {b.profiles}
                     {/* 不写"留 N"：本页另一个页签有"留出集"，"留"字会被读成 holdout。 */}
                     {b.profiles !== b.kept &&
-                      <span className="ml-1 text-xs text-slate-400">（清洗后 {b.kept}）</span>}
+                      <span className="ml-1 text-xs text-body-3">（清洗后 {b.kept}）</span>}
                   </td>
                 </tr>
               ))}
@@ -501,7 +495,7 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
 
       <Card className="p-5" delay={0.1}>
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
-          <h3 className="font-semibold text-slate-800 flex-1">脱敏人才画像</h3>
+          <h3 className="font-semibold text-body-1 flex-1">脱敏人才画像</h3>
           <div className="w-full sm:w-56">
             <Select value={src} onChange={setSrc} options={[
               { value: '', label: `全部来源（${corpus.total_profiles}）` },
@@ -512,28 +506,28 @@ function CorpusPanel({ corpus }: { corpus: TalentCorpus }) {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
           {profiles.map(p => (
-            <div key={p.id} className="rounded-xl bg-sky-50/70 border border-slate-200/70 p-3.5
-                                       hover:bg-sky-100/60 transition">
+            <div key={p.id} className="rounded-xl bg-accent/6 border border-line-soft/8 p-3.5
+                                       hover:bg-accent/10 transition">
               <div className="flex items-center justify-between gap-2">
-                <span className="font-mono text-sm font-semibold text-slate-800">{p.code}</span>
+                <span className="font-mono text-sm font-semibold text-body-1">{p.code}</span>
                 <div className="flex gap-1.5 shrink-0">
                   <Badge tone="slate">{p.language === 'zh' ? '中文' : 'EN'}</Badge>
                   {p.holdout && <Badge tone="amber">留出集</Badge>}
                 </div>
               </div>
-              <div className="mt-1 text-xs text-slate-500 truncate">
+              <div className="mt-1 text-xs text-body-2 truncate">
                 {SRC_LABEL[p.source_type] || p.source_type} · {p.matched_job_name || p.target_cluster || '未映射'}
               </div>
-              <div className="mt-2 text-xs text-slate-600">技能 {p.skill_count} 项</div>
+              <div className="mt-2 text-xs text-body-2">技能 {p.skill_count} 项</div>
               <div className="mt-1 flex flex-wrap gap-1">
                 {p.skills.slice(0, 8).map(s => (
-                  <span key={s} className="px-1.5 py-0.5 rounded bg-white/80 border border-slate-200/70
-                                           text-[11px] text-slate-600">{s}</span>
+                  <span key={s} className="px-1.5 py-0.5 rounded bg-white/80 border border-line-soft/8
+                                           text-[11px] text-body-2">{s}</span>
                 ))}
               </div>
               {p.source_url && (
                 <a href={p.source_url} target="_blank" rel="noreferrer"
-                  className="mt-2 inline-flex items-center gap-1 text-[11px] text-sky-600 hover:underline">
+                  className="mt-2 inline-flex items-center gap-1 text-[11px] text-accent-deep hover:underline">
                   <ExternalLink className="w-3 h-3" />出处
                 </a>
               )}
@@ -560,42 +554,42 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
   return (
     <div className="space-y-4">
       <Card className="p-6">
-        <h3 className="font-semibold text-slate-800 mb-2">简历里学到了什么</h3>
+        <h3 className="font-semibold text-body-1 mb-2">简历里学到了什么</h3>
         {/* 限宽：这段是正文不是表格，通栏会拉出一行几十字的长行，很难读 */}
-        <p className="max-w-3xl text-sm text-slate-600 leading-relaxed">
-          简历的技能写法和 JD 不一样（<code className="text-xs bg-slate-100 px-1 rounded">Numpy</code>
+        <p className="max-w-3xl text-sm text-body-2 leading-relaxed">
+          简历的技能写法和 JD 不一样（<code className="text-xs bg-brand-ink/8 px-1 rounded">Numpy</code>
           {' / '}
-          <code className="text-xs bg-slate-100 px-1 rounded">Map Reduce</code>），对不齐就等于白抽。
-          系统从语料里归集这些写法、对齐到图谱<b className="text-slate-800">已有</b>的技能节点，
-          <b className="text-slate-800">不新建节点、不改 JD 侧词典</b>。
+          <code className="text-xs bg-brand-ink/8 px-1 rounded">Map Reduce</code>），对不齐就等于白抽。
+          系统从语料里归集这些写法、对齐到图谱<b className="text-body-1">已有</b>的技能节点，
+          <b className="text-body-1">不新建节点、不改 JD 侧词典</b>。
         </p>
 
         {/* 四个数字从句子里拎出来单独成行，便于逐个核对 */}
         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
-          <span className="text-slate-500">采纳
+          <span className="text-body-2">采纳
             <b className="ml-1.5 text-base text-accent-deep tabular-nums">{corpus.alias_accepted}</b>
             <span className="ml-0.5 text-xs">条</span>
           </span>
-          <span className="text-slate-500">拒绝
-            <b className="ml-1.5 text-base text-slate-700 tabular-nums">{corpus.alias_rejected}</b>
+          <span className="text-body-2">拒绝
+            <b className="ml-1.5 text-base text-body-1 tabular-nums">{corpus.alias_rejected}</b>
             <span className="ml-0.5 text-xs">条</span>
           </span>
-          <span className="h-4 w-px bg-slate-200" aria-hidden />
-          <span className="text-slate-500">学习集
-            <b className="ml-1.5 text-base text-slate-700 tabular-nums">{corpus.total_profiles - corpus.holdout}</b>
+          <span className="h-4 w-px bg-brand-ink/12" aria-hidden />
+          <span className="text-body-2">学习集
+            <b className="ml-1.5 text-base text-body-1 tabular-nums">{corpus.total_profiles - corpus.holdout}</b>
             <span className="ml-0.5 text-xs">份</span>
           </span>
-          <span className="text-slate-500">留出集
-            <b className="ml-1.5 text-base text-amber-600 tabular-nums">{corpus.holdout}</b>
+          <span className="text-body-2">留出集
+            <b className="ml-1.5 text-base text-warn tabular-nums">{corpus.holdout}</b>
             <span className="ml-0.5 text-xs">份</span>
-            <span className="ml-1 text-xs text-slate-400">（不参与学习，只做对照评测）</span>
+            <span className="ml-1 text-xs text-body-3">（不参与学习，只做对照评测）</span>
           </span>
         </div>
 
-        <p className="mt-3 max-w-3xl text-xs text-slate-500 leading-relaxed">
+        <p className="mt-3 max-w-3xl text-xs text-body-2 leading-relaxed">
           下表里不少条目只有 1 份简历佐证，是因为护栏按映射类型分档：
-          <b className="text-slate-700">机械型</b>（只差大小写/空格，如 <code className="bg-slate-100 px-1 rounded">JSP→Jsp</code>）
-          客观可核验，1 份即可；<b className="text-slate-700">判断型</b>（包含关系、语义相似）
+          <b className="text-body-1">机械型</b>（只差大小写/空格，如 <code className="bg-brand-ink/8 px-1 rounded">JSP→Jsp</code>）
+          客观可核验，1 份即可；<b className="text-body-1">判断型</b>（包含关系、语义相似）
           必须 ≥2 份不同简历佐证，孤例只记候选、不启用。
         </p>
         {/* 二级筛选：刻意做得比顶部主页签轻，避免两处实心色块互相抢视觉 */}
@@ -605,10 +599,10 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
             <button key={k} onClick={() => setStatus(k)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                 status === k
-                  ? 'bg-sky-50 text-sky-700 ring-1 ring-sky-200'
-                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}>
+                  ? 'bg-accent/6 text-accent-deep ring-1 ring-accent/25'
+                  : 'text-body-2 hover:text-body-1 hover:bg-surface-muted'}`}>
               {label}
-              <span className={`ml-1.5 tabular-nums ${status === k ? 'text-sky-500' : 'text-slate-400'}`}>{n}</span>
+              <span className={`ml-1.5 tabular-nums ${status === k ? 'text-accent' : 'text-body-3'}`}>{n}</span>
             </button>
           ))}
         </div>
@@ -616,21 +610,21 @@ function AliasPanel({ corpus }: { corpus: TalentCorpus }) {
 
       {loading ? <Spinner /> : (
         <Card className="p-5" delay={0.05}>
-          <div className="mb-3 rounded-xl bg-sky-50/70 border border-slate-200/70 px-3 py-2
-                          text-xs text-slate-500 leading-relaxed">
-            左 = 简历里出现的写法　→　右 = 图谱中<b className="text-slate-700">已存在</b>的节点名。
-            节点名的大小写以图谱为准（如 <code className="bg-white px-1 rounded border border-slate-200">JDK → jdk</code>），
+          <div className="mb-3 rounded-xl bg-accent/6 border border-line-soft/8 px-3 py-2
+                          text-xs text-body-2 leading-relaxed">
+            左 = 简历里出现的写法　→　右 = 图谱中<b className="text-body-1">已存在</b>的节点名。
+            节点名的大小写以图谱为准（如 <code className="bg-white px-1 rounded border border-line-soft/8">JDK → jdk</code>），
             对齐的是"哪个节点"，不是"哪种写法好看"。
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
             {items.map(a => (
-              <div key={a.alias} className="rounded-xl bg-sky-50/70 border border-slate-200/70 px-3.5 py-2.5">
-                <div className="text-sm text-slate-800 truncate">
+              <div key={a.alias} className="rounded-xl bg-accent/6 border border-line-soft/8 px-3.5 py-2.5">
+                <div className="text-sm text-body-1 truncate">
                   <span className="font-medium">{a.alias}</span>
-                  {a.canonical && <span className="text-slate-400"> → </span>}
+                  {a.canonical && <span className="text-body-3"> → </span>}
                   {a.canonical && <span className="text-accent-deep">{a.canonical}</span>}
                 </div>
-                <div className="text-[11px] text-slate-500 mt-0.5 truncate" title={a.reason || ''}>
+                <div className="text-[11px] text-body-2 mt-0.5 truncate" title={a.reason || ''}>
                   {a.talent_count} 份简历 · {a.reason || '—'}
                 </div>
               </div>

@@ -36,7 +36,7 @@ export default function Feedback() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3"><div className="w-11 h-11 shrink-0 rounded-xl bg-grad-violet grid place-items-center shadow-glow"><MessageSquareText className="w-5 h-5 text-white" /></div><div><h1 className="text-2xl font-extrabold text-slate-900">反馈与知识更新</h1><p className="text-sm text-slate-500">反馈须经审核才能影响公共岗位知识，全程可跟踪</p></div></div>
+      <div className="flex items-center gap-3"><div className="w-11 h-11 shrink-0 rounded-xl bg-grad-violet grid place-items-center shadow-glow"><MessageSquareText className="w-5 h-5 text-white" /></div><div><h1 className="text-2xl font-extrabold text-body-1">反馈与知识更新</h1><p className="text-sm text-body-2">反馈须经审核才能影响公共岗位知识，全程可跟踪</p></div></div>
       <div className="grid grid-cols-1 lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[420px_minmax(0,1fr)] gap-4 lg:gap-5 items-start">
         <Card className="p-5">
           <form onSubmit={submit} className="space-y-4">
@@ -49,7 +49,7 @@ export default function Feedback() {
         <div>
           <div className="label mb-3">我的反馈进度</div>
           {loading ? <Spinner /> : error ? <ErrorState text="反馈记录加载失败" onRetry={load} /> : items.length === 0 ? <Card className="p-5"><EmptyState text="暂无反馈记录" /></Card> : (
-            <div className="space-y-3">{items.map(item => <div key={item.id} className="rounded-xl border border-slate-200 bg-white/75 p-4"><div className="flex flex-wrap items-start justify-between gap-2 sm:flex-nowrap sm:gap-3"><div className="min-w-0"><div className="font-semibold text-slate-800 break-words">{item.subject || item.category || `反馈 #${item.id}`}</div><div className="text-xs text-slate-400 mt-1">{new Date(item.created_at).toLocaleString()}</div></div><Badge tone={FEEDBACK_STATUS_TONE[item.status]}>{FEEDBACK_STATUS_LABEL[item.status] || item.status}</Badge></div>{item.content && <p className="text-sm text-slate-500 mt-3 line-clamp-2">{item.content}</p>}{item.status === 'applied' && <div className="flex items-center gap-1.5 text-xs text-accent-deep mt-3"><CheckCircle2 className="w-3.5 h-3.5" /> 已关联实际知识变更</div>}</div>)}</div>
+            <div className="space-y-3">{items.map(item => <div key={item.id} className="rounded-xl border border-line-soft/8 bg-white/75 p-4"><div className="flex flex-wrap items-start justify-between gap-2 sm:flex-nowrap sm:gap-3"><div className="min-w-0"><div className="font-semibold text-body-1 break-words">{item.subject || item.category || `反馈 #${item.id}`}</div><div className="text-xs text-body-3 mt-1">{new Date(item.created_at).toLocaleString()}</div></div><Badge tone={FEEDBACK_STATUS_TONE[item.status]}>{FEEDBACK_STATUS_LABEL[item.status] || item.status}</Badge></div>{item.content && <p className="text-sm text-body-2 mt-3 line-clamp-2">{item.content}</p>}{item.status === 'applied' && <div className="flex items-center gap-1.5 text-xs text-accent-deep mt-3"><CheckCircle2 className="w-3.5 h-3.5" /> 已关联实际知识变更</div>}</div>)}</div>
           )}
         </div>
       </div>

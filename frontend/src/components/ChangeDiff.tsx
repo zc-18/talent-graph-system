@@ -23,11 +23,11 @@ function summarize(v: any): string {
 
 function DiffArrow({ label, from, to }: { label: string; from: string; to: string }) {
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] text-slate-500 bg-white/70 border border-slate-200 rounded-full px-2 py-0.5">
-      <span className="text-slate-400">{label}</span>
-      <span className="text-slate-600">{from}</span>
-      <ArrowRight className="w-3 h-3 text-amber-500" />
-      <span className="font-semibold text-slate-800">{to}</span>
+    <span className="inline-flex items-center gap-1 text-[11px] text-body-2 bg-white/70 border border-line-soft/8 rounded-full px-2 py-0.5">
+      <span className="text-body-3">{label}</span>
+      <span className="text-body-2">{from}</span>
+      <ArrowRight className="w-3 h-3 text-warn" />
+      <span className="font-semibold text-body-1">{to}</span>
     </span>
   )
 }
@@ -54,7 +54,7 @@ export default function ChangeDiff({ change, compact = false }: { change: any; c
     return (
       <span className="inline-flex items-center gap-1.5 flex-wrap">
         <Badge tone="rose">删除</Badge>
-        {s && <span className="text-[11px] text-rose-400 line-through">{s}</span>}
+        {s && <span className="text-[11px] text-danger/80 line-through">{s}</span>}
       </span>
     )
   }
@@ -78,7 +78,7 @@ export default function ChangeDiff({ change, compact = false }: { change: any; c
       <span className="inline-flex items-center gap-1.5 flex-wrap">
         <Badge tone="amber">修改</Badge>
         {diffs.length > 0 ? diffs : (
-          !compact && <span className="text-[11px] text-slate-400">{summarize(o)} → {summarize(n) || '（细节调整）'}</span>
+          !compact && <span className="text-[11px] text-body-3">{summarize(o)} → {summarize(n) || '（细节调整）'}</span>
         )}
       </span>
     )

@@ -120,7 +120,7 @@ function StatBar({ stats, state }: { stats: PublicStats | null; state: LoadState
     },
   ]
   return (
-    <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line-soft/12 bg-line-soft/10 shadow-[0_10px_30px_-18px_rgb(var(--brand-ink)/0.22)] sm:grid-cols-2 lg:grid-cols-4">
+    <div className="tg-topbar grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line-soft/6 bg-line-soft/8 shadow-[0_10px_30px_-18px_rgb(var(--brand-ink)/0.22)] sm:grid-cols-2 lg:grid-cols-4">
       {items.map(item => (
         <div key={item.label} className="bg-white px-5 py-5 sm:px-6">
           <div className="text-xs font-semibold text-body-3">{item.label}</div>
@@ -128,7 +128,7 @@ function StatBar({ stats, state }: { stats: PublicStats | null; state: LoadState
             <div className="mt-2 h-8 w-24 animate-pulse rounded-xl bg-brand-ink/8" aria-label="数据加载中" />
           ) : (
             <div className="mt-1.5 flex items-baseline gap-1">
-              <span className="text-3xl font-extrabold tabular-nums text-body-1">{item.value}</span>
+              <span className="text-3xl font-extrabold tabular-nums text-accent-deep">{item.value}</span>
               <span className="text-sm font-semibold text-body-3">{item.unit}</span>
             </div>
           )}
@@ -149,7 +149,7 @@ function FlowBand() {
           <li key={title} className="relative flex min-w-0 flex-col items-center text-center">
             <div className="grid h-24 place-items-center">
               <span className={primary
-                ? 'relative z-10 grid h-[74px] w-[74px] place-items-center rounded-2xl bg-grad-accent ring-1 ring-accent/20 text-accent-deep shadow-[0_14px_30px_-14px_rgb(var(--brand-accent)/0.75)]'
+                ? 'relative z-10 grid h-[74px] w-[74px] place-items-center rounded-2xl bg-grad-accent text-white shadow-[0_14px_30px_-14px_rgb(var(--brand-accent)/0.55)]'
                 : 'relative z-10 grid h-14 w-14 place-items-center rounded-2xl border border-line-soft/14 bg-white text-accent shadow-[0_8px_20px_-14px_rgb(var(--brand-ink)/0.4)]'}>
                 <Icon className={primary ? 'h-7 w-7' : 'h-5 w-5'} />
               </span>
@@ -160,7 +160,7 @@ function FlowBand() {
             )}
             <div className="mt-1 flex items-center gap-1.5 text-[11px] font-bold tabular-nums text-body-3">
               <span>0{index + 1}</span>
-              {primary && <span className="rounded-full bg-accent/10 px-1.5 py-0.5 text-[10px] text-accent">主干</span>}
+              {primary && <span className="rounded-full bg-accent/10 px-1.5 py-0.5 text-[10px] text-accent-deep">主干</span>}
             </div>
             <h3 className={`mt-2 font-bold text-body-1 ${primary ? 'text-base' : 'text-sm'}`}>{title}</h3>
             <p className="mt-1.5 text-xs leading-5 text-body-2">{text}</p>
@@ -174,7 +174,7 @@ function FlowBand() {
         {FLOW.map(({ icon: Icon, title, text, primary }, index) => (
           <li key={title} className="relative">
             <span className={`absolute -left-14 top-1 grid h-[42px] w-[42px] place-items-center rounded-2xl ${primary
-              ? 'bg-grad-accent ring-1 ring-accent/20 text-accent-deep shadow-[0_10px_22px_-14px_rgb(var(--brand-accent)/0.8)]'
+              ? 'bg-grad-accent text-white shadow-[0_10px_22px_-14px_rgb(var(--brand-accent)/0.6)]'
               : 'border border-line-soft/14 bg-white text-accent'}`}>
               <Icon className="h-[18px] w-[18px]" />
             </span>
@@ -288,7 +288,8 @@ export default function Portal() {
         <img src="/portal-hero.webp" alt=""
           className="absolute inset-0 h-full w-full object-cover object-center"
           onError={event => { event.currentTarget.hidden = true }} />
-        <div className="absolute inset-0 bg-[linear-gradient(100deg,rgb(var(--surface-page)/0.99)_0%,rgb(var(--surface-page)/0.97)_40%,rgb(var(--surface-page)/0.90)_70%,rgb(var(--surface-page)/0.82)_100%)]" />
+        {/* 遮罩降到 0.86→0.48：此前是 0.99→0.82，白得几乎全不透明，/portal-hero.webp 等于没贴 */}
+        <div className="absolute inset-0 bg-[linear-gradient(100deg,rgb(var(--surface-page)/0.86)_0%,rgb(var(--surface-page)/0.78)_40%,rgb(var(--surface-page)/0.62)_70%,rgb(var(--surface-page)/0.48)_100%)]" />
 
         <header className="relative z-10 section-wrap flex h-20 items-center !max-w-[1320px]">
           <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="智岗图谱首页">
@@ -302,7 +303,7 @@ export default function Portal() {
             {!user && <Link to="/login" title="登录" aria-label="登录" className="portal-nav-link"><LogIn className="h-4 w-4" /><span className="hidden md:inline">登录</span></Link>}
             {!user && <Link to="/register" title="注册" aria-label="注册" className="portal-nav-link"><UserPlus className="h-4 w-4" /><span className="hidden md:inline">注册</span></Link>}
             <Link to={workspace} title="进入工作台"
-              className="inline-flex h-10 w-10 items-center justify-center gap-2 rounded-full bg-[rgb(var(--btn-solid))] text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--brand-ink)/0.18),0_8px_20px_-12px_rgb(var(--brand-ink)/0.45)] transition hover:bg-brand-ink sm:w-auto sm:px-5">
+              className="btn-primary h-10 w-10 !px-0 sm:w-auto sm:!px-5">
               <span className="hidden sm:inline">进入工作台</span><ArrowRight className="h-4 w-4" />
             </Link>
           </nav>
@@ -349,9 +350,11 @@ export default function Portal() {
         </div>
       </section>
 
-      {/* 真实数据条：接口拿不到就整条不渲染，不出现写死数字 */}
+      {/* 真实数据条：接口拿不到就整条不渲染，不出现写死数字。
+          relative z-10 是必须的：本节是静态定位，负 margin 把它拉进了上面那个 relative
+          英雄区的覆盖带，英雄区的背景图与遮罩两层 absolute inset-0 会盖住整条 KPI。 */}
       {state !== 'unavailable' && (
-        <section className="section-wrap -mt-10 pb-2 sm:-mt-12" aria-label="平台实时数据">
+        <section className="section-wrap relative z-10 -mt-10 pb-2 sm:-mt-12" aria-label="平台实时数据">
           <StatBar stats={stats} state={state} />
         </section>
       )}
@@ -359,8 +362,8 @@ export default function Portal() {
       <section className="section-wrap py-14 sm:py-16" aria-label="系统原则">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {PRINCIPLES.map(({ icon: Icon, title, text }) => (
-            <div key={title} className="rounded-2xl border border-line-soft/10 bg-white p-6 shadow-[0_10px_30px_-20px_rgb(var(--brand-ink)/0.28)]">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-accent/10 text-accent"><Icon className="h-5 w-5" /></span>
+            <div key={title} className="tg-topbar overflow-hidden rounded-2xl border border-line-soft/6 bg-white p-6 shadow-[0_10px_30px_-20px_rgb(var(--brand-ink)/0.24)]">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-grad-accent text-white shadow-glow"><Icon className="h-5 w-5" /></span>
               <h2 className="mt-4 text-base font-bold text-body-1">{title}</h2>
               <p className="mt-2 text-sm leading-6 text-body-2">{text}</p>
             </div>

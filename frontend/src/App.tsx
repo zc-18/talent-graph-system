@@ -29,6 +29,7 @@ const Feedback = lazy(() => import('./pages/Feedback'))
 const HRWorkspace = lazy(() => import('./pages/HRWorkspace'))
 const Admin = lazy(() => import('./pages/Admin'))
 const Portal = lazy(() => import('./pages/Portal'))
+const Profile = lazy(() => import('./pages/Profile'))
 
 type NavItem = { to: string; label: string; icon: any; end?: boolean; roles?: AppRole[] }
 const ALL_ROLES: AppRole[] = ['user', 'hr', 'admin']
@@ -50,7 +51,7 @@ const NAV: NavItem[] = [
 const navClass = (collapsed: boolean) => ({ isActive }: { isActive: boolean }) =>
   `group relative flex min-h-10 items-center rounded-lg text-[13px] font-medium transition-all ${
     collapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2'
-  } ${isActive ? 'bg-inkSolid text-white shadow-[0_6px_16px_-8px_rgb(0_0_0/0.55)]' : 'text-body-2 hover:text-body-1 hover:bg-accent/8'}`
+  } ${isActive ? 'bg-grad-accent text-white shadow-glow' : 'text-body-2 hover:text-body-1 hover:bg-accent/8'}`
 
 // 品牌区可点击回门户首页（此前侧栏与顶栏的 logo 都是死区，进工作台后没有回首页的入口）
 function Brand({ collapsed = false, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
@@ -90,10 +91,11 @@ function AccountArea({ collapsed = false, onNavigate }: { collapsed?: boolean; o
   const roleLabel = user.role === 'admin' ? '管理员' : user.role === 'hr' ? 'HR' : '个人用户'
   return (
     <div className={`border-t border-line-soft/12 pt-2 ${collapsed ? 'flex flex-col items-center gap-1' : ''}`}>
-      <div className={`flex min-w-0 items-center gap-2 ${collapsed ? '' : 'px-1 pb-2'}`}>
-        <RoleAvatar username={user.username} role={user.role} className="h-8 w-8 shrink-0 rounded-lg border border-white shadow-sm" />
-        {!collapsed && <div className="min-w-0"><div className="truncate text-xs font-semibold text-body-1">{user.username}</div><div className="truncate text-[10px] text-body-3">{roleLabel}{user.organization_name ? ` · ${user.organization_name}` : ''}</div></div>}
-      </div>
+      <Link to="/me" onClick={onNavigate} title="编辑资料" aria-label="编辑资料"
+        className={`flex min-w-0 items-center gap-2 rounded-lg transition hover:bg-accent/8 ${collapsed ? 'p-1' : 'px-1 py-1.5 mb-1'}`}>
+        <RoleAvatar username={user.username} role={user.role} avatarUrl={user.avatar_url} className="h-8 w-8 shrink-0 rounded-lg border border-white shadow-sm" />
+        {!collapsed && <div className="min-w-0"><div className="truncate text-xs font-semibold text-body-1">{user.nickname || user.username}</div><div className="truncate text-[10px] text-body-3">{roleLabel}{user.organization_name ? ` · ${user.organization_name}` : ''}</div></div>}
+      </Link>
       <button onClick={() => { void logout(); onNavigate?.() }} title="退出登录" className={`btn-ghost text-body-2 ${collapsed ? '!p-2.5' : 'w-full justify-center'}`}><LogOut className="w-4 h-4" />{!collapsed && '退出登录'}</button>
     </div>
   )
@@ -152,9 +154,9 @@ function MobileTopBar({ onOpen }: { onOpen: () => void }) {
           <span className="block text-[10px] text-body-3 tracking-wide -mt-0.5">TalentGraph AI</span>
         </span>
       </Link>
-      <Link to={user ? (user.role === 'admin' ? '/admin' : user.role === 'hr' ? '/hr' : '/history') : '/login'}
-        aria-label={user ? '打开我的工作台' : '登录'} className="ml-auto w-9 h-9 grid place-items-center rounded-lg text-body-2 hover:bg-white/80">
-        {user ? <RoleAvatar username={user.username} role={user.role} className="h-8 w-8 rounded-lg border border-white shadow-sm" /> : <LogIn className="w-5 h-5" />}
+      <Link to={user ? '/me' : '/login'}
+        aria-label={user ? '编辑我的资料' : '登录'} className="ml-auto w-9 h-9 grid place-items-center rounded-lg text-body-2 hover:bg-white/80">
+        {user ? <RoleAvatar username={user.username} role={user.role} avatarUrl={user.avatar_url} className="h-8 w-8 rounded-lg border border-white shadow-sm" /> : <LogIn className="w-5 h-5" />}
       </Link>
     </header>
   )
@@ -222,6 +224,7 @@ function AppContent() {
             <Route path="/talent" element={<RequireAuth roles={ALL_ROLES}><Talent /></RequireAuth>} />
             <Route path="/history" element={<RequireAuth roles={ALL_ROLES}><HistoryPage /></RequireAuth>} />
             <Route path="/feedback" element={<RequireAuth roles={ALL_ROLES}><Feedback /></RequireAuth>} />
+            <Route path="/me" element={<RequireAuth roles={ALL_ROLES}><Profile /></RequireAuth>} />
             <Route path="/hr" element={<RequireAuth roles={['hr', 'admin']}><HRWorkspace /></RequireAuth>} />
             <Route path="/admin" element={<RequireAuth roles={['admin']}><Admin /></RequireAuth>} />
             <Route path="*" element={<Navigate to="/" replace />} />

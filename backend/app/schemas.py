@@ -1,5 +1,6 @@
 """请求/响应 Pydantic 模型。"""
 from __future__ import annotations
+import re
 from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Any
 
@@ -97,6 +98,68 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     username: str
     password: str
+
+
+# ---------------- 个人资料（昵称 / 头像）----------------
+# 头像只认两类**站内相对路径**：预置图库与本站上传产物。
+# 不接受任意 http(s) URL —— 头像会被渲染进每个页面头部，放开外链等于把
+# SSRF（后端若去取图）和第三方内容注入（前端直接 <img src>）两个面一起打开。
+AVATAR_PRESETS: tuple[str, ...] = tuple(f"/avatars/a{index:02d}.webp" for index in range(1, 13))
+AVATAR_UPLOAD_EXTENSIONS: tuple[str, ...] = ("png", "jpg", "jpeg", "webp")
+_AVATAR_UPLOAD_RE = re.compile(
+    r"^/avatars/u(?P<user_id>[1-9][0-9]{0,9})-[0-9a-f]{16}\.(?:"
+    + "|".join(AVATAR_UPLOAD_EXTENSIONS) + r")$")
+
+
+def is_preset_avatar(value: str) -> bool:
+    return value in AVATAR_PRESETS
+
+
+def is_uploaded_avatar(value: str) -> bool:
+    return _AVATAR_UPLOAD_RE.match(value) is not None
+
+
+def validate_avatar_url(value: str) -> str:
+    """Accept only a preset gallery path or a path this site itself produced."""
+    candidate = value.strip()
+    if not candidate:
+        raise ValueError("头像路径不能为空")
+    if ".." in candidate or "\\" in candidate or "\n" in candidate or "\r" in candidate:
+        raise ValueError("头像路径非法")
+    if is_preset_avatar(candidate) or is_uploaded_avatar(candidate):
+        return candidate
+    raise ValueError("头像仅支持预置图库或本站上传的图片，不接受外部链接")
+
+
+class ProfileUpdateRequest(BaseModel):
+    """PATCH /api/me/profile —— 至少给一个字段；给了就必须是合法值。"""
+    nickname: str | None = None
+    avatar_url: str | None = None
+
+    @field_validator("nickname")
+    @classmethod
+    def validate_nickname(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        trimmed = value.strip()
+        if not trimmed:
+            raise ValueError("昵称不能为空白")
+        if len(trimmed) > 64:
+            raise ValueError("昵称最长 64 个字符")
+        if any(char in trimmed for char in "\n\r\t"):
+            raise ValueError("昵称不能包含换行或制表符")
+        return trimmed
+
+    @field_validator("avatar_url")
+    @classmethod
+    def validate_avatar(cls, value: str | None) -> str | None:
+        return None if value is None else validate_avatar_url(value)
+
+    @model_validator(mode="after")
+    def require_one_field(self):
+        if self.nickname is None and self.avatar_url is None:
+            raise ValueError("至少需要修改昵称或头像其中之一")
+        return self
 
 
 class DiscoveryRunRequest(BaseModel):

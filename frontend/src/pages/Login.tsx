@@ -52,7 +52,10 @@ export default function Login({ register = false }: { register?: boolean }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-surface-page">
       <img src="/login-background.webp" alt="" className="absolute inset-0 h-full w-full object-cover" onError={event => { event.currentTarget.hidden = true }} />
-      <div className="absolute inset-0 bg-[linear-gradient(100deg,rgb(var(--surface-page)/0.98),rgb(var(--surface-page)/0.90)_56%,rgb(var(--surface-page)/0.66))]" />
+      {/* 遮罩方向跟着图走：/login-background.webp 的光晕在左半边、留白在右半边，
+          所以左侧薄（0.45，让光晕透出来）、右侧厚（0.86，把表单底下压干净）。
+          此前是 0.98/0.90/0.66 全程压死，改薄后又一度左浓右淡，与图正好错开。 */}
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,rgb(var(--surface-page)/0.45),rgb(var(--surface-page)/0.62)_44%,rgb(var(--surface-page)/0.86))]" />
       <div className="relative z-10 mx-auto grid min-h-screen max-w-[1480px] lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
         {/* 左栏：顶部返回 → 中部品牌/主张/能力预览（撑满剩余高度）→ 底部保证项。
             原实现是 justify-between + 两个子块，中间会裂出一大片空白。 */}

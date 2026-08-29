@@ -55,7 +55,13 @@ export type AppRole = 'user' | 'hr' | 'admin'
 export interface AuthUser {
   id: number; username: string; role: AppRole; status: string
   organization_id?: number | null; organization_name?: string | null; permissions: string[]
+  /** 后端未设置时用 username 兜底，前端可直接显示 */
+  nickname?: string | null
+  /** 为空时前端按 username 哈希取 /avatars/aNN.webp */
+  avatar_url?: string | null
 }
+export interface AvatarPresets { items: string[]; total: number; max_upload_bytes: number }
+export interface AvatarUploadResult { avatar_url: string; size: number; format: string; user: AuthUser }
 export interface AuthResponse {
   access_token: string; token_type: 'bearer'; expires_at: string; user: AuthUser
 }
@@ -344,6 +350,16 @@ export const api = {
   login: (body: { username: string; password: string }) => http.post<AuthResponse>('/auth/login', body).then(r => r.data),
   logout: () => http.post('/auth/logout').then(r => r.data),
   me: () => http.get<AuthUser>('/auth/me').then(r => r.data),
+  // 账号资料：PATCH 的返回体与 /auth/me 同构，拿到就能整体替换本地 user，不用二次拉取
+  avatarPresets: () => http.get<AvatarPresets>('/me/avatar-presets').then(r => r.data),
+  updateProfile: (body: { nickname?: string; avatar_url?: string }) =>
+    http.patch<AuthUser>('/me/profile', body).then(r => r.data),
+  uploadAvatar: (file: File) => {
+    const fd = new FormData()
+    fd.append('file', file)
+    return http.post<AvatarUploadResult>('/me/avatar', fd,
+      { headers: { 'Content-Type': 'multipart/form-data' } }).then(r => r.data)
+  },
 
   feedback: (body: any) => http.post<FeedbackTicket>('/feedback', body).then(r => r.data),
   feedbackList: (params: any = {}) => http.get<Paginated<FeedbackTicket>>('/feedback', { params }).then(r => r.data),

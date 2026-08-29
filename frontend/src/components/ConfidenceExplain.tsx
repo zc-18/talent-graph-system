@@ -68,9 +68,9 @@ export default function ConfidenceExplain({ value, factors, children }: {
       </button>
       {open && pos && createPortal(
         <div ref={popRef} role="dialog" aria-label="置信度计算说明"
-          className="fixed z-[80] rounded-xl border border-slate-200 bg-white shadow-xl p-4"
+          className="fixed z-[80] rounded-xl border border-line-soft/8 bg-white shadow-xl p-4"
           style={{ top: pos.top, left: pos.left, width: POP_W }}>
-          <div className="text-xs font-bold text-slate-700 mb-2 flex items-center justify-between">
+          <div className="text-xs font-bold text-body-1 mb-2 flex items-center justify-between">
             <span>置信度是怎么算的？</span>
             <span className="text-accent font-extrabold">{Math.round(value * 100)}%</span>
           </div>
@@ -80,22 +80,22 @@ export default function ConfidenceExplain({ value, factors, children }: {
               const contrib = f.weight * v
               return (
                 <div key={f.key}>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500">
-                    <span>{f.label} <span className="text-slate-400">×{f.weight.toFixed(2)}</span></span>
+                  <div className="flex items-center justify-between text-[11px] text-body-2">
+                    <span>{f.label} <span className="text-body-3">×{f.weight.toFixed(2)}</span></span>
                     <span className="tabular-nums">{v.toFixed(2)} → 贡献 {(contrib * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="h-1.5 mt-0.5 rounded-full bg-slate-100 overflow-hidden">
+                  <div className="h-1.5 mt-0.5 rounded-full bg-brand-ink/8 overflow-hidden">
                     <div className="h-full rounded-full bg-grad-accent" style={{ width: `${Math.round(v * 100)}%` }} />
                   </div>
                 </div>
               )
             })}
           </div>
-          <div className="mt-3 pt-2 border-t border-slate-100 text-[10px] leading-relaxed text-slate-400">
+          <div className="mt-3 pt-2 border-t border-line-soft/6 text-[10px] leading-relaxed text-body-3">
             {FORMULA_TEXT}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">
-            合计 <span className="font-bold text-slate-700 tabular-nums">{(total * 100).toFixed(1)}%</span>
+          <div className="text-[11px] text-body-2 mt-1">
+            合计 <span className="font-bold text-body-1 tabular-nums">{(total * 100).toFixed(1)}%</span>
             （多源交叉验证，越高越可信）
           </div>
         </div>, document.body)}

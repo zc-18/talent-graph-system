@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { GitBranch, Network, Search, Sparkles, PlusCircle, Target } from 'lucide-react'
-import { IBriefcase } from '../components/icons'
+import { Search, Sparkles, PlusCircle } from 'lucide-react'
+import { IJob, IEvolution, IGraph, IMatch } from '../components/icons'
 import { api, JobListItem, CATEGORY_COLORS } from '../api'
-import { Card, Spinner, ConfidencePill, Badge, EmptyState, ErrorState } from '../components/ui'
+import { Card, Spinner, ConfidencePill, Badge, EmptyState, ErrorState, PageHeader } from '../components/ui'
 import Select from '../components/Select'
 import { ConfidenceMeta } from '../components/ConfidenceMeta'
 
@@ -39,23 +39,16 @@ export default function Jobs() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <div className="w-11 h-11 shrink-0 rounded-xl bg-grad-violet grid place-items-center shadow-glow">
-          <IBriefcase className="w-6 h-6 text-white" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-extrabold text-slate-900">岗位库管理</h1>
-          <p className="text-sm text-slate-500">{items.length} 个岗位 · 支持检索与人工优化</p>
-        </div>
-      </div>
+      <PageHeader icon={<IJob className="w-6 h-6" />} title="岗位库管理"
+        subtitle={`${items.length} 个岗位 · 支持检索与人工优化`} />
 
       {/* 窄屏：2 列网格（搜索框独占整行），控件铺满栅格避免定宽挤出横向滚动；
           sm 起切回原来的定宽 flex 排布。纯断点驱动，不做 JS 宽度判断。 */}
       <div className="grid grid-cols-2 items-center gap-2 sm:flex sm:flex-wrap">
-        <div className="col-span-2 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/80 border border-slate-200 sm:flex-1 sm:min-w-[220px] focus-within:border-accent/60 focus-within:ring-2 focus-within:ring-accent/15 transition">
-          <Search className="w-4 h-4 shrink-0 text-slate-400" />
+        <div className="col-span-2 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/80 border border-line-soft/8 sm:flex-1 sm:min-w-[220px] focus-within:border-accent/60 focus-within:ring-2 focus-within:ring-accent/15 transition">
+          <Search className="w-4 h-4 shrink-0 text-body-3" />
           <input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === 'Enter' && load()}
-            placeholder="搜索岗位名称…" className="bg-transparent text-sm outline-none flex-1 min-w-0 text-slate-800 placeholder:text-slate-400" />
+            placeholder="搜索岗位名称…" className="bg-transparent text-sm outline-none flex-1 min-w-0 text-body-1 placeholder:text-body-3" />
         </div>
         <Select value={cat} onChange={setCat} options={cats} className="w-full sm:w-44" />
         <Select value={track} onChange={setTrack} className="w-full sm:w-36" label="岗位轨道" options={[
@@ -87,11 +80,11 @@ export default function Jobs() {
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="w-2.5 h-2.5 rounded-full shrink-0"
                       style={{ background: CATEGORY_COLORS[j.category] || '#64748B' }} />
-                    <h3 className="font-bold text-slate-800 truncate group-hover:text-slate-900">{j.name}</h3>
+                    <h3 className="font-bold text-body-1 truncate group-hover:text-body-1">{j.name}</h3>
                   </div>
                   {j.is_new && <Badge tone="amber">新兴</Badge>}
                 </div>
-                <p className="text-xs text-slate-500 mt-2 line-clamp-2 min-h-[32px]">{j.summary}</p>
+                <p className="text-xs text-body-2 mt-2 line-clamp-2 min-h-[32px]">{j.summary}</p>
                 {j.core_capabilities && j.core_capabilities.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-3">{j.core_capabilities.slice(0, 10).map(capability => <Badge key={capability} tone="slate">{capability}</Badge>)}</div>
                 )}
@@ -105,7 +98,7 @@ export default function Jobs() {
                 <div className="mt-2 min-w-0">
                   <ConfidenceMeta asOf={j.confidence_as_of} delta={j.confidence_delta} compact />
                 </div>
-                <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-t border-slate-200/70 pt-3 text-[11px] text-slate-400">
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-t border-line-soft/8 pt-3 text-[11px] text-body-3">
                   <span className="flex items-center gap-1.5">{j.required_count} 个岗位契约能力簇{j.contract_status === 'evidence_insufficient' && <Badge tone="amber">证据待补</Badge>}</span>
                   {/* evidence_count 是 active 能力项的 source_count 之和，即「多少条 JD 支撑了
                       这个岗位的能力集」，不是证据表的行数。原来写「证据 N」与详情页
@@ -113,10 +106,10 @@ export default function Jobs() {
                   <span title="该岗位能力集累计获得的真实 JD 支撑数">雇主 {j.employer_count || 0} · JD 支撑 {j.evidence_count} · v{j.version}</span>
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-200/70">
-                <button onClick={() => nav('/match', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><Target className="w-3.5 h-3.5" /> 匹配</button>
-                <button onClick={() => nav('/panorama', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><Network className="w-3.5 h-3.5" /> 图谱</button>
-                <button onClick={() => nav('/evolution', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><GitBranch className="w-3.5 h-3.5" /> 演化</button>
+              <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-line-soft/8">
+                <button onClick={() => nav('/match', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><IMatch className="w-3.5 h-3.5" /> 匹配</button>
+                <button onClick={() => nav('/panorama', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><IGraph className="w-3.5 h-3.5" /> 图谱</button>
+                <button onClick={() => nav('/evolution', { state: { jobId: j.id } })} className="btn-ghost !px-2 !py-2 text-xs"><IEvolution className="w-3.5 h-3.5" /> 演化</button>
               </div>
             </Card>
           ))}

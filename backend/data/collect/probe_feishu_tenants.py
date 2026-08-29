@@ -48,6 +48,22 @@ SLUGS = [
     "bilibili", "zhihu", "xiaohongshu", "mihoyo", "dewu", "tuya", "quectel", "envision",
     "datacanvas", "kyligence", "pingcap", "zilliz", "oceanbase", "juicefs", "streamnative",
     "insta360", "dji", "hesaitech", "robosense", "innovusion",
+    # ---- R6 扩池（2026-08-29，Lane F）：为 T2「补新雇主」补候选租户 ----
+    # 智能汽车 / 车联网 / 域控 Tier-1
+    "banma", "ecarx", "thundersoft", "desaysv", "hirain", "jingwei", "zeekr",
+    "lynkco", "jidu", "aiways", "nezha", "hycan", "arcfox", "deeproute",
+    "qcraft", "holomatic", "zongmutech", "minieye", "nullmax", "tusimple",
+    "inceptio", "uisee", "neolix", "westwell", "trunk", "freetech", "iflytekauto",
+    # 机器人 / 具身智能（新一批）
+    "fourier", "robotera", "astribot", "limxdynamics", "engineai", "booster",
+    "dobot", "jaka", "geekplus", "syrius", "hairobotics", "deeprobotics",
+    "elephantrobotics", "youibot", "siasun", "cloudminds",
+    # 智能硬件 / 消费电子 / 可穿戴
+    "anker", "ninebot", "xreal", "rokid", "zepp", "amazfit", "goertek",
+    "transsion", "yealink", "unisoc", "ingenic", "espressif", "quectelwireless",
+    # 多模态 / 大模型（新一批）
+    "minimax", "deepseek", "zhipu", "baai", "openbmb", "shengshuai", "vivo",
+    "kunlun", "seedream",
 ]
 
 Q = ("?keyword=&limit=1&offset=0&job_category_id_list=&tag_id_list=&location_code_list="
