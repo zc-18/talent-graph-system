@@ -109,7 +109,7 @@ export default function Dashboard() {
         <Card delay={0.2} className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="font-semibold text-body-1">岗位能力榜</div>
-            <button onClick={() => nav('/jobs')} className="text-xs text-accent hover:underline flex items-center gap-1">
+            <button onClick={() => nav('/jobs')} className="-my-1 flex items-center gap-1 py-1 text-xs text-accent-deep hover:underline">
               全部 <ArrowRight className="w-3 h-3" />
             </button>
           </div>
@@ -228,7 +228,7 @@ export default function Dashboard() {
               ['匹配与诊断', '差距+学习路径'],
             ].map(([t, s], i) => (
               <div key={t} data-reveal className="relative rounded-xl bg-accent/6 border border-line-soft/8 p-3.5">
-                <div className="text-[11px] text-accent font-bold mb-1">0{i + 1}</div>
+                <div className="text-[11px] text-accent-deep font-bold mb-1">0{i + 1}</div>
                 <div className="text-sm font-semibold text-body-1">{t}</div>
                 <div className="text-[11px] text-body-3 mt-0.5">{s}</div>
               </div>

@@ -1,0 +1,120 @@
+{
+  "employer_parent_before": [
+    {
+      "id": 327,
+      "name": "中国联合网络通信有限公司研究院",
+      "parent_id": null
+    },
+    {
+      "id": 330,
+      "name": "中国联合网络通信有限公司软件研究院",
+      "parent_id": null
+    },
+    {
+      "id": 372,
+      "name": "中国联合网络通信有限公司广东省分公司",
+      "parent_id": null
+    },
+    {
+      "id": 375,
+      "name": "中国联合网络通信有限公司甘肃省分公司",
+      "parent_id": null
+    },
+    {
+      "id": 384,
+      "name": "中国联合网络通信有限公司重庆市分公司",
+      "parent_id": null
+    },
+    {
+      "id": 387,
+      "name": "中国联合网络通信有限公司四川省分公司",
+      "parent_id": null
+    },
+    {
+      "id": 393,
+      "name": "中国联合网络通信有限公司上海市分公司",
+      "parent_id": null
+    },
+    {
+      "id": 400,
+      "name": "中国联合网络通信有限公司北京网络运营事业部",
+      "parent_id": null
+    },
+    {
+      "id": 402,
+      "name": "中国联合网络通信有限公司江西省分公司",
+      "parent_id": null
+    },
+    {
+      "id": 410,
+      "name": "中国联合网络通信有限公司福建省分公司",
+      "parent_id": null
+    },
+    {
+      "id": 510,
+      "name": "中国联合网络通信有限公司海南省分公司",
+      "parent_id": null
+    },
+    {
+      "id": 536,
+      "name": "中国联合网络通信有限公司西藏自治区分公司",
+      "parent_id": null
+    },
+    {
+      "id": 539,
+      "name": "中国联合网络通信有限公司安徽省分公司",
+      "parent_id": null
+    },
+    {
+      "id": 316,
+      "name": "中远海运科技股份有限公司",
+      "parent_id": null
+    },
+    {
+      "id": 325,
+      "name": "上海中远海运资讯科技有限公司",
+      "parent_id": null
+    },
+    {
+      "id": 358,
+      "name": "天津中远海运数智能源科技有限公司",
+      "parent_id": null
+    },
+    {
+      "id": 362,
+      "name": "中远海运散货运输有限公司",
+      "parent_id": null
+    },
+    {
+      "id": 364,
+      "name": "中远海运重工有限公司",
+      "parent_id": null
+    },
+    {
+      "id": 368,
+      "name": "中远海运物流供应链有限公司",
+      "parent_id": null
+    },
+    {
+      "id": 386,
+      "name": "大连中远海运重工有限公司",
+      "parent_id": null
+    },
+    {
+      "id": 439,
+      "name": "扬州中远海运重工有限公司",
+      "parent_id": null
+    },
+    {
+      "id": 555,
+      "name": "中远海运博鳌有限公司博鳌亚洲论坛大酒店",
+      "parent_id": null
+    },
+    {
+      "id": 440,
+      "name": "中国远洋海运集团航运先进技术研究院",
+      "parent_id": null
+    }
+  ],
+  "alias_before": []
+}

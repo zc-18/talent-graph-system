@@ -1,0 +1,194 @@
+[
+  {
+    "job_id": 1,
+    "name": "后端开发工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 2,
+    "name": "Java开发工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 3,
+    "name": "数据分析师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 4,
+    "name": "机器学习工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 5,
+    "name": "运维开发工程师(SRE)",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 6,
+    "name": "自然语言处理工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 7,
+    "name": "大数据平台工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 8,
+    "name": "数据仓库工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 9,
+    "name": "计算机视觉工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 10,
+    "name": "深度学习工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 11,
+    "name": "云计算工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 12,
+    "name": "推荐算法工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 13,
+    "name": "嵌入式软件工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 14,
+    "name": "物联网开发工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 15,
+    "name": "大数据开发工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 16,
+    "name": "机器人算法工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 17,
+    "name": "大模型算法工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 18,
+    "name": "自动驾驶算法工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 19,
+    "name": "大模型推理优化工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 20,
+    "name": "AIGC算法工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 21,
+    "name": "多模态算法工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 22,
+    "name": "人工智能数字人训练师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 23,
+    "name": "边缘计算工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 24,
+    "name": "AI智能体开发工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 25,
+    "name": "具身智能工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 26,
+    "name": "生成式人工智能系统测试员",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 28,
+    "name": "AI产品经理",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 29,
+    "name": "数字孪生工程技术人员",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 30,
+    "name": "提示词工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 34,
+    "name": "车联网系统工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 35,
+    "name": "工业互联网工程师",
+    "track": null,
+    "industry": null
+  },
+  {
+    "job_id": 36,
+    "name": "智能硬件开发工程师",
+    "track": null,
+    "industry": null
+  }
+]

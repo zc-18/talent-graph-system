@@ -42,3 +42,9 @@ backend/_perf/
 
 # 前端增量编译缓存（构建产物，不入库）
 frontend/tsconfig.tsbuildinfo
+
+# 用户上传的运行时资产（头像等），不入库；服务端按需自建目录
+backend/user_uploads/
+
+# PPT/文档视觉 QA 的中间渲染产物，不入库
+docs/ppt_build/_qa/

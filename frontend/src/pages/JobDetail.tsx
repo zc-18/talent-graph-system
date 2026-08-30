@@ -101,12 +101,44 @@ function SkillRow({ s, fineChildren = [], fineCandidates = [], fineDeprecated = 
           <div className="h-full rounded-full bg-grad-accent" style={{ width: `${Math.round(s.weight * 100)}%` }} />
         </div>
         <span className="text-[11px] text-body-3 shrink-0 sm:hidden">{SKILL_LEVEL[s.level_required] || ''}</span>
-        <span className="text-[11px] text-body-3 shrink-0" title="独立来源数">×{s.source_count}</span>
+        <span className="text-[11px] text-body-3 shrink-0" title="通过交叉验证的独立雇主数">{s.source_count} 雇主</span>
         <span className="shrink-0"><ConfidencePill value={s.confidence} factors={s.factors} /></span>
       </div>
       {/* 细分技能点：已通过交叉验证的挂父项下直接展示 */}
       {fineChildren.length > 0 && (
         <div className="mt-2 pt-2 border-t border-accent/12 flex items-center gap-1.5 flex-wrap">
+          <span className="text-[10px] text-body-3 shrink-0">细分技能点</span>
+          <FineChips items={fineChildren} />
+        </div>
+      )}
+      <CandidateChips items={fineCandidates} />
+      <DeprecatedChips items={fineDeprecated} />
+    </div>
+  )
+}
+
+/** 粗粒度候选能力行。与 SkillRow 同信息量，但整行虚线描边 + 次级底色 + 「候选」徽标，
+ *  一眼可分「已验证 / 待验证」，同时把 source_count（独立雇主数）从 tooltip 提到正文——
+ *  这是 ≥2 独立雇主准入门槛的判定量本身，藏在 hover 里等于没说。 */
+function CandidateSkillRow({ s, importance, fineChildren = [], fineCandidates = [], fineDeprecated = [] }: any) {
+  return (
+    <div className="rounded-xl border border-dashed border-line-soft/16 bg-surface-muted px-3.5 py-2.5 transition hover:border-line-soft/24">
+      <div className="flex items-center gap-2 min-w-0 flex-wrap">
+        <span className="text-sm font-medium text-body-2 shrink-0">{s.name}</span>
+        <span className="chip border bg-white/70 text-body-3 border-line-soft/10 whitespace-nowrap truncate min-w-0">{s.category}</span>
+        <Badge tone="slate">候选</Badge>
+        <span className="text-[11px] text-body-3 shrink-0 hidden sm:inline">{importance === 'required' ? '必备向' : '加分向'}</span>
+      </div>
+      <div className="mt-1.5 flex items-center gap-2.5 flex-wrap">
+        <span className="text-[11px] text-body-3">
+          独立雇主 <span className="font-semibold text-body-2">{s.source_count}</span> / 门槛 2
+        </span>
+        <span className="text-[11px] text-body-3">置信度 {Math.round((s.confidence || 0) * 100)}%</span>
+        <span className="flex-1" />
+        <span className="text-[11px] text-body-3">{SKILL_LEVEL[s.level_required] || ''}</span>
+      </div>
+      {fineChildren.length > 0 && (
+        <div className="mt-2 pt-2 border-t border-line-soft/8 flex items-center gap-1.5 flex-wrap">
           <span className="text-[10px] text-body-3 shrink-0">细分技能点</span>
           <FineChips items={fineChildren} />
         </div>
@@ -266,21 +298,37 @@ export default function JobDetail() {
       arr.push(s); m.set(s.parent_name, arr)
     }
   }
-  const coarseRequired = job.required_skills.filter(s => s.granularity !== 'fine' && isLive(s))
-  const coarseBonus = job.bonus_skills.filter(s => s.granularity !== 'fine' && isLive(s))
-  const isOrphan = (s: TSkill) => s.granularity === 'fine' &&
-    (!s.parent_name || !allSkills.some(p => p.granularity !== 'fine' && p.name === s.parent_name))
-  const orphanFine = allSkills.filter(s => isOrphan(s) && isLive(s))
-  const orphanCand = allSkills.filter(s => isOrphan(s) && isCandidate(s))
-  const orphanDep = allSkills.filter(s => isOrphan(s) && isDeprecated(s))
-  const deprecatedAll = allSkills.filter(isDeprecated)
+  const isCoarse = (s: TSkill) => s.granularity !== 'fine'
+  const coarseRequired = job.required_skills.filter(s => isCoarse(s) && isLive(s))
+  const coarseBonus = job.bonus_skills.filter(s => isCoarse(s) && isLive(s))
+  // 粗粒度候选此前会被整页丢弃：它进不了 coarseRequired/coarseBonus（被 isLive 滤掉），
+  // 也进不了 candByParent/orphanCand（那两个只收 granularity==='fine'）。R6 把 48 条
+  // 只有 0–1 个独立雇主的历史遗留 active 降级为 candidate 之后，这个洞立刻致命：
+  // 「自动驾驶算法工程师」28 项里 26 项是候选，页面几乎空白，且与交付材料写的
+  // 「812 条已验证 + 若干候选」对不上——而「事实与呈现一致」正是本作品的立论。
+  // 解法不是把候选藏得更彻底，而是单独成区、并把准入门槛的判定量（独立雇主数）摆到台面上。
+  const coarseCandidate = allSkills.filter(s => isCoarse(s) && isCandidate(s))
+  const coarseDeprecated = allSkills.filter(s => isCoarse(s) && isDeprecated(s))
+  const requiredNames = new Set(job.required_skills.map(s => s.name))
+  // 只有「必备」「候选」两区用整行渲染、会带出挂在自己名下的细分技能点；加分区是纯 chip。
+  // 因此父项不在这两区里的细分技能点（挂加分项、挂已淘汰父项、父项根本不存在）
+  // 都必须落到兜底区，否则它们会和粗粒度候选一样静悄悄地一个都不显示。
+  const rowParents = new Set([...coarseRequired, ...coarseCandidate].map(s => s.name))
+  const isLoose = (s: TSkill) => s.granularity === 'fine' &&
+    (!s.parent_name || !rowParents.has(s.parent_name))
+  const orphanFine = allSkills.filter(s => isLoose(s) && isLive(s))
+  const orphanCand = allSkills.filter(s => isLoose(s) && isCandidate(s))
+  const orphanDep = allSkills.filter(s => isLoose(s) && isDeprecated(s))
+  const looseDep = [...coarseDeprecated, ...orphanDep]
+  const candidateTotal = coarseCandidate.length + orphanCand.length
+  const activeTotal = allSkills.filter(isLive).length
   const emergence = (job as any).emergence_type as string | null
   const eraCounts = (job.source_summary || {} as any).era_counts as Record<string, number> | undefined
   const earliestJd = (job.source_summary || {} as any).earliest_jd as string | undefined
 
   return (
     <div ref={revealRef} className="space-y-5">
-      <button onClick={() => nav(-1)} className="flex items-center gap-1.5 text-sm text-body-2 hover:text-body-1">
+      <button onClick={() => nav(-1)} className="-my-1 flex items-center gap-1.5 py-1 text-sm text-body-2 hover:text-body-1">
         <ArrowLeft className="w-4 h-4" /> 返回
       </button>
 
@@ -364,6 +412,14 @@ export default function JobDetail() {
             <Card className="p-5">
               <details open={!contract}>
               <summary className="list-none cursor-pointer label flex items-center gap-2"><ITarget className="w-4 h-4 text-accent" /> 完整技能与证据 · 必备 ({coarseRequired.length}) <ChevronRight className="w-4 h-4 ml-auto" /></summary>
+              {/* 页面显示几项、库里有几项、材料里写几项，必须能对上。这行就是那份对账单。 */}
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-body-3">
+                <span>本岗能力项共 {allSkills.length} 条</span>
+                <span className="text-body-2">已验证 {activeTotal}</span>
+                <span>候选 {candidateTotal}</span>
+                <span>已淘汰 {allSkills.filter(isDeprecated).length}</span>
+                <span className="text-body-3">（准入门槛：≥2 个独立雇主）</span>
+              </div>
               <div className="space-y-2 mt-3">
                 {coarseRequired.map(s => (
                   <div key={s.skill_id} data-reveal>
@@ -373,7 +429,7 @@ export default function JobDetail() {
                   </div>
                 ))}
               </div>
-              {(orphanFine.length > 0 || orphanCand.length > 0 || orphanDep.length > 0) && (
+              {(orphanFine.length > 0 || looseDep.length > 0) && (
                 <div className="mt-3 pt-3 border-t border-line-soft/6">
                   {orphanFine.length > 0 && (
                     <>
@@ -381,15 +437,14 @@ export default function JobDetail() {
                       <div className="flex flex-wrap gap-1.5"><FineChips items={orphanFine} /></div>
                     </>
                   )}
-                  <CandidateChips items={orphanCand} />
-                  <DeprecatedChips items={orphanDep} />
+                  <DeprecatedChips items={looseDep} />
                 </div>
               )}
               </details>
             </Card>
             {coarseBonus.length > 0 && (
               <Card className="p-5">
-                <details open={!contract}><summary className="list-none cursor-pointer label flex items-center gap-2">完整技能与证据 · 加分 ({coarseBonus.length}) <ChevronRight className="w-4 h-4 ml-auto" /></summary>
+                <details open={!contract}><summary className="list-none cursor-pointer label flex items-center gap-2"><ITarget className="w-4 h-4 text-accent" /> 完整技能与证据 · 加分 ({coarseBonus.length}) <ChevronRight className="w-4 h-4 ml-auto" /></summary>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {coarseBonus.map(s => (
                     <span key={s.skill_id} className="chip border bg-white/70 border-line-soft/8 text-body-2">
@@ -397,6 +452,48 @@ export default function JobDetail() {
                     </span>
                   ))}
                 </div>
+                </details>
+              </Card>
+            )}
+            {/* 候选能力独立成区。绝不能靠隐藏候选来消除「页面显示数」与「库内能力项数」的差：
+                那是把不一致藏起来而不是解决它。这里把候选完整渲染，只在视觉上与已验证能力
+                划清界限（虚线描边 + 次级底色 + 候选徽标），并逐行给出独立雇主数 / 门槛 2。 */}
+            {candidateTotal > 0 && (
+              <Card className="p-5">
+                <div className="label flex items-center gap-2"><IShieldCheck className="w-4 h-4 text-body-3" /> 候选能力 · 待更多雇主佐证 ({candidateTotal})</div>
+                <p className="mt-2 text-[11px] leading-relaxed text-body-2">
+                  下列能力项的<span className="font-semibold text-body-1">独立雇主数未达到准入门槛（≥2）</span>，
+                  因此不计入上方已验证能力，也不参与人岗匹配打分；证据链完整保留可追溯，补足第 2 个独立雇主后即转为已验证。
+                </p>
+                <details open={candidateTotal <= 12} className="group mt-3">
+                  <summary className="list-none cursor-pointer -my-1 py-1 inline-flex items-center gap-1 text-[11px] text-body-3 hover:text-body-2 transition">
+                    <ChevronRight className="w-3.5 h-3.5 transition-transform group-open:rotate-90" />
+                    候选能力清单（{candidateTotal} 项）
+                  </summary>
+                  {coarseCandidate.length > 0 && (
+                    <div className="space-y-2 mt-3">
+                      {coarseCandidate.map(s => (
+                        <CandidateSkillRow key={s.skill_id} s={s}
+                          importance={requiredNames.has(s.name) ? 'required' : 'bonus'}
+                          fineChildren={fineByParent.get(s.name) || []}
+                          fineCandidates={candByParent.get(s.name) || []}
+                          fineDeprecated={depByParent.get(s.name) || []} />
+                      ))}
+                    </div>
+                  )}
+                  {orphanCand.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-line-soft/6">
+                      <div className="text-[11px] text-body-3 mb-1.5">其他候选技能点 {orphanCand.length} 项</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {orphanCand.map(f => (
+                          <span key={f.skill_id} className="chip border border-dashed bg-surface-muted border-line-soft/14 text-body-2 text-[11px]"
+                            title={`置信度 ${Math.round((f.confidence || 0) * 100)}% · ${f.source_count} 个独立雇主`}>
+                            {f.name} <span className="text-body-3">·{f.source_count} 雇主</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </details>
               </Card>
             )}
@@ -408,7 +505,7 @@ export default function JobDetail() {
               <ul className="space-y-2">
                 {job.core_responsibilities.map((r, i) => (
                   <li key={i} className="text-sm text-body-2 flex gap-2">
-                    <span className="text-accent font-bold">{i + 1}</span>{r}
+                    <span className="text-accent-deep font-bold">{i + 1}</span>{r}
                   </li>
                 ))}
               </ul>
@@ -499,7 +596,7 @@ export default function JobDetail() {
                           <div className="flex items-center gap-1.5 flex-wrap">
                             <Badge tone={e.type === 'web' ? 'cyan' : e.type === 'llm' ? 'amber' : 'indigo'}>
                               {e.type === 'web' ? '网络佐证' : e.type === 'llm' ? 'LLM' : e.source || '招聘JD'}</Badge>
-                            {e.type === 'web' && e.source && <span className="text-[10px] text-accent">{e.source}</span>}
+                            {e.type === 'web' && e.source && <span className="text-[10px] text-accent-deep">{e.source}</span>}
                             {e.company && <span className="text-[11px] text-body-2 truncate">{e.company}</span>}
                             {e.job_title && <span className="text-[11px] text-body-3 truncate hidden sm:inline">{e.job_title}</span>}
                             <span className="flex-1" />

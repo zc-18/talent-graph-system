@@ -215,7 +215,7 @@ body::before {
   /* 段落间统一节奏：门户各 section 的纵向留白 */
   .section-pad { @apply py-16 sm:py-20 lg:py-24; }
   .section-wrap { @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12; }
-  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.18em] text-accent; }
+  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.18em] text-accent-deep; }
 }
 
 @supports (padding: env(safe-area-inset-top)) {

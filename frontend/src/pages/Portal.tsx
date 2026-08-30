@@ -212,7 +212,7 @@ function EvidenceSection({ data }: { data: Showcase }) {
           <div className="min-w-0 rounded-2xl border border-line-soft/12 bg-surface-muted p-5 sm:p-6">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-lg font-extrabold text-body-1">{data.job.name}</span>
-              <span className="chip border border-accent/25 bg-accent/8 text-accent">v{data.job.version} 当前版本</span>
+              <span className="chip border border-accent/25 bg-accent/8 text-accent-deep">v{data.job.version} 当前版本</span>
               {!!data.job.employer_count && (
                 <span className="chip border border-line-soft/14 bg-white text-body-2">{data.job.employer_count} 家独立雇主</span>
               )}
@@ -260,7 +260,7 @@ function EvidenceSection({ data }: { data: Showcase }) {
                       <span className="mt-0.5 block truncate text-[11px] text-body-3">
                         {[item.skill, item.source, item.publishDate].filter(Boolean).join(' · ')}
                       </span>
-                      <span className="mt-1 block truncate text-[11px] text-accent">{item.url}</span>
+                      <span className="mt-1 block truncate text-[11px] text-accent-deep">{item.url}</span>
                     </span>
                   </a>
                 </li>

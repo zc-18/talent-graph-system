@@ -17,7 +17,7 @@ function nicknameError(value: string): string | null {
   const trimmed = value.trim()
   if (trimmed.length < NICKNAME_MIN) return '昵称不能为空'
   if (trimmed.length > NICKNAME_MAX) return `昵称最多 ${NICKNAME_MAX} 个字符`
-  if (/[\r\n]/.test(value)) return '昵称不能包含换行'
+  if (/[\x00-\x1f\x7f-\x9f]/.test(value)) return '昵称不能包含控制字符'
   return null
 }
 

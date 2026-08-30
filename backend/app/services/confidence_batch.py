@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 import logging
 from threading import Event, Lock, Thread
@@ -13,6 +14,7 @@ from .. import models
 from ..config import settings
 from ..db import SessionLocal
 from . import confidence as confidence_formula
+from . import role_contract
 
 
 logger = logging.getLogger("talent-graph.confidence")
@@ -100,13 +102,25 @@ def _weighted_factors(rows: list[tuple[models.JobSkill, dict[str, float]]]) -> d
             for key in confidence_formula.WEIGHTS}
 
 
-def _job_calculation(db: Session, job: models.Job, as_of: datetime) -> dict:
+def calculate_job_state(db: Session, job: models.Job, as_of: datetime, *,
+                        excluded_evidence_ids: set[int] | None = None) -> dict:
+    """Purely calculate every JobSkill row from current evidence and employers.
+
+    Candidate/deprecated rows deliberately share the same denominator and five-factor
+    formula as active rows. Status admission is not changed here; a governed repair
+    may demote invalid active rows, while evidence alone never auto-promotes a candidate.
+    """
     relations = db.query(models.JobSkill).filter(
-        models.JobSkill.job_id == job.id,
-        models.JobSkill.status == "active").all()
+        models.JobSkill.job_id == job.id).order_by(models.JobSkill.id).all()
     relation_ids = [row.id for row in relations]
-    evidence_rows = (db.query(models.Evidence).filter(
-        models.Evidence.job_skill_id.in_(relation_ids)).all()) if relation_ids else []
+    evidence_query = db.query(models.Evidence).filter(
+        models.Evidence.job_skill_id.in_(relation_ids)) if relation_ids else None
+    excluded_evidence_ids = excluded_evidence_ids or set()
+    if evidence_query is not None and excluded_evidence_ids:
+        evidence_query = evidence_query.filter(
+            ~models.Evidence.id.in_(excluded_evidence_ids))
+    evidence_rows = evidence_query.order_by(models.Evidence.id).all() \
+        if evidence_query is not None else []
     raw_ids = {row.raw_jd_id for row in evidence_rows if row.raw_jd_id}
     raw_jds = {row.id: row for row in db.query(models.RawJD).filter(
         models.RawJD.id.in_(raw_ids)).all()} if raw_ids else {}
@@ -136,11 +150,11 @@ def _job_calculation(db: Session, job: models.Job, as_of: datetime) -> dict:
         and bool((row.url or "").strip() or (row.local_file or "").strip())
         for row in authority_rows)
 
-    relation_results: list[tuple[models.JobSkill, dict[str, float]]] = []
-    real_evidence_keys: set[tuple[str, str | int]] = set(valid_job_jds)
+    results = []
     for relation in relations:
         supporting: dict[tuple[str, str | int], models.RawJD] = {}
         external_keys: set[str] = set()
+        evidence_refs = []
         for evidence in by_relation.get(relation.id, []):
             raw = raw_jds.get(evidence.raw_jd_id)
             if evidence.source_type == "jd" and _is_valid_raw_jd(raw, as_of):
@@ -149,52 +163,98 @@ def _job_calculation(db: Session, job: models.Job, as_of: datetime) -> dict:
                 key = (evidence.source_url or evidence.snippet or "").strip()
                 if key:
                     external_keys.add(key)
-                    real_evidence_keys.add(("external", key))
+            evidence_refs.append({
+                "evidence_id": evidence.id, "raw_jd_id": evidence.raw_jd_id,
+                "url": evidence.source_url,
+            })
         employer_keys = {_employer_key(raw, employers) for raw in supporting.values()}
         employer_keys.discard(None)
-        freshness = [_freshness(raw, as_of) for raw in supporting.values()]
-        authorities = [_source_authority(raw) for raw in supporting.values()]
         factors = confidence_formula.factors_from_jd(
             support_ratio=len(supporting) / total_valid_jds if total_valid_jds else 0.0,
             platforms={str(key) for key in employer_keys},
-            avg_freshness=_mean(freshness),
-            avg_authority=_mean(authorities),
+            avg_freshness=_mean([_freshness(raw, as_of) for raw in supporting.values()]),
+            avg_authority=_mean([_source_authority(raw) for raw in supporting.values()]),
             has_web=bool(external_keys) or has_authority,
         )
-        relation.confidence = confidence_formula.compute(factors)
-        relation.factors = factors
-        relation.source_count = len(employer_keys)
-        relation_results.append((relation, factors))
+        real_keys = set(supporting)
+        real_keys.update(("external", key) for key in external_keys)
+        results.append({
+            "relation": relation,
+            "source_count": len(employer_keys),
+            "factors": factors,
+            "confidence": confidence_formula.compute(factors),
+            "real_evidence_keys": real_keys,
+            "evidence_refs": evidence_refs,
+        })
+    return {"job": job, "relations": results, "valid_jd_count": total_valid_jds}
 
-    factors = _weighted_factors(relation_results)
-    if relation_results:
-        weights = [max(0.05, float(row.weight or 0.5)) for row, _ in relation_results]
-        score = round(sum(float(row.confidence or 0.0) * weight
-                          for (row, _), weight in zip(relation_results, weights)) / sum(weights), 4)
+
+def summarize_job_state(state: dict) -> dict:
+    """Aggregate the public job score from the rows currently admitted as active."""
+    active = [item for item in state["relations"]
+              if item["relation"].status == "active"]
+    weighted = [(item["relation"], item["factors"]) for item in active]
+    factors = _weighted_factors(weighted)
+    if active:
+        weights = [max(0.05, float(item["relation"].weight or 0.5)) for item in active]
+        score = round(sum(float(item["confidence"]) * weight
+                          for item, weight in zip(active, weights)) / sum(weights), 4)
     else:
         score = 0.0
+    real_evidence_keys = set().union(
+        *(item["real_evidence_keys"] for item in active)) if active else set()
+    return {
+        "confidence": score,
+        "factors": factors,
+        "valid_jd_count": state["valid_jd_count"],
+        "evidence_count": len(real_evidence_keys),
+    }
+
+
+def apply_relation_metrics(state: dict) -> None:
+    """Apply calculated fields only; never change admission status."""
+    for item in state["relations"]:
+        relation = item["relation"]
+        relation.source_count = item["source_count"]
+        relation.factors = item["factors"]
+        relation.confidence = item["confidence"]
+
+
+def _job_calculation(db: Session, job: models.Job, as_of: datetime) -> dict:
+    state = calculate_job_state(db, job, as_of)
+    apply_relation_metrics(state)
+    # Persisted active is an admission claim, not merely a label. Evidence replay
+    # may revoke that claim when independent employers fall below the governed
+    # gate; it never performs the inverse auto-promotion of a candidate.
+    for item in state["relations"]:
+        relation = item["relation"]
+        if (relation.status == "active"
+                and item["source_count"] < role_contract.MIN_EMPLOYERS):
+            relation.status = "candidate"
+    summary = summarize_job_state(state)
 
     version = db.query(models.JobVersion).filter(
         models.JobVersion.job_id == job.id,
         models.JobVersion.version == (job.version or 1)).order_by(
         models.JobVersion.id.desc()).first()
     if version:
-        current_by_skill = {row.skill_id: row for row, _ in relation_results}
+        current_by_skill = {
+            item["relation"].skill_id: item for item in state["relations"]}
         version_skills = db.query(models.JobVersionSkill).filter(
             models.JobVersionSkill.job_version_id == version.id).all()
         for snapshot_skill in version_skills:
             current = current_by_skill.get(snapshot_skill.skill_id)
             if current:
-                snapshot_skill.confidence = current.confidence
-                snapshot_skill.factors = current.factors
+                snapshot_skill.status = current["relation"].status
+                snapshot_skill.confidence = current["confidence"]
+                snapshot_skill.factors = current["factors"]
+                snapshot_skill.evidence_refs = current["evidence_refs"][:12]
+        db.flush()
+        version.contract_snapshot = role_contract.build_contract_from_version(
+            db, job, version)
+        version.evidence_window = deepcopy(version.evidence_window)
 
-    return {
-        "confidence": score,
-        "factors": factors,
-        "valid_jd_count": total_valid_jds,
-        "evidence_count": len(real_evidence_keys),
-        "job_version_id": version.id if version else None,
-    }
+    return {**summary, "job_version_id": version.id if version else None}
 
 
 def run_confidence_recalculation(db: Session, *, as_of: datetime | None = None,

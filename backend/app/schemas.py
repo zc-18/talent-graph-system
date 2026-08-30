@@ -105,18 +105,27 @@ class LoginRequest(BaseModel):
 # 不接受任意 http(s) URL —— 头像会被渲染进每个页面头部，放开外链等于把
 # SSRF（后端若去取图）和第三方内容注入（前端直接 <img src>）两个面一起打开。
 AVATAR_PRESETS: tuple[str, ...] = tuple(f"/avatars/a{index:02d}.webp" for index in range(1, 13))
-AVATAR_UPLOAD_EXTENSIONS: tuple[str, ...] = ("png", "jpg", "jpeg", "webp")
+# 上传时允许客户端文件名使用 .jpeg，但服务端规范化后的站内路径统一使用 .jpg。
+AVATAR_UPLOAD_EXTENSIONS: tuple[str, ...] = ("png", "jpg", "webp")
 _AVATAR_UPLOAD_RE = re.compile(
-    r"^/avatars/u(?P<user_id>[1-9][0-9]{0,9})-[0-9a-f]{16}\.(?:"
-    + "|".join(AVATAR_UPLOAD_EXTENSIONS) + r")$")
+    r"/avatars/u(?P<user_id>[1-9][0-9]{0,9})-"
+    # 16 位兼容本功能早期生成的路径；新上传使用完整 64 位 SHA-256。
+    r"(?:[0-9a-f]{16}|[0-9a-f]{64})\.(?:"
+    + "|".join(AVATAR_UPLOAD_EXTENSIONS) + r")")
 
 
 def is_preset_avatar(value: str) -> bool:
     return value in AVATAR_PRESETS
 
 
+def uploaded_avatar_user_id(value: str) -> int | None:
+    """Return the owner encoded in a canonical upload path, otherwise ``None``."""
+    matched = _AVATAR_UPLOAD_RE.fullmatch(value)
+    return int(matched.group("user_id")) if matched else None
+
+
 def is_uploaded_avatar(value: str) -> bool:
-    return _AVATAR_UPLOAD_RE.match(value) is not None
+    return uploaded_avatar_user_id(value) is not None
 
 
 def validate_avatar_url(value: str) -> str:
@@ -146,8 +155,8 @@ class ProfileUpdateRequest(BaseModel):
             raise ValueError("昵称不能为空白")
         if len(trimmed) > 64:
             raise ValueError("昵称最长 64 个字符")
-        if any(char in trimmed for char in "\n\r\t"):
-            raise ValueError("昵称不能包含换行或制表符")
+        if any(ord(char) < 32 or 0x7F <= ord(char) <= 0x9F for char in trimmed):
+            raise ValueError("昵称不能包含控制字符")
         return trimmed
 
     @field_validator("avatar_url")

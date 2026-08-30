@@ -36,7 +36,13 @@ def main():
         built, skipped = 0, 0
         for job in jobs:
             rows = leveling.collect_job_rows(db, job)
-            profiles = leveling.build_level_profiles(db, job, rows=rows, cache_path=CACHE)
+            try:
+                profiles = leveling.build_level_profiles(
+                    db, job, rows=rows, cache_path=CACHE)
+                db.commit()
+            except Exception:
+                db.rollback()
+                raise
             if not profiles:
                 skipped += 1
                 by_level = {}

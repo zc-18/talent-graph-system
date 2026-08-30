@@ -72,7 +72,7 @@ export default function ConfidenceExplain({ value, factors, children }: {
           style={{ top: pos.top, left: pos.left, width: POP_W }}>
           <div className="text-xs font-bold text-body-1 mb-2 flex items-center justify-between">
             <span>置信度是怎么算的？</span>
-            <span className="text-accent font-extrabold">{Math.round(value * 100)}%</span>
+            <span className="text-accent-deep font-extrabold">{Math.round(value * 100)}%</span>
           </div>
           <div className="space-y-2">
             {FACTOR_DEFS.map(f => {

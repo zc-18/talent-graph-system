@@ -115,6 +115,62 @@ def test_apply_is_idempotent_and_covers_all_roles():
         db.close()
 
 
+def test_seed_does_not_overwrite_user_customized_auth_or_profile():
+    db = _database()
+    try:
+        seed.apply_seed(db)
+        user = db.query(models.AppUser).filter(
+            models.AppUser.username == seed.PERSONAS[0]["username"]).one()
+        original_hash = user.password_hash
+        user.nickname = "用户自定义昵称"
+        user.avatar_url = "/avatars/a12.webp"
+        user.password_hash = seed.hash_password("用户修改后的密码")
+        changed_hash = user.password_hash
+        existing = db.query(models.AppUser).filter(models.AppUser.username == "demo-user").one()
+        existing.nickname = "原账号自定义昵称"
+        existing.avatar_url = "/avatars/a11.webp"
+        db.commit()
+
+        seed.apply_seed(db)
+        db.refresh(user)
+        db.refresh(existing)
+        assert original_hash != changed_hash
+        assert user.password_hash == changed_hash
+        assert verify_password("用户修改后的密码", user.password_hash)
+        assert user.nickname == "用户自定义昵称"
+        assert user.avatar_url == "/avatars/a12.webp"
+        assert existing.password_hash == "unused"
+        assert existing.nickname == "原账号自定义昵称"
+        assert existing.avatar_url == "/avatars/a11.webp"
+    finally:
+        db.close()
+
+
+def test_seed_refuses_to_take_over_conflicting_existing_account():
+    db = _database()
+    try:
+        persona = seed.PERSONAS[0]
+        db.add(models.AppUser(username=persona["username"], password_hash="foreign-password",
+                              role="admin", status="disabled", nickname="真实用户"))
+        db.commit()
+        before = _counts(db)
+        try:
+            seed.apply_seed(db)
+        except RuntimeError as exc:
+            assert "拒绝覆盖" in str(exc)
+            db.rollback()
+        else:
+            raise AssertionError("认证属性冲突时必须拒绝覆盖")
+        row = db.query(models.AppUser).filter(
+            models.AppUser.username == persona["username"]).one()
+        assert row.password_hash == "foreign-password"
+        assert row.role == "admin" and row.status == "disabled"
+        assert row.nickname == "真实用户"
+        assert _counts(db) == before
+    finally:
+        db.close()
+
+
 def test_personas_are_differentiated():
     db = _database()
     try:

@@ -142,22 +142,50 @@ def _resume_skills(contract: dict, coverage: float) -> tuple[list[str], dict[str
 
 # ----------------------------- 账号 / 组织 -----------------------------
 
+def _has_seed_marker(db, user: models.AppUser) -> bool:
+    """Distinguish a previously seeded account from a first-run username collision.
+
+    Password hashes are intentionally not seed ownership markers because users may change their
+    passwords after the first production run.  R6-owned business rows provide stable markers.
+    """
+    persona_names = {persona["username"] for persona in PERSONAS}
+    if user.username in persona_names:
+        code = RESUME_CODE.format(username=user.username)
+        return db.query(models.ResumeProfile).filter(
+            models.ResumeProfile.owner_user_id == user.id,
+            models.ResumeProfile.code == code).first() is not None
+    if user.username == SECONDARY_HR["username"]:
+        return db.query(models.OrganizationMember).join(
+            models.Organization,
+            models.Organization.id == models.OrganizationMember.organization_id).filter(
+            models.OrganizationMember.user_id == user.id,
+            models.Organization.name == SECONDARY_ORGANIZATION).first() is not None
+    return False
+
+
 def _ensure_user(db, username: str, password: str, role: str, *,
                  nickname: str | None = None, avatar_url: str | None = None) -> models.AppUser:
     user = db.query(models.AppUser).filter(models.AppUser.username == username).first()
-    if user is None:
+    created = user is None
+    if created:
         user = models.AppUser(username=username, password_hash=hash_password(password),
                               role=role, status="active")
         db.add(user)
         db.flush()
     else:
-        user.role = role
-        user.status = "active"
-        if not verify_password(password, user.password_hash):
-            user.password_hash = hash_password(password)
-    if nickname:
+        # First-run username collisions must prove the configured demo credentials.  Once this
+        # script's durable business marker exists, however, password/profile changes belong to
+        # the user and a rerun must not reset or reject them.
+        seeded_before = _has_seed_marker(db, user)
+        identity_matches = user.role == role and user.status == "active"
+        initial_credentials_match = verify_password(password, user.password_hash)
+        if not identity_matches or (not seeded_before and not initial_credentials_match):
+            raise RuntimeError(f"{username} 已存在但认证属性与 R6 示例账号不一致；拒绝覆盖")
+    # 新建账号落默认资料；已存在账号只修业务演示数据，不重置密码、角色、状态或用户
+    # 自己改过的昵称/头像。这样脚本重复执行不会夺走账号控制权或覆盖个性化资料。
+    if user.nickname is None and nickname:
         user.nickname = nickname
-    if avatar_url:
+    if user.avatar_url is None and avatar_url:
         user.avatar_url = avatar_url
     return user
 
@@ -376,9 +404,11 @@ def _verify(db) -> dict:
         user = db.query(models.AppUser).filter(
             models.AppUser.username == persona["username"]).one()
         assert user.role == "user" and user.status == "active"
-        assert verify_password(persona["password"], user.password_hash)
-        assert user.nickname == persona["nickname"]
-        assert user.avatar_url == persona["avatar_url"]
+        # Password ownership passes to the account after initial seeding.  Re-verifying the
+        # built-in plaintext here would make a legitimate password change break every rerun.
+        assert user.password_hash
+        # 默认值可被账号本人后续修改；重复跑 seed 不应把自定义资料改回去。
+        assert user.nickname and user.avatar_url
         profile = db.query(models.ResumeProfile).filter(
             models.ResumeProfile.owner_user_id == user.id,
             models.ResumeProfile.code == RESUME_CODE.format(username=user.username)).one()
@@ -403,7 +433,9 @@ def _verify(db) -> dict:
 
     hr = db.query(models.AppUser).filter(
         models.AppUser.username == SECONDARY_HR["username"]).one()
-    assert hr.role == "hr" and verify_password(SECONDARY_HR["password"], hr.password_hash)
+    assert hr.role == "hr" and hr.status == "active"
+    assert hr.password_hash
+    assert hr.nickname and hr.avatar_url
     primary = db.query(models.Organization).filter(
         models.Organization.name == PRIMARY_ORGANIZATION).first()
     secondary = db.query(models.Organization).filter(

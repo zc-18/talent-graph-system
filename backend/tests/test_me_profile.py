@@ -6,7 +6,12 @@
 from __future__ import annotations
 
 import base64
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
+import hashlib
+import io
+
+from PIL import Image
 
 import pytest
 from fastapi.testclient import TestClient
@@ -20,11 +25,19 @@ from app.db import Base, get_db
 from app.main import app
 from app.schemas import AVATAR_PRESETS
 
-# 真实的 1x1 PNG（不是只拼个魔数），确保魔数判定走的是真图片
+# 真实的 1x1 PNG；JPEG / WebP 同样由 Pillow 编码，保证完整解码路径可用。
 PNG_BYTES = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==")
-JPEG_BYTES = b"\xff\xd8\xff\xe0" + b"\x00" * 64
-WEBP_BYTES = b"RIFF" + (64).to_bytes(4, "little") + b"WEBPVP8 " + b"\x00" * 56
+
+
+def _image_bytes(format_name: str, *, size: tuple[int, int] = (1, 1)) -> bytes:
+    output = io.BytesIO()
+    Image.new("RGB", size, (39, 86, 142)).save(output, format=format_name)
+    return output.getvalue()
+
+
+JPEG_BYTES = _image_bytes("JPEG")
+WEBP_BYTES = _image_bytes("WEBP")
 
 
 @pytest.fixture()
@@ -43,7 +56,13 @@ def session():
 def client(monkeypatch, session, tmp_path):
     # READ_ONLY 打开：个人资料属于用户私有数据，不受知识图谱写闸限制
     monkeypatch.setattr(guards.settings, "read_only", True, raising=False)
-    monkeypatch.setenv("STATIC_DIR", str(tmp_path / "static"))
+    static_dir = tmp_path / "static"
+    preset_dir = static_dir / "avatars"
+    preset_dir.mkdir(parents=True)
+    for preset in AVATAR_PRESETS:
+        (preset_dir / preset.rsplit("/", 1)[-1]).write_bytes(WEBP_BYTES)
+    monkeypatch.setenv("STATIC_DIR", str(static_dir))
+    monkeypatch.setenv("AVATAR_UPLOAD_DIR", str(tmp_path / "user_uploads" / "avatars"))
     app.dependency_overrides[get_db] = lambda: session
     try:
         yield TestClient(app)
@@ -117,12 +136,20 @@ def test_patch_profile_allows_partial_update(client, session):
     {"nickname": "   "},                            # 纯空白
     {"nickname": "x" * 65},                         # 超长
     {"nickname": "换\n行"},                          # 控制字符
+    {"nickname": "退\x1b格"},                         # 其他 C0 控制字符
+    {"nickname": "隐\x85藏"},                         # C1 控制字符
     {"avatar_url": "https://evil.example.com/a.png"},   # 外部链接
     {"avatar_url": "//evil.example.com/a.png"},         # 协议相对外链
     {"avatar_url": "/avatars/../../etc/passwd"},        # 路径穿越
     {"avatar_url": "/avatars/a13.webp"},                # 不在预置图库内
     {"avatar_url": "/static/anything.png"},             # 站内但不是头像目录
     {"avatar_url": "/avatars/u1-notahash.png"},         # 冒充上传产物
+    {"avatar_url": "/avatars/u1-0123456789abcdef.jpeg"}, # 非规范上传扩展名
+    {"avatar_url": "/avatars//a01.webp"},                # 双斜杠
+    {"avatar_url": "/avatars/%2e%2e/a01.webp"},          # 编码穿越
+    {"avatar_url": "/avatars/a01.webp?x=.png"},          # query
+    {"avatar_url": "/avatars/a01.webp#x"},               # fragment
+    {"avatar_url": "/avatars／a01.webp"},                # Unicode 全角斜杠
 ])
 def test_patch_profile_rejects_bad_input(client, session, payload):
     user, headers = make_user(session, suffix=f"bad{abs(hash(str(payload))) % 1000}")
@@ -169,7 +196,7 @@ def test_avatar_upload_accepts_real_images(client, session, tmp_path,
     assert body["avatar_url"].startswith(f"/avatars/u{user.id}-")
     assert body["avatar_url"].endswith(f".{expected}")
     assert body["user"]["avatar_url"] == body["avatar_url"]
-    written = tmp_path / "static" / "avatars" / body["avatar_url"].rsplit("/", 1)[-1]
+    written = tmp_path / "user_uploads" / "avatars" / body["avatar_url"].rsplit("/", 1)[-1]
     assert written.is_file() and written.read_bytes() == content
     session.refresh(user)
     assert user.avatar_url == body["avatar_url"]
@@ -179,10 +206,28 @@ def test_uploaded_avatar_url_passes_the_patch_validator(client, session):
     """上传产出的路径必须能被 PATCH 的白名单接受，否则换头像会自相矛盾。"""
     _, headers = make_user(session, suffix="roundtrip")
     uploaded = _upload(client, headers, "me.png", PNG_BYTES).json()["avatar_url"]
-    client.patch("/api/me/profile", headers=headers, json={"avatar_url": "/avatars/a01.webp"})
     response = client.patch("/api/me/profile", headers=headers, json={"avatar_url": uploaded})
     assert response.status_code == 200
     assert response.json()["avatar_url"] == uploaded
+
+
+def test_patch_cannot_select_another_users_upload(client, session):
+    _, headers_a = make_user(session, suffix="owner-a")
+    user_b, headers_b = make_user(session, suffix="owner-b")
+    foreign_url = _upload(client, headers_b, "me.png", PNG_BYTES).json()["avatar_url"]
+
+    response = client.patch("/api/me/profile", headers=headers_a,
+                            json={"avatar_url": foreign_url})
+    assert response.status_code == 422
+    session.refresh(user_b)
+    assert user_b.avatar_url == foreign_url
+
+
+def test_patch_rejects_missing_owned_upload(client, session):
+    user, headers = make_user(session, suffix="missing-upload")
+    missing = f"/avatars/u{user.id}-{'0' * 64}.png"
+    assert client.patch("/api/me/profile", headers=headers,
+                        json={"avatar_url": missing}).status_code == 422
 
 
 def test_avatar_upload_is_content_addressed_and_idempotent(client, session, tmp_path):
@@ -190,15 +235,100 @@ def test_avatar_upload_is_content_addressed_and_idempotent(client, session, tmp_
     first = _upload(client, headers, "a.png", PNG_BYTES).json()["avatar_url"]
     second = _upload(client, headers, "b.png", PNG_BYTES).json()["avatar_url"]
     assert first == second
-    assert len(list((tmp_path / "static" / "avatars").iterdir())) == 1
+    assert len(first.rsplit("-", 1)[-1].split(".", 1)[0]) == 64
+    assert len(list((tmp_path / "user_uploads" / "avatars").iterdir())) == 1
+
+
+def test_failed_commit_keeps_installed_content_addressed_file(client, session, tmp_path,
+                                                               monkeypatch):
+    """Rollback cleanup must not delete a file an identical concurrent request may reference."""
+    _, headers = make_user(session, suffix="commit-race")
+    real_commit = session.commit
+
+    def fail_commit():
+        raise RuntimeError("simulated commit failure")
+
+    monkeypatch.setattr(session, "commit", fail_commit)
+    with pytest.raises(RuntimeError, match="simulated commit failure"):
+        _upload(client, headers, "me.png", PNG_BYTES)
+    monkeypatch.setattr(session, "commit", real_commit)
+
+    user = session.query(models.AppUser).filter_by(username="profile-user-commit-race").one()
+    expected_name = f"u{user.id}-{hashlib.sha256(PNG_BYTES).hexdigest()}.png"
+    assert (tmp_path / "user_uploads" / "avatars" / expected_name).read_bytes() == PNG_BYTES
+
+
+def test_replacing_upload_removes_old_file_and_bounds_disk(client, session, tmp_path):
+    _, headers = make_user(session, suffix="replace")
+    first = _upload(client, headers, "first.png", PNG_BYTES).json()["avatar_url"]
+    second_bytes = _image_bytes("PNG", size=(2, 1))
+    second = _upload(client, headers, "second.png", second_bytes).json()["avatar_url"]
+    upload_dir = tmp_path / "user_uploads" / "avatars"
+    assert first != second
+    assert not (upload_dir / first.rsplit("/", 1)[-1]).exists()
+    assert [path.name for path in upload_dir.iterdir()] == [second.rsplit("/", 1)[-1]]
+
+
+def test_selecting_preset_removes_previous_upload(client, session, tmp_path):
+    _, headers = make_user(session, suffix="preset-clean")
+    uploaded = _upload(client, headers, "me.png", PNG_BYTES).json()["avatar_url"]
+    upload_path = (tmp_path / "user_uploads" / "avatars"
+                   / uploaded.rsplit("/", 1)[-1])
+    assert upload_path.is_file()
+    response = client.patch("/api/me/profile", headers=headers,
+                            json={"avatar_url": "/avatars/a01.webp"})
+    assert response.status_code == 200
+    assert not upload_path.exists()
+
+
+def test_patch_never_follows_or_deletes_an_owned_name_symlink(client, session, tmp_path):
+    user, headers = make_user(session, suffix="symlink")
+    upload_dir = tmp_path / "user_uploads" / "avatars"
+    upload_dir.mkdir(parents=True, exist_ok=True)
+    outside = tmp_path / "outside.png"
+    outside.write_bytes(PNG_BYTES)
+    url = f"/avatars/u{user.id}-{'1' * 64}.png"
+    link = upload_dir / url.rsplit("/", 1)[-1]
+    try:
+        link.symlink_to(outside)
+    except (OSError, NotImplementedError):
+        pytest.skip("当前平台不允许创建测试符号链接")
+    response = client.patch("/api/me/profile", headers=headers, json={"avatar_url": url})
+    assert response.status_code == 422
+    assert outside.read_bytes() == PNG_BYTES and link.is_symlink()
 
 
 def test_avatar_upload_rejects_extension_lies(client, session, tmp_path):
-    """扩展名是白名单里的，内容不是图片 —— 必须被文件头拦下。"""
+    """扩展名是白名单里的，内容不是图片 —— 必须被完整解码拦下。"""
     _, headers = make_user(session, suffix="lie")
     response = _upload(client, headers, "payload.png", b"<?php system($_GET['c']); ?>")
     assert response.status_code == 422
-    assert not (tmp_path / "static" / "avatars").exists()
+    upload_dir = tmp_path / "user_uploads" / "avatars"
+    assert not upload_dir.exists() or not list(upload_dir.iterdir())
+
+
+def test_avatar_upload_rejects_magic_only_and_truncated_images(client, session):
+    _, headers = make_user(session, suffix="truncated")
+    fake_jpeg = b"\xff\xd8\xff\xe0" + b"\x00" * 64
+    fake_webp = b"RIFF" + (64).to_bytes(4, "little") + b"WEBPVP8 " + b"\x00" * 56
+    assert _upload(client, headers, "fake.jpg", fake_jpeg).status_code == 422
+    assert _upload(client, headers, "fake.webp", fake_webp).status_code == 422
+    assert _upload(client, headers, "truncated.png", PNG_BYTES[:-10]).status_code == 422
+
+
+def test_avatar_upload_rejects_pixel_bombs_before_decode(client, session, monkeypatch):
+    _, headers = make_user(session, suffix="pixel-cap")
+    monkeypatch.setattr("app.routers.me.AVATAR_MAX_PIXELS", 1)
+    response = _upload(client, headers, "large.png", _image_bytes("PNG", size=(2, 1)))
+    assert response.status_code == 422
+
+
+def test_avatar_upload_rejects_animated_images(client, session):
+    _, headers = make_user(session, suffix="animated")
+    output = io.BytesIO()
+    frames = [Image.new("RGB", (1, 1), color) for color in ((255, 0, 0), (0, 0, 255))]
+    frames[0].save(output, format="WEBP", save_all=True, append_images=frames[1:], duration=100)
+    assert _upload(client, headers, "animated.webp", output.getvalue()).status_code == 422
 
 
 def test_avatar_upload_rejects_format_mismatch(client, session):
@@ -223,7 +353,81 @@ def test_avatar_upload_enforces_two_megabyte_cap(client, session, tmp_path):
     oversized = PNG_BYTES + b"\x00" * (2 * 1024 * 1024 + 1)
     response = _upload(client, headers, "big.png", oversized)
     assert response.status_code == 413
-    assert not (tmp_path / "static" / "avatars").exists()
+    upload_dir = tmp_path / "user_uploads" / "avatars"
+    assert not upload_dir.exists() or not list(upload_dir.iterdir())
+
+
+def test_uploaded_avatar_is_explicitly_served_outside_frontend_static(client, session,
+                                                                      tmp_path):
+    _, headers = make_user(session, suffix="serve")
+    avatar_url = _upload(client, headers, "me.png", PNG_BYTES).json()["avatar_url"]
+    response = client.get(avatar_url)
+    assert response.status_code == 200 and response.content == PNG_BYTES
+    assert response.headers["content-type"].startswith("image/png")
+    assert response.headers["cache-control"] == "public, max-age=31536000, immutable"
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["cross-origin-resource-policy"] == "same-origin"
+    assert "sandbox" in response.headers["content-security-policy"]
+    assert client.head(avatar_url).status_code == 200
+    assert client.post(avatar_url).status_code == 405
+    assert not (tmp_path / "static" / "avatars" / avatar_url.rsplit("/", 1)[-1]).exists()
+
+
+@pytest.mark.parametrize("path", [
+    "/avatars/random.txt",
+    "/avatars/u1-0123456789abcdef.svg",
+    "/avatars/u1-0123456789abcdef.png/extra",
+    "/avatars/",
+])
+def test_avatar_static_mount_only_serves_canonical_upload_names(client, path):
+    assert client.get(path).status_code == 404
+
+
+def test_avatar_static_mount_serves_presets_without_spa_fallback(client):
+    # This exercises the FastAPI *main app*, not me.router in isolation.  It proves that
+    # APIRouter.mount is included at /avatars before main.py's SPA catch-all.
+    response = client.get(AVATAR_PRESETS[0])
+    assert response.status_code == 200 and response.content == WEBP_BYTES
+    assert response.headers["content-type"].startswith("image/webp")
+    assert response.headers["cache-control"] == "public, max-age=3600, must-revalidate"
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["cross-origin-resource-policy"] == "same-origin"
+    assert "sandbox" in response.headers["content-security-policy"]
+    assert client.get("/avatars/a13.webp").status_code == 404
+
+
+def test_avatar_static_mount_rejects_normalized_or_encoded_paths(client):
+    paths = (
+        "/avatars//a01.webp",
+        "/avatars/a/%2e%2e/a01.webp",
+        "/avatars/%2e%2e/a01.webp",
+        "/avatars/a01.webp%3Fx",
+        "/avatars/a01.webp%23x",
+        "/avatars/%61%30%31.webp",
+        "/avatars%2fa01.webp",
+        "/avatars%5ca01.webp",
+    )
+    for path in paths:
+        response = client.get(path, follow_redirects=False)
+        assert response.status_code == 404, (path, response.status_code, response.text)
+
+
+def test_avatar_roots_do_not_share_mutable_staticfiles_state(client, session):
+    _, headers = make_user(session, suffix="parallel-static")
+    uploaded_url = _upload(client, headers, "me.png", PNG_BYTES).json()["avatar_url"]
+
+    def request(url: str) -> tuple[int, bytes, str]:
+        response = client.get(url)
+        return response.status_code, response.content, response.headers["content-type"]
+
+    urls = [AVATAR_PRESETS[0], uploaded_url] * 25
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        results = list(pool.map(request, urls))
+    for url, (status, content, content_type) in zip(urls, results):
+        assert status == 200
+        expected = WEBP_BYTES if url == AVATAR_PRESETS[0] else PNG_BYTES
+        assert content == expected
+        assert content_type.startswith("image/webp" if url == AVATAR_PRESETS[0] else "image/png")
 
 
 def test_avatar_upload_requires_authentication(client, session):
@@ -241,3 +445,15 @@ def test_avatar_paths_are_namespaced_per_user(client, session):
     url_b = _upload(client, headers_b, "me.png", PNG_BYTES).json()["avatar_url"]
     assert url_a != url_b
     assert f"u{user_a.id}-" in url_a and f"u{user_b.id}-" in url_b
+
+
+def test_profile_endpoints_are_strictly_actor_scoped(client, session):
+    user_a, headers_a = make_user(session, suffix="scope-a")
+    user_b, headers_b = make_user(session, suffix="scope-b")
+    assert client.patch("/api/me/profile", headers=headers_a,
+                        json={"nickname": "用户 A"}).status_code == 200
+    assert _upload(client, headers_b, "me.png", PNG_BYTES).status_code == 200
+    session.refresh(user_a)
+    session.refresh(user_b)
+    assert user_a.nickname == "用户 A" and user_a.avatar_url is None
+    assert user_b.nickname is None and user_b.avatar_url is not None

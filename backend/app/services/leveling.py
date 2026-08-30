@@ -7,11 +7,13 @@
 from __future__ import annotations
 import json
 import os
+import unicodedata
 from collections import defaultdict
 from pathlib import Path
+from uuid import uuid4
 from sqlalchemy.orm import Session
 from .. import models
-from . import cleaning, extraction, hallucination, graph_service
+from . import cleaning, extraction, hallucination
 from .ingest import title_key
 from .evolution import compute_changes
 from .job_resolution import resolve_job_query
@@ -33,6 +35,27 @@ def _load_cache(cache_path: str) -> dict:
         except Exception:
             return {}
     return {}
+
+
+def _skill_key(name: str) -> str:
+    """Normalize a skill name without erasing meaningful punctuation."""
+    return unicodedata.normalize("NFKC", name or "").strip().casefold()
+
+
+def _stage_cache(cache_path: str, cache: dict) -> str:
+    """Write a complete cache next to its destination; caller publishes it."""
+    path = Path(cache_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    staged = path.with_name(f".{path.name}.{uuid4().hex}.tmp")
+    try:
+        with open(staged, "w", encoding="utf-8") as stream:
+            json.dump(cache, stream, ensure_ascii=False)
+            stream.flush()
+            os.fsync(stream.fileno())
+    except Exception:
+        staged.unlink(missing_ok=True)
+        raise
+    return str(staged)
 
 
 def collect_job_rows(db: Session, job: models.Job) -> list[models.RawJD]:
@@ -81,7 +104,8 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
     """构建岗位分级能力画像并落库 JobLevelSkill。
 
     返回 {"level|recruitment|track|industry": {slice metadata, capabilities}}；
-    分桶规则不满足时返回 {}。
+    分桶规则不满足时返回 {}。本函数事务中立：只 flush/暂存状态，不 commit；
+    调用方必须在返回后 commit，并在异常时 rollback。
     """
     parse_fn = parse_fn or extraction.parse_jd
     cache_path = cache_path or str(_DEFAULT_CACHE)
@@ -89,11 +113,34 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
         rows = collect_job_rows(db, job)
     buckets = bucket_slices(rows)
     if not buckets:
+        # 全量重建必须是目标状态同步，而不是只写本次仍有效的切片。岗位在新数据或
+        # 摘除错挂证据后可能不再满足分桶门槛；若直接早退，历史画像会永久残留。
+        db.query(models.JobLevelSkill).filter(
+            models.JobLevelSkill.job_id == job.id).delete(
+                synchronize_session="fetch")
+        db.flush()
         return {}
 
     cache = _load_cache(cache_path)
     cache_dirty = False
     out: dict[str, dict] = {}
+    staged_rows: list[models.JobLevelSkill] = []
+    confirmed: dict[str, int] = {}
+    collisions: dict[str, set[int]] = defaultdict(set)
+    for skill_id, name in (db.query(models.Skill.id, models.Skill.name)
+                           .join(models.JobSkill,
+                                 models.JobSkill.skill_id == models.Skill.id)
+                           .filter(models.JobSkill.job_id == job.id,
+                                   models.JobSkill.status == "active").all()):
+        key = _skill_key(name)
+        if not key:
+            continue
+        collisions[key].add(skill_id)
+        confirmed[key] = skill_id
+    ambiguous = {key: ids for key, ids in collisions.items() if len(ids) > 1}
+    if ambiguous:
+        detail = ", ".join(f"{key}={sorted(ids)}" for key, ids in sorted(ambiguous.items()))
+        raise ValueError(f"岗位 {job.name} 存在归一化后同名的 active 技能：{detail}")
 
     for slice_key, level_rows in buckets.items():
         level, recruitment_type, track, industry = slice_key
@@ -135,34 +182,20 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
         # 没有的技能（实测越界率 45.5%）——同一个岗位，岗位页显示 7 项能力、级别页
         # 却列出 88 项，评委点开就是硬伤。以岗位能力集为准，分级画像只做「级别内的
         # 子集划分」，不引入新能力项。
-        confirmed = {
-            name.lower()
-            for (name,) in db.query(models.Skill.name)
-            .join(models.JobSkill, models.JobSkill.skill_id == models.Skill.id)
-            .filter(models.JobSkill.job_id == job.id,
-                    models.JobSkill.status == "active").all()
-        }
-        if confirmed:
-            caps = [c for c in caps if c["name"].lower() in confirmed]
+        # 空 active 集同样必须相交成空集，不能让生成结果绕过岗位能力门槛。
+        caps = [c for c in caps if _skill_key(c["name"]) in confirmed]
 
-        # 落库：先清该 job+level 旧行
-        db.query(models.JobLevelSkill).filter(
-            models.JobLevelSkill.job_id == job.id,
-            models.JobLevelSkill.level == level,
-            models.JobLevelSkill.recruitment_type == recruitment_type,
-            models.JobLevelSkill.track == track,
-            models.JobLevelSkill.industry == industry).delete()
         for c in caps:
-            sk = graph_service.upsert_skill(db, c["name"], c.get("category"),
-                                            c.get("skill_type"))
-            db.add(models.JobLevelSkill(
-                job_id=job.id, level=level, skill_id=sk.id,
+            # 直接复用已确认 JobSkill 的 skill_id，而不是按名称再次 upsert；由此把
+            # 「画像行一定对应同岗位 active JobSkill」固化为写入时不变量。
+            skill_id = confirmed[_skill_key(c["name"])]
+            staged_rows.append(models.JobLevelSkill(
+                job_id=job.id, level=level, skill_id=skill_id,
                 recruitment_type=recruitment_type, track=track, industry=industry,
                 importance=c["importance"], weight=c.get("weight", 0.5),
                 level_required=c.get("level_required", "familiar"),
                 confidence=c.get("confidence", 0.0), factors=c.get("factors"),
                 source_count=c.get("source_count", 0), jd_count=len(level_rows)))
-        db.commit()
         out["|".join(slice_key)] = {
             "level": level, "recruitment_type": recruitment_type,
             "track": track, "industry": industry,
@@ -172,15 +205,31 @@ def build_level_profiles(db: Session, job: models.Job, rows=None, parse_fn=None,
     # 中级 1 项）。分级画像的价值在于跨级对比，单档无从对比，出一张只有一行的
     # 「中级画像」反而像数据没跑通。与 bucket_rows 的「≥2 档」是同一条规则，
     # 只是那条按 JD 条数判、这条按交集结果判——判据晚了一步，得在这里补上。
-    if sum(1 for v in out.values() if v["capabilities"]) < MIN_BUCKETS:
+    populated_levels = {v["level"] for v in out.values() if v["capabilities"]}
+    if len(populated_levels) < MIN_BUCKETS:
         db.query(models.JobLevelSkill).filter(
-            models.JobLevelSkill.job_id == job.id).delete()
-        db.commit()
+            models.JobLevelSkill.job_id == job.id).delete(
+                synchronize_session="fetch")
+        db.flush()
         return {}
 
+    # 缓存是可再生的解析产物，但写失败不能发生在画像已经提交之后。先在同目录完整
+    # 写入并原子替换缓存，成功后才触碰旧画像；即使后续数据库事务回滚，缓存仅会多出
+    # 一份有效解析结果，不会形成半张画像。
     if cache_dirty and cache_path:
-        with open(cache_path, "w", encoding="utf-8") as f:
-            json.dump(cache, f, ensure_ascii=False)
+        staged_cache = _stage_cache(cache_path, cache)
+        try:
+            os.replace(staged_cache, cache_path)
+        finally:
+            Path(staged_cache).unlink(missing_ok=True)
+
+    # 只有所有切片都成功计算、缓存落盘且通过跨级门槛后，才把旧画像替换为新目标状态。
+    # 服务函数不提交调用方事务；flush 让约束错误在返回前暴露，由调用方统一回滚。
+    db.query(models.JobLevelSkill).filter(
+        models.JobLevelSkill.job_id == job.id).delete(
+            synchronize_session="fetch")
+    db.add_all(staged_rows)
+    db.flush()
     return out
 
 

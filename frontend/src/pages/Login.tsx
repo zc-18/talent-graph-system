@@ -60,7 +60,7 @@ export default function Login({ register = false }: { register?: boolean }) {
         {/* 左栏：顶部返回 → 中部品牌/主张/能力预览（撑满剩余高度）→ 底部保证项。
             原实现是 justify-between + 两个子块，中间会裂出一大片空白。 */}
         <section className="hidden min-w-0 flex-col px-12 py-10 lg:flex">
-          <Link to="/" className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-body-2 transition hover:text-body-1">
+          <Link to="/" className="-my-1 inline-flex w-fit items-center gap-2 py-1 text-sm font-semibold text-body-2 transition hover:text-body-1">
             <ArrowLeft className="h-4 w-4" />返回首页
           </Link>
 
@@ -99,7 +99,7 @@ export default function Login({ register = false }: { register?: boolean }) {
         </section>
 
         <section className="flex min-h-screen min-w-0 flex-col justify-center border-l border-line-soft/12 bg-white/[0.92] px-5 py-20 shadow-[-16px_0_36px_-32px_rgb(var(--brand-ink)/0.35)] backdrop-blur-md sm:px-10 lg:px-12">
-          <Link to="/" className="mb-10 inline-flex w-fit items-center gap-2 text-sm font-semibold text-body-2 transition hover:text-body-1 lg:hidden">
+          <Link to="/" className="mb-10 -my-1 inline-flex w-fit items-center gap-2 py-1 text-sm font-semibold text-body-2 transition hover:text-body-1 lg:hidden">
             <ArrowLeft className="h-4 w-4" />返回首页
           </Link>
           <div className="mb-8">
@@ -149,7 +149,7 @@ export default function Login({ register = false }: { register?: boolean }) {
 
           <div className="text-sm text-body-2 mt-6 text-center">
             {register ? '已有账号？' : '还没有账号？'}{' '}
-            <Link to={register ? '/login' : '/register'} className="text-accent font-semibold hover:underline">{register ? '去登录' : '立即注册'}</Link>
+            <Link to={register ? '/login' : '/register'} className="text-accent-deep font-semibold hover:underline">{register ? '去登录' : '立即注册'}</Link>
           </div>
         </section>
       </div>

@@ -7,6 +7,9 @@ export default defineConfig({
     port: 5188,
     proxy: {
       '/api': { target: 'http://127.0.0.1:8200', changeOrigin: true },
+      // Presets remain in frontend/public/avatars. Only content-addressed uploads live in
+      // the backend's persistent directory, so proxy that subset without shadowing presets.
+      '^/avatars/u[1-9][0-9]{0,9}-': { target: 'http://127.0.0.1:8200', changeOrigin: true },
     },
   },
   build: {
