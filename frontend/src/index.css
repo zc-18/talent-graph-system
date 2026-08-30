@@ -83,7 +83,12 @@ body {
 
 /* 柔光洗：--surface-page 打底 → 大半径 radial 淡蓝/淡紫（不是硬色块）
    → 最底层叠一张低透明度背景图。
-   层序：先写的在上。第 3 层是半透明的页面色洗，让 /app-bg.webp 透出约 12%。
+   层序：先写的在上。第 3 层是半透明的页面色洗，让 /app-bg-v2.webp 透出约 25%。
+   0.88 → 0.75：旧图 app-bg.webp 蓝通道 stddev 只有 1.0（近乎纯色），再被 0.88 的洗盖掉，
+   整屏实测色阶跨度仅 8 级，登录后整站看起来是一片死板的淡紫。换成结构化的 app-bg-v2.webp
+   （stddev 23.4/21.6，构图把内容压在四角、中间留空）并把洗降到 0.75 后，
+   同一纯背景列的实测跨度从 11 级提升到 29 级（CSS 合成模拟按旧口径为 8 → 22–25）。
+   注意 public/ 不做内容哈希，必须换新文件名，覆盖同名文件浏览器/CDN 仍发旧图。
 
    为什么挂在 fixed 伪元素上而不是直接写在 body：
    `html, body, #root { height: 100% }` 让 html 的盒子恰好一屏高，而背景定位区域
@@ -107,8 +112,8 @@ body::before {
   background-image:
     radial-gradient(1180px 760px at 86% -10%, rgb(var(--bar-2) / 0.20), transparent 62%),
     radial-gradient(980px 660px at 2% 104%, rgb(var(--bar-1) / 0.14), transparent 64%),
-    linear-gradient(158deg, rgb(var(--surface-page) / 0.88) 0%, rgb(var(--surface-page-2) / 0.88) 100%),
-    url('/app-bg.webp');
+    linear-gradient(158deg, rgb(var(--surface-page) / 0.75) 0%, rgb(var(--surface-page-2) / 0.75) 100%),
+    url('/app-bg-v2.webp');
   background-repeat: no-repeat;
   background-size: auto, auto, auto, cover;
   background-position: center, center, center, 50% 0;

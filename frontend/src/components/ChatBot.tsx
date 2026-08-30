@@ -191,7 +191,7 @@ export default function ChatBot() {
         aria-label={open ? '关闭 AI 助手' : '打开 AI 助手'}>
         {open
           ? <X className="w-6 h-6 text-white" />
-          : <img src="/assistant.webp" alt="" className="w-9 h-9 lg:w-12 lg:h-12 rounded-full object-cover ring-2 ring-white/80" />}
+          : <img src="/avatar.webp" alt="" className="w-9 h-9 lg:w-12 lg:h-12 rounded-full object-cover ring-2 ring-white/80" />}
       </motion.button>
 
       {/* 对话面板：<sm 近全屏，≥sm 右下浮窗 */}
@@ -204,15 +204,17 @@ export default function ChatBot() {
             className="fixed inset-x-2 top-16 bottom-20 z-50 flex flex-col overflow-hidden rounded-2xl border border-line-soft/6 bg-white
                        shadow-[0_24px_60px_-20px_rgb(var(--brand-ink)/0.32)]
                        sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[560px] sm:max-h-[calc(100vh-8rem)] sm:w-[384px]">
-            {/* 头部：毛玻璃 + 3px 顶边饰条（原来是一整块 bg-grad-sky 实色面板） */}
-            <div className="tg-topbar relative flex items-center gap-3 overflow-hidden border-b border-line-soft/6
-                            bg-white/88 px-4 pb-3.5 pt-4 text-body-1 backdrop-blur-xl">
-              <div aria-hidden className="absolute inset-0 pointer-events-none bg-cover bg-center opacity-[0.10]"
+            {/* 头部：一整块 bg-grad-sky 实色面板 + banner 底图（毛玻璃版把 banner 压到看不见了） */}
+            <div className="relative flex items-center gap-3 overflow-hidden border-b border-accent/20
+                            bg-grad-sky px-4 pb-3.5 pt-4 text-body-1">
+              <div aria-hidden className="absolute inset-0 pointer-events-none bg-cover bg-center opacity-[0.28]"
                 style={{ backgroundImage: 'url(/chat-banner.webp)' }} />
-              <img src="/assistant.webp" alt="" className="relative z-10 w-11 h-11 rounded-full object-cover bg-surface-muted ring-2 ring-white shadow-sm" />
+              <img src="/avatar.webp" alt="" className="relative z-10 w-11 h-11 rounded-full object-cover bg-surface-muted ring-2 ring-white shadow-sm" />
               <div className="relative z-10 flex-1 min-w-0">
                 <div className="font-bold text-[15px] flex items-center gap-1.5">智岗小助手 <Sparkles className="w-3.5 h-3.5 text-accent" /></div>
-                <div className="text-[11px] text-body-2 flex items-center gap-1">
+                {/* 底图铺开后这行 11px 小字压在 banner 上，text-body-2 只有 4.37:1 过不了 AA；
+                    text-body-1/90 既够对比度又不至于和上面的标题一样重 */}
+                <div className="text-[11px] text-body-1/90 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" /> 在线 · 随时为你解答
                 </div>
               </div>
@@ -220,11 +222,19 @@ export default function ChatBot() {
             </div>
 
             {/* 消息区 */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-3.5 py-4 space-y-3 bg-gradient-to-b from-surface-muted to-white">
+            {/* 底图 bg2.webp + 白纱：backgroundAttachment 保持默认 scroll，图钉在容器上不随内容滚。
+                position 必须是 left top，不能改回 center——bg2 的结构全在四角（左上 sd=33.1、
+                中央 sd=1.5 近乎纯色），面板又窄又高，居中 cover 正好裁到那块平的中间列，
+                图等于看不见。左上角是四角里最强的一块。 */}
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-3.5 py-4 space-y-3"
+              style={{
+                backgroundImage: 'linear-gradient(rgba(255,255,255,.60), rgba(255,255,255,.78)), url(/bg2.webp)',
+                backgroundSize: 'cover', backgroundPosition: 'left top',
+              }}>
               {msgs.map((m, i) => (
                 <div key={i} className={`flex gap-2 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   {m.role === 'assistant'
-                    ? <img src="/assistant.webp" alt="" className="w-7 h-7 rounded-full object-cover shrink-0 mt-0.5 bg-surface-muted border border-line-soft/8" />
+                    ? <img src="/avatar.webp" alt="" className="w-7 h-7 rounded-full object-cover shrink-0 mt-0.5 bg-surface-muted border border-line-soft/8" />
                     : <span aria-hidden className="w-7 h-7 rounded-full shrink-0 mt-0.5 grid place-items-center bg-grad-accent text-[11px] font-bold text-white">我</span>}
                   {/* markdown 渲染出的是块级元素，外层不能再挂 whitespace-pre-wrap，
                       否则列表/标题的块级布局会和保留的空白打架 */}

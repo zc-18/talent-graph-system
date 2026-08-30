@@ -116,7 +116,7 @@ steps.forEach(([t, d, c], i) => {
   s.addText(d, { x: x + 0.05, y: 3.2, w: 1.75, h: 0.5, align: 'center', fontFace: F, fontSize: 10, color: MUTED })
   if (i < 5) s.addText('▶', { x: x + 1.78, y: 2.0, w: 0.3, h: 1.9, align: 'center', valign: 'middle', fontFace: F, fontSize: 12, color: FAINT })
 })
-const kpis = [['32', '岗位（新兴6）'], ['3952', '技能（含3816技能点）'], ['2570', '真实岗位JD'], ['9128', 'JD溯源证据'], ['0.5502', '岗位置信度均值（2026-08-30 口径）']]
+const kpis = [['32', '岗位（新兴6）'], ['3952', '技能（含3816技能点）'], ['3090', '真实岗位JD'], ['12277', 'JD溯源证据'], ['0.5502', '岗位置信度均值（2026-08-30 口径）']]
 kpis.forEach(([v, l], i) => {
   const x = 0.55 + i * 2.44   // 与步骤卡行同宽同起点：0.55→12.75
   s.addText(v, { x, y: 4.5, w: 2.44, h: 0.7, align: 'center', fontFace: F, fontSize: 32, bold: true, color: INDIGO })
@@ -128,7 +128,7 @@ s.addText('技术栈：FastAPI · SQLAlchemy · DeepSeek 大模型 · BGE 向量
 footer(s, 3)
 
 // ============ 3.5 真实数据采集与合规 ============
-s = p.addSlide(); base(s); header(s, '02+', '真实数据采集、证据与治理', '六类分发渠道累计 2570 条真实 JD · 有效 2404 / 重复 166 · 原始台账全程可溯源')
+s = p.addSlide(); base(s); header(s, '02+', '真实数据采集、证据与治理', '六类分发渠道累计 3090 条真实 JD · 有效 2860 / 重复 230 · 原始台账全程可溯源')
 const srcs = [
   [INDIGO, '飞书 ATS', '774 条', '企业官网公开职位'],
   [CYAN, '国聘网', '671 条', '国家级公共招聘平台'],
@@ -341,7 +341,7 @@ s.addText('R6 最终（补齐「必备能力 ≥2 个独立雇主」闸门后）
 footer(s, 10)
 
 // ============ 10. 测试与指标 ============
-s = p.addSlide(); base(s); header(s, '09', '测试与验证', '双轨数据集（对抗基准 379 条 + 真实语料 2570 条）· 三项核心指标全部超过 90%')
+s = p.addSlide(); base(s); header(s, '09', '测试与验证', '双轨数据集（对抗基准 379 条 + 真实语料 3090 条）· 三项核心指标全部超过 90%')
 const metrics = [
   ['98.25%', 'JD 解析准确率', 'F1 · 371 条非重复 JD', EMERALD],
   ['96.49%', '简历提取准确率', 'F1 · 召回 100%', EMERALD],

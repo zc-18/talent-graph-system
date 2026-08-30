@@ -59,6 +59,18 @@ def write_evidence(db: Session, job_skill_id: int, evidence: list[dict],
         return 0
     seen = {r[0] for r in db.query(models.Evidence.raw_jd_id).filter(
         models.Evidence.job_skill_id == job_skill_id).all() if r[0] is not None}
+    # 证据 URL 缺省回落到该条 JD 自己的 source_url。不回落的话每次全量重建都会把溯源链接
+    # 整片丢掉——上一轮 9128 条证据 100% 带 URL，靠的是重建后手工补跑
+    # backfill_employers_evidence.py；忘了跑就掉到 37%，而时间线卡片的「URL 覆盖率」
+    # 直接读这个字段。写入时就取对，别依赖事后修补。一次批量取，避免 N+1。
+    missing = {ev.get("raw_jd_id") for ev in evidence
+               if ev.get("raw_jd_id") is not None and not (ev.get("source_url") or "").strip()}
+    raw_urls: dict[int, str] = {}
+    if missing:
+        raw_urls = {rid: str(url).strip() for rid, url in db.query(
+            models.RawJD.id, models.RawJD.source_url).filter(
+            models.RawJD.id.in_(missing)).all()
+            if url and str(url).startswith(("http://", "https://"))}
     n = 0
     for ev in evidence:
         if n >= cap:
@@ -68,11 +80,14 @@ def write_evidence(db: Session, job_skill_id: int, evidence: list[dict],
             continue          # 同一条 JD 不重复举证（演化可能被跑很多次）
         if rid is not None:
             seen.add(rid)
+        source_url = (ev.get("source_url") or "").strip()
+        if not source_url and rid is not None:
+            source_url = raw_urls.get(rid, "")
         db.add(models.Evidence(
             job_skill_id=job_skill_id, raw_jd_id=rid,
             source_type=ev.get("source_type", "jd"),
             source_name=ev.get("source") or ev.get("source_name"),
-            source_url=ev.get("source_url", ""),
+            source_url=source_url,
             snippet=(ev.get("snippet") or "")[:500], weight=ev.get("weight", 1.0)))
         n += 1
     return n

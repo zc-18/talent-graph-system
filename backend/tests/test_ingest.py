@@ -1,6 +1,7 @@
 """岗位标题归一化 / 领域过滤 / PII 打码的行为测试（纯内存，不连数据库）。"""
 from app.services import ingest
-from data.import_raw import is_it_domain
+from app.services.job_resolution import title_on_target
+from data.import_raw import infer_title_cluster, is_it_domain
 from data.collect.base import mask_pii
 
 LS, PS = " ", " "   # Unicode 行/段分隔符（源码里用转义写，避免被编辑器吃掉）
@@ -55,10 +56,19 @@ def test_import_dimensions_reject_unknown_values_and_title_track_conflicts():
     assert ambiguous["track"] is None
 
 
-def test_canonical_job_names_covers_both_sources():
+def test_canonical_job_names_is_exactly_the_governed_title_map():
+    """查询解析词表不是发布岗位清单，只有 title_map 策展的 32 岗能独立建图。"""
     canon = ingest.canonical_job_names()
-    assert "大模型算法工程师" in canon      # title_map.json
-    assert "Java开发工程师" in canon        # 内置标题映射
+    assert len(canon) == 32
+    assert "大模型算法工程师" in canon
+    assert "Java开发工程师" in canon
+    # 这些标题仍可被自由文本查询识别，但语料不足、未进 title_map，不能在全量重建时
+    # 长成只有 1–14 条 JD 的一次性公开岗位。
+    for name in ["前端开发工程师", "Python开发工程师", "C++开发工程师",
+                 "算法工程师", "软件测试工程师", "自动化测试工程师",
+                 "硬件系统测试工程师", "系统测试工程师", "行业测试工程师",
+                 "ETL开发工程师"]:
+        assert name not in canon, name
     assert "整车附件产品经理" not in canon
 
 
@@ -95,3 +105,23 @@ def test_mask_pii_still_masks_contacts():
 
 def test_mask_pii_empty():
     assert mask_pii("") == ""
+
+
+# ---------------- 全目录标题归簇 / 配额键
+
+def test_infer_title_cluster_for_full_catalog_rows():
+    """飞书全目录没有 query，必须从标题得到簇，不能把全公司都塞进 None 配额。"""
+    assert infer_title_cluster("智能座舱软件工程师") == "车联网"
+    assert infer_title_cluster("机器人运动控制算法工程师") == "机器人算法"
+    assert infer_title_cluster("数字孪生平台开发工程师") == "数字孪生"
+
+
+def test_infer_title_cluster_rejects_non_engineering_and_prefers_longest_keyword():
+    assert infer_title_cluster("机器人销售专员") is None
+    assert infer_title_cluster("普通产品经理") is None
+    assert infer_title_cluster("大模型产品经理") == "AI产品"
+    assert title_on_target("数字人产品经理", "数字人") is False
+    assert title_on_target("数字人销售专员", "数字人") is False
+    assert title_on_target("人工智能数字人训练师", "数字人") is True
+    # 同时命中大模型算法与推理优化正则时，queries.json 的最长关键词应钉住更具体的簇。
+    assert infer_title_cluster("大模型推理优化算法工程师") == "大模型推理优化"

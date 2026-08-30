@@ -1,5 +1,5 @@
 {
-  "checked": 160,
+  "checked": 394,
   "valid": [
     {
       "slug": "nio",
@@ -17,7 +17,7 @@
       "base": "https://xiaopeng.jobs.feishu.cn",
       "title": "加入小鹏集团",
       "portal_type": 6,
-      "count": 1619,
+      "count": 1620,
       "sample": "具身智能算法工程师/专家",
       "has_desc": true
     },
@@ -52,13 +52,23 @@
       "has_desc": true
     },
     {
+      "slug": "moonton",
+      "home": 200,
+      "base": "https://moonton.jobs.feishu.cn",
+      "title": "加入沐瞳科技",
+      "portal_type": 6,
+      "count": 153,
+      "sample": "游戏战略PMO",
+      "has_desc": true
+    },
+    {
       "slug": "shengshu",
       "home": 200,
       "base": "https://shengshu.jobs.feishu.cn",
       "title": "欢迎加入生数科技",
       "portal_type": 6,
-      "count": 104,
-      "sample": "视频生成模型后训练 / 行业微调算法工程师",
+      "count": 106,
+      "sample": "项目助理",
       "has_desc": true
     },
     {
@@ -69,6 +79,26 @@
       "portal_type": 6,
       "count": 96,
       "sample": "装配组长-无锡",
+      "has_desc": true
+    },
+    {
+      "slug": "lilithgames",
+      "home": 200,
+      "base": "https://lilithgames.jobs.feishu.cn",
+      "title": "莉莉丝社会招聘",
+      "portal_type": 6,
+      "count": 66,
+      "sample": "系统策划（开放世界/SOC）",
+      "has_desc": true
+    },
+    {
+      "slug": "blacklake",
+      "home": 200,
+      "base": "https://blacklake.jobs.feishu.cn",
+      "title": "加入黑湖科技",
+      "portal_type": 6,
+      "count": 58,
+      "sample": "agent开发工程师-星闪",
       "has_desc": true
     },
     {
@@ -92,6 +122,16 @@
       "has_desc": true
     },
     {
+      "slug": "duxiaoman",
+      "home": 200,
+      "base": "https://duxiaoman.jobs.feishu.cn",
+      "title": "加入度小满",
+      "portal_type": 6,
+      "count": 55,
+      "sample": "AI产品实习生",
+      "has_desc": true
+    },
+    {
       "slug": "01ai",
       "home": 200,
       "base": "https://01ai.jobs.feishu.cn",
@@ -112,6 +152,16 @@
       "has_desc": true
     },
     {
+      "slug": "ai2robotics",
+      "home": 200,
+      "base": "https://ai2robotics.jobs.feishu.cn",
+      "title": "加入智平方",
+      "portal_type": 6,
+      "count": 38,
+      "sample": "机器人具身算法工程师（机场方向）",
+      "has_desc": true
+    },
+    {
       "slug": "holomatic",
       "home": 200,
       "base": "https://holomatic.jobs.feishu.cn",
@@ -119,6 +169,16 @@
       "portal_type": 6,
       "count": 21,
       "sample": "感知融合算法工程师-北京",
+      "has_desc": true
+    },
+    {
+      "slug": "yanfu",
+      "home": 200,
+      "base": "https://yanfu.jobs.feishu.cn",
+      "title": "加入衍复投资管理有限公司",
+      "portal_type": 6,
+      "count": 20,
+      "sample": "机器学习（可实习）",
       "has_desc": true
     },
     {
@@ -142,6 +202,16 @@
       "has_desc": true
     },
     {
+      "slug": "xianyuan",
+      "home": 200,
+      "base": "https://xianyuan.jobs.feishu.cn",
+      "title": "加入衔远科技",
+      "portal_type": 6,
+      "count": 14,
+      "sample": "论坛岗位",
+      "has_desc": false
+    },
+    {
       "slug": "hozonauto",
       "home": 200,
       "base": "https://hozonauto.jobs.feishu.cn",
@@ -150,6 +220,16 @@
       "count": 12,
       "sample": "叉车工",
       "has_desc": false
+    },
+    {
+      "slug": "houmo",
+      "home": 200,
+      "base": "https://houmo.jobs.feishu.cn",
+      "title": "后摩智能",
+      "portal_type": 6,
+      "count": 11,
+      "sample": "高级PCB 设计工程师",
+      "has_desc": true
     },
     {
       "slug": "orionstar",
@@ -172,6 +252,46 @@
       "has_desc": true
     },
     {
+      "slug": "deeplang",
+      "home": 200,
+      "base": "https://deeplang.jobs.feishu.cn",
+      "title": "加入深言",
+      "portal_type": 6,
+      "count": 3,
+      "sample": "AI平台研发工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "pateo",
+      "home": 200,
+      "base": "https://pateo.jobs.feishu.cn",
+      "title": "加入",
+      "portal_type": 6,
+      "count": 3,
+      "sample": "产品经理（大连）",
+      "has_desc": true
+    },
+    {
+      "slug": "longcheer",
+      "home": 200,
+      "base": "https://longcheer.jobs.feishu.cn",
+      "title": "加入上海龙旗科技股份有限公司",
+      "portal_type": 6,
+      "count": 2,
+      "sample": "射频工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "uih",
+      "home": 200,
+      "base": "https://uih.jobs.feishu.cn",
+      "title": "加入上海联影医疗科技股份有限公司",
+      "portal_type": 6,
+      "count": 2,
+      "sample": "区域销售经理（江西）B21",
+      "has_desc": true
+    },
+    {
       "slug": "iq",
       "home": 200,
       "base": "https://iq.jobs.feishu.cn",
@@ -179,6 +299,16 @@
       "portal_type": 6,
       "count": 1,
       "sample": "AIGC导演-26年校招（需上传AI短片作品）",
+      "has_desc": true
+    },
+    {
+      "slug": "hypergryph",
+      "home": 200,
+      "base": "https://hypergryph.jobs.feishu.cn",
+      "title": "加入鹰角",
+      "portal_type": 6,
+      "count": 1,
+      "sample": "社招测试2",
       "has_desc": true
     }
   ],
@@ -209,8 +339,8 @@
       "base": "https://shengshu.jobs.feishu.cn",
       "title": "欢迎加入生数科技",
       "portal_type": 6,
-      "count": 104,
-      "sample": "视频生成模型后训练 / 行业微调算法工程师",
+      "count": 106,
+      "sample": "项目助理",
       "has_desc": true
     },
     {
@@ -235,7 +365,7 @@
       "base": "https://xiaopeng.jobs.feishu.cn",
       "title": "加入小鹏集团",
       "portal_type": 6,
-      "count": 1619,
+      "count": 1620,
       "sample": "具身智能算法工程师/专家",
       "has_desc": true
     },
@@ -963,6 +1093,1044 @@
     },
     {
       "slug": "seedream",
+      "home": 404
+    },
+    {
+      "slug": "deeplang",
+      "home": 200,
+      "base": "https://deeplang.jobs.feishu.cn",
+      "title": "加入深言",
+      "portal_type": 6,
+      "count": 3,
+      "sample": "AI平台研发工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "langboat",
+      "home": 404
+    },
+    {
+      "slug": "rcrai",
+      "home": 404
+    },
+    {
+      "slug": "emotibot",
+      "home": 404
+    },
+    {
+      "slug": "zhuiyi",
+      "home": 404
+    },
+    {
+      "slug": "xverse",
+      "home": 404
+    },
+    {
+      "slug": "siliconflow",
+      "home": 404
+    },
+    {
+      "slug": "hpcaitech",
+      "home": 404
+    },
+    {
+      "slug": "luchentech",
+      "home": 404
+    },
+    {
+      "slug": "shlab",
+      "home": 404
+    },
+    {
+      "slug": "pjlab",
+      "home": 404
+    },
+    {
+      "slug": "bigai",
+      "home": 404
+    },
+    {
+      "slug": "pixverse",
+      "home": 404
+    },
+    {
+      "slug": "hidreamai",
+      "home": 404
+    },
+    {
+      "slug": "lingxin",
+      "home": 404
+    },
+    {
+      "slug": "westlakemind",
+      "home": 404
+    },
+    {
+      "slug": "xianyuan",
+      "home": 200,
+      "base": "https://xianyuan.jobs.feishu.cn",
+      "title": "加入衔远科技",
+      "portal_type": 6,
+      "count": 14,
+      "sample": "论坛岗位",
+      "has_desc": false
+    },
+    {
+      "slug": "highflyer",
+      "home": 404
+    },
+    {
+      "slug": "antgroup",
+      "home": 404
+    },
+    {
+      "slug": "volcengine",
+      "home": 404
+    },
+    {
+      "slug": "tiamat",
+      "home": 404
+    },
+    {
+      "slug": "laiye",
+      "home": 404
+    },
+    {
+      "slug": "datagrand",
+      "home": 404
+    },
+    {
+      "slug": "aishu",
+      "home": 404
+    },
+    {
+      "slug": "noetix",
+      "home": 404
+    },
+    {
+      "slug": "ai2robotics",
+      "home": 200,
+      "base": "https://ai2robotics.jobs.feishu.cn",
+      "title": "加入智平方",
+      "portal_type": 6,
+      "count": 38,
+      "sample": "机器人具身算法工程师（机场方向）",
+      "has_desc": true
+    },
+    {
+      "slug": "tarsai",
+      "home": 404
+    },
+    {
+      "slug": "xsquarerobot",
+      "home": 404
+    },
+    {
+      "slug": "galaxea",
+      "home": 404
+    },
+    {
+      "slug": "spiritai",
+      "home": 404
+    },
+    {
+      "slug": "quicktron",
+      "home": 404
+    },
+    {
+      "slug": "forwardx",
+      "home": 404
+    },
+    {
+      "slug": "standardrobots",
+      "home": 404
+    },
+    {
+      "slug": "seer",
+      "home": 404
+    },
+    {
+      "slug": "seergroup",
+      "home": 404
+    },
+    {
+      "slug": "gausium",
+      "home": 404
+    },
+    {
+      "slug": "ecovacs",
+      "home": 404
+    },
+    {
+      "slug": "rokae",
+      "home": 404
+    },
+    {
+      "slug": "aubo",
+      "home": 404
+    },
+    {
+      "slug": "agilerobots",
+      "home": 404
+    },
+    {
+      "slug": "mechmind",
+      "home": 404
+    },
+    {
+      "slug": "aqrose",
+      "home": 404
+    },
+    {
+      "slug": "xyzrobotics",
+      "home": 200,
+      "base": "https://xyzrobotics.jobs.feishu.cn",
+      "title": "加入星猿哲科技，开启职场新篇章"
+    },
+    {
+      "slug": "mogoauto",
+      "home": 404
+    },
+    {
+      "slug": "hanrobot",
+      "home": 404
+    },
+    {
+      "slug": "visionnav",
+      "home": 404
+    },
+    {
+      "slug": "yunji",
+      "home": 404
+    },
+    {
+      "slug": "tinavi",
+      "home": 404
+    },
+    {
+      "slug": "idriverplus",
+      "home": 404
+    },
+    {
+      "slug": "whiterhino",
+      "home": 404
+    },
+    {
+      "slug": "zelostech",
+      "home": 200,
+      "base": "https://zelostech.jobs.feishu.cn",
+      "title": "加入九识"
+    },
+    {
+      "slug": "zvision",
+      "home": 404
+    },
+    {
+      "slug": "leishen",
+      "home": 404
+    },
+    {
+      "slug": "semidrive",
+      "home": 404
+    },
+    {
+      "slug": "siengine",
+      "home": 404
+    },
+    {
+      "slug": "houmo",
+      "home": 200,
+      "base": "https://houmo.jobs.feishu.cn",
+      "title": "后摩智能",
+      "portal_type": 6,
+      "count": 11,
+      "sample": "高级PCB 设计工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "motovis",
+      "home": 404
+    },
+    {
+      "slug": "zhituauto",
+      "home": 404
+    },
+    {
+      "slug": "joyson",
+      "home": 404
+    },
+    {
+      "slug": "neusoftreach",
+      "home": 404
+    },
+    {
+      "slug": "pateo",
+      "home": 200,
+      "base": "https://pateo.jobs.feishu.cn",
+      "title": "加入",
+      "portal_type": 6,
+      "count": 3,
+      "sample": "产品经理（大连）",
+      "has_desc": true
+    },
+    {
+      "slug": "archermind",
+      "home": 404
+    },
+    {
+      "slug": "kotei",
+      "home": 404
+    },
+    {
+      "slug": "deepal",
+      "home": 404
+    },
+    {
+      "slug": "aion",
+      "home": 404
+    },
+    {
+      "slug": "gacaion",
+      "home": 404
+    },
+    {
+      "slug": "xiaomi",
+      "home": 404
+    },
+    {
+      "slug": "xiaomiev",
+      "home": 404
+    },
+    {
+      "slug": "catarc",
+      "home": 404
+    },
+    {
+      "slug": "rising",
+      "home": 404
+    },
+    {
+      "slug": "lotustech",
+      "home": 404
+    },
+    {
+      "slug": "verisilicon",
+      "home": 404
+    },
+    {
+      "slug": "gigadevice",
+      "home": 404
+    },
+    {
+      "slug": "montage",
+      "home": 404
+    },
+    {
+      "slug": "willsemi",
+      "home": 404
+    },
+    {
+      "slug": "smartsens",
+      "home": 404
+    },
+    {
+      "slug": "galaxycore",
+      "home": 404
+    },
+    {
+      "slug": "bestechnic",
+      "home": 404
+    },
+    {
+      "slug": "bluetrum",
+      "home": 404
+    },
+    {
+      "slug": "allwinner",
+      "home": 404
+    },
+    {
+      "slug": "rockchip",
+      "home": 404
+    },
+    {
+      "slug": "amlogic",
+      "home": 404
+    },
+    {
+      "slug": "asrmicro",
+      "home": 404
+    },
+    {
+      "slug": "nucleisys",
+      "home": 404
+    },
+    {
+      "slug": "thead",
+      "home": 404
+    },
+    {
+      "slug": "yusur",
+      "home": 404
+    },
+    {
+      "slug": "dapustor",
+      "home": 404
+    },
+    {
+      "slug": "memblaze",
+      "home": 404
+    },
+    {
+      "slug": "ymtc",
+      "home": 404
+    },
+    {
+      "slug": "empyrean",
+      "home": 404
+    },
+    {
+      "slug": "xepic",
+      "home": 404
+    },
+    {
+      "slug": "primarius",
+      "home": 404
+    },
+    {
+      "slug": "uniic",
+      "home": 404
+    },
+    {
+      "slug": "cxmt",
+      "home": 404
+    },
+    {
+      "slug": "hygon",
+      "home": 404
+    },
+    {
+      "slug": "loongson",
+      "home": 404
+    },
+    {
+      "slug": "phytium",
+      "home": 404
+    },
+    {
+      "slug": "zhaoxin",
+      "home": 404
+    },
+    {
+      "slug": "starfive",
+      "home": 404
+    },
+    {
+      "slug": "canaan",
+      "home": 404
+    },
+    {
+      "slug": "taosdata",
+      "home": 200,
+      "base": "https://taosdata.jobs.feishu.cn",
+      "title": "加入TAOS Data"
+    },
+    {
+      "slug": "oushu",
+      "home": 404
+    },
+    {
+      "slug": "sequoiadb",
+      "home": 404
+    },
+    {
+      "slug": "transwarp",
+      "home": 404
+    },
+    {
+      "slug": "dameng",
+      "home": 404
+    },
+    {
+      "slug": "kingbase",
+      "home": 404
+    },
+    {
+      "slug": "whaleops",
+      "home": 404
+    },
+    {
+      "slug": "databend",
+      "home": 404
+    },
+    {
+      "slug": "matrixorigin",
+      "home": 404
+    },
+    {
+      "slug": "guance",
+      "home": 404
+    },
+    {
+      "slug": "jihu",
+      "home": 404
+    },
+    {
+      "slug": "koderover",
+      "home": 404
+    },
+    {
+      "slug": "alauda",
+      "home": 404
+    },
+    {
+      "slug": "qingcloud",
+      "home": 404
+    },
+    {
+      "slug": "daocloud",
+      "home": 404
+    },
+    {
+      "slug": "tenxcloud",
+      "home": 404
+    },
+    {
+      "slug": "caicloud",
+      "home": 404
+    },
+    {
+      "slug": "ucloud",
+      "home": 404
+    },
+    {
+      "slug": "ksyun",
+      "home": 404
+    },
+    {
+      "slug": "qiniu",
+      "home": 404
+    },
+    {
+      "slug": "upyun",
+      "home": 404
+    },
+    {
+      "slug": "agora",
+      "home": 404
+    },
+    {
+      "slug": "rongcloud",
+      "home": 404
+    },
+    {
+      "slug": "easemob",
+      "home": 404
+    },
+    {
+      "slug": "jiguang",
+      "home": 404
+    },
+    {
+      "slug": "sensorsdata",
+      "home": 200,
+      "base": "https://sensorsdata.jobs.feishu.cn",
+      "title": "加入内效"
+    },
+    {
+      "slug": "growingio",
+      "home": 200,
+      "base": "https://growingio.jobs.feishu.cn",
+      "title": "加入GrowingIO"
+    },
+    {
+      "slug": "ishumei",
+      "home": 404
+    },
+    {
+      "slug": "fanruan",
+      "home": 404
+    },
+    {
+      "slug": "yonghong",
+      "home": 404
+    },
+    {
+      "slug": "guandata",
+      "home": 404
+    },
+    {
+      "slug": "hengshi",
+      "home": 404
+    },
+    {
+      "slug": "dtstack",
+      "home": 404
+    },
+    {
+      "slug": "deepexi",
+      "home": 404
+    },
+    {
+      "slug": "hashdata",
+      "home": 404
+    },
+    {
+      "slug": "bytedance",
+      "home": 200,
+      "base": "https://bytedance.jobs.feishu.cn",
+      "title": ""
+    },
+    {
+      "slug": "kuaishou",
+      "home": 404
+    },
+    {
+      "slug": "meituan",
+      "home": 404
+    },
+    {
+      "slug": "pdd",
+      "home": 404
+    },
+    {
+      "slug": "jd",
+      "home": 404
+    },
+    {
+      "slug": "didiglobal",
+      "home": 404
+    },
+    {
+      "slug": "ke",
+      "home": 404
+    },
+    {
+      "slug": "ctrip",
+      "home": 404
+    },
+    {
+      "slug": "lilithgames",
+      "home": 200,
+      "base": "https://lilithgames.jobs.feishu.cn",
+      "title": "莉莉丝社会招聘",
+      "portal_type": 6,
+      "count": 66,
+      "sample": "系统策划（开放世界/SOC）",
+      "has_desc": true
+    },
+    {
+      "slug": "papergames",
+      "home": 200,
+      "base": "https://career.papegames.com",
+      "title": "加入Papergames"
+    },
+    {
+      "slug": "hypergryph",
+      "home": 200,
+      "base": "https://hypergryph.jobs.feishu.cn",
+      "title": "加入鹰角",
+      "portal_type": 6,
+      "count": 1,
+      "sample": "社招测试2",
+      "has_desc": true
+    },
+    {
+      "slug": "kurogames",
+      "home": 404
+    },
+    {
+      "slug": "xdinc",
+      "home": 404
+    },
+    {
+      "slug": "pwrd",
+      "home": 404
+    },
+    {
+      "slug": "youzu",
+      "home": 200,
+      "base": "https://youzu.jobs.feishu.cn",
+      "title": "加入游族网络股份有限公司"
+    },
+    {
+      "slug": "moonton",
+      "home": 200,
+      "base": "https://moonton.jobs.feishu.cn",
+      "title": "加入沐瞳科技",
+      "portal_type": 6,
+      "count": 153,
+      "sample": "游戏战略PMO",
+      "has_desc": true
+    },
+    {
+      "slug": "yuanfudao",
+      "home": 404
+    },
+    {
+      "slug": "zuoyebang",
+      "home": 404
+    },
+    {
+      "slug": "tal",
+      "home": 404
+    },
+    {
+      "slug": "gaotu",
+      "home": 404
+    },
+    {
+      "slug": "ximalaya",
+      "home": 404
+    },
+    {
+      "slug": "shein",
+      "home": 404
+    },
+    {
+      "slug": "manbang",
+      "home": 404
+    },
+    {
+      "slug": "huolala",
+      "home": 200,
+      "base": "https://huolala.jobs.feishu.cn",
+      "title": "加入Huolala&amp;Lalamove"
+    },
+    {
+      "slug": "duxiaoman",
+      "home": 200,
+      "base": "https://duxiaoman.jobs.feishu.cn",
+      "title": "加入度小满",
+      "portal_type": 6,
+      "count": 55,
+      "sample": "AI产品实习生",
+      "has_desc": true
+    },
+    {
+      "slug": "webank",
+      "home": 404
+    },
+    {
+      "slug": "mybank",
+      "home": 404
+    },
+    {
+      "slug": "lufax",
+      "home": 404
+    },
+    {
+      "slug": "hithink",
+      "home": 404
+    },
+    {
+      "slug": "hundsun",
+      "home": 404
+    },
+    {
+      "slug": "eastmoney",
+      "home": 404
+    },
+    {
+      "slug": "futu",
+      "home": 404
+    },
+    {
+      "slug": "tigerbrokers",
+      "home": 404
+    },
+    {
+      "slug": "mobvista",
+      "home": 404
+    },
+    {
+      "slug": "ubiquant",
+      "home": 404
+    },
+    {
+      "slug": "lingjun",
+      "home": 404
+    },
+    {
+      "slug": "minghong",
+      "home": 404
+    },
+    {
+      "slug": "yanfu",
+      "home": 200,
+      "base": "https://yanfu.jobs.feishu.cn",
+      "title": "加入衍复投资管理有限公司",
+      "portal_type": 6,
+      "count": 20,
+      "sample": "机器学习（可实习）",
+      "has_desc": true
+    },
+    {
+      "slug": "wenbo",
+      "home": 404
+    },
+    {
+      "slug": "tydw",
+      "home": 404
+    },
+    {
+      "slug": "shouqianba",
+      "home": 404
+    },
+    {
+      "slug": "lianlian",
+      "home": 200,
+      "base": "https://lianlian.jobs.feishu.cn",
+      "title": "加入连连"
+    },
+    {
+      "slug": "fibocom",
+      "home": 404
+    },
+    {
+      "slug": "meigsmart",
+      "home": 404
+    },
+    {
+      "slug": "ezviz",
+      "home": 404
+    },
+    {
+      "slug": "hikvision",
+      "home": 404
+    },
+    {
+      "slug": "dahuatech",
+      "home": 404
+    },
+    {
+      "slug": "uniview",
+      "home": 404
+    },
+    {
+      "slug": "honor",
+      "home": 404
+    },
+    {
+      "slug": "oppo",
+      "home": 404
+    },
+    {
+      "slug": "huaqin",
+      "home": 404
+    },
+    {
+      "slug": "longcheer",
+      "home": 200,
+      "base": "https://longcheer.jobs.feishu.cn",
+      "title": "加入上海龙旗科技股份有限公司",
+      "portal_type": 6,
+      "count": 2,
+      "sample": "射频工程师",
+      "has_desc": true
+    },
+    {
+      "slug": "wingtech",
+      "home": 404
+    },
+    {
+      "slug": "luxshare",
+      "home": 404
+    },
+    {
+      "slug": "aactechnologies",
+      "home": 404
+    },
+    {
+      "slug": "cvte",
+      "home": 404
+    },
+    {
+      "slug": "iflytek",
+      "home": 404
+    },
+    {
+      "slug": "soundai",
+      "home": 404
+    },
+    {
+      "slug": "inmo",
+      "home": 404
+    },
+    {
+      "slug": "rayneo",
+      "home": 404
+    },
+    {
+      "slug": "llvision",
+      "home": 404
+    },
+    {
+      "slug": "keep",
+      "home": 200,
+      "base": "https://keep.jobs.feishu.cn",
+      "title": "加入Keep"
+    },
+    {
+      "slug": "viomi",
+      "home": 404
+    },
+    {
+      "slug": "tineco",
+      "home": 404
+    },
+    {
+      "slug": "xgimi",
+      "home": 404
+    },
+    {
+      "slug": "jmgo",
+      "home": 404
+    },
+    {
+      "slug": "baseus",
+      "home": 404
+    },
+    {
+      "slug": "ugreen",
+      "home": 404
+    },
+    {
+      "slug": "creality",
+      "home": 404
+    },
+    {
+      "slug": "anycubic",
+      "home": 404
+    },
+    {
+      "slug": "autelrobotics",
+      "home": 404
+    },
+    {
+      "slug": "xag",
+      "home": 404
+    },
+    {
+      "slug": "uii",
+      "home": 404
+    },
+    {
+      "slug": "uih",
+      "home": 200,
+      "base": "https://uih.jobs.feishu.cn",
+      "title": "加入上海联影医疗科技股份有限公司",
+      "portal_type": 6,
+      "count": 2,
+      "sample": "区域销售经理（江西）B21",
+      "has_desc": true
+    },
+    {
+      "slug": "deepwise",
+      "home": 404
+    },
+    {
+      "slug": "infervision",
+      "home": 404
+    },
+    {
+      "slug": "shukun",
+      "home": 404
+    },
+    {
+      "slug": "airdoc",
+      "home": 404
+    },
+    {
+      "slug": "xtalpi",
+      "home": 200,
+      "base": "https://xtalpi.jobs.feishu.cn",
+      "title": "加入晶泰科技XtalPi"
+    },
+    {
+      "slug": "insilico",
+      "home": 404
+    },
+    {
+      "slug": "biomap",
+      "home": 404
+    },
+    {
+      "slug": "mgitech",
+      "home": 404
+    },
+    {
+      "slug": "catl",
+      "home": 404
+    },
+    {
+      "slug": "eve",
+      "home": 404
+    },
+    {
+      "slug": "svolt",
+      "home": 404
+    },
+    {
+      "slug": "calb",
+      "home": 404
+    },
+    {
+      "slug": "longi",
+      "home": 404
+    },
+    {
+      "slug": "sungrow",
+      "home": 404
+    },
+    {
+      "slug": "aesc",
+      "home": 404
+    },
+    {
+      "slug": "zwsoft",
+      "home": 404
+    },
+    {
+      "slug": "caxa",
+      "home": 404
+    },
+    {
+      "slug": "blacklake",
+      "home": 200,
+      "base": "https://blacklake.jobs.feishu.cn",
+      "title": "加入黑湖科技",
+      "portal_type": 6,
+      "count": 58,
+      "sample": "agent开发工程师-星闪",
+      "has_desc": true
+    },
+    {
+      "slug": "rootcloud",
+      "home": 404
+    },
+    {
+      "slug": "supos",
+      "home": 404
+    },
+    {
+      "slug": "lenovo",
+      "home": 404
+    },
+    {
+      "slug": "envisiondigital",
+      "home": 404
+    },
+    {
+      "slug": "xcmg",
+      "home": 404
+    },
+    {
+      "slug": "cosmoplat",
+      "home": 404
+    },
+    {
+      "slug": "inspur",
       "home": 404
     }
   ]

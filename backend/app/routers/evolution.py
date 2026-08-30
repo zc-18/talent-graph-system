@@ -62,11 +62,15 @@ def evolution_timeline(job_id: int, db: Session = Depends(get_db)):
             evidenced_values.append(observed)
         bucket = slices.setdefault(observed.year, {
             "year": observed.year, "jd_ids": set(), "employer_ids": set(),
-            "platforms": set(), "urls": set(), "start": observed, "end": observed,
+            "platforms": set(), "urls": set(), "urled_jd_ids": set(),
+            "start": observed, "end": observed,
         })
         bucket["jd_ids"].add(raw.id)
         bucket["platforms"].add(raw.platform or raw.source or "未知来源")
-        bucket["urls"].update(urls_by_raw.get(raw.id, set()))
+        raw_urls = urls_by_raw.get(raw.id, set())
+        bucket["urls"].update(raw_urls)
+        if raw_urls:
+            bucket["urled_jd_ids"].add(raw.id)
         bucket["start"] = min(bucket["start"], observed)
         bucket["end"] = max(bucket["end"], observed)
         employer = employers.get(raw.employer_id)
@@ -84,8 +88,12 @@ def evolution_timeline(job_id: int, db: Session = Depends(get_db)):
         "jd_count": len(bucket["jd_ids"]),
         "employer_count": len(bucket["employer_ids"]),
         "platforms": sorted(bucket["platforms"]),
+        # 两个字段口径不同，别合并：valid_url_count 数的是去重后的 URL 条数；
+        # url_coverage 是「有可核验 URL 的 JD 占比」，分子分母同为 JD 口径。
+        # 用 URL 数除 JD 数会因一条 JD 挂多个 source_url 而超过 1（前端曾显示 URL 120%），
+        # 多条 JD 共用同一 URL 时又会低报。
         "valid_url_count": len(bucket["urls"]),
-        "url_coverage": round(len(bucket["urls"]) / max(1, len(bucket["jd_ids"])), 4),
+        "url_coverage": round(len(bucket["urled_jd_ids"]) / max(1, len(bucket["jd_ids"])), 4),
     } for year, bucket in sorted(slices.items())]
 
     changes = db.query(models.CapabilityChange).filter(

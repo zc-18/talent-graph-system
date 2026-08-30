@@ -64,6 +64,50 @@ SLUGS = [
     # 多模态 / 大模型（新一批）
     "minimax", "deepseek", "zhipu", "baai", "openbmb", "shengshuai", "vivo",
     "kunlun", "seedream",
+    # ---- R7 扩池（2026-08-30，Lane D）：为「补 2024/2025 存量 JD」扩大飞书租户池 ----
+    # 大模型 / AIGC / AI 应用（新一批）
+    "deeplang", "langboat", "rcrai", "emotibot", "zhuiyi", "xverse", "siliconflow", "hpcaitech",
+    "luchentech", "shlab", "pjlab", "bigai", "pixverse", "hidreamai", "lingxin", "westlakemind",
+    "xianyuan", "highflyer", "antgroup", "volcengine", "tiamat", "laiye", "datagrand", "aishu",
+    # 具身智能 / 机器人（新一批）
+    "noetix", "ai2robotics", "tarsai", "xsquarerobot", "galaxea", "spiritai", "quicktron",
+    "forwardx", "standardrobots", "seer", "seergroup", "gausium", "ecovacs", "rokae", "aubo",
+    "agilerobots", "mechmind", "aqrose", "xyzrobotics", "mogoauto", "hanrobot", "visionnav",
+    "yunji", "tinavi",
+    # 自动驾驶 / 智能汽车（新一批）
+    "idriverplus", "whiterhino", "zelostech", "zvision", "leishen", "semidrive", "siengine",
+    "houmo", "motovis", "zhituauto", "joyson", "neusoftreach", "pateo", "archermind", "kotei",
+    "deepal", "aion", "gacaion", "xiaomi", "xiaomiev", "catarc", "rising", "lotustech",
+    # 芯片 / 半导体 / 算力（新一批）
+    "verisilicon", "gigadevice", "montage", "willsemi", "smartsens", "galaxycore", "bestechnic",
+    "bluetrum", "allwinner", "rockchip", "amlogic", "asrmicro", "nucleisys", "thead", "yusur",
+    "dapustor", "memblaze", "ymtc", "empyrean", "xepic", "primarius", "uniic", "cxmt", "hygon",
+    "loongson", "phytium", "zhaoxin", "starfive", "canaan",
+    # 云原生 / 数据库 / 大数据 / 开发者工具
+    "taosdata", "oushu", "sequoiadb", "transwarp", "dameng", "kingbase", "whaleops", "databend",
+    "matrixorigin", "guance", "jihu", "koderover", "alauda", "qingcloud", "daocloud", "tenxcloud",
+    "caicloud", "ucloud", "ksyun", "qiniu", "upyun", "agora", "rongcloud", "easemob", "jiguang",
+    "sensorsdata", "growingio", "ishumei", "fanruan", "yonghong", "guandata", "hengshi", "dtstack",
+    "deepexi", "hashdata",
+    # 互联网 / 游戏 / 在线教育 / 内容平台
+    "bytedance", "kuaishou", "meituan", "pdd", "jd", "didiglobal", "ke", "ctrip", "lilithgames",
+    "papergames", "hypergryph", "kurogames", "xdinc", "pwrd", "youzu", "moonton", "yuanfudao",
+    "zuoyebang", "tal", "gaotu", "ximalaya", "shein", "manbang", "huolala",
+    # 金融科技 / 量化
+    "duxiaoman", "webank", "mybank", "lufax", "hithink", "hundsun", "eastmoney", "futu",
+    "tigerbrokers", "mobvista", "ubiquant", "lingjun", "minghong", "yanfu", "wenbo", "tydw",
+    "shouqianba", "lianlian",
+    # 智能硬件 / 物联网 / 消费电子（新一批）
+    "fibocom", "meigsmart", "ezviz", "hikvision", "dahuatech", "uniview", "honor", "oppo",
+    "huaqin", "longcheer", "wingtech", "luxshare", "aactechnologies", "cvte", "iflytek", "soundai",
+    "inmo", "rayneo", "llvision", "keep", "viomi", "tineco", "xgimi", "jmgo", "baseus", "ugreen",
+    "creality", "anycubic", "autelrobotics", "xag",
+    # 医疗 AI / 生物计算
+    "uii", "uih", "deepwise", "infervision", "shukun", "airdoc", "xtalpi", "insilico", "biomap",
+    "mgitech",
+    # 新能源 / 工业互联网 / 工业软件
+    "catl", "eve", "svolt", "calb", "longi", "sungrow", "aesc", "zwsoft", "caxa", "blacklake",
+    "rootcloud", "supos", "lenovo", "envisiondigital", "xcmg", "cosmoplat", "inspur",
 ]
 
 Q = ("?keyword=&limit=1&offset=0&job_category_id_list=&tag_id_list=&location_code_list="

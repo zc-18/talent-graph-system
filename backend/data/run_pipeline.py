@@ -70,14 +70,23 @@ def main():
                          "此前只能全量重跑，而全量重跑会冲掉所有已演化岗位的能力项")
     ap.add_argument("--force-rebuild-evolved", action="store_true",
                     help="允许重建已跑过演化的岗位（默认拒绝）。会丢失该岗位的演化结果，除非你确知在做什么")
+    ap.add_argument("--refresh-evolved-evidence", action="store_true",
+                    help="对因演化历史而跳过重建的岗位，仅向既有能力关系追加精确匹配的JD证据；"
+                         "不改能力关系、岗位字段、置信度、版本或审计记录")
     ap.add_argument("--dry-run", action="store_true",
-                    help="只跑清洗/聚类并打印将重建/将跳过的岗位，不解析、不改图谱"
-                         "（清洗字段本身幂等，仍会写回 raw_jd）")
+                    help="只打印将重建/将跳过的岗位，不改图谱；配合 --refresh-evolved-evidence "
+                         "时会解析并估算证据新增数（清洗字段本身幂等，仍会写回 raw_jd）")
     args = ap.parse_args()
 
     only_jobs = {s.strip() for s in args.only_jobs.split(",") if s.strip()} or None
     if only_jobs and not args.from_db:
         ap.error("--only-jobs 目前只支持 --from-db（真实语料）路径")
+    if args.refresh_evolved_evidence and not args.from_db:
+        ap.error("--refresh-evolved-evidence 只支持 --from-db（RawJD 历史语料）路径")
+    if args.refresh_evolved_evidence and args.force_rebuild_evolved:
+        ap.error("--refresh-evolved-evidence 与 --force-rebuild-evolved 互斥：前者保留关系，后者重建关系")
+    if args.refresh_evolved_evidence and args.reset:
+        ap.error("--refresh-evolved-evidence 不能与 --reset 同用：清空演化历史后已无安全刷新对象")
 
     init_db()
     if args.reset:
@@ -102,7 +111,8 @@ def main():
                 max_workers=args.workers, cache_path=cache_path,
                 skip_existing=args.skip_existing_jobs,
                 only_jobs=only_jobs, force=args.force_rebuild_evolved,
-                dry_run=args.dry_run)
+                dry_run=args.dry_run,
+                refresh_evolved_evidence=args.refresh_evolved_evidence)
         else:
             with open(os.path.join(HERE, "seed_jds.json"), encoding="utf-8") as f:
                 dataset = json.load(f)
@@ -114,18 +124,32 @@ def main():
         db.close()
     dt = time.time() - t0
     if result.get("dry_run"):
+        refresh_note = ""
+        if args.refresh_evolved_evidence:
+            refresh_note = (f"，其中将证据刷新 {result['evolved_jobs_to_refresh']} 个演化岗位，"
+                            f"预计新增 {result['estimated_new_evidence']} 条 Evidence")
         print(f"\n[dry-run] 未改动图谱，用时 {dt:.1f}s；"
-              f"将重建 {len(result['plan'])} 个岗位，跳过 {len(result['skipped_evolved'])} 个")
+              f"将重建 {len(result['plan'])} 个岗位，跳过 {len(result['skipped_evolved'])} 个"
+              f"{refresh_note}")
         return
     print(f"\n构建完成，用时 {dt:.1f}s")
     print(json.dumps({"jobs_built": result["jobs_built"], "total_jds": result["total_jds"],
-                      "duplicates": result["duplicates"]}, ensure_ascii=False, indent=2))
+                      "duplicates": result["duplicates"],
+                      "evolved_jobs_refreshed": result.get("evolved_jobs_refreshed", 0),
+                      "new_evidence": result.get("new_evidence", 0)},
+                     ensure_ascii=False, indent=2))
     skipped = result.get("skipped_evolved") or []
     if skipped:
         print(f"\n⚠ 已跳过 {len(skipped)} 个跑过演化的岗位（未重建，演化结果保留）：")
         for s in skipped:
+            refresh = s.get("evidence_refresh")
+            suffix = (f"  仅新增证据={refresh['added_evidence']} "
+                      f"年份={refresh['selected_years']}" if refresh else "")
             print(f"  {s['job_name']}  v{s['version']}  {s['changes']} 条变更  "
-                  f"{s['active_capabilities']} 项能力")
+                  f"{s['active_capabilities']} 项能力{suffix}")
+    if args.refresh_evolved_evidence:
+        print("\n说明：本模式不会调用 run_confidence_batch.py；该批处理会改 JobSkill/Job "
+              "置信度并可能降级关系，不属于证据-only 安全边界。")
     print("\n各岗位置信度：")
     for d in sorted(result["details"], key=lambda x: -x["confidence"]):
         s = d["stats"]
