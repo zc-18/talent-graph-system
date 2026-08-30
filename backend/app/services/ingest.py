@@ -399,8 +399,7 @@ def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dic
             }
 
         agg = hallucination.aggregate_capabilities(agg_input, source_meta=source_meta)
-        # 岗位元信息取置信度最高的一条解析
-        rep = max(parsed_list, key=lambda x: len(x["parsed"].get("core_responsibilities", [])))
+        rep = _representative_parse(parsed_list, key)
         rp = rep["parsed"]
         slices = _slice_summary(items)
         recruitment_values = [
@@ -427,6 +426,61 @@ def _aggregate_clusters(db: Session, clusters: dict, parsed_cache: dict[int, dic
         results.append({"job": key, "job_id": job.id, "stats": agg["stats"],
                         "confidence": job.confidence})
     return results, skipped
+
+
+# Role-type nouns, longest first: a JD may sit in the right domain yet describe a different
+# kind of work (a 项目管理 posting speaking for 自动驾驶算法工程师). Matching the job's own
+# role noun keeps the representative both on-domain and on-role.
+_ROLE_NOUNS = ("算法工程师", "开发工程师", "系统工程师", "测试工程师", "运维工程师",
+               "数据工程师", "产品经理", "训练师", "架构师", "研究员", "工程师")
+
+
+def _role_noun(name: str) -> str:
+    for noun in _ROLE_NOUNS:
+        if noun in name:
+            return noun
+    return ""
+
+
+def _representative_parse(parsed_list: list[dict], cluster_key: str) -> dict:
+    """Pick the JD whose own title actually belongs to this cluster, then the richest one.
+
+    A job's summary / responsibilities / scenarios are copied verbatim from ONE parsed JD, so
+    that choice defines the whole job page. Ranking by bullet count alone let a single verbose
+    off-target JD define the job -- 自动驾驶算法工程师 ended up describing 金融信贷风控 and
+    评分卡模型, 车联网系统工程师 described semiconductor procurement.
+
+    The title is resolved WITHOUT ``cluster_hint`` on purpose. The hint records the search query
+    a JD was collected under, and a query matching body text rather than the title is exactly how
+    a 金融算法工程师 posting lands in the 自动驾驶 cluster; honouring it here would re-admit the
+    very rows this guard exists to exclude (measured: 39 of 40, hint-trusting vs 1, title-only).
+    Membership in the cluster is unchanged -- the JD still contributes its capabilities and
+    evidence. This only decides which single JD gets to speak for the job. Bullet count breaks
+    ties among titles that already resolve here, and the old behaviour is the fallback so a
+    cluster is never left without metadata.
+    """
+    def bullets(item: dict) -> int:
+        return len(item["parsed"].get("core_responsibilities", []))
+
+    on_title = []
+    for item in parsed_list:
+        row = item.get("row")
+        title = getattr(row, "job_title", None) or item.get("job_title") or ""
+        if not title:
+            continue
+        try:
+            if title_key(title) == cluster_key:
+                on_title.append(item)
+        except Exception:                      # never let title parsing break ingest
+            continue
+    pool = on_title or parsed_list
+    noun = _role_noun(cluster_key)
+    if noun:
+        same_role = [item for item in pool
+                     if noun in (getattr(item.get("row"), "job_title", None)
+                                 or item.get("job_title") or "")]
+        pool = same_role or pool
+    return max(pool, key=bullets)
 
 
 def _slice_summary(items: list[dict]) -> dict:
