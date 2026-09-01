@@ -259,7 +259,13 @@ export interface SupplyDemand {
   required_total: number; required_covered: number; coverage_rate: number
   items: SupplyDemandItem[]; note: string
 }
-export interface TeamItem { id: number; name: string; description: string; target_job_id?: number; size: number }
+export interface TeamItem {
+  id: number; name: string; description: string; target_job_id?: number; size: number
+  /** null = 公共演示团队（所有人可见、只读）；有值 = 组织私有团队 */
+  organization_id?: number | null
+  /** 当前登录身份能否改动成员；false 时前端要禁用写操作而不是让人点了吃错误码 */
+  editable?: boolean
+}
 export interface TeamEvent {
   id: number; action: string; member_id: number | null; details: Record<string, any>
   before: { member_count: number; coverage_rate: number | null } | null

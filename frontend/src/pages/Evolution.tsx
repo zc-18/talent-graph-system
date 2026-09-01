@@ -39,10 +39,13 @@ function dateLabel(value?: string | null) {
 }
 
 function TimelineOverview({ timeline }: { timeline: EvolutionTimeline }) {
-  const lifecycle = [
-    ['首次观察', timeline.first_observed_at],
-    ['首次考证', timeline.first_evidenced_at],
-    ['首次发布', timeline.first_published_at],
+  // 三格是三个口径，必须逐格写清楚：前两个是市场侧（企业何时发的 JD、何时能溯源），
+  // 第三个是我方侧（这条岗位画像何时进的图谱库）。之前统称「首次发布」，老岗位会
+  // 出现「首次观察 2018、首次发布 2026」，被读成「这个岗位 2026 年才出现」。
+  const lifecycle: Array<[string, string | null | undefined, string]> = [
+    ['首次观察', timeline.first_observed_at, '语料中最早一条 JD 的发布时间'],
+    ['首次考证', timeline.first_evidenced_at, '其中最早一条带可核验 URL 的时间'],
+    ['图谱首次发布', timeline.first_published_at, '本系统发布该岗位画像的时间'],
   ]
   return (
     <Card className="p-4 sm:p-5">
@@ -51,7 +54,7 @@ function TimelineOverview({ timeline }: { timeline: EvolutionTimeline }) {
         <Badge tone={timeline.lifecycle_mode === 'first_observation' ? 'amber' : 'cyan'}>{timeline.lifecycle_mode === 'first_observation' ? '首次观察生命周期' : '历史演化生命周期'}</Badge>
       </div>
       <div className="mt-4 grid grid-cols-1 border-y border-line-soft/8 sm:grid-cols-3">
-        {lifecycle.map(([label, value], index) => <div key={label} className={`py-3 ${index ? 'border-t border-line-soft/8 sm:border-l sm:border-t-0 sm:pl-4' : ''}`}><div className="text-[10px] font-semibold text-body-3">{label}</div><div className="mt-1 text-sm font-bold tabular-nums text-body-1">{dateLabel(value)}</div></div>)}
+        {lifecycle.map(([label, value, hint], index) => <div key={label} className={`py-3 ${index ? 'border-t border-line-soft/8 sm:border-l sm:border-t-0 sm:pl-4' : ''}`}><div className="text-[10px] font-semibold text-body-3">{label}</div><div className="mt-1 text-sm font-bold tabular-nums text-body-1">{dateLabel(value)}</div><div className="mt-0.5 text-[10px] leading-4 text-body-3">{hint}</div></div>)}
       </div>
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {timeline.corpus_slices.map(slice => <div key={slice.year} className="rounded-lg border border-line-soft/8 bg-surface-muted px-3 py-3"><div className="flex items-center justify-between gap-2"><b className="text-sm text-body-1">{slice.label}</b><span className="text-[10px] text-body-3">URL {Math.round(slice.url_coverage * 100)}%</span></div><div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-body-2"><span>{slice.jd_count} 条 JD</span><span>{slice.employer_count} 个雇主</span><span>{slice.platforms.length} 个渠道</span></div></div>)}

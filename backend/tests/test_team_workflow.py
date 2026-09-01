@@ -132,3 +132,73 @@ def test_team_mutation_is_org_scoped_and_rejects_expired_profile(client, session
         f"/api/talent/teams/{team_id}/history", headers=headers_b).status_code == 404
     assert client.post(f"/api/talent/teams/{team_id}/members", headers=headers_b, json={
         "resume_profile_id": expired.id, "display_name": "越权候选"}).status_code == 404
+
+
+def test_public_demo_team_is_readable_but_not_writable(client, session):
+    """种子演示团队（organization_id 为 NULL）要「列得出来也读得出来」。
+
+    回归：这类团队被 GET /teams 刻意列给所有人，但 history / 加成员 / 移成员
+    过去统一走 ownership.require_org，而它对 organization_id IS NULL 一律判 404。
+    页面默认又选中列表第一项（正是演示团队），于是每次打开「团队变化历史」都是
+    被前端吞掉的 404，显示成「暂无团队变更」，看起来像数据丢了。
+    """
+    _, org, headers = make_hr(session, "public")
+    job = seed_job(session)
+    public_team = models.Team(name="AI 算法组", description="公共演示团队",
+                              organization_id=None, target_job_id=job.id)
+    session.add(public_team)
+    session.commit()
+    profile = models.ResumeProfile(
+        organization_id=org.id, code="PUB-CAND-001", source_type="batch",
+        skills=["Java"], skill_levels={}, authorized=True,
+        retention_expires_at=datetime.utcnow() + timedelta(days=30))
+    session.add(profile)
+    session.commit()
+
+    listed = client.get("/api/talent/teams", headers=headers).json()["items"]
+    public_row = next(t for t in listed if t["id"] == public_team.id)
+    assert public_row["organization_id"] is None
+    assert public_row["editable"] is False
+
+    # 读：列表里有就必须点得进去，三个读接口口径一致
+    assert client.get(f"/api/talent/teams/{public_team.id}",
+                      headers=headers).status_code == 200
+    assert client.get(f"/api/talent/teams/{public_team.id}/gap?job_id={job.id}",
+                      headers=headers).status_code == 200
+    history = client.get(f"/api/talent/teams/{public_team.id}/history", headers=headers)
+    assert history.status_code == 200
+    assert history.json()["total"] == 0
+
+    # 写：403 而不是 404 —— 它的存在已经公开了，用 404 掩饰只会让人以为数据没了
+    denied = client.post(f"/api/talent/teams/{public_team.id}/members", headers=headers,
+                         json={"resume_profile_id": profile.id, "display_name": "候选"})
+    assert denied.status_code == 403
+    assert "公共演示团队" in denied.json()["detail"]
+
+    # 自建团队仍然可写，且 editable 为 True
+    own_id = client.post("/api/talent/teams", headers=headers, json={
+        "name": "本组织团队", "target_job_id": job.id}).json()["id"]
+    own_row = next(t for t in client.get("/api/talent/teams", headers=headers).json()["items"]
+                   if t["id"] == own_id)
+    assert own_row["editable"] is True
+    assert client.post(f"/api/talent/teams/{own_id}/members", headers=headers, json={
+        "resume_profile_id": profile.id, "display_name": "候选"}).status_code == 201
+    # 新建团队的「创建」事件当场可读 —— 用户报的「创建完没有历史记录」就是这条
+    own_history = client.get(f"/api/talent/teams/{own_id}/history", headers=headers).json()
+    assert [item["action"] for item in reversed(own_history["items"])] == [
+        "created", "member_added"]
+
+
+def test_cross_org_team_still_404_not_403(client, session):
+    """公共团队放宽到 403 之后，跨租户仍须是 404，不能被拿来枚举他人 id。"""
+    _, _, headers_a = make_hr(session, "probe-a")
+    _, _, headers_b = make_hr(session, "probe-b")
+    job = seed_job(session)
+    team_id = client.post("/api/talent/teams", headers=headers_a, json={
+        "name": "他组织团队", "target_job_id": job.id}).json()["id"]
+    for response in (
+        client.get(f"/api/talent/teams/{team_id}", headers=headers_b),
+        client.get(f"/api/talent/teams/{team_id}/history", headers=headers_b),
+        client.delete(f"/api/talent/teams/{team_id}/members/1", headers=headers_b),
+    ):
+        assert response.status_code == 404

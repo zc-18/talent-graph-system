@@ -11,6 +11,7 @@ from sqlalchemy import func
 from .. import models, clients
 from .taxonomy import capability_cluster, skill_category, skill_type
 from .hallucination import job_confidence
+from .confidence import support_ratio
 from . import confidence_batch
 
 # 每个能力项最多留存的证据条数。JD 提及数可达上千，全存下来是六位数行且对
@@ -250,6 +251,9 @@ def job_to_dict(db: Session, job: models.Job, include_candidates: bool = False) 
             "skill_type": sk.skill_type, "importance": j.importance, "weight": j.weight,
             "level_required": j.level_required, "confidence": j.confidence,
             "factors": j.factors, "source_count": j.source_count, "status": j.status,
+            # 支持率单独摊平一份：role_contract 组簇时读的是 support_ratio 而不是
+            # factors["support"]，少了这个键岗位详情页每个能力簇都会显示 0%。
+            "support_ratio": support_ratio(j.factors),
             "parent_id": sk.parent_id, "parent_name": parent.name if parent else None,
             "granularity": "fine" if sk.parent_id else "coarse",
         })

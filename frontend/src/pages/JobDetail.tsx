@@ -404,7 +404,7 @@ export default function JobDetail() {
                     <div className="mt-3 pt-3 border-t border-line-soft/6 flex flex-wrap gap-1.5">{cluster.skills.map((skill, index) => {
                       const name = typeof skill === 'string' ? skill : skill.name
                       return <Badge key={`${name}-${index}`} tone="slate">{name}</Badge>
-                    })}{cluster.employer_count != null && <span className="w-full text-[11px] text-body-3 mt-1">{cluster.employer_count} 个独立雇主支持 · 覆盖率 {Math.round((cluster.support_ratio || 0) * 100)}%</span>}</div>
+                    })}{cluster.employer_count != null && <span className="w-full text-[11px] text-body-3 mt-1">{cluster.employer_count} 个独立雇主支持 · 支持率 {Math.round((cluster.support_ratio || 0) * 100)}%</span>}</div>
                   </details>
                 ))}</div>
               </Card>

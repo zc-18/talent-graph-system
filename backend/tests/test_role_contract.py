@@ -144,3 +144,65 @@ def test_quality_eval_and_shadow_diff_are_auditable():
     }])
     assert report["before"]["active"] == 1
     assert report["after"]["candidate"] == 1
+
+
+def test_contract_clusters_carry_support_ratio_from_persisted_factors():
+    """岗位详情页的「支持率」必须真的来自 job_skill.factors，不能恒为 0。
+
+    回归：build_contract_from_job 的两个分支（分级切片 job_level_skill 与
+    job_skill 回落）都只往 caps 里塞 factors，没有摊平 support_ratio，而
+    _build_cluster 读的正是 support_ratio —— 于是线上每个岗位、每个能力簇都显示
+    「覆盖率 0%」，而库里的 factors["support"] 其实在 0.25~0.6 之间。
+    """
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from app import models
+    from app.db import Base
+    from app.services.role_contract import build_contract_from_job
+
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    db = sessionmaker(bind=engine)()
+    try:
+        job = models.Job(name="Java开发工程师", slug="java-support", status="published",
+                         category="云计算与工程", level="senior", track="software")
+        java = models.Skill(name="Java", normalized_name="Java", category="编程语言")
+        k8s = models.Skill(name="Kubernetes", normalized_name="Kubernetes",
+                           category="云计算与工程")
+        db.add_all([job, java, k8s])
+        db.flush()
+        factors = {"support": 0.4, "diversity": 1.0, "freshness": 0.8,
+                   "authority": 1.0, "external": 0.0}
+        # 回落分支的数据源
+        db.add_all([
+            models.JobSkill(job_id=job.id, skill_id=java.id, importance="required",
+                            weight=0.9, confidence=0.72, source_count=11,
+                            status="active", factors=factors),
+            models.JobSkill(job_id=job.id, skill_id=k8s.id, importance="required",
+                            weight=0.85, confidence=0.68, source_count=6,
+                            status="active", factors=factors),
+        ])
+        db.commit()
+
+        fallback = build_contract_from_job(db, job, seniority="unspecified")
+        assert fallback["slice_source"] == "job_skill_fallback"
+        assert fallback["clusters"], "回落分支应产出能力簇"
+        assert all(c["support_ratio"] > 0 for c in fallback["clusters"])
+        assert max(c["support_ratio"] for c in fallback["clusters"]) == 0.4
+
+        # 分级切片分支
+        db.add_all([
+            models.JobLevelSkill(job_id=job.id, level="senior", skill_id=java.id,
+                                 importance="required", weight=0.8, confidence=0.9,
+                                 source_count=3, jd_count=10, factors=factors),
+            models.JobLevelSkill(job_id=job.id, level="senior", skill_id=k8s.id,
+                                 importance="required", weight=0.85, confidence=0.88,
+                                 source_count=3, jd_count=10, factors=factors),
+        ])
+        db.commit()
+        leveled = build_contract_from_job(db, job, seniority="senior")
+        assert leveled["slice_source"] == "job_level_skill"
+        assert leveled["clusters"]
+        assert all(c["support_ratio"] > 0 for c in leveled["clusters"])
+    finally:
+        db.close()

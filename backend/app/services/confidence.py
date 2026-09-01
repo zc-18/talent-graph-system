@@ -61,6 +61,17 @@ def compute(factors: dict[str, float]) -> float:
     return round(score, 4)
 
 
+def support_ratio(factors: dict | None) -> float:
+    """从持久化的 factors 里取支持率，供不做置信度计算、只需展示这一项的调用方。
+
+    factors 是 MySQL JSON 列，读回来可能是 None、可能缺键、数值末位也可能漂
+    （见 tests/test_confidence.py 的浮点往返用例），所以统一走这里而不是各处
+    自己 ``.get("support", 0)``：岗位详情页曾因为构造契约时漏掉这一项，
+    每个能力簇都显示 0%。
+    """
+    return _clip01((factors or {}).get("support", 0.0) or 0.0)
+
+
 def factors_from_jd(
     support_ratio: float,
     platforms: set[str] | None,

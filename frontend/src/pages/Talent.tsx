@@ -94,6 +94,32 @@ export default function Talent() {
 }
 
 /* ---------------- 团队能力盘点：谁能补 / 还缺谁 ---------------- */
+/** 选中的团队记在本地：页面每次挂载都无条件选中列表第一项的话，
+ *  自建团队排在那 3 个公共演示团队后面，刷新一次就再也回不去，看起来像「团队没了」。 */
+const TEAM_ID_KEY = 'tg.talent.teamId'
+
+function rememberTeamId(id: number | null) {
+  try {
+    if (id == null) localStorage.removeItem(TEAM_ID_KEY)
+    else localStorage.setItem(TEAM_ID_KEY, String(id))
+  } catch { /* 隐私模式下 localStorage 会抛，选中不持久化即可，不影响主流程 */ }
+}
+
+function recallTeamId(): number | null {
+  try {
+    const raw = localStorage.getItem(TEAM_ID_KEY)
+    const id = raw ? Number(raw) : NaN
+    return Number.isFinite(id) ? id : null
+  } catch { return null }
+}
+
+/** 404/403 是作用域判断的正常结果（换了账号、公共演示团队只读），不该弹错误提示；
+ *  其它错误必须冒出来 —— 以前一律 catch 成空数组，权限失败和「真的没数据」长得一模一样。 */
+function isScopeError(e: any): boolean {
+  const status = e?.response?.status
+  return status === 403 || status === 404
+}
+
 function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => void }) {
   const [teams, setTeams] = useState<TeamItem[]>([])
   const [teamId, setTeamId] = useState<number | null>(null)
@@ -109,25 +135,47 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
   const auth = useAuth()
   const canManageTeam = auth.can('hr')
 
+  const currentTeam = teams.find(t => t.id === teamId) || null
+  // 后端没返回 editable 的旧响应按「可改」处理，避免把正常团队误禁用。
+  const teamEditable = currentTeam ? currentTeam.editable !== false : true
+  const teamIsPublic = currentTeam ? currentTeam.organization_id == null : false
+
+  const selectTeam = (id: number | null) => { setTeamId(id); rememberTeamId(id) }
+
   useEffect(() => {
-    api.teams().then(d => { setTeams(d.items); if (d.items[0]) setTeamId(d.items[0].id) })
-      .catch(() => {})
+    api.teams().then(d => {
+      setTeams(d.items)
+      // 优先回到上次选中的团队；它不在列表里（换了账号/组织）才回落第一项。
+      const remembered = recallTeamId()
+      const restored = remembered != null && d.items.some(t => t.id === remembered)
+        ? remembered : d.items[0]?.id ?? null
+      setTeamId(restored)
+      rememberTeamId(restored)
+    }).catch(error => {
+      if (!isScopeError(error)) toast('error', errMsg(error, '团队列表加载失败'))
+    })
   }, [])
   useEffect(() => { if (jobs[0] && !jobId) setJobId(jobs[0].id) }, [jobs])
   useEffect(() => {
     if (!teamId || !jobId) return
     setLoading(true)
-    api.teamGap(teamId, jobId).then(setGap).catch(() => setGap(null)).finally(() => setLoading(false))
+    api.teamGap(teamId, jobId).then(setGap).catch(error => {
+      setGap(null)
+      if (!isScopeError(error)) toast('error', errMsg(error, '团队盘点计算失败'))
+    }).finally(() => setLoading(false))
   }, [teamId, jobId])
   useEffect(() => {
     if (!teamId || !canManageTeam) { setTeamEvents([]); return }
-    api.teamHistory(teamId).then(d => setTeamEvents(d.items || [])).catch(() => setTeamEvents([]))
+    api.teamHistory(teamId).then(d => setTeamEvents(d.items || [])).catch(error => {
+      setTeamEvents([])
+      if (!isScopeError(error)) toast('error', errMsg(error, '团队变更历史加载失败'))
+    })
   }, [teamId, canManageTeam])
 
   const reloadTeam = async (selectedId = teamId) => {
     const d = await api.teams()
     setTeams(d.items)
-    if (selectedId) setTeamId(selectedId)
+    if (selectedId) selectTeam(selectedId)
     if (selectedId && jobId) {
       api.teamGap(selectedId, jobId).then(setGap).catch(() => setGap(null))
       api.teamHistory(selectedId).then(r => setTeamEvents(r.items || [])).catch(() => {})
@@ -175,8 +223,11 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
         <div className="flex flex-col sm:flex-row sm:items-end gap-3">
           <div className="flex-1 min-w-0">
             <div className="label mb-1.5">团队</div>
-            <Select value={String(teamId ?? '')} onChange={v => setTeamId(Number(v))}
-              options={teams.map(t => ({ value: String(t.id), label: `${t.name}（${t.size} 人）` }))} />
+            <Select value={String(teamId ?? '')} onChange={v => selectTeam(Number(v))}
+              options={teams.map(t => ({
+                value: String(t.id),
+                label: `${t.name}（${t.size} 人）${t.organization_id == null ? ' · 公共示例' : ''}`,
+              }))} />
           </div>
           <div className="flex-1 min-w-0">
             <div className="label mb-1.5">目标岗位</div>
@@ -187,7 +238,10 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
             <div className="shrink-0 w-full sm:w-auto">
               <input ref={fileRef} type="file" accept=".pdf,.docx,.txt" className="hidden"
                 onChange={e => e.target.files?.[0] && onFile(e.target.files[0])} />
-              <button onClick={() => fileRef.current?.click()} disabled={uploading || !teamId || !authorized}
+              {/* 只读团队上禁用而不是让人点了吃一个错误码 */}
+              <button onClick={() => fileRef.current?.click()}
+                disabled={uploading || !teamId || !authorized || !teamEditable}
+                title={teamEditable ? undefined : '公共演示团队为只读示例，请先创建本组织的团队'}
                 className="btn-primary w-full sm:w-auto whitespace-nowrap">
                 {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 加入成员简历
@@ -212,9 +266,11 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
         )}
         <p className="mt-3 text-xs text-body-2 flex items-start gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 mt-0.5 shrink-0 text-accent-deep" />
-          {canManageTeam
-            ? '组织私有人才数据可在公共图谱只读模式下追加。简历只在内存中解析，服务端仅留存脱敏技能要素。'
-            : '当前为公共演示视图；登录 HR 组织账号后可导入授权成员并查看加入前后的覆盖变化。'}
+          {!canManageTeam
+            ? '当前为公共演示视图；登录 HR 组织账号后可导入授权成员并查看加入前后的覆盖变化。'
+            : teamEditable
+              ? '组织私有人才数据可在公共图谱只读模式下追加。简历只在内存中解析，服务端仅留存脱敏技能要素。'
+              : '当前选中的是公共演示团队，只能查看、不能改动成员；用下方输入框创建本组织的团队后即可导入成员。'}
         </p>
       </Card>
 
@@ -303,7 +359,7 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
                             <div className="flex items-center gap-1.5 shrink-0">
                               <Badge tone="indigo">覆盖 {c.covers_required}</Badge>
                               {c.uniquely_covers > 0 && <Badge tone="amber">独有 {c.uniquely_covers}</Badge>}
-                              {canManageTeam && <button onClick={() => void removeMember(c.member_id, c.display_name)}
+                              {canManageTeam && teamEditable && <button onClick={() => void removeMember(c.member_id, c.display_name)}
                                 className="icon-btn !w-7 !h-7 text-danger" title="移出团队" aria-label={`移出 ${c.display_name}`}>
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>}
@@ -325,31 +381,37 @@ function TeamPanel({ jobs, onChanged }: { jobs: JobListItem[]; onChanged: () => 
                   </div>}
             </Card>
           </div>
-          {canManageTeam && (
-            <Card className="p-5" delay={0.12}>
-              <h3 className="font-semibold text-body-1 flex items-center gap-2 mb-3">
-                <History className="w-4 h-4 text-accent-violet" /> 团队变化历史
-              </h3>
-              {teamEvents.length === 0 ? <EmptyState text="暂无团队变更" /> : (
-                <div className="divide-y divide-line-soft/6">
-                  {teamEvents.slice(0, 10).map(event => {
-                    const labels: Record<string, string> = { created: '创建团队', member_added: '加入成员', member_uploaded: '上传成员', member_removed: '移出成员' }
-                    const before = event.before?.coverage_rate
-                    const after = event.after?.coverage_rate
-                    return <div key={event.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
-                      <div className="min-w-0"><b className="text-body-1">{labels[event.action] || event.action}</b>
-                        <span className="ml-2 text-body-2">{event.details?.display_name || event.details?.code || ''}</span></div>
-                      <div className="shrink-0 text-xs text-body-3">
-                        {before != null && after != null && <span className="mr-3">覆盖率 {Math.round(before * 100)}% → {Math.round(after * 100)}%</span>}
-                        {new Date(event.created_at).toLocaleString('zh-CN')}
-                      </div>
-                    </div>
-                  })}
-                </div>
-              )}
-            </Card>
-          )}
         </>
+      )}
+
+      {/* 团队变更历史独立渲染：以前整块嵌在 gap 判断里，目标岗位一旦算不出缺口，
+          历史也跟着一起消失，看起来像「创建完团队什么都没留下」。 */}
+      {canManageTeam && (
+        <Card className="p-5" delay={0.12}>
+          <h3 className="font-semibold text-body-1 flex items-center gap-2 mb-3">
+            <History className="w-4 h-4 text-accent-violet" /> 团队变化历史
+          </h3>
+          {teamEvents.length === 0 ? (
+            <EmptyState text={teamIsPublic ? '公共演示团队不记录组织变更' : '暂无团队变更'}
+              hint={teamIsPublic ? '创建本组织的团队后，创建、加入与移出成员都会记在这里' : undefined} />
+          ) : (
+            <div className="divide-y divide-line-soft/6">
+              {teamEvents.slice(0, 10).map(event => {
+                const labels: Record<string, string> = { created: '创建团队', member_added: '加入成员', member_uploaded: '上传成员', member_removed: '移出成员' }
+                const before = event.before?.coverage_rate
+                const after = event.after?.coverage_rate
+                return <div key={event.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
+                  <div className="min-w-0"><b className="text-body-1">{labels[event.action] || event.action}</b>
+                    <span className="ml-2 text-body-2">{event.details?.display_name || event.details?.code || ''}</span></div>
+                  <div className="shrink-0 text-xs text-body-3">
+                    {before != null && after != null && <span className="mr-3">覆盖率 {Math.round(before * 100)}% → {Math.round(after * 100)}%</span>}
+                    {new Date(event.created_at).toLocaleString('zh-CN')}
+                  </div>
+                </div>
+              })}
+            </div>
+          )}
+        </Card>
       )}
     </div>
   )

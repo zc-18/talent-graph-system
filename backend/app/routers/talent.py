@@ -24,6 +24,56 @@ def _page(page: int, size: int, *, maximum: int = 100) -> tuple[int, int]:
     return max(1, page), min(maximum, max(1, size))
 
 
+PUBLIC_TEAM_READONLY = ("公共演示团队为只读示例，不能改动成员；"
+                        "请先创建本组织的团队，再把成员加进去。")
+
+
+def _team_is_public(team: models.Team) -> bool:
+    """种子演示团队的 organization_id 为 NULL —— 它们是公开展示内容。
+
+    ``GET /teams`` 刻意把这类团队列给所有人看，所以它们的存在本身不是秘密。
+    """
+    return team.organization_id is None
+
+
+def _team_editable(team: models.Team, actor: Actor) -> bool:
+    """前端据此禁用写操作按钮，而不是让人点下去吃一个错误码。"""
+    if actor.role == "admin":
+        return True
+    return (not _team_is_public(team)
+            and actor.organization_id is not None
+            and team.organization_id == actor.organization_id)
+
+
+def _read_team(db: Session, team_id: int, actor: Actor) -> models.Team:
+    """读作用域：本组织的团队，或任何人都能看的公共演示团队。
+
+    历史上这里直接用 ``ownership.require_org``，而它对 ``organization_id IS NULL``
+    的行判 404 —— 于是列表里明明列出来的 3 个演示团队，点进去查变更历史全是 404，
+    被前端吞成「暂无团队变更」。读和写要分开判，就是为了不再出现这种
+    「列得出来、读不出来」的自相矛盾。
+    """
+    team = db.query(models.Team).get(team_id)
+    if not team:
+        raise HTTPException(404, "记录不存在")
+    if actor.role == "admin" or _team_is_public(team):
+        return team
+    return require_org(team, actor)
+
+
+def _write_team(db: Session, team_id: int, actor: Actor) -> models.Team:
+    """写作用域：只有本组织的团队可改。
+
+    公共演示团队返回 403 而不是 404 —— 它已经在列表里公开了，用 404 掩饰存在性
+    没有意义，反而让用户以为数据丢了。跨组织的团队仍然是 404，那才是需要
+    防 id 枚举的场景（见 ownership.require_org）。
+    """
+    team = _read_team(db, team_id, actor)
+    if _team_is_public(team) and actor.role != "admin":
+        raise HTTPException(403, PUBLIC_TEAM_READONLY)
+    return team
+
+
 def _team_state(db: Session, team: models.Team) -> dict:
     member_count = db.query(models.TeamMember).filter(
         models.TeamMember.team_id == team.id).count()
@@ -106,6 +156,8 @@ def teams(page: int = 1, size: int = 20, actor: Actor = Depends(current_actor),
         models.TeamMember.team_id).all()) if team_ids else {}
     return {"items": [{"id": t.id, "name": t.name, "description": t.description,
                        "target_job_id": t.target_job_id,
+                       "organization_id": t.organization_id,
+                       "editable": _team_editable(t, actor),
                        "size": sizes.get(t.id, 0)} for t in rows],
             "total": total, "page": page, "size": size}
 
@@ -136,12 +188,7 @@ def create_team(payload: TeamCreateRequest, actor: Actor = Depends(require_org_a
 
 @router.get("/teams/{team_id}")
 def team_detail(team_id: int, actor: Actor = Depends(current_actor), db: Session = Depends(get_db)):
-    team = db.query(models.Team).get(team_id)
-    if not team:
-        raise HTTPException(404, "团队不存在")
-    if team.organization_id is not None:
-        if actor.role != "admin" and actor.organization_id != team.organization_id:
-            raise HTTPException(404, "团队不存在")
+    team = _read_team(db, team_id, actor)
     members = db.query(models.TeamMember).filter(
         models.TeamMember.team_id == team_id).order_by(models.TeamMember.id).all()
     talent_ids = [m.talent_id for m in members if m.talent_id is not None]
@@ -155,6 +202,7 @@ def team_detail(team_id: int, actor: Actor = Depends(current_actor), db: Session
     job_names = {j.id: j.name for j in db.query(models.Job.id, models.Job.name).all()}
     return {"id": team.id, "name": team.name, "description": team.description,
             "organization_id": team.organization_id, "target_job_id": team.target_job_id,
+            "editable": _team_editable(team, actor),
             "members": [{
                 "member_id": m.id, "display_name": m.display_name, "role_label": m.role_label,
                 "talent_id": m.talent_id,
@@ -175,10 +223,7 @@ def team_detail(team_id: int, actor: Actor = Depends(current_actor), db: Session
 def team_history(team_id: int, page: int = 1, size: int = 20,
                  actor: Actor = Depends(require_org_append), db: Session = Depends(get_db)):
     page, size = _page(page, size)
-    team = db.query(models.Team).get(team_id)
-    if not team:
-        raise HTTPException(404, "团队不存在")
-    require_org(team, actor)
+    team = _read_team(db, team_id, actor)
     q = db.query(models.TeamEvent).filter(models.TeamEvent.team_id == team.id)
     total = q.count()
     rows = q.order_by(models.TeamEvent.created_at.desc(), models.TeamEvent.id.desc()).offset(
@@ -193,10 +238,7 @@ def team_history(team_id: int, page: int = 1, size: int = 20,
 @router.post("/teams/{team_id}/members", status_code=201)
 def add_team_member(team_id: int, payload: TeamMemberRequest,
                     actor: Actor = Depends(require_org_append), db: Session = Depends(get_db)):
-    team = db.query(models.Team).get(team_id)
-    if not team:
-        raise HTTPException(404, "团队不存在")
-    require_org(team, actor)
+    team = _write_team(db, team_id, actor)
     profile = db.query(models.ResumeProfile).filter(
         models.ResumeProfile.id == payload.resume_profile_id,
         models.ResumeProfile.organization_id == actor.organization_id,
@@ -228,10 +270,7 @@ def add_team_member(team_id: int, payload: TeamMemberRequest,
 @router.delete("/teams/{team_id}/members/{member_id}")
 def remove_team_member(team_id: int, member_id: int,
                        actor: Actor = Depends(require_org_append), db: Session = Depends(get_db)):
-    team = db.query(models.Team).get(team_id)
-    if not team:
-        raise HTTPException(404, "团队不存在")
-    require_org(team, actor)
+    team = _write_team(db, team_id, actor)
     member = db.query(models.TeamMember).filter(
         models.TeamMember.id == member_id,
         models.TeamMember.team_id == team.id).first()
@@ -299,10 +338,7 @@ async def upload_member_resume(team_id: int, file: UploadFile = File(...),
     隐私口径与 /api/match/resume/upload 一致：原文与姓名只在内存里参与本次解析，
     落库只有脱敏后的技能要素；display_name 由上传方自己给的化名，不取简历里的姓名。
     """
-    team = db.query(models.Team).get(team_id)
-    if not team:
-        raise HTTPException(404, "团队不存在")
-    require_org(team, actor)
+    team = _write_team(db, team_id, actor)
     if not authorization_confirmed:
         raise HTTPException(422, {"code": "AUTHORIZATION_REQUIRED",
                                   "message": "必须确认已获得成员授权"})

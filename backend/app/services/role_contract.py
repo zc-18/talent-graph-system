@@ -11,6 +11,7 @@ from datetime import date
 
 from .job_resolution import role_skill_conflict
 from .taxonomy import capability_cluster, normalize_skill
+from . import confidence
 
 
 MIN_EMPLOYERS = 2
@@ -217,6 +218,9 @@ def build_contract_from_job(db, job, **overrides) -> dict:
             "skill_type": skill.skill_type, "importance": row.importance,
             "weight": row.weight, "level_required": row.level_required,
             "confidence": row.confidence, "factors": row.factors,
+            # 分级切片同样要摊平支持率：_build_cluster 读的是这个键，
+            # 只传 factors 的话簇上显示的是 0%。
+            "support_ratio": confidence.support_ratio(row.factors),
             "source_count": row.source_count, "employer_count": row.source_count,
             "jd_support_count": row.jd_count, "status": "active",
             "granularity": "coarse",
@@ -293,7 +297,7 @@ def contract_summaries_for_jobs(db, jobs: list) -> dict[int, dict]:
             "level_required": relation.level_required,
             "confidence": relation.confidence,
             "factors": factors,
-            "support_ratio": float(factors.get("support", 0.0) or 0.0),
+            "support_ratio": confidence.support_ratio(factors),
             "source_count": relation.source_count,
             "employer_count": relation.source_count,
             "status": relation.status,
@@ -451,6 +455,10 @@ def build_contract_from_version(db, job, job_version) -> dict:
             "confidence": row.confidence,
             "level_required": row.level_required,
             "factors": factors,
+            # 注意：这里的口径与其它构造器不同 —— 是「本能力项引用的证据里落在
+            # 有效语料窗口内的占比」，不是 confidence 的支持率（提及 JD 数 / 岗位
+            # 有效 JD 总数）。版本快照要判的是证据有效性，所以刻意分开。这条链路
+            # 不直出到页面上的「支持率」标签，别照抄到展示路径去。
             "support_ratio": len(valid_raw_ids) / max(1, len(referenced_raw_ids)),
             "employer_count": employer_count,
             "jd_support_count": len(valid_raw_ids),
