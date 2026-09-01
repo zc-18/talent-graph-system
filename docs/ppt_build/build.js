@@ -154,12 +154,12 @@ s.addText([
   '· PII 双保险：字段拦截 + 正则打码',
   '· 每次请求写入采集台账日志',
   '· jsonl 原始留存 + RawJD 溯源',
-  '· SimHash 检出 166 条重复',
+  '· SimHash 检出 230 条重复',
 ].map(t => ({ text: t, options: { breakLine: true, paraSpaceAfter: 17 } })), { x: 8.65, y: 2.12, w: 3.75, h: 2.55, valign: 'top', fontFace: F, fontSize: 11.5, color: MUTED, margin: 0.02 })
 s.addText('AuthorityEvidence 21 条 · 覆盖 19 / 32 岗 · 6 / 6 新兴岗位全覆盖（8 条）', {
   x: 0.55, y: 5.05, w: 12.2, h: 0.55, align: 'center', valign: 'middle', fontFace: F, fontSize: 13, bold: true, color: EMERALD,
   fill: { type: 'solid', color: TINT_E }, line: { color: TINT_E_LINE, width: 1 }, margin: 0 })
-s.addText('雇主识别 87.56%（2105 / 2404，页面显示 88%） · 独立来源按独立雇主实体归一化，同雇主跨渠道分发只计 1 次', {
+s.addText('雇主识别 89.55%（2561 / 2860，页面显示 90%） · 独立来源按独立雇主实体归一化，同雇主跨渠道分发只计 1 次', {
   x: 0.55, y: 5.75, w: 12.2, h: 0.55, align: 'center', valign: 'middle', fontFace: F, fontSize: 12, bold: true, color: INDIGO,
   fill: { type: 'solid', color: TINT_V }, line: { color: TINT_V_LINE, width: 1 }, margin: 0 })
 s.addText('RoleContract ready 6 / 32（18.75%）｜对完整证据图投影 8–12 个同粒度能力簇；未 ready 表示证据不足，不代表岗位不可用', {
@@ -355,7 +355,7 @@ metrics.forEach(([v, t, d, c], i) => {
   s.addText(d, { x, y: 3.44, w: 3.85, h: 0.3, align: 'center', fontFace: F, fontSize: 11.5, color: MUTED })
   s.addText('要求 ≥ 90% ✓', { x, y: 3.76, w: 3.85, h: 0.3, align: 'center', fontFace: F, fontSize: 11, bold: true, color: EMERALD })
 })
-const extra = [['8 / 8', '抄袭检出'], ['17 / 17', '通胀检出'], ['73%', '单元测试覆盖率'], ['146', '测试用例全通过']]
+const extra = [['8 / 8', '抄袭检出'], ['17 / 17', '通胀检出'], ['85%', '单元测试覆盖率'], ['398', '测试用例全通过']]
 extra.forEach(([v, l], i) => {
   const x = 0.6 + i * 3.075   // 4 卡 3 隙合计 12.1，右边缘同为 12.70
   card(s, x, 4.45, 2.875, 1.5)

@@ -1,6 +1,6 @@
 """将提交用 Markdown 文档转换为 Word(.docx)。
 
-支持：# / ## / ### / #### 标题、表格、- / · 列表、**加粗**、代码块、普通段落、引用。
+支持：# / ## / ### / #### 标题、表格、- / · 列表、**加粗**、代码块、普通段落、引用、独占一行的图片。
 """
 from __future__ import annotations
 import os
@@ -57,11 +57,19 @@ def join_soft_wrap(parts):
     return out
 
 
+# 独占一行的图片：![说明](相对路径)。行内图片不支持——交付稿里没有这种写法，
+# 混进 add_runs 会让图注和正文挤在一段里，不如显式只认整行形式。
+IMG_RE = re.compile(r"^!\[(?P<alt>[^\]]*)\]\((?P<src>[^)\s]+)\)\s*$")
+# 正文区宽度：A4 默认页宽 8.27in 减左右各 1in 页边距，留一点余量。
+MAX_IMG_WIDTH = Inches(6.0)
+
+
 def _is_block_start(line: str) -> bool:
     """这一行是否开启了一个新块（因而不能被并进上一段）。"""
     s = line.strip()
     return (
         not s
+        or bool(IMG_RE.match(s))
         or s.startswith("#")
         or s.startswith(">")
         or s.startswith("|")
@@ -157,7 +165,36 @@ def md_table(doc, rows):
                     run.bold = True
 
 
+def add_image(doc, src: str, alt: str, base_dir: str) -> None:
+    """插入一张图并在其下写图注。
+
+    路径按 Markdown 所在目录解析（交付稿里写的是 `图示/xxx.png` 这类相对路径），
+    因此从 backend/ 还是从 docs/ 调用本脚本，结果都一样。
+    找不到文件时**不静默跳过**：Word 里会留一行醒目的占位文字，同时在终端告警——
+    图丢了却生成出一份看着正常的交付稿，比直接报错更难发现。
+    """
+    full = src if os.path.isabs(src) else os.path.normpath(os.path.join(base_dir, src))
+    if not os.path.isfile(full):
+        print(f"  !! 图片缺失，已插入占位：{src}", file=sys.stderr)
+        ph = doc.add_paragraph()
+        ph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = ph.add_run(f"[图片缺失：{src}]")
+        r.bold = True; r.font.color.rgb = RGBColor(0xC0, 0x39, 0x2B)
+        return
+    doc.add_picture(full, width=MAX_IMG_WIDTH)
+    pic = doc.paragraphs[-1]
+    pic.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    pic.paragraph_format.keep_with_next = True
+    if alt.strip():
+        cap = doc.add_paragraph()
+        cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        add_runs(cap, alt.strip())
+        for r in cap.runs:
+            r.italic = True; r.font.size = Pt(9); r.font.color.rgb = MUTED
+
+
 def convert(path):
+    base_dir = os.path.dirname(os.path.abspath(path))
     doc = Document()
     style = doc.styles["Normal"]
     style.font.name = "Microsoft YaHei"
@@ -189,6 +226,11 @@ def convert(path):
             i += 1; continue
         if in_code:
             code_buf.append(line); i += 1; continue
+
+        img = IMG_RE.match(line.strip())
+        if img:
+            add_image(doc, img.group("src"), img.group("alt"), base_dir)
+            i += 1; continue
 
         if re.match(r"^#{1,4} ", line):
             level = len(line) - len(line.lstrip("#")) - 1   # "# "->0, "## "->1, ...

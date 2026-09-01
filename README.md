@@ -30,7 +30,7 @@
 
 | JD 解析 F1 | 简历提取 F1 | 人岗匹配准确率 | 测试覆盖率 | 测试 JD |
 |:---:|:---:|:---:|:---:|:---:|
-| **98.25%** | **96.49%** | **100%** | **73%** | **对抗基准 379 + 真实语料 3090** |
+| **98.25%** | **96.49%** | **100%** | **85%** | **对抗基准 379 + 真实语料 3090** |
 
 ### R6 最终生产快照
 
@@ -56,7 +56,7 @@ talent-graph-system/
 ├── backend/
 │   ├── app/                FastAPI 应用（services 分层 + routers）
 │   ├── data/               数据生成 / pipeline / 评测脚本
-│   ├── tests/              单元测试（146 用例，覆盖率 73%）
+│   ├── tests/              单元测试（398 用例通过 / 1 跳过，覆盖率 85%）
 │   └── requirements.txt
 ├── frontend/               React + Vite 前端
 ├── deploy/                 Dockerfile / docker-compose / systemd
