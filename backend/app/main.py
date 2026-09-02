@@ -10,9 +10,10 @@ from fastapi.responses import FileResponse
 from .config import settings
 from .db import engine, init_db
 from .auth import current_actor
-from .routers import (admin, auth, chat, discovery, evolution, feedback, graph, hr, public,
-                      jobs, match, me, talent)
+from .routers import (admin, auth, chat, discovery, evolution, feedback, graph, hr, mining,
+                      public, jobs, match, me, talent)
 from .services.confidence_batch import scheduler as confidence_scheduler
+from .services.mining_scheduler import scheduler as mining_scheduler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("talent-graph")
@@ -39,6 +40,7 @@ app.include_router(discovery.router, dependencies=_authenticated)
 app.include_router(evolution.router, dependencies=_authenticated)
 app.include_router(match.router, dependencies=_authenticated)
 app.include_router(talent.router, dependencies=_authenticated)
+app.include_router(mining.router, dependencies=_authenticated)
 # 公开门户数据条：白名单字段，不挂 _authenticated（见 routers/public.py）
 app.include_router(public.router)
 app.include_router(chat.router)
@@ -61,15 +63,18 @@ def _startup():
             connection.execute(text("SELECT 1"))
         logger.info("生产数据库连通性检查完成；未执行 runtime create_all")
         confidence_scheduler.start()
+        mining_scheduler.start()
         return
     init_db()
     logger.info("本地/测试数据库初始化完成")
     confidence_scheduler.start()
+    mining_scheduler.start()
 
 
 @app.on_event("shutdown")
 def _shutdown():
     confidence_scheduler.stop()
+    mining_scheduler.stop()
 
 
 @app.get("/api/health")

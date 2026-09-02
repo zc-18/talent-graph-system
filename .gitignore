@@ -48,3 +48,11 @@ backend/user_uploads/
 
 # PPT/文档视觉 QA 的中间渲染产物，不入库
 docs/ppt_build/_qa/
+
+# 竞赛数据切片（仅限比赛使用，~36MB）：本地一次性产物，不入库
+# 例外：stopwords.json 是需要评审的人工过筛结果，保留跟踪
+backend/data/aggregate_source/*
+!backend/data/aggregate_source/stopwords.json
+
+# Playwright 验收截图（本地自查产物，14MB，不入库）
+frontend/.e2e-shots/

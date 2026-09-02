@@ -45,6 +45,23 @@ class Settings(BaseSettings):
     confidence_scheduler_hour: int = 2
     confidence_scheduler_minute: int = 30
 
+    # 每日动态数据挖掘（模拟聚合源 BOSS直聘，语料由赛事方提供）。
+    # 默认 False：本地跑数据脚本时不希望后台线程也在写库；只有服务器 .env 置
+    # MINING_ENABLED=1 才开启夜间作业。注意 guards.py 是 HTTP 层的闸，
+    # 进程内调度器不受 READ_ONLY 约束（与 02:30 置信度批算同理），
+    # 写入范围由 services/mining.py 的 INSERT-only 白名单自行约束。
+    mining_enabled: bool = False
+    mining_scheduler_hour: int = 0
+    mining_scheduler_minute: int = 0
+    mining_rows_per_day: int = 1000
+    # 硬性日预算（人民币元）。累计超过即停止调用 LLM，剩余行降级为纯规则抽取。
+    mining_daily_budget_cny: float = 0.30
+    mining_llm_batch_size: int = 10
+    # 挖掘专用 key：把这份预算和 chat/discovery 的用量隔开；留空则回落到 deepseek_api_key
+    mining_llm_api_key: str = ""
+    mining_shard_dir: str = ""          # 留空 = backend/data/aggregate_source
+    mining_source_label: str = "BOSS直聘"
+
     @property
     def database_url(self) -> str:
         if self.database_url_override:

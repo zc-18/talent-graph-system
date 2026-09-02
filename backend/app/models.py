@@ -775,3 +775,97 @@ class FeedbackEvent(Base):
     applied_record_id = Column(String(64), nullable=True)
     actor_user_id = Column(Integer, ForeignKey("app_user.id"), nullable=False, index=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+
+# ------------------------- 每日动态挖掘观测层（模拟聚合源） -------------------------
+# 设计约束（改动前务必读完）：
+# 1. 这三张表是**观测层**，记录每日从模拟聚合源（BOSS直聘，语料由赛事方提供）挖掘的
+#    全过程与结果。聚合语料本身**不进 raw_jd**——raw_jd 的行数就是 graph_service
+#    .stats_overview 里对外的「JD 总数」，那个数字只统计合规实采语料，掺进 5 万条
+#    模拟语料会让所有已交付材料的头条数字失真。
+# 2. 每日增量对公开图谱**只做 INSERT**，且只碰 skill / job_skill / evidence 三张表，
+#    job_skill.status 恒为 candidate。原因：这份语料没有雇主字段，
+#    employer_resolution.employer_independence_key() 返回 None，
+#    hallucination.aggregate_capabilities 的 ≥2 独立雇主门无条件拦截——这是门禁在
+#    正常工作，不是缺陷。为了让技能点「转正」而放宽门禁会让全库置信度虚高。
+# 3. 因此也**不写 capability_change**：v1→v2 演化审计链只记录经过雇主交叉验证的变更，
+#    每日候选层的增减记在 DailySkillDelta 里，两条线不混。
+class DailyMiningRun(Base):
+    """一天一行：某日挖掘作业的台账与漏斗计数。"""
+    __tablename__ = "daily_mining_run"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    run_date = Column(String(10), unique=True, index=True)          # YYYY-MM-DD，ISO 串便于字典序排序
+    status = Column(String(16), default="running", index=True)      # running/completed/failed
+    source_label = Column(String(64), default="BOSS直聘")           # 对外展示名
+    platform = Column(String(64), default="boss_sim")               # 内部平台标识
+    shard_index = Column(Integer, default=0)                        # 当日消费的分片序号
+    cursor_start = Column(Integer, default=0)                       # 表格原始行号区间（闭区间）
+    cursor_end = Column(Integer, default=0)
+    dry_run = Column(Boolean, default=True)
+
+    rows_read = Column(Integer, default=0)                          # 漏斗：读入
+    rows_valid = Column(Integer, default=0)                         # 结构校验 + 正文长度门之后
+    rows_dedup = Column(Integer, default=0)                         # 去重之后
+    rows_mapped = Column(Integer, default=0)                        # 命中策展岗位
+    rows_dropped = Column(Integer, default=0)
+
+    llm_calls = Column(Integer, default=0)
+    llm_prompt_tokens = Column(Integer, default=0)
+    llm_completion_tokens = Column(Integer, default=0)
+    llm_cost_cny = Column(Float, default=0.0)
+    llm_budget_hit = Column(Boolean, default=False)                 # 是否撞上日预算闸并降级为纯规则
+
+    jobs_touched = Column(Integer, default=0)
+    new_skill_points = Column(Integer, default=0)
+    skills_created = Column(Integer, default=0)
+    job_skills_created = Column(Integer, default=0)
+    evidence_created = Column(Integer, default=0)
+
+    # 回放动画的数据源：夜间真实运行时逐阶段记录，前端只按记录的节奏播放，不编造进度
+    stage_log = Column(JSON)
+    started_at = Column(DateTime, default=datetime.utcnow)
+    finished_at = Column(DateTime, nullable=True)
+    error = Column(Text, nullable=True)
+
+
+class DailyMiningItem(Base):
+    """当日每一条被处理的语料行（含被丢弃的），漏斗要能逐条解释。"""
+    __tablename__ = "daily_mining_item"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    run_id = Column(Integer, ForeignKey("daily_mining_run.id"), nullable=False, index=True)
+    source_row_no = Column(Integer, index=True)                     # 原表 1-based 数据行号
+    job_id = Column(Integer, ForeignKey("job.id"), nullable=True, index=True)
+    title_raw = Column(String(160))
+    title_key = Column(String(128), index=True)                     # ingest.title_key() 归一结果
+    job_category = Column(String(64))                               # 原表「岗位分类」
+    company_domain = Column(String(64), index=True)                 # 原表「公司领域」——注意：不是雇主身份
+    skills = Column(JSON)                                           # 清洗归一后的技能名列表
+    used_llm = Column(Boolean, default=False)
+    drop_reason = Column(String(64), nullable=True, index=True)     # None=保留；否则为丢弃原因
+    # 回滚凭据：rollback_mining.py 按这三个字段精确撤销本次运行写入公开图谱的行
+    created_skill_ids = Column(JSON)
+    created_job_skill_ids = Column(JSON)
+    created_evidence_ids = Column(JSON)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class DailySkillDelta(Base):
+    """某岗位在某日相对前一日的技能点变化，以及针对新增项生成的培训路径。"""
+    __tablename__ = "daily_skill_delta"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    run_id = Column(Integer, ForeignKey("daily_mining_run.id"), nullable=False, index=True)
+    job_id = Column(Integer, ForeignKey("job.id"), nullable=False, index=True)
+    skill_id = Column(Integer, ForeignKey("skill.id"), nullable=True, index=True)
+    skill_name = Column(String(128), index=True)
+    delta_type = Column(String(16), index=True)                     # new/support_up/support_down/vanished
+    prev_support = Column(Integer, default=0)                       # 前一日累计支持条数
+    curr_support = Column(Integer, default=0)
+    prev_status = Column(String(16), nullable=True)                 # None=昨日尚不存在
+    curr_status = Column(String(16), nullable=True)
+    # 该技能点当日出现在几个「公司领域」。这是弱独立性信号，**不等于雇主多样性**，
+    # 不参与置信度计算，仅用于前端解释「为什么它还停在 candidate」。
+    industry_count = Column(Integer, default=0)
+    industries = Column(JSON)
+    sample_titles = Column(JSON)                                    # 佐证用的原始岗位标题样本
+    training_plan = Column(JSON)                                    # build_learning_path() 产出的新人培训顺序
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)

@@ -10,6 +10,46 @@ export function setAccessToken(token: string | null) {
   accessToken = token
 }
 
+/**
+ * 动态数据挖掘·采集回放（SSE）。
+ *
+ * 必须写在这里、紧挨 setAccessToken：accessToken 是模块私有变量且只对外暴露 setter，
+ * 只有同模块内的函数读得到它。EventSource 无法携带 Authorization 头，而 /mining 路由
+ * 挂在 current_actor 后面，所以走 fetch + body.getReader() 手工分帧。
+ *
+ * 分帧逻辑与 components/ChatBot.tsx 完全一致，逐条都是有原因的：
+ *   decode({stream:true}) —— 多字节汉字可能被切在两个 chunk 之间；
+ *   buf.split('\n\n') + parts.pop() —— 末尾那截可能是半帧，留到下一轮再拼；
+ *   剥掉 data: 前缀、跳过空行与 [DONE] —— 后者是终止哨兵而非 JSON。
+ * signal 透传给 fetch：组件卸载时 abort，read() 抛 AbortError 由调用方吞掉。
+ */
+export async function miningReplay(
+  runDate: string,
+  onFrame: (frame: MiningReplayFrame) => void,
+  signal?: AbortSignal,
+): Promise<void> {
+  const headers: Record<string, string> = { Accept: 'text/event-stream' }
+  if (accessToken) headers.Authorization = `Bearer ${accessToken}`
+  const resp = await fetch(`${apiBase}/mining/runs/${encodeURIComponent(runDate)}/replay`, { headers, signal })
+  if (!resp.ok) throw new Error(`回放接口返回 ${resp.status}`)
+  if (!resp.body) throw new Error('回放接口未返回流式响应')
+  const reader = resp.body.getReader()
+  const decoder = new TextDecoder()
+  let buf = ''
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    buf += decoder.decode(value, { stream: true })
+    const parts = buf.split('\n\n')
+    buf = parts.pop() || ''
+    for (const part of parts) {
+      const line = part.replace(/^data:\s?/, '')
+      if (!line || line === '[DONE]') continue
+      try { onFrame(JSON.parse(line)) } catch { /* 半帧或心跳，忽略 */ }
+    }
+  }
+}
+
 http.interceptors.request.use(config => {
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`
   return config
@@ -132,6 +172,91 @@ export interface PipelineStats {
   batches: { batch_key: string; platform: string; tier: string; kept: number; finished_at?: string | null }[]
   loop: { manual_edits: number; evolution_runs: number }
 }
+/* ---------- 动态数据挖掘（每日模拟聚合源 · 展示为 BOSS直聘）----------
+   语料由竞赛主办方提供的离线模拟聚合源产出，不含雇主身份，
+   因此其技能点一律以 candidate 态入图（见 gate_note）。 */
+export interface MiningRunItem {
+  run_date: string; status: string
+  rows_read: number; rows_valid: number; rows_dedup: number; rows_mapped: number
+  jobs_touched: number; new_skill_points: number; skills_created: number
+  job_skills_created: number; evidence_created: number
+  llm_calls: number; llm_cost_cny: number; llm_budget_hit: boolean; dry_run: boolean
+  finished_at?: string | null
+  /** 仅 /runs/{date} 详情返回 */
+  shard_index?: number; cursor_start?: number; cursor_end?: number
+  started_at?: string | null; error?: string | null
+}
+export interface MiningRunsResponse {
+  source_label: string; platform: string; tier: string; enabled: boolean
+  schedule: string; daily_budget_cny: number
+  /** 新到旧 */
+  items: MiningRunItem[]
+}
+export interface MiningFunnelStep {
+  key: string; label: string
+  /** in 是保留字级别的常见字段名，接口原样返回，这里不改名以免与后端对不齐 */
+  in: number; out: number; dropped: number
+  reasons: Record<string, number>
+  detail?: string; duration_ms?: number; samples?: string[]
+}
+export type MiningDeltaType = 'new' | 'support_up' | 'support_down' | 'vanished'
+export interface MiningTrainingStep {
+  step: number; skill: string; category?: string; priority?: string; prerequisites?: string[]
+}
+export interface MiningSkillDelta {
+  skill_name: string; delta_type: MiningDeltaType
+  /**
+   * 图谱节点 id 与「是否已入图」。挂不到任何粗粒度概念的技能词不会建 Skill 节点，
+   * 只记录在观测层：此时 `skill_id === null` 且 `in_graph === false`（两者恒等价）。
+   * 实测某日 672 条明细里 242 条如此，不是边缘情况，必须在界面上显式标出，
+   * 并且**不能**给它们挂技能详情链接——背后没有行，点了就是 404。
+   */
+  skill_id?: number | null; in_graph?: boolean
+  prev_support: number; curr_support: number
+  prev_status?: string | null; curr_status?: string | null
+  /** 公司领域数——不是雇主多样性，模拟源无雇主身份 */
+  industry_count?: number; industries?: string[]; sample_titles?: string[]
+  training_plan?: MiningTrainingStep[]
+}
+export interface MiningJobDelta {
+  job_id: number; job_name: string; category?: string; rows: number
+  new_count: number; support_up: number; support_down: number; vanished: number
+  /** 后端按 MAX_DELTAS_PER_JOB 截断时给出真实总数，必须显示出来——静默砍掉等于伪造当日变化量 */
+  truncated?: boolean; deltas_total?: number; deltas: MiningSkillDelta[]
+}
+export interface MiningTopSkill {
+  name: string; count: number; job_id: number; job_name: string; delta_type: MiningDeltaType
+  /** 与 MiningSkillDelta 同义：热点技能同样可能是「仅观测·未入图」的 */
+  skill_id?: number | null; in_graph?: boolean
+}
+export interface MiningRunDetail {
+  run: MiningRunItem; funnel: MiningFunnelStep[]; jobs: MiningJobDelta[]
+  /** 后端按 MAX_JOBS 截断岗位块时给出的真实总数与标记（同上：截断必须说出来） */
+  jobs_total?: number; jobs_truncated?: boolean
+  top_skills: MiningTopSkill[]; gate_note: string
+}
+export interface MiningTrendItem {
+  run_date: string; new_skill_points: number; rows_mapped: number
+  skills_created: number; cumulative_new: number
+}
+export interface MiningJobDeltaHistoryItem {
+  run_date: string; new_count: number; support_up: number; support_down: number
+  vanished: number; truncated?: boolean; deltas_total?: number; deltas: MiningSkillDelta[]
+}
+export interface MiningJobDeltaHistory {
+  job_id: number; job_name: string; items: MiningJobDeltaHistoryItem[]
+}
+/** SSE 回放帧。type 决定其余字段，故按判别联合的松散形式声明。 */
+export interface MiningReplayFrame {
+  type: 'start' | 'stage' | 'tick' | 'summary' | 'done'
+  run_date?: string; total_stages?: number; source_label?: string
+  index?: number; key?: string; label?: string; phase?: 'begin' | 'end'
+  in?: number; out?: number; dropped?: number
+  reasons?: Record<string, number>; detail?: string
+  progress?: number; processed?: number; sample?: string
+  new_skill_points?: number; jobs_touched?: number; skills_created?: number
+}
+
 export interface JobDetail {
   id: number; name: string; category: string; level: string; is_new: boolean
   summary: string; core_responsibilities: string[]; typical_scenarios: string[]
@@ -340,6 +465,16 @@ export const api = {
     http.get<{ from: string; to: string; from_label: string; to_label: string; changes: CapChange[] }>(
       `/evolution/${jobId}/level-diff`, { params: { frm, to } }).then(r => r.data),
   pipelineStats: () => http.get<PipelineStats>('/graph/pipeline-stats').then(r => r.data),
+
+  // ---------- 动态数据挖掘（每日模拟聚合源）----------
+  // 回放是 SSE，走本文件顶部的 miningReplay（fetch + reader），不在这里。
+  miningRuns: (limit = 30) => http.get<MiningRunsResponse>('/mining/runs', { params: { limit } }).then(r => r.data),
+  /** runDate 可以传字面量 'latest' */
+  miningRun: (runDate: string) => http.get<MiningRunDetail>(`/mining/runs/${encodeURIComponent(runDate)}`).then(r => r.data),
+  miningSkillTrend: (days = 30) => http.get<{ items: MiningTrendItem[] }>('/mining/skill-trend', { params: { days } }).then(r => r.data),
+  miningJobDeltas: (jobId: number, limit = 30) =>
+    http.get<MiningJobDeltaHistory>(`/mining/jobs/${jobId}/deltas`, { params: { limit } }).then(r => r.data),
+
   previewEvolution: (jobId: number, newJds: string[], useWeb = true) =>
     http.post('/evolution/update', { job_id: jobId, new_jds: newJds, use_web: useWeb }).then(r => r.data),
 

@@ -5,7 +5,7 @@ import {
   BriefcaseBusiness, CalendarClock, ChevronLeft, ChevronRight, LogIn, LogOut, Menu,
   MessageSquareText, ShieldCheck, X,
 } from 'lucide-react'
-import { IGauge, ITreeStructure, ISparkle, IGitBranch, IBriefcase, ITarget, IUsersThree } from './components/icons'
+import { IGauge, ITreeStructure, ISparkle, IGitBranch, IBriefcase, ITarget, IUsersThree, IDatabase } from './components/icons'
 import ChatBot from './components/ChatBot'
 import { ToastProvider } from './components/Toast'
 import { ReadOnlyProvider } from './hooks/useReadOnly'
@@ -16,6 +16,7 @@ import RoleAvatar from './components/RoleAvatar'
 
 // 路由级代码分割：各页面（含 ECharts 等重依赖）按需加载，减小首包
 const Dashboard = lazy(() => import('./pages/Dashboard'))
+const Mining = lazy(() => import('./pages/Mining'))
 const Panorama = lazy(() => import('./pages/Panorama'))
 const Jobs = lazy(() => import('./pages/Jobs'))
 const JobDetail = lazy(() => import('./pages/JobDetail'))
@@ -35,6 +36,7 @@ type NavItem = { to: string; label: string; icon: any; end?: boolean; roles?: Ap
 const ALL_ROLES: AppRole[] = ['user', 'hr', 'admin']
 const NAV: NavItem[] = [
   { to: '/dashboard', label: '数据驾驶舱', icon: IGauge, end: true, roles: ALL_ROLES },
+  { to: '/mining', label: '动态数据挖掘', icon: IDatabase, roles: ALL_ROLES },
   { to: '/panorama', label: '全景能力图谱', icon: ITreeStructure, roles: ALL_ROLES },
   { to: '/discovery', label: '新岗位发现', icon: ISparkle, roles: ALL_ROLES },
   { to: '/evolution', label: '岗位能力演化', icon: IGitBranch, roles: ALL_ROLES },
@@ -215,6 +217,7 @@ function AppContent() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Login register />} />
             <Route path="/dashboard" element={<RequireAuth roles={ALL_ROLES}><Dashboard /></RequireAuth>} />
+            <Route path="/mining" element={<RequireAuth roles={ALL_ROLES}><Mining /></RequireAuth>} />
             <Route path="/panorama" element={<RequireAuth roles={ALL_ROLES}><Panorama /></RequireAuth>} />
             <Route path="/discovery" element={<RequireAuth roles={ALL_ROLES}><Discovery /></RequireAuth>} />
             <Route path="/evolution" element={<RequireAuth roles={ALL_ROLES}><Evolution /></RequireAuth>} />
