@@ -219,10 +219,11 @@ def _delta_payload(delta: models.DailySkillDelta) -> dict:
 
 
 def _resolve_run(db: Session, run_date: str) -> models.DailyMiningRun:
-    """run_date 支持 YYYY-MM-DD 或字面量 latest。"""
+    """run_date 支持 YYYY-MM-DD 或字面量 latest；latest 只返回可信的成功批次。"""
     query = db.query(models.DailyMiningRun)
     if run_date == "latest":
-        run = query.order_by(models.DailyMiningRun.run_date.desc()).first()
+        run = query.filter(models.DailyMiningRun.status == "completed").order_by(
+            models.DailyMiningRun.run_date.desc()).first()
     else:
         run = query.filter(models.DailyMiningRun.run_date == run_date).first()
     if not run:
@@ -354,6 +355,7 @@ def skill_trend(days: int = 30, db: Session = Depends(get_db)):
     """新增技能点的日度趋势（由旧到新，直接喂图表 X 轴）。"""
     days = min(180, max(1, days))
     runs = (db.query(models.DailyMiningRun)
+            .filter(models.DailyMiningRun.status == "completed")
             .order_by(models.DailyMiningRun.run_date.desc())
             .limit(days).all())
     runs.reverse()

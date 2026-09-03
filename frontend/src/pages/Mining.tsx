@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, ArrowDownRight, ArrowUpRight, CalendarDays, Check, RotateCcw } from 'lucide-react'
+import { AlertTriangle, ArrowRight, ArrowDownRight, ArrowUpRight, CalendarDays, Check, RotateCcw } from 'lucide-react'
 import {
   IDatabase, ICorpus, IEvidence, IJob, ILightning, IPath, IShieldCheck, ISkill, ITrendUp,
 } from '../components/icons'
@@ -211,7 +211,8 @@ export default function Mining() {
     setRuns(null)
     api.miningRuns(30).then(d => {
       setRuns(d)
-      const first = d.items?.[0]?.run_date
+      // 失败批次留在台账供排查，但不能抢占公开页默认展示的最近可信结果。
+      const first = d.items.find(i => i.status === 'completed')?.run_date || d.items?.[0]?.run_date
       if (first) setRunDate(prev => (prev && d.items.some(i => i.run_date === prev) ? prev : first))
     }).catch(() => setError(true))
     api.miningSkillTrend(30).then(d => setTrend(d.items || [])).catch(() => setTrend([]))
@@ -231,7 +232,8 @@ export default function Mining() {
         if (cancelled) return
         setDetail(d)
         setStages(settledStages(d.funnel))
-        void startReplay(d)
+        if (d.run.status === 'completed') void startReplay(d)
+        else setPlaying(false)
       })
       .catch(() => { if (!cancelled) setDetailErr(true) })
       .finally(() => { if (!cancelled) setDetailLoading(false) })
@@ -304,11 +306,11 @@ export default function Mining() {
   if (!runs) return <PageSkeleton />
 
   const run = detail?.run
-  const today = runs.items[0]
+  const today = runs.items.find(i => i.status === 'completed') || runs.items[0]
   const kpiSrc = run || today
   const dateOptions = runs.items.map(i => ({
     value: i.run_date,
-    label: `${i.run_date}${i.dry_run ? ' · 试运行' : ''}`,
+    label: `${i.run_date}${i.status === 'failed' ? ' · 已阻断' : i.dry_run ? ' · 试运行' : ''}`,
   }))
 
   const header = (
@@ -321,7 +323,8 @@ export default function Mining() {
           <Select value={runDate} onChange={setRunDate} options={dateOptions}
             className="w-[190px]" label="选择挖掘批次日期" placeholder="选择日期"
             icon={<CalendarDays className="h-4 w-4" />} align="right" />
-          <button className="btn-primary text-sm" disabled={!detail || playing}
+          <button className="btn-primary text-sm"
+            disabled={!detail || playing || run?.status !== 'completed'}
             onClick={() => detail && void startReplay(detail)}>
             <RotateCcw className={`h-4 w-4 ${playing ? 'animate-spin' : ''}`} />
             {playing ? '回放中' : '重新播放'}
@@ -368,6 +371,18 @@ export default function Mining() {
           icon={<ISkill className="h-5 w-5" />} tone="bg-grad-violet" />
       </div>
 
+      {run?.status === 'failed' && (
+        <div role="alert" className="flex items-start gap-3 rounded-lg border border-danger/25 bg-danger-weak px-4 py-3 text-danger">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+          <div className="min-w-0">
+            <div className="text-sm font-semibold">该批次未通过数据质量门，未生成日间变化</div>
+            <div className="mt-1 break-words text-xs leading-relaxed opacity-80">
+              {run.error || '任务已中止，线上继续保留最近一次成功批次。'}
+            </div>
+          </div>
+        </div>
+      )}
+
       {detailErr && (
         <Card className="p-5">
           <ErrorState text={`${runDate} 的挖掘详情加载失败`} onRetry={() => setReloadTick(t => t + 1)} />
@@ -393,7 +408,9 @@ export default function Mining() {
                 <div className="flex items-center gap-1.5">
                   {playing
                     ? <Badge tone="cyan">回放中 {Math.min(stages.length, active + 1)}/{stages.length}</Badge>
-                    : <Badge tone="emerald">已完成</Badge>}
+                    : run?.status === 'failed'
+                      ? <Badge tone="rose">质量闸已阻断</Badge>
+                      : <Badge tone="emerald">已完成</Badge>}
                   {run?.llm_budget_hit && <Badge tone="amber">触及预算上限</Badge>}
                   {run?.dry_run && <Badge tone="slate">试运行</Badge>}
                 </div>

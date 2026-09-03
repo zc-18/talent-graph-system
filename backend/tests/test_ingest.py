@@ -1,4 +1,9 @@
 """岗位标题归一化 / 领域过滤 / PII 打码的行为测试（纯内存，不连数据库）。"""
+import json
+from pathlib import Path
+
+import pytest
+
 from app.services import ingest
 from app.services.job_resolution import title_on_target
 from data.import_raw import infer_title_cluster, is_it_domain
@@ -70,6 +75,45 @@ def test_canonical_job_names_is_exactly_the_governed_title_map():
                  "ETL开发工程师"]:
         assert name not in canon, name
     assert "整车附件产品经理" not in canon
+
+
+def test_runtime_governance_files_ship_inside_app_and_match_collection_sources():
+    """线上只发布 app/；运行时副本必须在 app 内，且不得与采集源配置漂移。"""
+    collection_dir = Path(__file__).resolve().parents[1] / "data" / "collect"
+    assert ingest._GOVERNANCE_DIR.parent.name == "app"
+    for name in ("title_map.json", "queries.json"):
+        runtime = json.loads((ingest._GOVERNANCE_DIR / name).read_text("utf-8"))
+        collection = json.loads((collection_dir / name).read_text("utf-8"))
+        assert runtime == collection, f"{name} 的 app 运行时副本与采集源配置发生漂移"
+
+
+def test_missing_runtime_governance_fails_closed(tmp_path, monkeypatch):
+    """配置缺失时抛错，绝不能退化成空白名单继续跑。"""
+    monkeypatch.setattr(ingest, "_GOVERNANCE_DIR", tmp_path)
+    ingest._cluster_name_map.cache_clear()
+    try:
+        with pytest.raises(RuntimeError, match="岗位治理配置不可用"):
+            ingest.canonical_job_names.cache_clear()
+            ingest.canonical_job_names()
+    finally:
+        ingest._cluster_name_map.cache_clear()
+        ingest.canonical_job_names.cache_clear()
+
+
+def test_missing_runtime_queries_fails_closed(tmp_path, monkeypatch):
+    """白名单存在但查询词表漏发时，同样不允许标题归一静默降级。"""
+    source = ingest._GOVERNANCE_DIR / "title_map.json"
+    (tmp_path / "title_map.json").write_text(source.read_text("utf-8"), "utf-8")
+    monkeypatch.setattr(ingest, "_GOVERNANCE_DIR", tmp_path)
+    ingest._cluster_name_map.cache_clear()
+    ingest._keyword_cluster_map.cache_clear()
+    try:
+        assert len(ingest._cluster_name_map()) == 32
+        with pytest.raises(RuntimeError, match="岗位治理配置不可用"):
+            ingest._keyword_cluster_map()
+    finally:
+        ingest._cluster_name_map.cache_clear()
+        ingest._keyword_cluster_map.cache_clear()
 
 
 # ---------------- 领域过滤 ----------------

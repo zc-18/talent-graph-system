@@ -29,6 +29,26 @@ from .job_resolution import (
     resolve_job_query,
 )
 
+_GOVERNANCE_DIR = Path(__file__).resolve().parents[1] / "resources"
+
+
+def _load_governance_file(name: str) -> dict:
+    """读取随 ``app/`` 部署的岗位治理配置；缺失或损坏时必须失败关闭。
+
+    线上只发布 ``app/`` 与前端 ``static/``。治理文件曾放在 ``data/collect``，未被
+    发布包带上时这里静默返回空字典，导致每日挖掘把 881 行全部判成未命中并生成
+    1,189 条虚假 ``vanished``。运行时配置因此必须属于应用包，且绝不能空集兜底。
+    """
+    path = _GOVERNANCE_DIR / name
+    try:
+        raw = json.loads(path.read_text("utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        raise RuntimeError(f"岗位治理配置不可用：{path}") from exc
+    if not isinstance(raw, dict):
+        raise RuntimeError(f"岗位治理配置格式错误：{path}")
+    return raw
+
+
 # 真实标题装饰剥离：括号编号/城市/紧急标记/级别词（级别词回填给分级画像）
 _TITLE_STRIP = re.compile(
     r"[（(【\[][^）)】\]]*[）)】\]]|急聘|急招|热招|高薪|双休|"
@@ -39,11 +59,13 @@ _TITLE_STRIP = re.compile(
 @lru_cache(maxsize=1)
 def _cluster_name_map() -> dict[str, str]:
     """簇名 -> 规范岗位名（只读，调用方不要就地修改返回的 dict）。"""
-    p = Path(__file__).resolve().parents[2] / "data" / "collect" / "title_map.json"
-    try:
-        return json.loads(p.read_text("utf-8"))["cluster_job_name"]
-    except Exception:
-        return {}
+    names = _load_governance_file("title_map.json").get("cluster_job_name")
+    if not isinstance(names, dict) or not names:
+        raise RuntimeError("岗位治理配置缺少非空 cluster_job_name")
+    if not all(isinstance(k, str) and k and isinstance(v, str) and v
+               for k, v in names.items()):
+        raise RuntimeError("岗位治理配置 cluster_job_name 含非法条目")
+    return dict(names)
 
 
 @lru_cache(maxsize=1)
@@ -56,15 +78,14 @@ def _cluster_category_map() -> dict[str, str]:
     没落到物联网。领域归属是稳定的人工判断，属于和「簇 -> 规范岗位名」同一层的
     策展信息，声明比推断可靠。
     """
-    p = Path(__file__).resolve().parents[2] / "data" / "collect" / "title_map.json"
-    try:
-        raw = json.loads(p.read_text("utf-8"))
-        names = raw.get("cluster_job_name", {})
-        # 键从「簇名」翻成「规范岗位名」，聚合阶段拿到的是后者
-        return {names[k]: v for k, v in raw.get("cluster_category", {}).items()
-                if k in names}
-    except Exception:
-        return {}
+    raw = _load_governance_file("title_map.json")
+    names = _cluster_name_map()
+    categories = raw.get("cluster_category", {})
+    if not isinstance(categories, dict):
+        raise RuntimeError("岗位治理配置 cluster_category 必须是对象")
+    # 键从「簇名」翻成「规范岗位名」，聚合阶段拿到的是后者
+    return {names[k]: v for k, v in categories.items()
+            if k in names and isinstance(v, str) and v}
 
 
 # 平台 -> 时间切片。三个切片是演化链的观测点：2018 与 2024 各为一个公开数据集，
@@ -108,21 +129,23 @@ def _keyword_cluster_map() -> tuple[tuple[str, str], ...]:
 
     用于**没有 cluster_hint** 的来源（如按企业目录全量采集的招聘官网）：
     这类数据不是按检索词采的，只能从标题反推所属岗位簇。
-    结果只依赖磁盘上的两个映射文件，进程内缓存（几千条 JD 的循环里每条都会调用）。
+    结果只依赖应用包内的两个映射文件，进程内缓存（几千条 JD 的循环里每条都会调用）。
     """
-    qp = Path(__file__).resolve().parents[2] / "data" / "collect" / "queries.json"
     names = _cluster_name_map()
     pairs: list[tuple[str, str]] = []
-    try:
-        for cluster, kws in json.loads(qp.read_text("utf-8"))["queries"].items():
-            job = names.get(cluster)
-            if not job:
-                continue
-            for kw in kws:
+    queries = _load_governance_file("queries.json").get("queries")
+    if not isinstance(queries, dict) or not queries:
+        raise RuntimeError("岗位治理配置缺少非空 queries")
+    for cluster, kws in queries.items():
+        if not isinstance(cluster, str) or not isinstance(kws, list):
+            raise RuntimeError("岗位治理配置 queries 含非法条目")
+        job = names.get(cluster)
+        if not job:
+            continue
+        for kw in kws:
+            if isinstance(kw, str) and kw:
                 pairs.append((kw.lower(), job))
-            pairs.append((cluster.lower(), job))
-    except Exception:
-        return ()
+        pairs.append((cluster.lower(), job))
     for kw, cluster in _KEYWORD_ALIASES.items():
         job = names.get(cluster)
         if job:

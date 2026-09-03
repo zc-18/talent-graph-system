@@ -41,6 +41,7 @@ from sqlalchemy.orm import sessionmaker
 from app import models
 from app.config import settings
 from app.db import Base
+from app.routers import mining as mining_router
 from app.services import cleaning, ingest, mining, taxonomy
 from app.services.graph_service import MAX_EVIDENCE_PER_SKILL, slugify
 
@@ -894,11 +895,44 @@ def test_no_job_row_is_ever_created_for_an_unbuilt_canonical_title(db, tmp_path)
         _row("提示词工程师", row_no=2, body=BODY_CV, tags="Prompt工程"),
     ], stopwords={"exact": [], "patterns": [r"相关专业$"]})
 
-    summary = _run(db, tmp_path)
+    with pytest.raises(mining.MiningDataQualityError, match="岗位归一结果为 0"):
+        _run(db, tmp_path)
     db.expire_all()
-    assert summary["rows_mapped"] == 0
     assert _table_checksum(db, models.Job) == before
     assert db.query(models.Job).count() == 2
+    failed = db.query(models.DailyMiningRun).one()
+    assert failed.status == "failed" and failed.rows_mapped == 0
+    assert "禁止把缺失输入解释为技能消失" in failed.error
+    assert db.query(models.DailySkillDelta).count() == 0
+
+
+def test_empty_governed_catalog_fails_without_fabricating_vanished(
+        db, tmp_path, monkeypatch):
+    """回归 2026-09-03 事故：白名单空集必须 failed，不能把昨日全集记成消失。"""
+    _funnel_db(db)
+    job = db.query(models.Job).filter(models.Job.name == "计算机视觉工程师").one()
+    previous = models.DailyMiningRun(
+        run_date="2026-09-02", status="completed", source_label="BOSS直聘",
+        platform="boss_sim", shard_index=0, dry_run=False, rows_mapped=1, stage_log=[])
+    db.add(previous)
+    db.flush()
+    db.add(models.DailyMiningItem(
+        run_id=previous.id, source_row_no=1, job_id=job.id,
+        title_raw="计算机视觉算法工程师", title_key=job.name,
+        skills=["Python"], used_llm=False))
+    db.commit()
+    _write_shard(tmp_path, [
+        _row("计算机视觉算法工程师", row_no=1001, body=BODY_CV, tags="Python"),
+    ], index=1, stopwords={"exact": [], "patterns": []})
+    monkeypatch.setattr(ingest, "canonical_job_names", lambda: frozenset())
+
+    with pytest.raises(mining.MiningDataQualityError, match="岗位归一结果为 0"):
+        _run(db, tmp_path, run_date="2026-09-03", shard_index=1)
+
+    failed = db.query(models.DailyMiningRun).filter_by(run_date="2026-09-03").one()
+    assert failed.status == "failed"
+    assert failed.stage_log[-1]["detail"] == "命中 0 个策展岗位中的 0 个"
+    assert db.query(models.DailySkillDelta).filter_by(run_id=failed.id).count() == 0
 
 
 def test_funnel_counts_are_monotonic_and_recorded(db, tmp_path):
@@ -1521,6 +1555,32 @@ def test_cursor_follows_the_previous_run(db, tmp_path):
     summary = _run(db, tmp_path, run_date="2026-09-03", shard_index=None, rows=1000)
     assert summary["shard_index"] == 1
     assert summary["cursor_start"] == summary["cursor_end"] == 1001
+
+
+def test_cursor_ignores_failed_run_and_latest_resolves_to_completed(db, tmp_path):
+    """失败批次既不能跳过分片，也不能抢占公开页 latest / 趋势。"""
+    _funnel_db(db)
+    _write_shard(tmp_path, [
+        _row("计算机视觉算法工程师", row_no=1001, body=BODY_CV,
+             tags=f"{COARSE_CV}、Python"),
+    ], index=1, stopwords={"exact": [], "patterns": []})
+    completed = models.DailyMiningRun(
+        run_date="2026-09-02", status="completed", source_label="BOSS直聘",
+        platform="boss_sim", shard_index=0, dry_run=False, rows_mapped=1,
+        new_skill_points=3, stage_log=[])
+    failed = models.DailyMiningRun(
+        run_date="2026-09-03", status="failed", source_label="BOSS直聘",
+        platform="boss_sim", shard_index=9, dry_run=False, rows_mapped=0,
+        error="岗位归一结果为 0", stage_log=[])
+    db.add_all([completed, failed])
+    db.commit()
+
+    assert mining_router._resolve_run(db, "latest").run_date == "2026-09-02"
+    trend = mining_router.skill_trend(days=30, db=db)
+    assert [item["run_date"] for item in trend["items"]] == ["2026-09-02"]
+
+    summary = _run(db, tmp_path, run_date="2026-09-04", shard_index=None)
+    assert summary["shard_index"] == 1
 
 
 def test_cursor_advances_past_a_short_final_shard(db, tmp_path):

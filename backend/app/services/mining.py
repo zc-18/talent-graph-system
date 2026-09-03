@@ -90,6 +90,10 @@ STAGE_LABELS = {
     "map": "岗位归一", "extract": "技能抽取", "write": "增量入图",
 }
 
+
+class MiningDataQualityError(RuntimeError):
+    """输入或治理配置未通过发布闸；本轮不得写图谱或生成日间差异。"""
+
 _SPLIT_RE = re.compile(r"[、，,/;；|\r\n\t]+")
 # 括号必须在**整串切分之前**就归一成分隔符，不能等切完再逐 token 剥。
 # 实测：`大数据处理框架(Spark、Hive)` 朴素切分得到 `大数据处理框架(Spark` + `Hive)`；
@@ -470,7 +474,8 @@ def run_daily_mining(db: Session, *, run_date: str, shard_index: int | None = No
     # 于是同一批 (岗位, 技能) 上会一直追加 dataset 证据直到撞 12 条封顶，
     # 而漏斗和日间变化悄悄变成一潭死水。任何一个分片末行损坏也会踩同一个坑。
     if shard_index is None:
-        prev = db.query(models.DailyMiningRun.shard_index).order_by(
+        prev = db.query(models.DailyMiningRun.shard_index).filter(
+            models.DailyMiningRun.status == "completed").order_by(
             models.DailyMiningRun.run_date.desc()).first()
         total = shard_count(directory)
         shard_index = (int(prev[0]) + 1) if prev else 0
@@ -493,6 +498,17 @@ def run_daily_mining(db: Session, *, run_date: str, shard_index: int | None = No
         summary = _pipeline(db, run, shard_index=shard_index, rows_per_day=rows_per_day,
                             use_llm=use_llm, directory=directory,
                             source_label=source_label, dry_run=dry_run)
+    except MiningDataQualityError as exc:
+        # 质量闸在任何公开图谱写入之前触发。正式任务保留一条 failed 台账，既让运维
+        # 看见问题，也让公开页可以继续选择最近的 completed 批次；试运行仍不留痕。
+        if dry_run:
+            db.rollback()
+        else:
+            run.status = "failed"
+            run.error = str(exc)[:2000]
+            run.finished_at = datetime.utcnow()
+            db.commit()
+        raise
     except Exception:  # noqa: BLE001
         db.rollback()
         raise
@@ -598,7 +614,13 @@ def _pipeline(db: Session, run: models.DailyMiningRun, *, shard_index: int,
 
     # ---------------- 5. 岗位归一
     t0 = time.perf_counter()
-    canonical = ingest.canonical_job_names()
+    try:
+        canonical = ingest.canonical_job_names()
+        # 提前加载标题关键词表；否则只在某条需要关键词回退的标题出现时才暴露漏发。
+        ingest._keyword_cluster_map()
+    except RuntimeError as exc:
+        run.stage_log = stages
+        raise MiningDataQualityError(f"岗位治理配置加载失败，已中止本轮：{exc}") from exc
     job_by_name = {name: jid for name, jid in db.query(
         models.Job.name, models.Job.id).all()}
     dropped_map: dict[str, int] = defaultdict(int)
@@ -626,6 +648,11 @@ def _pipeline(db: Session, run: models.DailyMiningRun, *, shard_index: int,
         "map", 4, t0, in_count=len(deduped), out_count=len(mapped),
         dropped=dropped_map, samples=sorted(hit_jobs),
         detail=f"命中 {len(canonical)} 个策展岗位中的 {len(hit_jobs)} 个"))
+    if not mapped:
+        run.stage_log = stages
+        raise MiningDataQualityError(
+            f"岗位归一结果为 0（去重后 {len(deduped)} 行、策展岗位 {len(canonical)} 个），"
+            "已中止本轮，禁止把缺失输入解释为技能消失")
 
     # ---------------- 6+7. 规则抽取 + LLM 补缺（合并为 extract 阶段）
     t0 = time.perf_counter()
@@ -995,9 +1022,11 @@ def _prev_observations(db: Session, run: models.DailyMiningRun) -> dict[int, dic
 def _build_deltas(db: Session, run: models.DailyMiningRun,
                   rows: list[dict]) -> list[models.DailySkillDelta]:
     curr = _observations(rows)
-    prev = _prev_observations(db, run)
-    if not curr and not prev:
+    # 空输入不是「所有技能今天都消失」。即使上游质量闸被未来改动绕过，这里也必须
+    # 失败关闭，绝不能拿昨日全集单边生成 vanished。
+    if not curr:
         return []
+    prev = _prev_observations(db, run)
 
     names = {n for per_job in list(curr.values()) + list(prev.values()) for n in per_job}
     skill_ids: dict[str, int] = {}
