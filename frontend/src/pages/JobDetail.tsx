@@ -396,7 +396,7 @@ export default function JobDetail() {
               <Card className="p-5">
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div><div className="label">岗位核心契约</div><div className="text-xs text-body-2 mt-1">{contract.track || '通用'} 轨道 · {LEVEL_LABEL[contract.seniority] || contract.seniority || '级别未指定'} · {contract.recruitment_type === 'campus' ? '校招' : contract.recruitment_type === 'social' ? '社招' : '校社招混合'}</div></div>
-                  <Badge tone={contract.status === 'evidence_insufficient' ? 'amber' : 'emerald'}>{contract.status === 'evidence_insufficient' ? '证据待补' : `v${contract.version} 当前版本`}</Badge>
+                  <Badge tone={contract.status === 'evidence_insufficient' ? 'slate' : 'emerald'}>v{contract.version} 当前版本</Badge>
                 </div>
                 <div className="space-y-2">{contract.clusters.map(cluster => (
                   <details key={`${cluster.importance}-${cluster.name}`} className="group rounded-xl border border-line-soft/8 bg-white/65 px-3.5 py-3">

@@ -7,9 +7,9 @@ import { useToast } from '../components/Toast'
 
 /* 左栏能力预览：用系统真实界面截图，避免登录页只剩一句空口号 */
 const PREVIEWS = [
-  { img: '/shot-dashboard-sm.webp', title: '数据驾驶舱', text: '语料、置信与闭环漏斗' },
-  { img: '/shot-panorama-sm.webp', title: '全景能力图谱', text: '岗位与能力点关系网' },
-  { img: '/shot-match-sm.webp', title: '人岗匹配诊断', text: '差距定位与学习路径' },
+  { img: '/shot-dashboard-sm.webp?v=20260904', title: '数据驾驶舱', text: '语料、置信与闭环漏斗' },
+  { img: '/shot-panorama-sm.webp?v=20260904', title: '全景能力图谱', text: '岗位与能力点关系网' },
+  { img: '/shot-match-sm.webp?v=20260904', title: '人岗匹配诊断', text: '差距定位与学习路径' },
 ]
 
 const GUARANTEES = ['版本可追溯', '个人数据隔离', '组织权限边界']

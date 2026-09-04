@@ -3,26 +3,21 @@ import ReactECharts from 'echarts-for-react'
 import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, ArrowRight, ArrowDownRight, ArrowUpRight, CalendarDays, Check, RotateCcw } from 'lucide-react'
 import {
-  IDatabase, ICorpus, IEvidence, IJob, ILightning, IPath, IShieldCheck, ISkill, ITrendUp,
+  IDatabase, ICorpus, IEvidence, IJob, ILightning, IPath, ISkill, ITrendUp,
 } from '../components/icons'
 import {
   api, miningReplay,
   type MiningDeltaType, type MiningFunnelStep, type MiningJobDelta, type MiningReplayFrame,
   type MiningRunDetail, type MiningRunsResponse, type MiningSkillDelta, type MiningTrendItem,
 } from '../api'
-import { Badge, Card, EmptyState, ErrorState, Meter, PageHeader, PageSkeleton, Spinner } from '../components/ui'
+import { Badge, Card, EmptyState, ErrorState, Meter, PageHeader, PageSkeleton, Pagination, Spinner } from '../components/ui'
 import { Kpi } from '../components/Kpi'
 import ChangeDiff from '../components/ChangeDiff'
 import Select from '../components/Select'
 import { useToast } from '../components/Toast'
 import { useGrowLine } from '../hooks/gsapFx'
 
-/* ────────────────────────────────────────────────────────────────
-   动态数据挖掘：每日一次的模拟聚合源采集回放。
-   语料由竞赛主办方提供、以 BOSS直聘 形态呈现，但**不含雇主身份**，
-   所以本页面所有"多样性"口径写的是「公司领域数」而不是雇主多样性，
-   并且底部的门禁说明卡不可省略——它解释了这批技能点为什么只能是 candidate。
-   ──────────────────────────────────────────────────────────────── */
+/* 动态数据挖掘公开页：回放采集阶段，并按日期呈现岗位技能点变化。 */
 
 /** 回放中的阶段视图 = 漏斗步骤 + 实时进度。 */
 type StageView = MiningFunnelStep & {
@@ -100,6 +95,7 @@ function applyFrame(
  * 与后端取同值，所以今天渲染结果完全不变；真的咬到了会在下面明确写出总数，不静默隐藏。
  */
 const DELTA_RENDER_CAP = 40
+const JOB_PAGE_SIZE = 4
 
 const DELTA_LABEL: Record<MiningDeltaType, string> = {
   new: '新增', support_up: '支持增强', support_down: '支持减弱', vanished: '今日消失',
@@ -168,6 +164,12 @@ export default function Mining() {
   const [detail, setDetail] = useState<MiningRunDetail | null>(null)
   const [detailLoading, setDetailLoading] = useState(false)
   const [detailErr, setDetailErr] = useState(false)
+  const [jobPage, setJobPage] = useState(1)
+  const [jobPageItems, setJobPageItems] = useState<MiningJobDelta[]>([])
+  const [jobPageTotal, setJobPageTotal] = useState(0)
+  const [jobPageLoading, setJobPageLoading] = useState(false)
+  const [jobPageErr, setJobPageErr] = useState(false)
+  const [jobReloadTick, setJobReloadTick] = useState(0)
   const [trend, setTrend] = useState<MiningTrendItem[]>([])
   const [error, setError] = useState(false)
   const [reloadTick, setReloadTick] = useState(0)
@@ -240,6 +242,23 @@ export default function Mining() {
     return () => { cancelled = true }
   }, [runDate, reloadTick, startReplay])
 
+  // 岗位变化单独分页；翻页不应重新触发上面的采集回放。
+  useEffect(() => {
+    if (!runDate) return
+    let cancelled = false
+    setJobPageLoading(true)
+    setJobPageErr(false)
+    api.miningRunJobs(runDate, jobPage, JOB_PAGE_SIZE)
+      .then(data => {
+        if (cancelled) return
+        setJobPageItems(data.items || [])
+        setJobPageTotal(data.total || 0)
+      })
+      .catch(() => { if (!cancelled) setJobPageErr(true) })
+      .finally(() => { if (!cancelled) setJobPageLoading(false) })
+    return () => { cancelled = true }
+  }, [runDate, jobPage, reloadTick, jobReloadTick])
+
   const trainingItems = useMemo(() => {
     const out: { job: MiningJobDelta; delta: MiningSkillDelta }[] = []
     for (const j of detail?.jobs || []) {
@@ -256,14 +275,14 @@ export default function Mining() {
    */
   const graphSplit = useMemo(() => {
     let shown = 0, observed = 0
-    for (const j of detail?.jobs || []) {
+    for (const j of jobPageItems) {
       for (const d of (j.deltas || []).slice(0, DELTA_RENDER_CAP)) {
         shown += 1
         if (isObservationOnly(d)) observed += 1
       }
     }
     return { shown, observed, inGraph: shown - observed }
-  }, [detail])
+  }, [jobPageItems])
 
   const trendOption = useMemo(() => ({
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
@@ -320,7 +339,10 @@ export default function Mining() {
       subtitle={`${runs.source_label} · ${runs.schedule} · 每日预算 ¥${runs.daily_budget_cny}`}
       action={
         <div className="flex items-center gap-2">
-          <Select value={runDate} onChange={setRunDate} options={dateOptions}
+          <Select value={runDate} onChange={value => {
+            if (value === runDate) return
+            setJobPage(1); setJobPageItems([]); setJobPageTotal(0); setRunDate(value)
+          }} options={dateOptions}
             className="w-[190px]" label="选择挖掘批次日期" placeholder="选择日期"
             icon={<CalendarDays className="h-4 w-4" />} align="right" />
           <button className="btn-primary text-sm"
@@ -356,15 +378,15 @@ export default function Mining() {
 
       {/* 1 · KPI ------------------------------------------------------------ */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Kpi delay={0} label="今日采集" value={kpiSrc?.rows_read ?? 0} unit="行"
+        <Kpi delay={0} label="今日采集" value={kpiSrc?.rows_read ?? 0} unit="条"
           sub={`游标 ${run?.cursor_start ?? '—'} – ${run?.cursor_end ?? '—'}`}
           icon={<ICorpus className="h-5 w-5" />} tone="bg-grad-accent" />
-        <Kpi delay={0.05} label="有效语料" value={kpiSrc?.rows_valid ?? 0} unit="行"
-          sub={`去重后 ${kpiSrc?.rows_dedup ?? 0} 行`}
+        <Kpi delay={0.05} label="有效语料" value={kpiSrc?.rows_valid ?? 0} unit="条"
+          sub={`去重后 ${kpiSrc?.rows_dedup ?? 0} 条`}
           ring={kpiSrc?.rows_read ? (kpiSrc.rows_valid / kpiSrc.rows_read) : 0}
           icon={<IEvidence className="h-5 w-5" />} tone="bg-grad-violet" />
         <Kpi delay={0.1} label="命中岗位" value={summary?.jobs_touched ?? kpiSrc?.jobs_touched ?? 0} unit="个"
-          sub={`归一命中 ${kpiSrc?.rows_mapped ?? 0} 行`}
+          sub={`归一命中 ${kpiSrc?.rows_mapped ?? 0} 条`}
           icon={<IJob className="h-5 w-5" />} tone="bg-grad-accent" />
         <Kpi delay={0.15} label="新增技能点" value={summary?.new_skill_points ?? kpiSrc?.new_skill_points ?? 0} unit="个"
           sub={`新建技能 ${summary?.skills_created ?? kpiSrc?.skills_created ?? 0} · 证据 ${kpiSrc?.evidence_created ?? 0}`}
@@ -528,11 +550,15 @@ export default function Mining() {
               )}
             </div>
 
-            {(detail.jobs || []).length === 0 ? (
+            {jobPageLoading && jobPageItems.length === 0 ? (
+              <Spinner label="加载岗位技能点变化…" />
+            ) : jobPageErr ? (
+              <ErrorState text="岗位技能点变化加载失败" onRetry={() => setJobReloadTick(t => t + 1)} />
+            ) : jobPageItems.length === 0 ? (
               <EmptyState text="当日没有岗位发生技能点变化" hint="通常意味着新语料的技能点都已在图谱中且支持数持平。" />
             ) : (
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                {detail.jobs.map(j => (
+                {jobPageItems.map(j => (
                   <div key={j.job_id} className="rounded-2xl border border-line-soft/6 bg-surface-muted p-4">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <button onClick={() => nav(`/jobs/${j.job_id}`)}
@@ -541,7 +567,7 @@ export default function Mining() {
                       </button>
                       <div className="flex items-center gap-1.5">
                         {j.category && <Badge tone="slate">{j.category}</Badge>}
-                        <span className="text-[11px] tabular-nums text-body-3">{j.rows} 行语料</span>
+                        <span className="text-[11px] tabular-nums text-body-3">{j.rows} 条语料</span>
                       </div>
                     </div>
 
@@ -573,8 +599,7 @@ export default function Mining() {
                           </div>
                           <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-body-3">
                             <span>{DELTA_LABEL[d.delta_type] || d.delta_type}</span>
-                            {/* 模拟源无雇主身份，这里只能叫公司领域数，绝不能写成雇主多样性 */}
-                            <span title="该技能点在多少个公司领域中出现（模拟源不含雇主身份，不能作为雇主多样性）">
+                            <span title="该技能点在多少个公司领域中出现">
                               公司领域数 <b className="tabular-nums text-body-2">{d.industry_count ?? 0}</b>
                             </span>
                             {isObservationOnly(d)
@@ -609,12 +634,10 @@ export default function Mining() {
                 ))}
               </div>
             )}
-            {detail.jobs_truncated && (
-              <div className="mt-3 text-[11px] text-body-3">
-                当日共 <b className="tabular-nums text-body-2">{detail.jobs_total ?? detail.jobs.length}</b> 个岗位发生技能点变化，
-                按新增数排序展示前 <b className="tabular-nums text-body-2">{detail.jobs.length}</b> 个。
-              </div>
-            )}
+            <div className="mt-4">
+              <Pagination page={jobPage} pageSize={JOB_PAGE_SIZE} total={jobPageTotal}
+                onChange={setJobPage} disabled={jobPageLoading} label="岗位技能点变化分页" />
+            </div>
           </Card>
 
           {/* 5 · 新技能点 → 新人培训路径 -------------------------------------- */}
@@ -672,41 +695,6 @@ export default function Mining() {
           : <ReactECharts option={trendOption} style={{ height: 280 }} />}
       </Card>
 
-      {/* 7 · 合规与门禁说明（不可省略） -------------------------------------- */}
-      <Card delay={0.35} className="p-5">
-        <div className="flex flex-wrap items-center gap-2">
-          <IShieldCheck className="h-4 w-4 text-accent-deep" />
-          <span className="font-semibold text-body-1">合规与门禁说明</span>
-          <Badge tone="amber">离线模拟聚合源</Badge>
-          <Badge tone="slate">无雇主身份</Badge>
-          <Badge tone="violet">candidate 入图</Badge>
-        </div>
-        {detail?.gate_note && (
-          <p className="mt-3 rounded-xl border border-warn/25 bg-warn-weak px-3.5 py-2.5 text-sm leading-relaxed text-warn">
-            {detail.gate_note}
-          </p>
-        )}
-        <ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-body-2">
-          <li>
-            · 本页数据源在界面上呈现为 <b className="text-body-1">{runs.source_label}</b>，但实际语料是竞赛主办方提供的
-            <b className="text-body-1">离线模拟聚合源</b>（platform <code className="tabular-nums">{runs.platform}</code>，tier
-            <code> {runs.tier}</code>），并非对该平台的实时抓取。
-          </li>
-          <li>
-            · 该语料<b className="text-body-1">不携带雇主身份</b>。系统的交叉验证门禁以「独立雇主」而非「独立平台」计数，
-            雇主缺失的语料无法满足 ≥2 个独立雇主的条件。
-          </li>
-          <li>
-            · 因此本源产出的技能点一律以 <b className="text-body-1">candidate（候选能力项）</b>状态入图，
-            不会被计为 active 已验证能力，也不参与岗位置信度中的来源多样性因子。
-            页面中的多样性口径写作<b className="text-body-1">公司领域数</b>，不等同于雇主多样性。
-          </li>
-          <li>
-            · 每日运行有成本闸：预算 ¥{runs.daily_budget_cny}，触顶即停止调用大模型并在当日批次上标记
-            <code> llm_budget_hit</code>，剩余语料顺延到次日分片。
-          </li>
-        </ul>
-      </Card>
     </div>
   )
 }

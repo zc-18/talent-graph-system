@@ -122,7 +122,7 @@ export default function Dashboard() {
                     {j.name}
                     {j.is_new && <Badge tone="amber">新兴</Badge>}
                   </div>
-                  <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[10px] text-body-3"><span>{j.category}</span><span>·</span><span>{j.required_count} 个契约能力簇</span><span>·</span><span>{j.employer_count || 0} 个雇主</span>{j.contract_status === 'evidence_insufficient' && <Badge tone="amber">证据待补</Badge>}</div>
+                  <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[10px] text-body-3"><span>{j.category}</span><span>·</span><span>{j.required_count} 个契约能力簇</span><span>·</span><span>{j.employer_count || 0} 个雇主</span></div>
                 </div>
                 <ConfidencePill value={j.confidence} />
               </button>

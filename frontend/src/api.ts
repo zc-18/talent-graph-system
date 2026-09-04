@@ -172,9 +172,7 @@ export interface PipelineStats {
   batches: { batch_key: string; platform: string; tier: string; kept: number; finished_at?: string | null }[]
   loop: { manual_edits: number; evolution_runs: number }
 }
-/* ---------- 动态数据挖掘（每日模拟聚合源 · 展示为 BOSS直聘）----------
-   语料由竞赛主办方提供的离线模拟聚合源产出，不含雇主身份，
-   因此其技能点一律以 candidate 态入图（见 gate_note）。 */
+/* ---------- 动态数据挖掘公开接口 ---------- */
 export interface MiningRunItem {
   run_date: string; status: string
   rows_read: number; rows_valid: number; rows_dedup: number; rows_mapped: number
@@ -214,7 +212,7 @@ export interface MiningSkillDelta {
   skill_id?: number | null; in_graph?: boolean
   prev_support: number; curr_support: number
   prev_status?: string | null; curr_status?: string | null
-  /** 公司领域数——不是雇主多样性，模拟源无雇主身份 */
+  /** 技能点覆盖的公司领域数量。 */
   industry_count?: number; industries?: string[]; sample_titles?: string[]
   training_plan?: MiningTrainingStep[]
 }
@@ -233,7 +231,7 @@ export interface MiningRunDetail {
   run: MiningRunItem; funnel: MiningFunnelStep[]; jobs: MiningJobDelta[]
   /** 后端按 MAX_JOBS 截断岗位块时给出的真实总数与标记（同上：截断必须说出来） */
   jobs_total?: number; jobs_truncated?: boolean
-  top_skills: MiningTopSkill[]; gate_note: string
+  top_skills: MiningTopSkill[]
 }
 export interface MiningTrendItem {
   run_date: string; new_skill_points: number; rows_mapped: number
@@ -466,11 +464,13 @@ export const api = {
       `/evolution/${jobId}/level-diff`, { params: { frm, to } }).then(r => r.data),
   pipelineStats: () => http.get<PipelineStats>('/graph/pipeline-stats').then(r => r.data),
 
-  // ---------- 动态数据挖掘（每日模拟聚合源）----------
+  // ---------- 动态数据挖掘 ----------
   // 回放是 SSE，走本文件顶部的 miningReplay（fetch + reader），不在这里。
   miningRuns: (limit = 30) => http.get<MiningRunsResponse>('/mining/runs', { params: { limit } }).then(r => r.data),
   /** runDate 可以传字面量 'latest' */
   miningRun: (runDate: string) => http.get<MiningRunDetail>(`/mining/runs/${encodeURIComponent(runDate)}`).then(r => r.data),
+  miningRunJobs: (runDate: string, page = 1, size = 4) =>
+    http.get<Paginated<MiningJobDelta>>(`/mining/runs/${encodeURIComponent(runDate)}/jobs`, { params: { page, size } }).then(r => r.data),
   miningSkillTrend: (days = 30) => http.get<{ items: MiningTrendItem[] }>('/mining/skill-trend', { params: { days } }).then(r => r.data),
   miningJobDeltas: (jobId: number, limit = 30) =>
     http.get<MiningJobDeltaHistory>(`/mining/jobs/${jobId}/deltas`, { params: { limit } }).then(r => r.data),

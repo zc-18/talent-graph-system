@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { WifiOff, RotateCcw, Inbox } from 'lucide-react'
+import { ChevronLeft, ChevronRight, WifiOff, RotateCcw, Inbox } from 'lucide-react'
 import ConfidenceExplain from './ConfidenceExplain'
 import type { ConfidenceFactors } from '../api'
 
@@ -116,6 +116,56 @@ export function ErrorState({ text = '数据加载失败，请检查网络后重�
         </button>
       )}
     </div>
+  )
+}
+
+function paginationItems(page: number, totalPages: number): Array<number | string> {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1)
+  if (page <= 4) return [1, 2, 3, 4, 5, 'right-gap', totalPages]
+  if (page >= totalPages - 3) return [1, 'left-gap', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
+  return [1, 'left-gap', page - 1, page, page + 1, 'right-gap', totalPages]
+}
+
+export function Pagination({ page, pageSize, total, onChange, disabled = false, label = '分页导航' }: {
+  page: number; pageSize: number; total: number; onChange: (page: number) => void
+  disabled?: boolean; label?: string
+}) {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  if (totalPages <= 1) return null
+  const go = (next: number) => {
+    if (!disabled && next >= 1 && next <= totalPages && next !== page) onChange(next)
+  }
+  return (
+    <nav aria-label={label}
+      className="flex min-h-12 flex-wrap items-center justify-between gap-2 rounded-xl border border-line-soft/8 bg-white/75 px-3 py-2 shadow-[0_6px_18px_-16px_rgb(var(--brand-ink)/0.30)]">
+      <span className="text-xs tabular-nums text-body-2">第 <b className="text-body-1">{page}</b> / {totalPages} 页 · 共 {total} 条</span>
+      <div className="flex items-center gap-1.5">
+        <button type="button" onClick={() => go(page - 1)} disabled={disabled || page <= 1}
+          title="上一页" aria-label="上一页"
+          className="grid h-8 w-8 place-items-center rounded-lg border border-line-soft/10 bg-white text-body-2 transition hover:border-accent/35 hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-40">
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+        <div className="hidden items-center gap-1 sm:flex">
+          {paginationItems(page, totalPages).map(item => typeof item === 'number' ? (
+            <button type="button" key={item} onClick={() => go(item)} disabled={disabled}
+              aria-label={`第 ${item} 页`} aria-current={item === page ? 'page' : undefined}
+              className={`grid h-8 min-w-8 place-items-center rounded-lg px-2 text-xs font-semibold tabular-nums transition ${
+                item === page
+                  ? 'bg-grad-accent text-white shadow-[0_6px_16px_-8px_rgb(var(--brand-accent)/0.55)]'
+                  : 'border border-line-soft/8 bg-white text-body-2 hover:border-accent/35 hover:bg-surface-muted'
+              }`}>
+              {item}
+            </button>
+          ) : <span key={item} className="grid h-8 w-6 place-items-center text-xs text-body-3">…</span>)}
+        </div>
+        <span className="min-w-14 text-center text-xs font-semibold tabular-nums text-body-2 sm:hidden">{page} / {totalPages}</span>
+        <button type="button" onClick={() => go(page + 1)} disabled={disabled || page >= totalPages}
+          title="下一页" aria-label="下一页"
+          className="grid h-8 w-8 place-items-center rounded-lg border border-line-soft/10 bg-white text-body-2 transition hover:border-accent/35 hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-40">
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+    </nav>
   )
 }
 

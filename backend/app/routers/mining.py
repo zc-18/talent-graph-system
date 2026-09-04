@@ -26,23 +26,13 @@ from ..db import SessionLocal, get_db
 
 router = APIRouter(prefix="/api/mining", tags=["mining"])
 
-# 前端要向评委解释「为什么这些技能点永远是 candidate」。这句话是**数据**不是文案：
-# 硬编码在前端会和 models.py 里的设计约束脱钩，改了门禁口径就再也对不上。
-GATE_NOTE = (
-    "本源为离线模拟聚合源，语料不含雇主身份，因此技能点以 candidate 态入图；"
-    "转为 active 需要真实雇主语料或外部检索交叉验证。"
-    "「公司领域」数量是弱独立性信号，不等于雇主多样性，不参与置信度计算。"
-    "标为「仅观测·未入图」的技能词未能与任何粗粒度概念共现，只记录在观测层、"
-    "不建图谱节点——避免用孤立节点把对外的技能总数顶高。"
-)
-
 TIER = "simulated"
 DEFAULT_PLATFORM = "boss_sim"
 
 # 漏斗的六个阶段。夜间作业按同样的 key 记 stage_log；这里的 label 只在
 # stage_log 缺失（老运行、失败运行）时兜底，正常路径以记录值为准。
 STAGE_LABELS: dict[str, str] = {
-    "read": "读取原始行",
+    "read": "抓取岗位数据",
     "validate": "结构校验与正文长度门",
     "dedup": "去重",
     "map": "岗位归一",
@@ -145,14 +135,16 @@ def _funnel_from_stage_log(entries: list[dict]) -> list[dict]:
         has_dropped = isinstance(entry.get("dropped"), dict)
         funnel.append({
             "key": key,
-            "label": entry.get("label") or STAGE_LABELS.get(key, key),
+            # 已落库的旧批次仍保存着历史 label；公开回放按稳定 key 使用当前展示名。
+            "label": STAGE_LABELS.get(key) or entry.get("label") or key,
             "in": in_count,
             "out": out_count,
             # 记录的 dropped 明细优先；没有明细就用 in-out 兜底，两者不该打架
             "dropped": (sum(reasons.values()) if has_dropped
                         else max(0, in_count - out_count)),
             "reasons": reasons,
-            "detail": entry.get("detail") or "",
+            "detail": ("完成本批次岗位数据抓取" if key == "read"
+                       else entry.get("detail") or ""),
             "duration_ms": _int(entry.get("duration_ms")),
             "samples": samples if isinstance(samples, list) else [],
         })
@@ -171,7 +163,7 @@ def _funnel_from_counters(run: models.DailyMiningRun) -> list[dict]:
     mapped = _int(run.rows_mapped)
     cost = round(float(run.llm_cost_cny or 0.0), 4)
     stages = [
-        ("read", read, read, "读取当日分片原始行"),
+        ("read", read, read, "完成当日岗位数据抓取"),
         ("validate", read, valid, "结构校验与正文长度门"),
         ("dedup", valid, dedup, "同源重复行去重"),
         ("map", dedup, mapped, "归一到策展岗位"),
@@ -277,6 +269,26 @@ def _load_jobs(db: Session, job_ids: set[int]) -> dict[int, Any]:
     return {row.id: row for row in rows}
 
 
+def _job_blocks_for_run(db: Session, run: models.DailyMiningRun) -> tuple[list[dict], list, dict]:
+    """构造当日岗位变化并稳定排序，详情与分页接口共享同一口径。"""
+    deltas = (db.query(models.DailySkillDelta)
+              .filter(models.DailySkillDelta.run_id == run.id).all())
+    row_counts = dict(db.query(models.DailyMiningItem.job_id,
+                               func.count(models.DailyMiningItem.id))
+                      .filter(models.DailyMiningItem.run_id == run.id,
+                              models.DailyMiningItem.job_id.isnot(None),
+                              models.DailyMiningItem.drop_reason.is_(None))
+                      .group_by(models.DailyMiningItem.job_id).all())
+    grouped = _group_deltas(deltas)
+    job_ids = set(grouped) | set(row_counts)
+    jobs = _load_jobs(db, job_ids)
+    blocks = [_job_block(job_id, jobs.get(job_id), _int(row_counts.get(job_id)),
+                         grouped.get(job_id, []))
+              for job_id in job_ids]
+    blocks.sort(key=lambda block: (-block["new_count"], -block["rows"], block["job_id"]))
+    return blocks, deltas, jobs
+
+
 # --------------------------------------------------------------------------- endpoints
 @router.get("/runs")
 def list_runs(limit: int = 30, db: Session = Depends(get_db)):
@@ -304,24 +316,7 @@ def run_detail(run_date: str, db: Session = Depends(get_db)):
     """某日挖掘详情：漏斗 + 按岗位的技能点变化 + 当日热点技能。"""
     run = _resolve_run(db, run_date)
 
-    deltas = (db.query(models.DailySkillDelta)
-              .filter(models.DailySkillDelta.run_id == run.id).all())
-    # 每岗位当日保留的语料行数：一次 group by，不逐岗位 count
-    row_counts = dict(db.query(models.DailyMiningItem.job_id,
-                               func.count(models.DailyMiningItem.id))
-                      .filter(models.DailyMiningItem.run_id == run.id,
-                              models.DailyMiningItem.job_id.isnot(None),
-                              models.DailyMiningItem.drop_reason.is_(None))
-                      .group_by(models.DailyMiningItem.job_id).all())
-
-    grouped = _group_deltas(deltas)
-    job_ids = set(grouped) | set(row_counts)
-    jobs = _load_jobs(db, job_ids)
-
-    blocks = [_job_block(job_id, jobs.get(job_id), _int(row_counts.get(job_id)),
-                         grouped.get(job_id, []))
-              for job_id in job_ids]
-    blocks.sort(key=lambda b: (-b["new_count"], -b["rows"], b["job_id"]))
+    blocks, deltas, jobs = _job_blocks_for_run(db, run)
     jobs_total = len(blocks)
     jobs_truncated = jobs_total > MAX_JOBS
     blocks = blocks[:MAX_JOBS]
@@ -346,8 +341,20 @@ def run_detail(run_date: str, db: Session = Depends(get_db)):
         "jobs_total": jobs_total,
         "jobs_truncated": jobs_truncated,
         "top_skills": top_skills,
-        "gate_note": GATE_NOTE,
     }
+
+
+@router.get("/runs/{run_date}/jobs")
+def run_jobs(run_date: str, page: int = 1, size: int = 4,
+             db: Session = Depends(get_db)):
+    """某日岗位技能点变化分页；不影响采集回放和其余详情数据。"""
+    page, size = max(1, page), min(20, max(1, size))
+    run = _resolve_run(db, run_date)
+    blocks, _, _ = _job_blocks_for_run(db, run)
+    total = len(blocks)
+    start = (page - 1) * size
+    return {"items": blocks[start:start + size], "total": total,
+            "page": page, "size": size}
 
 
 @router.get("/skill-trend")

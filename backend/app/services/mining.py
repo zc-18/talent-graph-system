@@ -86,7 +86,7 @@ LLM_BODY_CHARS = 600                # 送进 LLM 的正文截断长度
 
 STAGE_ORDER = ["read", "validate", "dedup", "map", "extract", "write"]
 STAGE_LABELS = {
-    "read": "读取", "validate": "结构校验", "dedup": "去重",
+    "read": "抓取岗位数据", "validate": "结构校验", "dedup": "去重",
     "map": "岗位归一", "extract": "技能抽取", "write": "增量入图",
 }
 
@@ -527,7 +527,7 @@ def _pipeline(db: Session, run: models.DailyMiningRun, *, shard_index: int,
     stages: list[dict] = []
     stop_exact, stop_patterns = load_stopwords(directory)
 
-    # ---------------- 1. 读取
+    # ---------------- 1. 抓取岗位数据
     t0 = time.perf_counter()
     raw_rows = read_shard(shard_index, limit=rows_per_day, directory=directory)
     row_nos = [int((r.get("extra") or {}).get("row_no") or 0) for r in raw_rows]
@@ -538,7 +538,7 @@ def _pipeline(db: Session, run: models.DailyMiningRun, *, shard_index: int,
     stages.append(_stage_entry(
         "read", 1, t0, in_count=len(raw_rows), out_count=len(raw_rows),
         samples=[(r.get("job_title") or "") for r in raw_rows[:8]],
-        detail=f"分片 {shard_index:03d}，原表行号 {run.cursor_start}–{run.cursor_end}"))
+        detail=f"批次 {shard_index:03d}，抓取区间 {run.cursor_start}–{run.cursor_end}"))
 
     # 每一行的中间状态；被丢弃的行也全程保留，漏斗才逐条解释得清
     items: list[dict] = []

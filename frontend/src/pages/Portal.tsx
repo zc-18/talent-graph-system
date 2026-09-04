@@ -340,7 +340,7 @@ export default function Portal() {
             transition={{ duration: 0.7, delay: 0.12, ease: 'easeOut' }}
             className="relative min-w-0">
             <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/80 p-2 shadow-[0_28px_60px_-28px_rgb(var(--brand-ink)/0.45)] backdrop-blur-sm">
-              <img src="/shot-dashboard.webp" alt="智岗图谱数据驾驶舱界面：岗位、能力与置信度指标总览"
+              <img src="/shot-dashboard.webp?v=20260904" alt="智岗图谱数据驾驶舱界面：岗位、能力与置信度指标总览"
                 width={1280} height={800} loading="eager"
                 className="block w-full rounded-xl"
                 onError={event => { event.currentTarget.hidden = true }} />

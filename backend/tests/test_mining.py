@@ -1583,6 +1583,41 @@ def test_cursor_ignores_failed_run_and_latest_resolves_to_completed(db, tmp_path
     assert summary["shard_index"] == 1
 
 
+def test_public_funnel_relabels_legacy_read_stage():
+    funnel = mining_router._funnel_from_stage_log([{
+        "key": "read", "label": "读取", "order": 1,
+        "in_count": 1000, "out_count": 1000, "dropped": {},
+        "detail": "分片 015，原表行号 15001-16000",
+    }])
+
+    assert funnel[0]["label"] == "抓取岗位数据"
+    assert funnel[0]["detail"] == "完成本批次岗位数据抓取"
+
+
+def test_run_jobs_paginates_with_stable_ranking(db):
+    run = models.DailyMiningRun(run_date="2026-09-04", status="completed")
+    jobs = [models.Job(name=f"分页岗位{i}", slug=f"paged-job-{i}", category="人工智能")
+            for i in range(1, 7)]
+    db.add(run)
+    db.add_all(jobs)
+    db.flush()
+    for row_count, job in enumerate(jobs, start=1):
+        db.add_all([models.DailyMiningItem(
+            run_id=run.id, job_id=job.id, title_raw=job.name,
+            title_key=job.slug, skills=[], drop_reason=None,
+        ) for _ in range(row_count)])
+    db.commit()
+
+    second = mining_router.run_jobs("2026-09-04", page=2, size=2, db=db)
+    assert second["total"] == 6
+    assert (second["page"], second["size"]) == (2, 2)
+    assert [item["job_id"] for item in second["items"]] == [jobs[3].id, jobs[2].id]
+
+    normalized = mining_router.run_jobs("2026-09-04", page=0, size=999, db=db)
+    assert (normalized["page"], normalized["size"]) == (1, 20)
+    assert len(normalized["items"]) == 6
+
+
 def test_cursor_advances_past_a_short_final_shard(db, tmp_path):
     """**回归**：末尾分片不满 1000 行时，游标不许原地打转。
 
